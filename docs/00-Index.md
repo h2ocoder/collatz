@@ -24,6 +24,12 @@ Core concepts from the research papers:
 - [[Complex Multiplier]]
 - [[Proportional Power Ratio]]
 
+### Syracuse / Odd-Only Dynamics
+- [[Syracuse Map]]
+- [[Alpha Value]]
+- [[Alpha Sequence]]
+- [[2-adic Valuation]]
+
 ## Explorations
 Findings from notebook investigations:
 - (To be filled from notebook results)

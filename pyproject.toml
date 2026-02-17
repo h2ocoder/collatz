@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "collatz-posw"
+version = "0.1.0"
+description = "Collatz conjecture exploration: dropping sets, stopping classes, geometry, and prime factorization"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "jupyter",
+    "sympy",
+]
+
+[tool.setuptools.packages.find]
+include = ["collatz*"]
+
+[project.optional-dependencies]
+dev = ["pytest"]

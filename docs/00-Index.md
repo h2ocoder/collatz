@@ -32,12 +32,14 @@ Core concepts from the research papers:
 
 ## Explorations
 Findings from notebook investigations:
-- (To be filled from notebook results)
+- **Odd Stopping Time Spectrum**: Only stopping times of form ceil(s * log2(6)) are possible for odd numbers. Gap classes (4, 5, 7, 9, 10, ...) are impossible. Verified for n < 200,000.
+- **2-Adic Determinism**: Each stopping class is a union of residue classes mod 2^p. Fraction resolved converges to 1 (89% by mod 4096).
+- **Syracuse Multiplication Table**: For semiprimes pq, class(pq) partially determined by factor classes. Non-class-3 x non-class-3 always gives class 3.
 
 ## Conjectures
 - [[Orbital Oddity Conjecture]]
 - [[Stopping Point Line Conjecture]]
-- (More to be added)
+- [[Odd Stopping Time Spectrum]] — k = ceil(s * log2(6)), base-6 emerges naturally
 
 ## Papers
 1. "The Collatz Conjecture, Pythagorean Triples, and the Riemann Hypothesis" — Dropping Sets, Genus, Orbital Triples, Complex Plane

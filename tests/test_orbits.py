@@ -1,6 +1,7 @@
 """Tests for collatz.orbits module."""
 
-from collatz.orbits import class_members, aligned_orbits
+from fractions import Fraction
+from collatz.orbits import class_members, aligned_orbits, pairwise_ratios, pairwise_differences
 import pandas as pd
 
 
@@ -46,3 +47,49 @@ def test_aligned_orbits_known_orbit():
     """dropping_orbit(5) = [5, 16, 8], so row for n=5 should be [5, 16, 8]."""
     df = aligned_orbits([5])
     assert list(df.iloc[0]) == [5, 16, 8]
+
+
+def test_pairwise_ratios_shape():
+    """Ratios DataFrame should have same shape as orbits."""
+    members = class_members(3, 0, 50)
+    df = aligned_orbits(members)
+    ratios = pairwise_ratios(df)
+    assert ratios.shape == df.shape
+
+
+def test_pairwise_ratios_first_row_is_one():
+    """First row (reference) should be all 1s."""
+    members = class_members(3, 0, 30)
+    df = aligned_orbits(members)
+    ratios = pairwise_ratios(df)
+    assert all(r == Fraction(1) for r in ratios.iloc[0])
+
+
+def test_pairwise_ratios_are_fractions():
+    """All ratio values should be Fraction instances."""
+    members = class_members(3, 0, 30)
+    df = aligned_orbits(members)
+    ratios = pairwise_ratios(df)
+    for col in ratios.columns:
+        for val in ratios[col]:
+            assert isinstance(val, Fraction), f"Expected Fraction, got {type(val)}"
+
+
+def test_pairwise_differences_first_row_zero():
+    """First row should be all zeros (reference minus itself)."""
+    members = class_members(3, 0, 30)
+    df = aligned_orbits(members)
+    diffs = pairwise_differences(df)
+    assert all(d == 0 for d in diffs.iloc[0])
+
+
+def test_pairwise_differences_known():
+    """Check difference between n=5 and n=9 orbits.
+
+    dropping_orbit(5) = [5, 16, 8]
+    dropping_orbit(9) = [9, 28, 14]
+    diffs = [4, 12, 6]
+    """
+    df = aligned_orbits([5, 9])
+    diffs = pairwise_differences(df)
+    assert list(diffs.iloc[1]) == [4, 12, 6]

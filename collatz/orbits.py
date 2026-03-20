@@ -4,6 +4,8 @@ Compare element-wise relationships (ratios, differences, modular equivalences)
 between orbits of numbers sharing the same (dropping set, dropping modulus).
 """
 
+from fractions import Fraction
+
 import pandas as pd
 
 from collatz.dropping import dropping_set, dropping_modulus, dropping_orbit
@@ -51,3 +53,46 @@ def aligned_orbits(members):
     """
     orbits = {n: dropping_orbit(n) for n in members}
     return pd.DataFrame.from_dict(orbits, orient="index").sort_index()
+
+
+def pairwise_ratios(orbit_df):
+    """Compute element-wise ratios relative to the first member's orbit.
+
+    For each position i and member j: ratio = orbit[j][i] / orbit[0][i].
+    Uses Fraction for exact rational arithmetic.
+
+    Parameters
+    ----------
+    orbit_df : pd.DataFrame
+        Output of aligned_orbits().
+
+    Returns
+    -------
+    pd.DataFrame
+        Same shape, values are Fraction instances.
+    """
+    ref = orbit_df.iloc[0]
+    return orbit_df.apply(
+        lambda row: [Fraction(int(row[c]), int(ref[c])) for c in orbit_df.columns],
+        axis=1,
+        result_type="expand",
+    )
+
+
+def pairwise_differences(orbit_df):
+    """Compute element-wise differences relative to the first member's orbit.
+
+    For each position i and member j: diff = orbit[j][i] - orbit[0][i].
+
+    Parameters
+    ----------
+    orbit_df : pd.DataFrame
+        Output of aligned_orbits().
+
+    Returns
+    -------
+    pd.DataFrame
+        Same shape, integer differences.
+    """
+    ref = orbit_df.iloc[0]
+    return orbit_df.subtract(ref)

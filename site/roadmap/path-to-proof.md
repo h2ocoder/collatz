@@ -16,28 +16,31 @@ A compact summary linking to full proof pages:
 | 4 | [3-Adic Mixing](/proofs/mixing) | $\text{ord}(3 \bmod 2^B) = 2^{B-2}$; transitions 98.7% independent | **Proved** |
 | 5 | [Ascending Elimination](/cycles/convergent-elimination) | All ascending convergents give $n < 0$ | **Proved** |
 | 6 | [Gap=13 Elimination](/cycles/convergent-elimination#gap-13-elimination) | No 13-step cycle (91 words checked) | **Proved** |
+| 7 | [Trivial Cycle Identification](/cycles/divisibility-obstruction) | All divisibility zeros produce $n \in \{1, 2, 4\}$ only | **Verified** ($K \leq 30$) |
 
-## Front 1: No Cycles (~70%)
+## Front 1: No Cycles (~75%)
 
 **What we have:**
 - Ascending convergents: eliminated (sign argument)
 - First descending convergent (gap=13): eliminated (divisibility check)
 - Each cycle pattern yields at most one candidate $n$ (affine uniqueness)
 - Baker's theorem bounds minimum cycle length
+- **NEW:** All $(S, E)$ tested ($K \leq 30$): only trivial cycle $n \in \{1,2,4\}$ survives
 
-**The key conjecture:**
+**The key conjecture (refined):**
 
 <div class="theorem">
 
-For every descending convergent with gap $g = 2^E - 3^S > 1$, no valid parity word has $g \mid 2^E \cdot C$. See the [Divisibility Obstruction Conjecture](/cycles/divisibility-obstruction).
+The sum $T = \sum_{j=0}^{S-1} 3^{S-1-j} \cdot 2^{q_j} \pmod{g}$ with monotone exponents $q_0 < q_1 < \cdots < q_{S-1}$ can only be zero when $q_j = 2j$ (the trivial cycle pattern). The **ordering constraint from parity words** blocks all non-trivial cancellations. See the [Divisibility Obstruction Conjecture](/cycles/divisibility-obstruction).
 
 </div>
 
+**Key insight:** Without the ordering constraint, the sum is zero with probability $1/g$ (random). With ordering, only the trivial pattern survives. The monotonicity is what kills non-trivial cycles.
+
 **Next steps:**
-1. Understand algebraically why $C \not\equiv 0 \pmod{13}$
-2. Check divisibility obstruction for other small gaps
+1. Prove the ordering obstruction algebraically (why does monotonicity block cancellation?)
+2. Random sampling for $(S=41, E=65)$ to build confidence at larger scale
 3. Connect to S-unit equation theory
-4. Leverage abc conjecture (if proved for $S = \{2, 3\}$)
 
 ## Front 2: No Divergence (~30%)
 

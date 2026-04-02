@@ -27,3 +27,8 @@ Thumbs.db
 *.csv
 *.parquet
 *.pkl
+
+# VitePress site
+site/node_modules/
+site/.vitepress/cache/
+site/.vitepress/dist/

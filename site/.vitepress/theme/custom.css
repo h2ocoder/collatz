@@ -1,0 +1,33 @@
+.theorem {
+  border-left: 4px solid var(--vp-c-brand-1);
+  background: var(--vp-c-bg-soft);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.theorem strong:first-child {
+  color: var(--vp-c-brand-1);
+}
+
+.proof {
+  border-left: 2px solid var(--vp-c-divider);
+  padding: 0.75rem 1.5rem;
+  margin: 1rem 0;
+}
+
+.proof::after {
+  content: '∎';
+  display: block;
+  text-align: right;
+  margin-top: 0.5rem;
+  color: var(--vp-c-text-2);
+}
+
+.corollary {
+  border-left: 3px solid var(--vp-c-green-1);
+  background: var(--vp-c-bg-soft);
+  padding: 0.75rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 0 6px 6px 0;
+}

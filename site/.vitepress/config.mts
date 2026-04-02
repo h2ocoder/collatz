@@ -4,8 +4,6 @@ import { katex } from '@mdit/plugin-katex'
 export default defineConfig({
   title: 'Collatz Research',
   description: 'Toward a proof of the Collatz conjecture',
-  ignoreDeadLinks: true,
-
   markdown: {
     config: (md) => {
       md.use(katex, { mhchem: false })

@@ -4,7 +4,7 @@
 
 <div class="theorem">
 
-**Theorem (Affine Orbit Structure).** For any Dropping Set $\text{Dset}_k$ with orbital oddity $s$, members within each residue-class subgroup mod $2^{k-s}$ satisfy:
+**Theorem (Affine Orbit Structure).** For any integer $n$ with [dropping time](/foundations/definitions#dropping-set) $k$ and orbital oddity $s$, within each residue-class subgroup mod $2^{k-s}$:
 
 $$\text{dest}(n) = \frac{3^s}{2^{k-s}} \cdot n + C$$
 

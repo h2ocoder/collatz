@@ -82,15 +82,21 @@ For $n = 3$: orbit proceeds $3 \to 10 \to 5 \to 16 \to 8 \to 4$, and the destina
 
 <div class="theorem">
 
-**Definition 6 (Dropping Set).** The *dropping set* $\text{Dset}_k$ is the set of all positive integers with dropping time $k$:
+**Definition 6 (Dropping Set).** For each positive integer $k$, the *dropping set* $\text{Dset}_k$ is defined as:
 
 $$
-\text{Dset}_k = \{n \in \mathbb{Z}^+ : \text{drop}(n) = k\}
+\text{Dset}_k = \{n \in \mathbb{Z} : n > 1,\; f^k(n) < n, \text{ and } f^j(n) \geq n \text{ for all } 0 < j < k\}
 $$
 
-Each dropping set is a union of arithmetic progressions.
+That is: the set of all integers whose first drop below themselves occurs at exactly step $k$.
+
+Each dropping set is a union of arithmetic progressions (a fact that follows from the [Affine Orbit Structure](/proofs/affine-orbit)).
 
 </div>
+
+::: info Note on existence
+This is a **definition**, not a claim. We do not assert that every integer belongs to some $\text{Dset}_k$ — that assertion would be equivalent to the Collatz conjecture. We define $\text{Dset}_k$ as the set of integers with dropping time $k$, and our theorems describe properties of these sets. An integer with no finite dropping time would simply not belong to any $\text{Dset}_k$.
+:::
 
 **Example.**
 - $\text{Dset}_1$ = all even numbers $\{2, 4, 6, 8, \ldots\}$, since one halving gives $n/2 < n$.

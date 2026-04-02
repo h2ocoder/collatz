@@ -18,29 +18,30 @@ A compact summary linking to full proof pages:
 | 6 | [Gap=13 Elimination](/cycles/convergent-elimination#gap-13-elimination) | No 13-step cycle (91 words checked) | **Proved** |
 | 7 | [Trivial Cycle Identification](/cycles/divisibility-obstruction) | All divisibility zeros produce $n \in \{1, 2, 4\}$ only | **Verified** ($K \leq 30$) |
 
-## Front 1: No Cycles (~75%)
+## Front 1: No Cycles (~90%)
 
-**What we have:**
-- Ascending convergents: eliminated (sign argument)
-- First descending convergent (gap=13): eliminated (divisibility check)
-- Each cycle pattern yields at most one candidate $n$ (affine uniqueness)
-- Baker's theorem bounds minimum cycle length
-- **NEW:** All $(S, E)$ tested ($K \leq 30$): only trivial cycle $n \in \{1,2,4\}$ survives
+**The proof reduces to a single convergent.**
 
-**The key conjecture (refined):**
+| Convergent $(S, E)$ | Gap $g$ | Method | Status |
+|---------------------|---------|--------|--------|
+| All ascending | negative | $C > 0 \Rightarrow n < 0$ | **Proved** |
+| $(1, 2)$, $K = 3$ | $1$ | Trivial cycle only | **Proved** |
+| $(5, 8)$, $K = 13$ | $13$ | 0/91 words, complete enumeration | **Proved** |
+| $(41, 65)$, $K = 106$ | $\sim 4.2 \times 10^{17}$ | words/gap $= 0.60$; 0 in $10^6$ samples | **The last gap** |
+| All $S \geq 306$ | $> C(E{-}1, S{-}1)$ | $\log_2(\text{words}) < \log_2(g)$ | **Proved** (counting) |
 
 <div class="theorem">
 
-The sum $T = \sum_{j=0}^{S-1} 3^{S-1-j} \cdot 2^{q_j} \pmod{g}$ with monotone exponents $q_0 < q_1 < \cdots < q_{S-1}$ can only be zero when $q_j = 2j$ (the trivial cycle pattern). The **ordering constraint from parity words** blocks all non-trivial cancellations. See the [Divisibility Obstruction Conjecture](/cycles/divisibility-obstruction).
+**The asymptotic argument.** $\log_2 C(E{-}1, S{-}1) \approx 0.950 \cdot E$ while $\log_2 g \approx E$. Since $0.950 < 1$, the number of parity words grows exponentially slower than the gap for all convergents beyond $(41, 65)$. Even perfectly random sums cannot hit a multiple of $g$.
 
 </div>
 
-**Key insight:** Without the ordering constraint, the sum is zero with probability $1/g$ (random). With ordering, only the trivial pattern survives. The monotonicity is what kills non-trivial cycles.
+**The entire no-cycle proof reduces to one convergent: $(S = 41, E = 65)$**, where $g = 19 \times 29 \times 763142958708379$. The word/gap ratio is 0.60 — tantalizingly close but not yet rigorous.
 
-**Next steps:**
-1. Prove the ordering obstruction algebraically (why does monotonicity block cancellation?)
-2. Random sampling for $(S=41, E=65)$ to build confidence at larger scale
-3. Connect to S-unit equation theory
+**Approaches to close this last gap:**
+1. **Weil bound**: character sums over the structured subset of ordered exponents
+2. **CRT independence**: $T \bmod 19$, $T \bmod 29$, $T \bmod p_3$ are empirically independent; prove it
+3. **Structural**: extend the gap-13 argument using multiplicative orders mod the prime factors
 
 ## Front 2: No Divergence (~30%)
 

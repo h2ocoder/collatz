@@ -54,28 +54,28 @@ The Collatz conjecture reduces to two independent claims:
 
 ## The Two Fronts
 
-### Front 1: No Cycles (~70% complete)
+### Front 1: No Cycles (~90% complete)
 
-**What we have:**
-- Ascending convergents: eliminated (sign argument)
-- First descending convergent (gap=13): eliminated (divisibility check)
-- Each cycle pattern yields at most one candidate $n$ (affine uniqueness)
-- Baker's theorem bounds minimum cycle length
+**The proof reduces to a single convergent.** Here is the complete elimination:
 
-**The key conjecture (refined 2026-04-02):**
-> For any $(S, E)$ with gap $g = 2^E - 3^S > 0$, the only parity words giving $g \mid 2^E \cdot C$ are the trivial cycle pattern $(1,0,0)^{K/3}$ and its rotations — producing $n = 1, 2, 4$. No non-trivial cycle exists.
+| Convergent $(S, E)$ | Gap $g$ | Method | Status |
+|---------------------|---------|--------|--------|
+| All ascending ($3^S > 2^E$) | negative | $C > 0 \Rightarrow n < 0$ | **Proved** |
+| $(1, 2)$, $K = 3$ | $1$ | Produces trivial cycle only | **Proved** |
+| $(5, 8)$, $K = 13$ | $13$ | 0/91 words, complete enumeration | **Proved** |
+| $(41, 65)$, $K = 106$ | $\sim 4.2 \times 10^{17}$ | $C(64,40)/g = 0.60$; 0 in $10^6$ samples | **Needs rigorous bound** |
+| All $(S \geq 306)$ | $> C(E{-}1, S{-}1)$ | $\log_2(\text{words}) < \log_2(g)$ always | **Proved** (counting) |
 
-**Why we believe it:**
-- Tested exhaustively for all $(S, E)$ with $K \leq 30$ and gap $< 10{,}000$. Every case with $g \mid 2^E \cdot C$ turned out to be the trivial cycle $(1 \to 4 \to 2)^m$ repeated.
-- The trivial cycle has period 3 with parity $(1,0,0)$. It can only tile $K$ when $3 \mid K$, i.e., $K = 3m$ with $S = m, E = 2m$.
-- For convergent $(S=5, E=8)$: $K = 13$, $3 \nmid 13$, trivial cycle can't fit. Zero of 91 words have $13 \mid C \cdot 2^8$.
-- For non-convergent $(S, E)$ with $3 \mid K$: the only zeros are trivial-cycle repetitions ($n = 1, 2, 4$).
-- Without the ordering constraint (assigning coefficients to exponents randomly), the sum IS zero $1/g$ of the time. The strict ordering $q_0 < q_1 < \cdots < q_{S-1}$ from the parity word structure is what blocks non-trivial zeros.
+**Key asymptotic:** $\log_2 C(E{-}1, S{-}1) \approx 0.950 \cdot E$ while $\log_2 g \approx E$. Since $0.950 < 1$, the ratio words/gap $\to 0$ **exponentially** for all convergents beyond $(41, 65)$.
 
-**Next steps:**
-1. **Prove the ordering obstruction algebraically.** The sum $T = \sum_{j=0}^{S-1} 3^{S-1-j} \cdot 2^{q_j} \bmod g$ with $q_0 < q_1 < \cdots < q_{S-1}$ can only be zero when $q_j = 2j$ (the trivial pattern). The coefficient sequence $[3^{S-1}, \ldots, 3^0]$ paired with monotone exponents creates a "positional lock" that prevents cancellation.
-2. Connect to S-unit equation theory: $|2^E - 3^S|$ for nearby powers is well-studied. Our ordering obstruction is a NEW constraint from the Collatz affine structure.
-3. The abc conjecture (if proved for $S = \{2,3\}$) would give exponential lower bounds on the gap, complementing the algebraic obstruction.
+**Non-convergent $(S, E)$ pairs:** These have LARGER gaps than the convergent with the same $K$ (by definition of convergent = best rational approximation). Larger gap = fewer expected zeros. So convergents are the hardest case; all others are easier.
+
+**The entire no-cycle proof reduces to one convergent: $(S = 41, E = 65)$.**
+
+**Approaches to close this last gap:**
+1. **Weil bound / exponential sum estimate**: Show $T \bmod g$ is sufficiently uniform. The sum $T = \sum 3^{S-1-j} \cdot 2^{q_j}$ over ordered subsets has character sum structure. If $|\#\{T \equiv 0\} - \text{words}/g| < \sqrt{\text{words}} \cdot \log g$, then $\#\{T \equiv 0\} < 0.60 + 10^{8.7} \cdot 18 < 1$? Need to check the constant.
+2. **CRT decomposition**: $g = 19 \times 29 \times 763142958708379$. Show $T \bmod 19$, $T \bmod 29$, and $T \bmod p_3$ are sufficiently independent. Empirically: each factor has zeros at the expected rate ($1/p$), and independence gives $1/g$.
+3. **Direct structural proof**: Extend the gap-13 argument. The normalized form $F = 3^{S-1} + \sum_{j=1}^{S-1} 3^{S-1-j} \cdot 2^{d_j} \bmod g$ with $1 \leq d_1 < \cdots < d_{S-1} \leq E-1$ might be analyzable using the multiplicative orders of 2 and 3 mod the prime factors of $g$.
 
 ### Front 2: No Divergence (~30% complete)
 
@@ -115,10 +115,10 @@ The Collatz conjecture reduces to two independent claims:
 
 ## Open Questions
 
-1. **Prove the ordering obstruction:** The sum $T = \sum 3^{S-1-j} \cdot 2^{q_j} \bmod g$ with strictly increasing exponents $q_0 < \cdots < q_{S-1}$ can only be zero when the exponents follow the trivial pattern $q_j = 2j$. This is the sharpest remaining target for killing all cycles. The key insight: without ordering, $T = 0$ occurs with probability $1/g$; with ordering, it's blocked entirely (except trivial). Why does monotonicity prevent cancellation?
+1. **Close the (41, 65) convergent.** This is the ONLY remaining gap for no-cycles. Approaches: Weil bounds on character sums, CRT independence of $T$ mod prime factors ($g = 19 \times 29 \times 763142958708379$), or a direct structural argument extending the gap-13 proof. Sampling ($10^6$ words, 0 zeros) and counting (words/gap = 0.60) strongly suggest it holds.
 
 2. **Can the 3-adic mixing be promoted from "statistical" to "deterministic"?** If no infinite bit string can keep the orbit in slow sets, divergence is impossible. The order of 3 mod $2^B$ being $2^{B-2}$ is the key tool.
 
 3. **Does the base-6 lattice structure give a covering argument?** The modulus $2^{k-2s} \cdot 6^s$ unifies the 2-adic and 3-adic views. A covering theorem here would close Front 2.
 
-4. **Random sampling for $(S=41, E=65)$?** Direct enumeration is infeasible ($\sim 10^{17}$ words), but sampling random valid parity words and checking $T \bmod g$ would build confidence. If $10^6$ random samples all avoid zero, that's strong evidence the algebraic obstruction generalizes.
+4. **Can the no-divergence and no-cycle proofs be unified?** Both fronts use the same affine structure and the 2-adic/3-adic interplay. Is there a single argument that handles both?

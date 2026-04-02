@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" font-family="system-ui, sans-serif">
+  <rect width="600" height="400" fill="#ffffff"/>
+
+  <!-- Top box: Collatz Conjecture -->
+  <rect x="190" y="20" width="220" height="44" rx="8" fill="#3451b2"/>
+  <text x="300" y="48" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="bold">Collatz Conjecture</text>
+
+  <!-- Connecting lines -->
+  <line x1="255" y1="64" x2="150" y2="110" stroke="#64748b" stroke-width="2"/>
+  <line x1="345" y1="64" x2="450" y2="110" stroke="#64748b" stroke-width="2"/>
+
+  <!-- Left branch box -->
+  <rect x="40" y="110" width="220" height="40" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="150" y="136" text-anchor="middle" fill="#1e293b" font-size="14" font-weight="bold">No Cycles (~70%)</text>
+
+  <!-- Right branch box -->
+  <rect x="340" y="110" width="220" height="40" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="450" y="136" text-anchor="middle" fill="#1e293b" font-size="14" font-weight="bold">No Divergence (~30%)</text>
+
+  <!-- Left bullet items -->
+  <text x="60" y="190" fill="#1e293b" font-size="13">Ascending eliminated</text>
+  <text x="232" y="190" fill="#10b981" font-size="14" font-weight="bold">&#x2713;</text>
+
+  <text x="60" y="222" fill="#1e293b" font-size="13">Gap=13 eliminated</text>
+  <text x="218" y="222" fill="#10b981" font-size="14" font-weight="bold">&#x2713;</text>
+
+  <text x="60" y="254" fill="#1e293b" font-size="13">Divisibility obstruction</text>
+  <text x="248" y="254" fill="#ef4444" font-size="14" font-weight="bold">?</text>
+
+  <!-- Left vertical line -->
+  <line x1="150" y1="150" x2="150" y2="170" stroke="#94a3b8" stroke-width="1.5"/>
+
+  <!-- Right vertical line -->
+  <line x1="450" y1="150" x2="450" y2="170" stroke="#94a3b8" stroke-width="1.5"/>
+
+  <!-- Right bullet items -->
+  <text x="360" y="190" fill="#1e293b" font-size="13">&#x03B2;(s) &gt; 0 always</text>
+  <text x="517" y="190" fill="#10b981" font-size="14" font-weight="bold">&#x2713;</text>
+
+  <text x="360" y="222" fill="#1e293b" font-size="13">Mixing proved</text>
+  <text x="476" y="222" fill="#10b981" font-size="14" font-weight="bold">&#x2713;</text>
+
+  <text x="360" y="254" fill="#1e293b" font-size="13">Every n finite?</text>
+  <text x="476" y="254" fill="#ef4444" font-size="14" font-weight="bold">?</text>
+
+  <!-- Left bracket -->
+  <rect x="50" y="172" width="2" height="92" fill="#94a3b8" rx="1"/>
+  <line x1="50" y1="172" x2="56" y2="172" stroke="#94a3b8" stroke-width="2"/>
+  <line x1="50" y1="264" x2="56" y2="264" stroke="#94a3b8" stroke-width="2"/>
+
+  <!-- Right bracket -->
+  <rect x="350" y="172" width="2" height="92" fill="#94a3b8" rx="1"/>
+  <line x1="350" y1="172" x2="356" y2="172" stroke="#94a3b8" stroke-width="2"/>
+  <line x1="350" y1="264" x2="356" y2="264" stroke="#94a3b8" stroke-width="2"/>
+
+  <!-- Legend -->
+  <text x="200" y="330" text-anchor="middle" fill="#10b981" font-size="12" font-weight="bold">&#x2713; Proved</text>
+  <text x="400" y="330" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="bold">? Open</text>
+
+  <!-- Bottom summary -->
+  <text x="300" y="370" text-anchor="middle" fill="#64748b" font-size="12" font-style="italic">Both fronts must close to prove the conjecture</text>
+</svg>

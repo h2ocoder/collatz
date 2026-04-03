@@ -122,7 +122,7 @@ The Collatz conjecture reduces to two independent claims:
 
 ## Open Questions
 
-1. **Close the (41, 65) convergent.** This is the ONLY remaining gap for no-cycles. $g = 19 \times 29 \times 17021 \times 44835377399$. DP proves $T \bmod g$ is perfectly uniform (every prime factor checked exactly). Meet-in-the-middle in C/Rust could exhaustively check all $C(64,40) \approx 2.5 \times 10^{17}$ subsets — feasible with optimized code. Alternatively, a Weil bound on the character sum over ordered subsets could close it theoretically.
+1. **Close the (41, 65) convergent.** This is the ONLY remaining gap for no-cycles. $g = 19 \times 29 \times 17021 \times 44835377399$. DP proves $T \bmod (19 \times 29 \times 17021)$ is perfectly uniform. Character sums mod $p_4 = 44835377399$ are at generic Parseval scale (not super-uniform). The 4-group MITM algorithm reduces to $\sim 7.7 \times 10^{10}$ hash operations across 2445 distributions — needs C/Rust with 128-bit modular arithmetic (64-bit overflow). Estimated runtime in C: minutes to hours.
 
 2. **Can the 3-adic mixing be promoted from "statistical" to "deterministic"?** If no infinite bit string can keep the orbit in slow sets, divergence is impossible. The order of 3 mod $2^B$ being $2^{B-2}$ is the key tool.
 

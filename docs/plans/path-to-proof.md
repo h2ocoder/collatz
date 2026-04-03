@@ -122,7 +122,7 @@ The Collatz conjecture reduces to two independent claims:
 
 ## Open Questions
 
-1. **Close the (41, 65) convergent.** This is the ONLY remaining gap for no-cycles. Approaches: Weil bounds on character sums, CRT independence of $T$ mod prime factors ($g = 19 \times 29 \times 763142958708379$), or a direct structural argument extending the gap-13 proof. Sampling ($10^6$ words, 0 zeros) and counting (words/gap = 0.60) strongly suggest it holds.
+1. **Close the (41, 65) convergent.** This is the ONLY remaining gap for no-cycles. $g = 19 \times 29 \times 17021 \times 44835377399$. DP proves $T \bmod g$ is perfectly uniform (every prime factor checked exactly). Meet-in-the-middle in C/Rust could exhaustively check all $C(64,40) \approx 2.5 \times 10^{17}$ subsets — feasible with optimized code. Alternatively, a Weil bound on the character sum over ordered subsets could close it theoretically.
 
 2. **Can the 3-adic mixing be promoted from "statistical" to "deterministic"?** If no infinite bit string can keep the orbit in slow sets, divergence is impossible. The order of 3 mod $2^B$ being $2^{B-2}$ is the key tool.
 

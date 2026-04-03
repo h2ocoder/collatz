@@ -17,7 +17,8 @@ export default defineConfig({
       { text: 'Proofs', link: '/proofs/affine-orbit' },
       { text: 'Cycles', link: '/cycles/convergent-elimination' },
       { text: 'Roadmap', link: '/roadmap/path-to-proof' },
-      { text: 'Connections', link: '/connections/' }
+      { text: 'Connections', link: '/connections/' },
+      { text: 'Explore', link: '/explore/alpha-sequence' }
     ],
 
     sidebar: [
@@ -55,6 +56,12 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/connections/' },
           { text: 'abc Conjecture', link: '/connections/abc-conjecture' }
+        ]
+      },
+      {
+        text: 'Explore',
+        items: [
+          { text: 'Alpha Sequence', link: '/explore/alpha-sequence' }
         ]
       }
     ],

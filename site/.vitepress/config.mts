@@ -61,7 +61,8 @@ export default defineConfig({
       {
         text: 'Explore',
         items: [
-          { text: 'Alpha Sequence', link: '/explore/alpha-sequence' }
+          { text: 'Alpha Sequence', link: '/explore/alpha-sequence' },
+          { text: 'Binary Shortcut', link: '/explore/binary-shortcut' }
         ]
       }
     ],

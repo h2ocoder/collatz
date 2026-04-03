@@ -54,7 +54,7 @@ The Collatz conjecture reduces to two independent claims:
 
 ## The Two Fronts
 
-### Front 1: No Cycles (COMPLETE)
+### Front 1: No Cycles (~95% complete)
 
 **The proof reduces to a single convergent.** Here is the complete elimination:
 
@@ -64,7 +64,7 @@ The Collatz conjecture reduces to two independent claims:
 | $(1, 2)$, $K = 3$ | $1$ | Produces trivial cycle only | **Proved** |
 | $(5, 8)$, $K = 13$ | $13$ | 0/91 words, complete enumeration | **Proved** |
 | $(41, 65)$, $K = 106$ | $\sim 4.2 \times 10^{17}$ | 0 in all $C(64,40) = 2.5 \times 10^{17}$ subsets (MITM, 87 min Rust) | **ELIMINATED** |
-| All $(S \geq 306)$ | $> C(E{-}1, S{-}1)$ | $\log_2(\text{words}) < \log_2(g)$ always | **Proved** (counting) |
+| All $(S \geq 306)$ | $> C(E{-}1, S{-}1)$ | $\log_2(\text{words}) < \log_2(g)$ always | **Heuristic** (counting + verified uniformity, needs formal uniformity bound) |
 
 **Key asymptotic:** $\log_2 C(E{-}1, S{-}1) \approx 0.950 \cdot E$ while $\log_2 g \approx E$. Since $0.950 < 1$, the ratio words/gap $\to 0$ **exponentially** for all convergents beyond $(41, 65)$.
 

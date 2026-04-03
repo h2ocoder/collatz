@@ -18,7 +18,7 @@ A compact summary linking to full proof pages:
 | 6 | [Gap=13 Elimination](/cycles/convergent-elimination#gap-13-elimination) | No 13-step cycle (91 words checked) | **Proved** |
 | 7 | [Trivial Cycle Identification](/cycles/divisibility-obstruction) | All divisibility zeros produce $n \in \{1, 2, 4\}$ only | **Verified** ($K \leq 30$) |
 
-## Front 1: No Cycles (COMPLETE)
+## Front 1: No Cycles (~95%)
 
 **The proof reduces to a single convergent.**
 
@@ -28,7 +28,7 @@ A compact summary linking to full proof pages:
 | $(1, 2)$, $K = 3$ | $1$ | Trivial cycle only | **Proved** |
 | $(5, 8)$, $K = 13$ | $13$ | 0/91 words, complete enumeration | **Proved** |
 | $(41, 65)$, $K = 106$ | $\sim 4.2 \times 10^{17}$ | 0 in all $2.5 \times 10^{17}$ subsets (Rust MITM, 87 min) | **ELIMINATED** |
-| All $S \geq 306$ | $> C(E{-}1, S{-}1)$ | $\log_2(\text{words}) < \log_2(g)$ | **Proved** (counting) |
+| All $S \geq 306$ | $> C(E{-}1, S{-}1)$ | $\log_2(\text{words}) < \log_2(g)$ | **Heuristic** (needs uniformity bound) |
 
 <div class="theorem">
 

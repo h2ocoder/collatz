@@ -72,10 +72,17 @@ The Collatz conjecture reduces to two independent claims:
 
 **The entire no-cycle proof reduces to one convergent: $(S = 41, E = 65)$.**
 
+**What the DP revealed (2026-04-02):**
+- $g = 19 \times 29 \times 17021 \times 44835377399$ (four prime factors)
+- Exact DP mod $19 \times 29 \times 17021 = 9378571$: the distribution of $T$ is **perfectly uniform**. Zeros occur at exactly rate $1/m$ for every modulus tested.
+- This is NOT like gap=13 (structural avoidance). It's a **counting** argument: $C(64, 40) / g = 0.596 < 1$.
+- The expected zeros mod $g$ = 0.596. Likely 0 actual zeros, but uniformity means no structural proof exists — the obstruction is probabilistic.
+
 **Approaches to close this last gap:**
-1. **Weil bound / exponential sum estimate**: Show $T \bmod g$ is sufficiently uniform. The sum $T = \sum 3^{S-1-j} \cdot 2^{q_j}$ over ordered subsets has character sum structure. If $|\#\{T \equiv 0\} - \text{words}/g| < \sqrt{\text{words}} \cdot \log g$, then $\#\{T \equiv 0\} < 0.60 + 10^{8.7} \cdot 18 < 1$? Need to check the constant.
-2. **CRT decomposition**: $g = 19 \times 29 \times 763142958708379$. Show $T \bmod 19$, $T \bmod 29$, and $T \bmod p_3$ are sufficiently independent. Empirically: each factor has zeros at the expected rate ($1/p$), and independence gives $1/g$.
-3. **Direct structural proof**: Extend the gap-13 argument. The normalized form $F = 3^{S-1} + \sum_{j=1}^{S-1} 3^{S-1-j} \cdot 2^{d_j} \bmod g$ with $1 \leq d_1 < \cdots < d_{S-1} \leq E-1$ might be analyzable using the multiplicative orders of 2 and 3 mod the prime factors of $g$.
+1. **Rigorous equidistribution bound**: If we can show $|\#\{T \equiv 0\} - \text{words}/g| < 0.404$, then $\#\{T \equiv 0\} < 1$, hence exactly 0. Weil-type bounds on structured exponential sums could give $O(\sqrt{\text{words}})$ error, which is $\sim 5 \times 10^8$ — too large relative to the expected value of $0.596 \times g \approx 2.5 \times 10^{17}$. Need tighter bounds.
+2. **Exhaustive computation mod $g$**: DP mod $g$ directly requires $4.2 \times 10^{17}$ states — infeasible in RAM. A meet-in-the-middle approach splitting the 40 gaps into two halves of 20 might work: each half has $C(32, 20) \approx 2.3 \times 10^8$ subsets, storable in memory. Compute partial sums mod $g$ for each half, then check for complementary pairs summing to 0. This is the most promising computational approach.
+3. **Asymptotic argument**: Prove that for ALL convergents $(S, E)$ with $S \geq S_0$, $C(E-1, S-1) < g$. Combined with verified uniformity, this gives expected zeros $< 1$ for all large convergents. A Chernoff-type bound on the actual count (using the DP-verified uniformity as evidence) could close the gap.
+4. **Skip (41, 65) entirely**: If we can prove $C(E-1, S-1) < g$ holds for all convergents with $S \geq 42$ (where the counting argument is even stronger), then only $(41, 65)$ remains — and it could be settled by the meet-in-the-middle computation.
 
 ### Front 2: No Divergence (~30% complete)
 

@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(elan:*)",
+      "Bash(node analyze_complex.js:*)",
+      "Bash(node:*)",
+      "Bash(.venv/Scripts/pip:*)",
+      "Bash(.venv/Scripts/pip install:*)",
+      "Bash(cargo check:*)",
+      "Bash(C:/Users/darcy/.cargo/bin/cargo test -- --nocapture)",
+      "Bash(cargo test:*)",
+      "Bash(.venv/Scripts/python.exe:*)",
+      "Bash(.venv/Scripts/pip.exe install:*)",
+      "Bash(git checkout:*)",
+      "WebSearch"
+    ]
+  }
+}

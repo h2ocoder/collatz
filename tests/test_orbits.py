@@ -1,7 +1,7 @@
 """Tests for collatz.orbits module."""
 
 from fractions import Fraction
-from collatz.orbits import class_members, aligned_orbits, pairwise_ratios, pairwise_differences
+from collatz.orbits import class_members, aligned_orbits, pairwise_ratios, pairwise_differences, modular_equivalences
 import pandas as pd
 
 
@@ -93,3 +93,30 @@ def test_pairwise_differences_known():
     df = aligned_orbits([5, 9])
     diffs = pairwise_differences(df)
     assert list(diffs.iloc[1]) == [4, 12, 6]
+
+
+def test_modular_equivalences_returns_series():
+    members = class_members(3, 0, 50)
+    df = aligned_orbits(members)
+    mods = modular_equivalences(df)
+    assert isinstance(mods, pd.Series)
+    assert len(mods) == len(df.columns)
+
+
+def test_modular_equivalences_positive():
+    """All moduli should be >= 1."""
+    members = class_members(3, 0, 100)
+    df = aligned_orbits(members)
+    mods = modular_equivalences(df)
+    assert all(m >= 1 for m in mods)
+
+
+def test_modular_equivalences_valid():
+    """All values in a column should be congruent mod the returned modulus."""
+    members = class_members(3, 0, 100)
+    df = aligned_orbits(members)
+    mods = modular_equivalences(df)
+    for col in df.columns:
+        m = mods[col]
+        residues = set(int(v) % m for v in df[col])
+        assert len(residues) == 1, f"Column {col}: expected 1 residue mod {m}, got {residues}"

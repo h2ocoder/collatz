@@ -1,0 +1,210 @@
+{
+  "main": {
+    "id": "49f0ffb367e2c5cf",
+    "type": "split",
+    "children": [
+      {
+        "id": "38e9ed98a845349d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "370ad03d900037bd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Conjectures/Bit Destruction Bound.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Bit Destruction Bound"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f6af561d9fbdfd43",
+    "type": "split",
+    "children": [
+      {
+        "id": "89677dab190765e3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "71156aae8701c341",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "70a90d2c654dd767",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "66a1723fe197e186",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "dc8ff1e5351485c5",
+    "type": "split",
+    "children": [
+      {
+        "id": "72bcfcfe5e5cec95",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e7dcbddbe82fe336",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "9460b5a018053734",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "032588f540026ea5",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "193e110b43b50ddb",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "c2af6880d3680c3c",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "370ad03d900037bd",
+  "lastOpenFiles": [
+    "plans/path-to-proof.md.tmp.51024.1775185082869",
+    "plans/path-to-proof.md.tmp.51024.1775184806232",
+    "plans/path-to-proof.md.tmp.51024.1775179196112",
+    "plans/path-to-proof.md.tmp.51024.1775173886965",
+    "plans/path-to-proof.md.tmp.51024.1775173131229",
+    "plans/path-to-proof.md.tmp.51024.1775173118575",
+    "plans/path-to-proof.md.tmp.51024.1775173100058",
+    "Conjectures/Affine Orbit Structure.md",
+    "Definitions/Orbital Oddity.md",
+    "Definitions/Alpha Value.md",
+    "Definitions/Alpha Sequence.md",
+    "Definitions/2-adic Valuation.md",
+    "Conjectures/Bit Destruction Bound.md",
+    "Conjectures/Odd Stopping Time Spectrum.md",
+    "Untitled.md",
+    "plans/2026-04-02-vitepress-implementation.md.tmp.51024.1775135125332",
+    "plans/2026-04-02-vitepress-implementation.md",
+    "plans/2026-04-02-vitepress-site-design.md.tmp.51024.1775134693301",
+    "plans/2026-04-02-vitepress-site-design.md.tmp.51024.1775134668123",
+    "plans/2026-04-02-vitepress-site-design.md",
+    "00-Index.md.tmp.51024.1775134097255",
+    "plans/path-to-proof.md",
+    "Conjectures/Logarithmic Escape Theorem.md",
+    "Definitions/Syracuse Map.md"
+  ]
+}

@@ -1,0 +1,3 @@
+Okay I want to think about information encoding. Specifically, I want to explore the idea of using Collatz as a way of perhaps compressing information. I got the idea from watching a video about dna and the way some combinations aren't allowed, at least we've never seen them. So I don't know if it's not allowed, or just unlikely.
+
+But I was thinking, the way the 3x+1 over 2 operation works is kind of like encoding a distance, but you have to expend energy to now where it lands. In this way, it's entire description only becomes known after the operation. This becomes kind of interesting in this game I was thinking about. So imagine a game where the goal is to compute

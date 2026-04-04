@@ -5,6 +5,8 @@ between orbits of numbers sharing the same (dropping set, dropping modulus).
 """
 
 from fractions import Fraction
+from math import gcd
+from functools import reduce
 
 import pandas as pd
 
@@ -96,3 +98,34 @@ def pairwise_differences(orbit_df):
     """
     ref = orbit_df.iloc[0]
     return orbit_df.subtract(ref)
+
+
+def modular_equivalences(orbit_df):
+    """Find the largest modulus where all values in each column are congruent.
+
+    For each orbit position, computes the GCD of all pairwise differences.
+    This GCD is the largest m such that all values ≡ r (mod m) for some r.
+
+    Parameters
+    ----------
+    orbit_df : pd.DataFrame
+        Output of aligned_orbits().
+
+    Returns
+    -------
+    pd.Series
+        Indexed by column (orbit position), values are the moduli.
+    """
+    result = {}
+    for col in orbit_df.columns:
+        values = [int(v) for v in orbit_df[col]]
+        if len(values) <= 1:
+            result[col] = values[0] if values else 1
+            continue
+        diffs = [abs(values[i] - values[0]) for i in range(1, len(values))]
+        diffs = [d for d in diffs if d > 0]
+        if not diffs:
+            result[col] = values[0]  # all identical
+            continue
+        result[col] = reduce(gcd, diffs)
+    return pd.Series(result)

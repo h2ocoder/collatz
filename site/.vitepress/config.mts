@@ -25,6 +25,7 @@ export default defineConfig({
       { text: 'Cycles', link: '/cycles/convergent-elimination' },
       { text: 'Roadmap', link: '/roadmap/path-to-proof' },
       { text: 'Connections', link: '/connections/' },
+      { text: 'Prior Work', link: '/publications' },
       { text: 'Explore', link: '/explore/alpha-sequence' }
     ],
 

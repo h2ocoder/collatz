@@ -46,9 +46,6 @@ Natural numbers have finite binary expansion, and the Collatz carry propagation 
 
 **The Formal Proofs** — Full mathematical detail with LaTeX-rendered theorems, induction proofs, and connections to classical results (Roth's theorem, abc conjecture, 2-adic analysis). For mathematicians. [Start here →](/proofs/affine-orbit)
 
-## Research Papers
+## Prior Work
 
-This work builds on three research papers:
-1. **Dropping Sets, Pythagorean Triples, and the Riemann Hypothesis** — The affine orbit structure
-2. **Stopping Classes and Geometric Correspondence** — The modular classification framework  
-3. **Proportional Power Ratios** — The base-6 lattice (the PPR function that independently discovered the near-conjugacy to irrational rotation)
+This proof framework grew out of several years of self-published exploration by an amateur mathematician working in industry. The earlier writings developed the dropping set framework, the geometric correspondence, and the base-6 rotation discovery that this site brings together into a proof. [Read more →](/publications)

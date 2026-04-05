@@ -87,6 +87,10 @@ export default defineConfig({
       }
     ],
 
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/h2ocoder/collatz' }
+    ],
+
     outline: { level: [2, 3] }
   }
 })

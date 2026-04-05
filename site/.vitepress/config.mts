@@ -13,6 +13,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
+      { text: 'Proof Journey', link: '/journey/the-puzzle' },
       { text: 'Foundations', link: '/foundations/definitions' },
       { text: 'Proofs', link: '/proofs/affine-orbit' },
       { text: 'Cycles', link: '/cycles/convergent-elimination' },
@@ -22,6 +23,18 @@ export default defineConfig({
     ],
 
     sidebar: [
+      {
+        text: 'Proof Journey',
+        items: [
+          { text: '1. The Puzzle', link: '/journey/the-puzzle' },
+          { text: '2. The Binary Engine', link: '/journey/binary-engine' },
+          { text: '3. No Loops', link: '/journey/no-loops' },
+          { text: '4. The Hidden Rotation', link: '/journey/the-rotation' },
+          { text: '5. The Countdown', link: '/journey/the-countdown' },
+          { text: '6. Finite Fuel', link: '/journey/finite-fuel' },
+          { text: '7. The Complete Picture', link: '/journey/the-picture' }
+        ]
+      },
       {
         text: 'Foundations',
         items: [

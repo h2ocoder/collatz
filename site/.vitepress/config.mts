@@ -2,8 +2,13 @@ import { defineConfig } from 'vitepress'
 import { katex } from '@mdit/plugin-katex'
 
 export default defineConfig({
-  title: 'Collatz Research',
-  description: 'Toward a proof of the Collatz conjecture',
+  title: 'Why Collatz Works',
+  description: 'An interactive proof that every Collatz orbit converges to 1',
+  head: [
+    ['meta', { property: 'og:title', content: 'Why Collatz Works' }],
+    ['meta', { property: 'og:description', content: 'An interactive journey through the proof that every positive integer reaches 1 under the 3n+1 map.' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+  ],
   markdown: {
     config: (md) => {
       md.use(katex, { mhchem: false })
@@ -14,6 +19,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Proof Journey', link: '/journey/the-puzzle' },
+      { text: 'The Proof', link: '/proof/' },
       { text: 'Foundations', link: '/foundations/definitions' },
       { text: 'Proofs', link: '/proofs/affine-orbit' },
       { text: 'Cycles', link: '/cycles/convergent-elimination' },

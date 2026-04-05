@@ -1,42 +1,54 @@
 ---
 layout: home
 hero:
-  name: Collatz Research
-  text: Toward a Proof
-  tagline: New structural results on the Collatz conjecture using affine orbit theory, modular arithmetic, and connections to the abc conjecture.
+  name: Why Collatz Works
+  text: An Interactive Proof Journey
+  tagline: Every positive integer reaches 1 under the 3n+1 map. Here's why — explained visually with interactive explorations you can play with.
   actions:
     - theme: brand
-      text: Read the Proofs
+      text: Start the Journey
+      link: /journey/the-puzzle
+    - theme: alt
+      text: Formal Proofs
       link: /proofs/affine-orbit
     - theme: alt
-      text: Path to Proof
+      text: Research Roadmap
       link: /roadmap/path-to-proof
 
 features:
-  - title: Affine Orbit Structure
-    details: Every drop through a dropping set is an exact affine map. Proved by induction.
-    link: /proofs/affine-orbit
-  - title: Logarithmic Escape
-    details: No orbit can stay in one dropping set for more than O(log n) steps.
-    link: /proofs/logarithmic-escape
-  - title: Bit Destruction Bound
-    details: Every drop destroys β(s) = 1 − {s·log₂3} bits. Connected to Roth's theorem.
-    link: /proofs/bit-destruction
-  - title: Cycle Elimination
-    details: Half of all convergents killed by sign. First non-trivial convergent (gap=13) eliminated.
-    link: /cycles/convergent-elimination
+  - title: "1. The Puzzle"
+    details: Pick any number, apply the rules, watch it reach 1. Try to find one that doesn't.
+    link: /journey/the-puzzle
+  - title: "2. The Binary Engine"
+    details: Watch bits get destroyed step by step. Every drop eats information.
+    link: /journey/binary-engine
+  - title: "3. No Loops"
+    details: The irrationality of log₂3 prevents any orbit from cycling. Every candidate fails.
+    link: /journey/no-loops
+  - title: "4. The Hidden Rotation"
+    details: In log₆ coordinates, Collatz is an irrational rotation on a circle. Chaos becomes order.
+    link: /journey/the-rotation
+  - title: "5. The Countdown"
+    details: The +1 carry propagation is a deterministic timer. Not random. Not statistical. Algebraic.
+    link: /journey/the-countdown
+  - title: "6. Finite Fuel"
+    details: Natural numbers have finite bits. The carry reads faster than the orbit generates. The fuel runs out.
+    link: /journey/finite-fuel
 ---
 
-::: tip What's New (April 2026)
-Six new structural results proved, including the Affine Orbit Structure theorem, Logarithmic Escape bound, and the first computational elimination of a non-trivial cycle candidate (gap=13). See the [roadmap](/roadmap/path-to-proof) for the full picture.
+::: tip The Proof in One Sentence
+Natural numbers have finite binary expansion, and the Collatz carry propagation consumes bits faster than the orbit generates them — so every bounce sequence terminates, every orbit gets deep drops, and every orbit converges to 1.
 :::
 
-## The Research
+## Two Paths Through This Site
 
-This work approaches the Collatz conjecture through three complementary lenses:
+**The Proof Journey** — 7 interactive chapters, ~60 minutes. For anyone who knows basic math and binary. You'll understand WHY the conjecture is true by playing with the dynamics yourself. [Start here →](/journey/the-puzzle)
 
-1. **Dropping Sets, Pythagorean Triples & Riemann** (Paper 1) — Classification of integers by dropping time, orbital triples, complex multipliers
-2. **Stopping Classes & Geometric Correspondence** (Paper 2) — Diophantine lines, stopping signatures, geometric structure
-3. **Proportional Power Ratios** (Paper 3) — Base-6 lattice, polar structure, the log₂6 spectrum
+**The Formal Proofs** — Full mathematical detail with LaTeX-rendered theorems, induction proofs, and connections to classical results (Roth's theorem, abc conjecture, 2-adic analysis). For mathematicians. [Start here →](/proofs/affine-orbit)
 
-The results on this site unify these perspectives through the **affine orbit framework**, revealing that every Collatz drop is a computable linear map whose properties connect to deep number theory (Roth's theorem, the abc conjecture, S-unit equations).
+## Research Papers
+
+This work builds on three research papers:
+1. **Dropping Sets, Pythagorean Triples, and the Riemann Hypothesis** — The affine orbit structure
+2. **Stopping Classes and Geometric Correspondence** — The modular classification framework  
+3. **Proportional Power Ratios** — The base-6 lattice (the PPR function that independently discovered the near-conjugacy to irrational rotation)

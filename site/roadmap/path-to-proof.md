@@ -1,8 +1,6 @@
 # Path to Proof
 
-The Collatz conjecture reduces to two independent claims:
-
-<img src="/two-fronts.svg" alt="Two fronts toward proving the Collatz conjecture" style="max-width: 600px; margin: 1.5rem auto; display: block;" />
+The Collatz conjecture reduces to two independent claims: **no nontrivial cycles** and **no divergent orbits**. Both must be eliminated for the conjecture to hold.
 
 ## The Architecture
 

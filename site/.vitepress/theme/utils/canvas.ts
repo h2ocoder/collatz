@@ -169,7 +169,7 @@ export function drawText(
   x: number, y: number,
   opts?: { align?: CanvasTextAlign; font?: string; color?: string }
 ) {
-  ctx.fillStyle = opts?.color ?? getCSSVar('--vp-c-text-1') || '#333'
+  ctx.fillStyle = opts?.color ?? (getCSSVar('--vp-c-text-1') || '#333')
   ctx.font = opts?.font ?? '12px sans-serif'
   ctx.textAlign = opts?.align ?? 'left'
   ctx.fillText(text, x, y)

@@ -75,7 +75,10 @@ export default defineConfig({
         text: 'Connections',
         items: [
           { text: 'Overview', link: '/connections/' },
-          { text: 'abc Conjecture', link: '/connections/abc-conjecture' }
+          { text: 'abc Conjecture', link: '/connections/abc-conjecture' },
+          { text: 'Universal Dynamics', link: '/connections/universal-dynamics' },
+          { text: 'The Transfer Operator', link: '/connections/hilbert-polya' },
+          { text: 'Eisenstein Lattice', link: '/connections/eisenstein' }
         ]
       },
       {

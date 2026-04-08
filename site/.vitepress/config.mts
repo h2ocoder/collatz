@@ -19,7 +19,6 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Proof Journey', link: '/journey/the-puzzle' },
-      { text: 'The Proof', link: '/proof/' },
       { text: 'Foundations', link: '/foundations/definitions' },
       { text: 'Proofs', link: '/proofs/affine-orbit' },
       { text: 'Cycles', link: '/cycles/convergent-elimination' },

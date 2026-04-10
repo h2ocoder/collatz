@@ -2,15 +2,15 @@
 layout: home
 hero:
   name: Why Collatz Works
-  text: An Interactive Proof Journey
-  tagline: Every positive integer reaches 1 under the 3n+1 map. Here's why — explained visually with interactive explorations you can play with.
+  text: Exploring the 3n+1 Problem
+  tagline: Interactive explorations of the Collatz conjecture — uncovering structural patterns, deep connections, and a possible path to proof.
   actions:
     - theme: brand
       text: Start the Journey
       link: /journey/the-puzzle
     - theme: alt
-      text: Formal Proofs
-      link: /proofs/affine-orbit
+      text: Connections
+      link: /connections/
     - theme: alt
       text: Research Roadmap
       link: /roadmap/path-to-proof
@@ -36,16 +36,28 @@ features:
     link: /journey/finite-fuel
 ---
 
-::: tip The Proof in One Sentence
-Natural numbers have finite binary expansion, and the Collatz carry propagation consumes bits faster than the orbit generates them — so every bounce sequence terminates, every orbit gets deep drops, and every orbit converges to 1.
+::: warning Status
+This is an **exploration**, not a completed proof. The results here include proved theorems, verified computations, and structural conjectures. Some arguments have gaps — notably the finite propagation bound needs full algebraic verification, and the asymptotic cycle elimination needs a rigorous uniformity bound. We describe both what we've proved and what remains open. Peer review and collaboration are welcome.
 :::
+
+## What This Site Is
+
+An amateur mathematician's multi-year exploration of the Collatz conjecture, presented as interactive visualizations you can play with. The goal is not to claim a proof, but to share genuinely interesting structural discoveries:
+
+- **The Collatz map is a thermodynamic system** — with a conservation law, a dissipation rate, and a critical threshold. Among all $nx+c$, $x/y$ systems, $3x+1$ is the *only* nontrivial convergent one, because 3 is the only odd prime less than $2^2 = 4$. [Read more →](/connections/universal-dynamics)
+
+- **The transfer operator has exactly 4 non-zero eigenvalues** — the cube roots of $4/3$, spaced at $120°$ intervals. This connects to the Hilbert-Polya conjecture and Eisenstein integers. [Read more →](/connections/hilbert-polya)
+
+- **Orbits trace walks on the Eisenstein lattice** — and convergence becomes a geometric question: does a biased random walk on $\mathbb{Z}[\omega]$ always end above a geodesic? [Read more →](/connections/eisenstein)
+
+- **Carry propagation is a countdown timer** — the $+1$ in $3n+1$ reads bits of $n$ at a rate that exceeds the orbit's ability to generate new ones. This is verified computationally but not yet fully proved for all integers. [Read more →](/journey/the-countdown)
 
 ## Two Paths Through This Site
 
-**The Proof Journey** — 7 interactive chapters, ~60 minutes. For anyone who knows basic math and binary. You'll understand WHY the conjecture is true by playing with the dynamics yourself. [Start here →](/journey/the-puzzle)
+**The Proof Journey** — 7 interactive chapters. For anyone who knows basic math and binary. Explore WHY the conjecture should be true by playing with the dynamics yourself. [Start here →](/journey/the-puzzle)
 
-**The Formal Proofs** — Full mathematical detail with LaTeX-rendered theorems, induction proofs, and connections to classical results (Roth's theorem, abc conjecture, 2-adic analysis). For mathematicians. [Start here →](/proofs/affine-orbit)
+**The Research** — Proved results, structural connections, and the roadmap of what's done and what remains. For mathematicians. [Proved results →](/proofs/affine-orbit) | [Connections →](/connections/) | [Roadmap →](/roadmap/path-to-proof)
 
 ## Prior Work
 
-This proof framework grew out of several years of self-published exploration by an amateur mathematician working in industry. The earlier writings developed the dropping set framework, the geometric correspondence, and the base-6 rotation discovery that this site brings together into a proof. [Read more →](/publications)
+This exploration grew out of several years of self-published work by an amateur mathematician working in industry. The earlier writings developed the dropping set framework, the geometric correspondence, and the base-6 rotation discovery. [Read more →](/publications)

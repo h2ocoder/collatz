@@ -161,6 +161,24 @@ export function frac(x: number): number {
   return x - Math.floor(x)
 }
 
+/** Alpha sequence: v2(3m+1) at each Syracuse step */
+export function alphaSequence(n: number, maxSteps = 5000): number[] {
+  const alphas: number[] = []
+  let m = n
+  let steps = 0
+  while (m !== 1 && steps < maxSteps) {
+    alphas.push(v2(3 * m + 1))
+    m = syracuseStep(m)
+    steps++
+  }
+  return alphas
+}
+
+/** Eisenstein norm: N(a + b*omega) = a^2 - ab + b^2 */
+export function eisensteinNorm(a: number, b: number): number {
+  return a * a - a * b + b * b
+}
+
 /** The rotation constant */
 export const LOG6_3 = Math.log(3) / Math.log(6) // ≈ 0.6131
 export const LOG2_3 = Math.log2(3) // ≈ 1.5850

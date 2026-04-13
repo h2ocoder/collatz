@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { DecisionPrompt } from "@/components/game/DecisionPrompt";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof DecisionPrompt> = {
   title: "Game/DecisionPrompt",

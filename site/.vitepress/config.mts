@@ -19,7 +19,6 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Proof Journey', link: '/journey/the-puzzle' },
-      { text: 'The Proof', link: '/proof/' },
       { text: 'Foundations', link: '/foundations/definitions' },
       { text: 'Proofs', link: '/proofs/affine-orbit' },
       { text: 'Cycles', link: '/cycles/convergent-elimination' },
@@ -75,7 +74,10 @@ export default defineConfig({
         text: 'Connections',
         items: [
           { text: 'Overview', link: '/connections/' },
-          { text: 'abc Conjecture', link: '/connections/abc-conjecture' }
+          { text: 'abc Conjecture', link: '/connections/abc-conjecture' },
+          { text: 'Universal Dynamics', link: '/connections/universal-dynamics' },
+          { text: 'The Transfer Operator', link: '/connections/hilbert-polya' },
+          { text: 'Eisenstein Lattice', link: '/connections/eisenstein' }
         ]
       },
       {
@@ -85,6 +87,10 @@ export default defineConfig({
           { text: 'Binary Shortcut', link: '/explore/binary-shortcut' }
         ]
       }
+    ],
+
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/h2ocoder/collatz' }
     ],
 
     outline: { level: [2, 3] }

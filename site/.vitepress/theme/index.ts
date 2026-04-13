@@ -17,6 +17,10 @@ import BounceSimulator from './components/journey/BounceSimulator.vue'
 import NaturalVs2Adic from './components/journey/NaturalVs2Adic.vue'
 import ProofMap from './components/journey/ProofMap.vue'
 import PhysicsAnalogy from './components/journey/PhysicsAnalogy.vue'
+import ZooExplorer from './components/journey/ZooExplorer.vue'
+import SpectrumVisualizer from './components/journey/SpectrumVisualizer.vue'
+import EisensteinWalk from './components/journey/EisensteinWalk.vue'
+import AlphaPositionChart from './components/journey/AlphaPositionChart.vue'
 
 export default {
   extends: DefaultTheme,
@@ -37,5 +41,9 @@ export default {
     app.component('NaturalVs2Adic', NaturalVs2Adic)
     app.component('ProofMap', ProofMap)
     app.component('PhysicsAnalogy', PhysicsAnalogy)
+    app.component('ZooExplorer', ZooExplorer)
+    app.component('SpectrumVisualizer', SpectrumVisualizer)
+    app.component('EisensteinWalk', EisensteinWalk)
+    app.component('AlphaPositionChart', AlphaPositionChart)
   }
 }

@@ -226,8 +226,50 @@ enum BountyAction {
         #[arg(long, default_value = "30")]
         expires_days: u64,
     },
-    /// List open bounties
-    List,
+    /// List open bounties with optional filters
+    ///
+    /// Clones/fetches the bounty-board repo to a local cache, reads every
+    /// file in `open/`, applies filters, and prints a table (or JSON array
+    /// with --json).
+    ///
+    /// Examples:
+    ///   emanon bounty list
+    ///   emanon bounty list --min-price 2.5
+    ///   emanon bounty list --predicate-includes path_exists
+    ///   emanon bounty list --expires-before 2026-05-01
+    ///   emanon bounty list --json
+    List {
+        /// Only show bounties with max_price_usdc >= MIN_PRICE
+        #[arg(long)]
+        min_price: Option<f64>,
+        /// Only show bounties whose constraint tree contains this predicate kind
+        /// (e.g. path_exists, snapshot_count_at_least, genus_present,
+        ///  merge_count_at_least, file_contains, jq, and, or, not)
+        #[arg(long)]
+        predicate_includes: Option<String>,
+        /// Only show bounties that expire strictly before this date (ISO-8601, e.g. 2026-05-01)
+        #[arg(long)]
+        expires_before: Option<String>,
+        /// Output as a machine-readable JSON array (one bounty object per element)
+        #[arg(long)]
+        json: bool,
+        /// Bounty board repo URL (overrides [bounty] board_url in config)
+        #[arg(long)]
+        board: Option<String>,
+    },
+    /// Show full detail of a single bounty
+    ///
+    /// Prints the raw JSON of the bounty stored in `open/<uuid>.json`.
+    ///
+    /// Example:
+    ///   emanon bounty show 550e8400-e29b-41d4-a716-446655440000
+    Show {
+        /// Full UUID of the bounty to inspect
+        uuid: String,
+        /// Bounty board repo URL (overrides [bounty] board_url in config)
+        #[arg(long)]
+        board: Option<String>,
+    },
     /// Accept a bounty
     Accept,
     /// Deliver work for an accepted bounty
@@ -3088,6 +3130,208 @@ fn sync_registry(registry_url: &str) -> Result<std::path::PathBuf, Box<dyn std::
     Ok(cache_dir)
 }
 
+// ---------------------------------------------------------------------------
+// Bounty-board local cache helpers
+// ---------------------------------------------------------------------------
+
+/// Get the local cache directory for a bounty-board repo.
+/// Mirrors the layout of `registry_cache_dir` but under `bounty-board/`.
+fn bounty_board_cache_dir(board_url: &str) -> Result<std::path::PathBuf, Box<dyn std::error::Error>> {
+    let home = std::env::var("HOME")
+        .map_err(|_| "HOME environment variable not set")?;
+    let slug: String = board_url
+        .chars()
+        .map(|c| if c.is_alphanumeric() || c == '.' { c } else { '-' })
+        .collect();
+    let mut prev_dash = false;
+    let slug: String = slug.chars().filter(|&c| {
+        if c == '-' {
+            if prev_dash { return false; }
+            prev_dash = true;
+        } else {
+            prev_dash = false;
+        }
+        true
+    }).collect();
+    Ok(std::path::PathBuf::from(format!(
+        "{home}/.local/share/emanon/bounty-board/{slug}"
+    )))
+}
+
+/// Clone or fetch the bounty-board to its local cache directory.
+/// Returns the cache directory path.
+fn sync_bounty_board(board_url: &str) -> Result<std::path::PathBuf, Box<dyn std::error::Error>> {
+    let cache_dir = bounty_board_cache_dir(board_url)?;
+
+    if cache_dir.exists() {
+        // Already cloned — just fetch to refresh.
+        let fetch = Command::new("git")
+            .args(["fetch", "--all", "--quiet"])
+            .current_dir(&cache_dir)
+            .output()?;
+        if !fetch.status.success() {
+            eprintln!(
+                "warning: bounty board fetch failed (using cached data):\n{}",
+                String::from_utf8_lossy(&fetch.stderr)
+            );
+        }
+    } else {
+        // First time — clone.
+        std::fs::create_dir_all(cache_dir.parent().unwrap())?;
+        let clone = Command::new("git")
+            .args(["clone", "--depth=1", "--quiet", board_url])
+            .arg(&cache_dir)
+            .output()?;
+        if !clone.status.success() {
+            return Err(format!(
+                "git clone {} failed:\n{}",
+                board_url,
+                String::from_utf8_lossy(&clone.stderr)
+            )
+            .into());
+        }
+    }
+
+    Ok(cache_dir)
+}
+
+// ---------------------------------------------------------------------------
+// Bounty list / show commands
+// ---------------------------------------------------------------------------
+
+/// Short human-readable summary of a predicate for the table view.
+fn constraint_summary(p: &bounty::Predicate) -> String {
+    match p {
+        bounty::Predicate::PathExists { path } => format!("path_exists:{}", path),
+        bounty::Predicate::FileContains { path, .. } => format!("file_contains:{}", path),
+        bounty::Predicate::Jq { path, .. } => format!("jq:{}", path),
+        bounty::Predicate::SnapshotCountAtLeast { n } => format!("snapshot_count_at_least:{}", n),
+        bounty::Predicate::GenusPresentSetK { set_k } => format!("genus_present(k={})", set_k),
+        bounty::Predicate::MergeCountAtLeast { n } => format!("merge_count_at_least:{}", n),
+        bounty::Predicate::And { children } => format!("and[{}]", children.len()),
+        bounty::Predicate::Or { children } => format!("or[{}]", children.len()),
+        bounty::Predicate::Not { .. } => "not(...)".to_string(),
+    }
+}
+
+/// Implements `emanon bounty list [filters...]`.
+///
+/// Syncs the bounty-board repo to a local cache, reads all `open/*.json`
+/// files, applies the requested filters, and prints either a formatted table
+/// or a JSON array (--json).
+///
+/// Performance: file reads are sequential but purely local after the first
+/// clone; 1000 small JSON files complete in well under 1 s on any disk.
+fn cmd_bounty_list(
+    min_price: Option<f64>,
+    predicate_includes: Option<&str>,
+    expires_before: Option<&str>,
+    json_output: bool,
+    board_url: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    eprintln!("🔄  Syncing bounty board...");
+    let cache_dir = sync_bounty_board(board_url)?;
+
+    // Collect matching bounties from open/
+    let open_dir = cache_dir.join("open");
+    let mut bounties: Vec<bounty::Bounty> = Vec::new();
+
+    if open_dir.is_dir() {
+        let mut entries: Vec<_> = std::fs::read_dir(&open_dir)?
+            .flatten()
+            .filter(|e| {
+                e.path().extension().map(|x| x == "json").unwrap_or(false)
+            })
+            .collect();
+        // Sort by filename for deterministic output.
+        entries.sort_by_key(|e| e.file_name());
+
+        for entry in entries {
+            let content = match std::fs::read_to_string(entry.path()) {
+                Ok(c) => c,
+                Err(_) => continue,
+            };
+            let b = match bounty::Bounty::from_json(&content) {
+                Some(b) => b,
+                None => continue,
+            };
+
+            // --- Filter: min price ---
+            if let Some(min) = min_price {
+                if b.max_price_usdc < min {
+                    continue;
+                }
+            }
+            // --- Filter: predicate kind ---
+            if let Some(kind) = predicate_includes {
+                if !bounty::predicate_includes_kind(&b.constraint, kind) {
+                    continue;
+                }
+            }
+            // --- Filter: expires before (ISO-8601 string lexicographic comparison) ---
+            if let Some(cutoff) = expires_before {
+                // Keep only bounties whose expires_at < cutoff.
+                if b.expires_at.as_str() >= cutoff {
+                    continue;
+                }
+            }
+
+            bounties.push(b);
+        }
+    }
+
+    // --- JSON output ---
+    if json_output {
+        let parts: Vec<String> = bounties.iter().map(|b| b.to_json()).collect();
+        println!("[{}]", parts.join(",\n"));
+        return Ok(());
+    }
+
+    // --- Table output ---
+    if bounties.is_empty() {
+        println!("No open bounties found.");
+        return Ok(());
+    }
+
+    // Header
+    println!(
+        "{:<38}  {:>10}  {:>24}  {}",
+        "UUID", "Price USDC", "Expires", "Constraint"
+    );
+    println!("{}", "-".repeat(110));
+    for b in &bounties {
+        println!(
+            "{:<38}  {:>10.2}  {:>24}  {}",
+            b.id,
+            b.max_price_usdc,
+            b.expires_at,
+            constraint_summary(&b.constraint)
+        );
+    }
+    println!("\n{} bounty/bounties listed.", bounties.len());
+    Ok(())
+}
+
+/// Implements `emanon bounty show <uuid>`.
+///
+/// Syncs the bounty-board, then pretty-prints the raw JSON stored at
+/// `open/<uuid>.json`.
+fn cmd_bounty_show(
+    uuid: &str,
+    board_url: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    eprintln!("🔄  Syncing bounty board...");
+    let cache_dir = sync_bounty_board(board_url)?;
+
+    let bounty_file = cache_dir.join("open").join(format!("{}.json", uuid));
+    if !bounty_file.exists() {
+        return Err(format!("Bounty '{}' not found in open/ on the bounty board.", uuid).into());
+    }
+    let content = std::fs::read_to_string(&bounty_file)?;
+    println!("{}", content);
+    Ok(())
+}
+
 /// Read and minimally parse a registry entry JSON file.
 /// Returns a flat key→value map (string values only, arrays as comma-joined).
 fn parse_entry_json(path: &std::path::Path) -> std::collections::HashMap<String, String> {
@@ -3788,7 +4032,28 @@ fn main() {
                     std::process::exit(1);
                 }
             }
-            BountyAction::List => not_yet("emanon bounty list"),
+            BountyAction::List { min_price, predicate_includes, expires_before, json, board } => {
+                let config = load_emanon_config();
+                let board_url = board.as_deref().unwrap_or(&config.bounty_board_url).to_string();
+                if let Err(e) = cmd_bounty_list(
+                    min_price,
+                    predicate_includes.as_deref(),
+                    expires_before.as_deref(),
+                    json,
+                    &board_url,
+                ) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+            BountyAction::Show { uuid, board } => {
+                let config = load_emanon_config();
+                let board_url = board.as_deref().unwrap_or(&config.bounty_board_url).to_string();
+                if let Err(e) = cmd_bounty_show(&uuid, &board_url) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
             BountyAction::Accept => not_yet("emanon bounty accept"),
             BountyAction::Deliver => not_yet("emanon bounty deliver"),
         },

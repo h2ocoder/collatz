@@ -650,6 +650,35 @@ fn parse_predicate_array(obj: &str, key: &str) -> Option<Vec<Predicate>> {
 }
 
 // ---------------------------------------------------------------------------
+// Predicate utility helpers
+// ---------------------------------------------------------------------------
+
+/// Return `true` if the predicate tree contains at least one node of `kind`.
+///
+/// Kind strings match the JSON key names:
+/// `"path_exists"`, `"file_contains"`, `"jq"`, `"snapshot_count_at_least"`,
+/// `"genus_present"`, `"merge_count_at_least"`, `"and"`, `"or"`, `"not"`.
+pub fn predicate_includes_kind(predicate: &Predicate, kind: &str) -> bool {
+    match predicate {
+        Predicate::PathExists { .. } => kind == "path_exists",
+        Predicate::FileContains { .. } => kind == "file_contains",
+        Predicate::Jq { .. } => kind == "jq",
+        Predicate::SnapshotCountAtLeast { .. } => kind == "snapshot_count_at_least",
+        Predicate::GenusPresentSetK { .. } => kind == "genus_present",
+        Predicate::MergeCountAtLeast { .. } => kind == "merge_count_at_least",
+        Predicate::And { children } => {
+            kind == "and" || children.iter().any(|c| predicate_includes_kind(c, kind))
+        }
+        Predicate::Or { children } => {
+            kind == "or" || children.iter().any(|c| predicate_includes_kind(c, kind))
+        }
+        Predicate::Not { child } => {
+            kind == "not" || predicate_includes_kind(child, kind)
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
 
@@ -958,5 +987,104 @@ mod tests {
         let json = r#"{"id":"abc","buyer_pubkey":"ed25519:x","constraint":{"path_exists":"regions/alpha.json"},"max_price_usdc":1.00,"expires_at":"2026-06-01T00:00:00Z","starter_seed_source":"drand","deliverable_format":"git-bundle","min_miner_reputation":0,"created_at":"2026-04-14T00:00:00Z"}"#;
         let b = Bounty::from_json(json).unwrap();
         assert!(matches!(b.starter_seed_source, SeedSource::Drand));
+    }
+
+    // -----------------------------------------------------------------------
+    // predicate_includes_kind
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn includes_kind_leaf_path_exists() {
+        let p = Predicate::PathExists { path: "regions/x".into() };
+        assert!(predicate_includes_kind(&p, "path_exists"));
+        assert!(!predicate_includes_kind(&p, "snapshot_count_at_least"));
+        assert!(!predicate_includes_kind(&p, "genus_present"));
+    }
+
+    #[test]
+    fn includes_kind_leaf_snapshot() {
+        let p = Predicate::SnapshotCountAtLeast { n: 3 };
+        assert!(predicate_includes_kind(&p, "snapshot_count_at_least"));
+        assert!(!predicate_includes_kind(&p, "path_exists"));
+    }
+
+    #[test]
+    fn includes_kind_leaf_genus() {
+        let p = Predicate::GenusPresentSetK { set_k: 7 };
+        assert!(predicate_includes_kind(&p, "genus_present"));
+        assert!(!predicate_includes_kind(&p, "merge_count_at_least"));
+    }
+
+    #[test]
+    fn includes_kind_leaf_merge() {
+        let p = Predicate::MergeCountAtLeast { n: 2 };
+        assert!(predicate_includes_kind(&p, "merge_count_at_least"));
+    }
+
+    #[test]
+    fn includes_kind_leaf_file_contains() {
+        let p = Predicate::FileContains { path: "f".into(), substring: "s".into() };
+        assert!(predicate_includes_kind(&p, "file_contains"));
+    }
+
+    #[test]
+    fn includes_kind_leaf_jq() {
+        let p = Predicate::Jq { path: "f.json".into(), filter: ".x".into() };
+        assert!(predicate_includes_kind(&p, "jq"));
+    }
+
+    #[test]
+    fn includes_kind_and_self() {
+        let p = Predicate::And { children: vec![] };
+        assert!(predicate_includes_kind(&p, "and"));
+        assert!(!predicate_includes_kind(&p, "or"));
+    }
+
+    #[test]
+    fn includes_kind_nested_in_and() {
+        // and(path_exists, snapshot_count_at_least)
+        let p = Predicate::And {
+            children: vec![
+                Predicate::PathExists { path: "regions/x".into() },
+                Predicate::SnapshotCountAtLeast { n: 5 },
+            ],
+        };
+        assert!(predicate_includes_kind(&p, "path_exists"));
+        assert!(predicate_includes_kind(&p, "snapshot_count_at_least"));
+        assert!(!predicate_includes_kind(&p, "genus_present"));
+        assert!(predicate_includes_kind(&p, "and")); // the combinator itself
+    }
+
+    #[test]
+    fn includes_kind_nested_in_not() {
+        let p = Predicate::Not {
+            child: Box::new(Predicate::GenusPresentSetK { set_k: 13 }),
+        };
+        assert!(predicate_includes_kind(&p, "genus_present"));
+        assert!(predicate_includes_kind(&p, "not"));
+        assert!(!predicate_includes_kind(&p, "path_exists"));
+    }
+
+    #[test]
+    fn includes_kind_deeply_nested() {
+        // or(and(path_exists, merge_count_at_least), genus_present)
+        let p = Predicate::Or {
+            children: vec![
+                Predicate::And {
+                    children: vec![
+                        Predicate::PathExists { path: "f".into() },
+                        Predicate::MergeCountAtLeast { n: 1 },
+                    ],
+                },
+                Predicate::GenusPresentSetK { set_k: 3 },
+            ],
+        };
+        assert!(predicate_includes_kind(&p, "or"));
+        assert!(predicate_includes_kind(&p, "and"));
+        assert!(predicate_includes_kind(&p, "path_exists"));
+        assert!(predicate_includes_kind(&p, "merge_count_at_least"));
+        assert!(predicate_includes_kind(&p, "genus_present"));
+        assert!(!predicate_includes_kind(&p, "jq"));
+        assert!(!predicate_includes_kind(&p, "not"));
     }
 }

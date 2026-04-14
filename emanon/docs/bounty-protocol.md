@@ -368,3 +368,84 @@ Backwards compatibility: v1 predicates will remain valid in all future versions.
 
 *Drafted 2026-04-14 as part of ALPHA-47 (M6.1 — Bounty data model and predicate
 language spec).*
+
+---
+
+## 9. Off-chain Escrow Board (M6.2)
+
+Until Solana integration is complete, Emanon uses an **off-chain escrow simulation**
+stored in the [`emanon-bounty-board`](https://github.com/forgetthefrets/emanon-bounty-board)
+GitHub repository.
+
+### Directory layout
+
+```
+open/            — Bounties accepting miner bids (one <uuid>.json per bounty)
+in-progress/     — Bounties with an accepted miner
+settled/         — Completed bounties (delivered + verified)
+escrow.json      — Simulation ledger tracking who owes who
+schema/          — JSON Schema for validating bounty files
+```
+
+### Extended wire format (off-chain)
+
+On-chain bounties do not include `buyer_signature` — the signature is implicit from
+the Solana transaction.  Off-chain bounties add a simulation stand-in:
+
+```json
+{
+  "id": "<uuid-v4>",
+  "buyer_pubkey": "ed25519:<base58>",
+  "constraint": { ... },
+  "max_price_usdc": 5.00,
+  "expires_at": "2026-05-14T00:00:00Z",
+  "starter_seed_source": "switchboard-vrf",
+  "deliverable_format": "git-bundle",
+  "min_miner_reputation": 0,
+  "created_at": "2026-04-14T15:30:00Z",
+  "buyer_signature": "sha256-sim:<hex>"
+}
+```
+
+`buyer_signature` = `sha256(<buyer_pubkey>:<canonical_bounty_json_without_signature>)`.
+
+### Posting a bounty
+
+```sh
+# 1. Write a predicate constraint file
+cat > spec.json << 'SPEC'
+{"snapshot_count_at_least": 5}
+SPEC
+
+# 2. Post
+emanon bounty post --constraint spec.json --max-price 5
+
+# Output:
+# 🎯  Posting bounty 550e8400-...
+#     constraint:  {"snapshot_count_at_least": 5}
+#     max_price:   $5.00 USDC
+#     expires_at:  2026-05-14T15:30:00Z
+#     board:       https://github.com/forgetthefrets/emanon-bounty-board
+# 🔄  Cloning bounty board...
+# 🚀  Pushing branch 'bounty-550e8400'...
+# 📬  Opening PR...
+# ✅  PR opened: https://github.com/forgetthefrets/emanon-bounty-board/pull/1
+#
+# Bounty ID:  550e8400-...
+# Expires at: 2026-05-14T15:30:00Z
+# Signature:  sha256-sim:abc123...
+```
+
+### Config
+
+Add to `~/.config/emanon/config.toml`:
+
+```toml
+[bounty]
+board_url = "https://github.com/forgetthefrets/emanon-bounty-board"
+buyer_pubkey = "ed25519:<your-base58-key>"
+```
+
+---
+
+*Section added 2026-04-14 as part of ALPHA-48 (M6.2 — `emanon bounty post`).*

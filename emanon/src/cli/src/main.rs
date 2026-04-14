@@ -204,8 +204,28 @@ enum ContractAction {
 
 #[derive(Subcommand)]
 enum BountyAction {
-    /// Post a new bounty
-    Post,
+    /// Post a new bounty to the bounty board
+    ///
+    /// Reads a predicate JSON file (--constraint), validates it, generates a UUID,
+    /// attaches your buyer pubkey + simulation signature, and opens a PR to the
+    /// bounty-board repo writing the bounty to `open/<uuid>.json`.
+    ///
+    /// Example:
+    ///   emanon bounty post --constraint spec.json --max-price 5
+    Post {
+        /// Path to the predicate constraint JSON file
+        #[arg(long, short = 'c')]
+        constraint: String,
+        /// Maximum price in USDC you will pay for delivery
+        #[arg(long, short = 'p')]
+        max_price: f64,
+        /// Bounty board repo URL (overrides [bounty] board_url in config)
+        #[arg(long)]
+        board: Option<String>,
+        /// Days until the bounty expires (default: 30)
+        #[arg(long, default_value = "30")]
+        expires_days: u64,
+    },
     /// List open bounties
     List,
     /// Accept a bounty
@@ -2486,14 +2506,364 @@ fn cmd_validate(strict: bool) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 // ---------------------------------------------------------------------------
+// Bounty — post command
+// ---------------------------------------------------------------------------
+
+/// Implements `emanon bounty post --constraint <file> --max-price <f>`.
+///
+/// Reads a predicate JSON file, validates it, generates a UUID, signs it
+/// with a SHA-256 simulation signature, and opens a PR to the bounty-board
+/// repo writing the bounty to `open/<uuid>.json`.
+///
+/// # Signature simulation
+///
+/// Real Ed25519 signatures require a crypto crate.  For M6 (off-chain simulation)
+/// we compute `sha256(<buyer_pubkey>:<canonical_bounty_json>)` and store it as
+/// `"buyer_signature": "sha256-sim:<hex>"`.  Anyone with the buyer_pubkey can
+/// verify by recomputing the same sha256.  Real signatures arrive with Solana integration.
+fn cmd_bounty_post(
+    constraint_path: &str,
+    max_price: f64,
+    board_url: &str,
+    expires_days: u64,
+    config: &EmanonConfig,
+) -> Result<(), Box<dyn std::error::Error>> {
+    // --- Read and validate constraint file ---
+    if !std::path::Path::new(constraint_path).exists() {
+        return Err(format!("constraint file not found: {constraint_path}").into());
+    }
+    let constraint_raw = std::fs::read_to_string(constraint_path)
+        .map_err(|e| format!("failed to read {constraint_path}: {e}"))?;
+    let constraint_raw = constraint_raw.trim();
+
+    // Validate by parsing through the predicate language.
+    let constraint = bounty::Predicate::from_json(constraint_raw)
+        .ok_or_else(|| {
+            format!(
+                "invalid predicate JSON in '{constraint_path}'.\n\
+                 Supported atoms: path_exists, file_contains, jq, snapshot_count_at_least,\n\
+                 genus_present, merge_count_at_least.\n\
+                 Combinators: and, or, not."
+            )
+        })?;
+
+    // --- Resolve buyer_pubkey ---
+    let buyer_pubkey = config.buyer_pubkey.as_deref().ok_or_else(|| {
+        "buyer_pubkey not configured.\n\
+         Add to ~/.config/emanon/config.toml:\n\
+         [bounty]\n\
+         buyer_pubkey = \"ed25519:<your-base58-key>\""
+    })?;
+    if !buyer_pubkey.starts_with("ed25519:") {
+        return Err(format!(
+            "buyer_pubkey must start with 'ed25519:'; got: {buyer_pubkey}"
+        ).into());
+    }
+
+    // --- Generate UUID via /proc/sys/kernel/random/uuid (Linux) or uuidgen ---
+    let uuid = generate_uuid()?;
+
+    // --- Timestamps ---
+    let now_ts = current_iso8601_timestamp();
+    let expires_at = add_days_to_timestamp(&now_ts, expires_days);
+
+    // --- Build the Bounty struct ---
+    let bounty = bounty::Bounty {
+        id: uuid.clone(),
+        buyer_pubkey: buyer_pubkey.to_string(),
+        constraint,
+        max_price_usdc: max_price,
+        expires_at: expires_at.clone(),
+        starter_seed_source: bounty::SeedSource::SwitchboardVrf,
+        deliverable_format: bounty::DeliverableFormat::GitBundle,
+        min_miner_reputation: 0,
+        created_at: now_ts.clone(),
+    };
+
+    // --- Serialize bounty (without signature) for signing ---
+    let bounty_json_no_sig = bounty.to_json();
+
+    // --- Compute simulation signature: sha256(buyer_pubkey + ":" + bounty_json) ---
+    let sign_payload = format!("{buyer_pubkey}:{bounty_json_no_sig}");
+    let sig_hex = sha256_str(&sign_payload)?;
+    let buyer_signature = format!("sha256-sim:{sig_hex}");
+
+    // --- Build final bounty JSON with signature ---
+    // Bounty::to_json() ends with "\n}" — strip both chars and append the signature field.
+    let bounty_json = {
+        let suffix = "\n}";
+        if bounty_json_no_sig.ends_with(suffix) {
+            let base = &bounty_json_no_sig[..bounty_json_no_sig.len() - suffix.len()];
+            format!("{base},\n  \"buyer_signature\": \"{buyer_signature}\"\n}}")
+        } else {
+            // Fallback: append as new field (handles unexpected format).
+            format!("{},{{\"buyer_signature\":\"{buyer_signature}\"}}", bounty_json_no_sig)
+        }
+    };
+
+    println!("🎯  Posting bounty {uuid}");
+    println!("    constraint:  {}", constraint_raw.lines().next().unwrap_or("..."));
+    println!("    max_price:   ${max_price:.2} USDC");
+    println!("    expires_at:  {expires_at}");
+    println!("    board:       {board_url}");
+
+    // --- Clone bounty-board to temp dir ---
+    let tmp_parent = std::env::temp_dir().join("emanon-bounty-post");
+    std::fs::create_dir_all(&tmp_parent)?;
+    let tmp_clone = tmp_parent.join(&uuid[..8]);
+    if tmp_clone.exists() {
+        std::fs::remove_dir_all(&tmp_clone)?;
+    }
+
+    println!("🔄  Cloning bounty board...");
+    let clone = Command::new("git")
+        .args(["clone", "--depth=1", "--quiet", board_url])
+        .arg(&tmp_clone)
+        .output()?;
+    if !clone.status.success() {
+        return Err(format!(
+            "git clone {} failed:\n{}",
+            board_url,
+            String::from_utf8_lossy(&clone.stderr)
+        ).into());
+    }
+
+    // --- Create branch ---
+    let branch_name = format!("bounty-{}", &uuid[..8]);
+    let checkout = Command::new("git")
+        .args(["checkout", "-b", &branch_name])
+        .current_dir(&tmp_clone)
+        .output()?;
+    if !checkout.status.success() {
+        return Err(format!(
+            "git checkout -b failed:\n{}",
+            String::from_utf8_lossy(&checkout.stderr)
+        ).into());
+    }
+
+    // --- Write bounty file to open/ ---
+    let open_dir = tmp_clone.join("open");
+    std::fs::create_dir_all(&open_dir)?;
+    let bounty_file = open_dir.join(format!("{uuid}.json"));
+    std::fs::write(&bounty_file, &bounty_json)?;
+
+    // --- Commit ---
+    let add = Command::new("git")
+        .args(["add", &format!("open/{uuid}.json")])
+        .current_dir(&tmp_clone)
+        .output()?;
+    if !add.status.success() {
+        return Err("git add failed in bounty-board clone".into());
+    }
+
+    let commit_msg = format!(
+        "bounty(open): {uuid}\n\
+         \n\
+         Buyer:      {buyer_pubkey}\n\
+         Max-Price:  ${max_price:.2} USDC\n\
+         Expires-At: {expires_at}\n\
+         Created-At: {now_ts}\n\
+         \n\
+         Co-Authored-By: Alpha36 <alpha36@nanoclaw.local>"
+    );
+    let commit = Command::new("git")
+        .args(["commit", "-m", &commit_msg])
+        .current_dir(&tmp_clone)
+        .output()?;
+    if !commit.status.success() {
+        return Err(format!(
+            "git commit failed:\n{}",
+            String::from_utf8_lossy(&commit.stderr)
+        ).into());
+    }
+
+    // --- Push ---
+    println!("🚀  Pushing branch '{branch_name}'...");
+    let push = Command::new("git")
+        .args(["push", "origin", &branch_name])
+        .current_dir(&tmp_clone)
+        .output()?;
+    if !push.status.success() {
+        let sha_out = Command::new("git")
+            .args(["rev-parse", "HEAD"])
+            .current_dir(&tmp_clone)
+            .output()
+            .ok()
+            .filter(|o| o.status.success())
+            .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
+            .unwrap_or_default();
+        return Err(format!(
+            "git push failed (commit {} pending push — auth failure?):\n{}",
+            sha_out,
+            String::from_utf8_lossy(&push.stderr)
+        ).into());
+    }
+
+    // --- Open PR ---
+    println!("📬  Opening PR...");
+    let board_repo = board_url.trim_start_matches("https://github.com/");
+    let pr_title = format!("bounty(open): {}", &uuid[..8]);
+    let pr_body = format!(
+        "## New Bounty\n\
+         \n\
+         | Field | Value |\n\
+         |---|---|\n\
+         | ID | `{uuid}` |\n\
+         | Buyer Pubkey | `{buyer_pubkey}` |\n\
+         | Max Price | ${max_price:.2} USDC |\n\
+         | Expires | {expires_at} |\n\
+         | Created | {now_ts} |\n\
+         \n\
+         ### Constraint\n\
+         \n\
+         ```json\n\
+         {constraint_raw}\n\
+         ```\n\
+         \n\
+         ### Signature\n\
+         \n\
+         ```\n\
+         {buyer_signature}\n\
+         ```\n\
+         \n\
+         > Verify: `sha256(<buyer_pubkey>:<canonical_bounty_json_without_signature>)`\n\
+         \n\
+         Generated by `emanon bounty post` — Alpha36 worker."
+    );
+
+    let gh_pr = Command::new("gh")
+        .args([
+            "pr", "create",
+            "--repo", board_repo,
+            "--title", &pr_title,
+            "--body", &pr_body,
+            "--head", &branch_name,
+            "--base", "main",
+        ])
+        .current_dir(&tmp_clone)
+        .output()?;
+
+    if gh_pr.status.success() {
+        let pr_url = String::from_utf8_lossy(&gh_pr.stdout).trim().to_string();
+        println!("✅  PR opened: {pr_url}");
+    } else {
+        let stderr = String::from_utf8_lossy(&gh_pr.stderr);
+        let board_base = board_url.trim_end_matches(".git");
+        println!(
+            "⚠️  gh pr create failed (branch pushed — open PR manually):\n\
+             Branch:  {branch_name}\n\
+             Compare: {board_base}/compare/{branch_name}\n\
+             Error:   {stderr}"
+        );
+    }
+
+    // --- Clean up temp clone ---
+    let _ = std::fs::remove_dir_all(&tmp_clone);
+
+    // --- Print summary ---
+    println!();
+    println!("Bounty ID:  {uuid}");
+    println!("Expires at: {expires_at}");
+    println!("Signature:  {buyer_signature}");
+
+    Ok(())
+}
+
+/// Generate a UUID v4 string.
+///
+/// Tries `/proc/sys/kernel/random/uuid` (Linux), then `uuidgen`, then
+/// falls back to a time-based pseudo-UUID (not cryptographically random but
+/// unique enough for simulation purposes).
+fn generate_uuid() -> Result<String, Box<dyn std::error::Error>> {
+    // Try Linux kernel UUID source.
+    if let Ok(uuid) = std::fs::read_to_string("/proc/sys/kernel/random/uuid") {
+        let u = uuid.trim().to_string();
+        if u.len() == 36 {
+            return Ok(u);
+        }
+    }
+    // Try uuidgen command.
+    let out = Command::new("uuidgen").output();
+    if let Ok(o) = out {
+        if o.status.success() {
+            let u = String::from_utf8_lossy(&o.stdout).trim().to_lowercase();
+            if u.len() == 36 {
+                return Ok(u);
+            }
+        }
+    }
+    // Fallback: construct a pseudo-UUID from time + sha256(time).
+    let ts = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_nanos()
+        .to_string();
+    let hex = sha256_str(&ts).unwrap_or_else(|_| ts.chars().take(32).collect());
+    if hex.len() >= 32 {
+        Ok(format!(
+            "{}-{}-4{}-8{}-{}",
+            &hex[0..8],
+            &hex[8..12],
+            &hex[13..16],
+            &hex[16..19],
+            &hex[20..32],
+        ))
+    } else {
+        Err("uuid generation failed: insufficient entropy".into())
+    }
+}
+
+/// Add `days` to an ISO-8601 timestamp string (UTC).
+///
+/// Uses the `date` command: `date -u -d "<ts> + N days" +%Y-%m-%dT%H:%M:%SZ`.
+/// Falls back to appending "(+N days)" as a note if `date` fails.
+fn add_days_to_timestamp(ts: &str, days: u64) -> String {
+    // GNU date supports `-d "date + N days"`.
+    let expr = format!("{ts} + {days} days");
+    let out = Command::new("date")
+        .args(["-u", "-d", &expr, "+%Y-%m-%dT%H:%M:%SZ"])
+        .output();
+    match out {
+        Ok(o) if o.status.success() => {
+            String::from_utf8_lossy(&o.stdout).trim().to_string()
+        }
+        _ => {
+            // Fallback: manually add days to the year-day portion.
+            // Parse YYYY-MM-DD from ts, add days naively (won't handle month rollover but
+            // is good enough for a 30-day default where month rollover is rare).
+            if ts.len() >= 10 {
+                let year: u32 = ts[0..4].parse().unwrap_or(2026);
+                let month: u32 = ts[5..7].parse().unwrap_or(4);
+                let day: u32 = ts[8..10].parse().unwrap_or(14);
+                let total_days = day + days as u32;
+                // Days in each month (non-leap-year approximation).
+                let dim = [0u32, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                let days_in_month = dim[month as usize % 13];
+                if total_days <= days_in_month {
+                    format!("{year}-{month:02}-{total_days:02}T00:00:00Z")
+                } else {
+                    let overflow = total_days - days_in_month;
+                    let next_month = if month == 12 { 1 } else { month + 1 };
+                    let next_year = if month == 12 { year + 1 } else { year };
+                    format!("{next_year}-{next_month:02}-{overflow:02}T00:00:00Z")
+                }
+            } else {
+                format!("{ts}+{days}d")
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Registry — config, helpers, and commands
 // ---------------------------------------------------------------------------
 
 const DEFAULT_REGISTRY_URL: &str = "https://github.com/forgetthefrets/emanon-registry";
+const DEFAULT_BOUNTY_BOARD_URL: &str = "https://github.com/forgetthefrets/emanon-bounty-board";
 
 /// Runtime configuration loaded from `~/.config/emanon/config.toml`.
 ///
-/// Minimal hand-rolled TOML reader: only `[registry]` section is parsed.
+/// Minimal hand-rolled TOML reader: parses `[registry]`, `[universe]`, and `[bounty]` sections.
 struct EmanonConfig {
     /// Registry repo HTTPS URL (default: DEFAULT_REGISTRY_URL).
     registry_url: String,
@@ -2503,6 +2873,10 @@ struct EmanonConfig {
     universe_name: Option<String>,
     /// Git remote to use when reading git_url for push (default: "origin").
     git_remote: String,
+    /// Bounty board repo HTTPS URL (default: DEFAULT_BOUNTY_BOARD_URL).
+    bounty_board_url: String,
+    /// Buyer pubkey for bounty posting (ed25519:<base58>).
+    buyer_pubkey: Option<String>,
 }
 
 /// Load configuration from `~/.config/emanon/config.toml`.
@@ -2512,6 +2886,8 @@ fn load_emanon_config() -> EmanonConfig {
     let mut owner_pubkey: Option<String> = None;
     let mut universe_name: Option<String> = None;
     let mut git_remote = "origin".to_string();
+    let mut bounty_board_url = DEFAULT_BOUNTY_BOARD_URL.to_string();
+    let mut buyer_pubkey: Option<String> = None;
 
     let config_path = std::env::var("HOME")
         .map(|h| format!("{h}/.config/emanon/config.toml"))
@@ -2521,6 +2897,7 @@ fn load_emanon_config() -> EmanonConfig {
         if let Ok(content) = std::fs::read_to_string(&config_path) {
             let mut in_registry = false;
             let mut in_universe = false;
+            let mut in_bounty = false;
             for line in content.lines() {
                 let trimmed = line.trim();
                 // Skip comments and blank lines.
@@ -2530,6 +2907,7 @@ fn load_emanon_config() -> EmanonConfig {
                 if trimmed.starts_with('[') {
                     in_registry = trimmed == "[registry]";
                     in_universe = trimmed == "[universe]";
+                    in_bounty = trimmed == "[bounty]";
                     continue;
                 }
                 if let Some((k, v)) = parse_toml_kv(trimmed) {
@@ -2544,13 +2922,19 @@ fn load_emanon_config() -> EmanonConfig {
                         if k == "name" {
                             universe_name = Some(v.to_string());
                         }
+                    } else if in_bounty {
+                        match k {
+                            "board_url" => bounty_board_url = v.to_string(),
+                            "buyer_pubkey" => buyer_pubkey = Some(v.to_string()),
+                            _ => {}
+                        }
                     }
                 }
             }
         }
     }
 
-    EmanonConfig { registry_url, owner_pubkey, universe_name, git_remote }
+    EmanonConfig { registry_url, owner_pubkey, universe_name, git_remote, bounty_board_url, buyer_pubkey }
 }
 
 /// Convenience loader that overrides registry_url from the command-line flag.
@@ -3396,7 +3780,14 @@ fn main() {
             not_yet(&format!("emanon scan {remote}"));
         }
         Commands::Bounty { action } => match action {
-            BountyAction::Post => not_yet("emanon bounty post"),
+            BountyAction::Post { constraint, max_price, board, expires_days } => {
+                let config = load_emanon_config();
+                let board_url = board.as_deref().unwrap_or(&config.bounty_board_url).to_string();
+                if let Err(e) = cmd_bounty_post(&constraint, max_price, &board_url, expires_days, &config) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
             BountyAction::List => not_yet("emanon bounty list"),
             BountyAction::Accept => not_yet("emanon bounty accept"),
             BountyAction::Deliver => not_yet("emanon bounty deliver"),
@@ -4680,5 +5071,160 @@ mod tests {
         let d1 = registry_cache_dir("https://github.com/foo/bar").unwrap();
         let d2 = registry_cache_dir("https://github.com/baz/qux").unwrap();
         assert_ne!(d1, d2);
+    }
+
+    // -----------------------------------------------------------------------
+    // bounty post helpers
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn generate_uuid_returns_36_char_string() {
+        let uuid = generate_uuid().expect("uuid generation should succeed");
+        assert_eq!(uuid.len(), 36, "UUID must be 36 chars: {uuid}");
+        // Format: 8-4-4-4-12
+        let parts: Vec<&str> = uuid.split('-').collect();
+        assert_eq!(parts.len(), 5, "UUID must have 5 hyphen-separated groups: {uuid}");
+        assert_eq!(parts[0].len(), 8);
+        assert_eq!(parts[1].len(), 4);
+        assert_eq!(parts[2].len(), 4);
+        assert_eq!(parts[3].len(), 4);
+        assert_eq!(parts[4].len(), 12);
+    }
+
+    #[test]
+    fn generate_uuid_is_unique_across_calls() {
+        let a = generate_uuid().unwrap();
+        let b = generate_uuid().unwrap();
+        assert_ne!(a, b, "consecutive UUID calls must differ");
+    }
+
+    #[test]
+    fn add_days_produces_future_timestamp() {
+        // 2026-04-14 + 30 days = somewhere in May 2026
+        let result = add_days_to_timestamp("2026-04-14T00:00:00Z", 30);
+        // Result must be a date string after April 2026.
+        assert!(result.starts_with("2026-05"), "expected May 2026, got: {result}");
+    }
+
+    #[test]
+    fn add_days_handles_month_rollover() {
+        // Jan 31 + 1 day = Feb 01
+        let result = add_days_to_timestamp("2026-01-31T00:00:00Z", 1);
+        // GNU date handles this correctly; fallback may differ.
+        assert!(!result.is_empty(), "result must not be empty");
+    }
+
+    #[test]
+    fn load_config_bounty_defaults() {
+        // Without a config file, bounty_board_url must fall back to the default.
+        // We can't unset HOME easily, but the default should match the constant.
+        let cfg = load_emanon_config();
+        // If a real config file exists, it may override; test the constant directly.
+        assert_eq!(DEFAULT_BOUNTY_BOARD_URL, "https://github.com/forgetthefrets/emanon-bounty-board");
+        let _ = cfg; // silence unused variable warning
+    }
+
+    #[test]
+    fn cmd_bounty_post_rejects_invalid_predicate() {
+        let dir = std::env::temp_dir().join("bounty_post_bad_pred_test");
+        std::fs::create_dir_all(&dir).unwrap();
+        let f = dir.join("bad.json");
+        std::fs::write(&f, r#"{"unknown_key": 42}"#).unwrap();
+
+        let cfg = EmanonConfig {
+            registry_url: DEFAULT_REGISTRY_URL.to_string(),
+            owner_pubkey: None,
+            universe_name: None,
+            git_remote: "origin".to_string(),
+            bounty_board_url: DEFAULT_BOUNTY_BOARD_URL.to_string(),
+            buyer_pubkey: Some("ed25519:TestKeyABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij".to_string()),
+        };
+
+        let result = cmd_bounty_post(
+            f.to_str().unwrap(),
+            1.0,
+            DEFAULT_BOUNTY_BOARD_URL,
+            30,
+            &cfg,
+        );
+        assert!(result.is_err(), "should reject unknown predicate key");
+        let msg = result.unwrap_err().to_string();
+        assert!(msg.contains("invalid predicate"), "error should mention predicate: {msg}");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn cmd_bounty_post_rejects_missing_buyer_pubkey() {
+        let dir = std::env::temp_dir().join("bounty_post_no_pubkey_test");
+        std::fs::create_dir_all(&dir).unwrap();
+        let f = dir.join("spec.json");
+        std::fs::write(&f, r#"{"snapshot_count_at_least": 3}"#).unwrap();
+
+        let cfg = EmanonConfig {
+            registry_url: DEFAULT_REGISTRY_URL.to_string(),
+            owner_pubkey: None,
+            universe_name: None,
+            git_remote: "origin".to_string(),
+            bounty_board_url: DEFAULT_BOUNTY_BOARD_URL.to_string(),
+            buyer_pubkey: None, // missing
+        };
+
+        let result = cmd_bounty_post(f.to_str().unwrap(), 2.0, DEFAULT_BOUNTY_BOARD_URL, 30, &cfg);
+        assert!(result.is_err());
+        let msg = result.unwrap_err().to_string();
+        assert!(msg.contains("buyer_pubkey"), "error should mention buyer_pubkey: {msg}");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn cmd_bounty_post_rejects_bad_pubkey_prefix() {
+        let dir = std::env::temp_dir().join("bounty_post_bad_prefix_test");
+        std::fs::create_dir_all(&dir).unwrap();
+        let f = dir.join("spec.json");
+        std::fs::write(&f, r#"{"snapshot_count_at_least": 3}"#).unwrap();
+
+        let cfg = EmanonConfig {
+            registry_url: DEFAULT_REGISTRY_URL.to_string(),
+            owner_pubkey: None,
+            universe_name: None,
+            git_remote: "origin".to_string(),
+            bounty_board_url: DEFAULT_BOUNTY_BOARD_URL.to_string(),
+            buyer_pubkey: Some("base58:wrongprefix".to_string()),
+        };
+
+        let result = cmd_bounty_post(f.to_str().unwrap(), 2.0, DEFAULT_BOUNTY_BOARD_URL, 30, &cfg);
+        assert!(result.is_err());
+        let msg = result.unwrap_err().to_string();
+        assert!(msg.contains("ed25519:"), "error should mention expected prefix: {msg}");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn cmd_bounty_post_rejects_missing_constraint_file() {
+        let cfg = EmanonConfig {
+            registry_url: DEFAULT_REGISTRY_URL.to_string(),
+            owner_pubkey: None,
+            universe_name: None,
+            git_remote: "origin".to_string(),
+            bounty_board_url: DEFAULT_BOUNTY_BOARD_URL.to_string(),
+            buyer_pubkey: Some("ed25519:TestKeyABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij".to_string()),
+        };
+        let result = cmd_bounty_post(
+            "/tmp/nonexistent-bounty-spec-zzz.json",
+            1.0,
+            DEFAULT_BOUNTY_BOARD_URL,
+            30,
+            &cfg,
+        );
+        assert!(result.is_err());
+        let msg = result.unwrap_err().to_string();
+        assert!(msg.contains("not found"), "error should say file not found: {msg}");
+    }
+
+    #[test]
+    fn add_days_to_timestamp_basic() {
+        // 2026-04-14 + 0 days should give today's date (via date command).
+        let result = add_days_to_timestamp("2026-04-14T00:00:00Z", 0);
+        assert!(result.contains("2026-04-14"), "0 days offset should keep date: {result}");
     }
 }

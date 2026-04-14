@@ -1,0 +1,64 @@
+name: Emanon E2E Tests
+
+# Run whenever emanon source or the test itself changes.
+on:
+  push:
+    paths:
+      - 'emanon/**'
+      - '.github/workflows/emanon-e2e.yml'
+  pull_request:
+    paths:
+      - 'emanon/**'
+      - '.github/workflows/emanon-e2e.yml'
+
+jobs:
+  e2e:
+    name: Two-player local play (M2.3)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      # Cache compiled artifacts so repeated pushes build quickly.
+      - name: Cache cargo registry + build artefacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            emanon/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('emanon/Cargo.toml', 'emanon/src/cli/Cargo.toml', 'emanon/src/collatz-rs/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Build emanon CLI (release)
+        run: |
+          cd emanon
+          cargo build --release 2>&1
+          echo "Built: $(ls -lh target/release/emanon)"
+
+      # Make the freshly-built binary available as `emanon` throughout the job.
+      - name: Add emanon to PATH
+        run: echo "${{ github.workspace }}/emanon/target/release" >> "$GITHUB_PATH"
+
+      # emanon init / snapshot commit under this identity.
+      - name: Configure git identity (required by emanon init/snapshot)
+        run: |
+          git config --global user.email "ci@emanon.local"
+          git config --global user.name "Emanon CI"
+
+      - name: Run two-player local play test
+        run: bash emanon/tests/two-player-local.sh
+
+      # On failure, upload any leftover test artifacts for debugging.
+      - name: Upload test workspace on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-workspace-debug
+          path: /tmp/tmp.*
+          if-no-files-found: ignore
+          retention-days: 3

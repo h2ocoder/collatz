@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 // --- Math utilities ---
 const SQRT3 = Math.sqrt(3);
@@ -265,6 +265,7 @@ interface PadicHexExplorerProps {
   mode: PadicMode;
   radius?: number;
   hexSize?: number;
+  showCoords?: boolean;
 }
 
 const MODE_LABELS: Record<PadicMode, string> = {
@@ -293,6 +294,7 @@ export function PadicHexExplorer({
   mode,
   radius = 10,
   hexSize = 18,
+  showCoords = true,
 }: PadicHexExplorerProps) {
   const cells = useMemo(() => hexGrid(radius), [radius]);
 
@@ -318,15 +320,80 @@ export function PadicHexExplorer({
   );
 
   const viewExtent = (radius + 2) * hexSize * 2;
+  const viewSize = viewExtent * 2;
   const gap = 1; // pixel gap between hex cells
+
+  // --- Focus (selected hex as player position) ---
+  const [focus, setFocus] = useState<{ q: number; r: number } | null>(null);
+  const didDrag = useRef(false);
+
+  const handleHexClick = useCallback((q: number, r: number) => {
+    if (didDrag.current) return; // ignore clicks after drag
+    setFocus((prev) =>
+      prev && prev.q === q && prev.r === r ? null : { q, r },
+    );
+  }, []);
+
+  // --- Pan & zoom ---
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const dragging = useRef<{ startX: number; startY: number; panX: number; panY: number } | null>(null);
+
+  const MIN_ZOOM = 0.2;
+  const MAX_ZOOM = 6;
+
+  const clientToSvg = useCallback((dx: number, dy: number): [number, number] => {
+    if (!svgRef.current) return [dx, dy];
+    const rect = svgRef.current.getBoundingClientRect();
+    const scale = viewSize / Math.min(rect.width, rect.height);
+    return [dx * scale, dy * scale];
+  }, [viewSize]);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    if (e.button !== 0) return;
+    (e.target as Element).setPointerCapture(e.pointerId);
+    didDrag.current = false;
+    dragging.current = { startX: e.clientX, startY: e.clientY, panX: pan.x, panY: pan.y };
+  }, [pan]);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    const dx = e.clientX - dragging.current.startX;
+    const dy = e.clientY - dragging.current.startY;
+    if (Math.abs(dx) + Math.abs(dy) > 4) didDrag.current = true;
+    const [sx, sy] = clientToSvg(dx, dy);
+    setPan({
+      x: dragging.current.panX + sx / zoom,
+      y: dragging.current.panY + sy / zoom,
+    });
+  }, [zoom, clientToSvg]);
+
+  const handlePointerUp = useCallback(() => {
+    dragging.current = null;
+  }, []);
+
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const factor = e.deltaY > 0 ? 0.9 : 1.1;
+    setZoom((z) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z * factor)));
+  }, []);
 
   return (
     <div className="relative w-full h-full bg-void overflow-hidden">
       <svg
+        ref={svgRef}
         className="w-full h-full"
-        viewBox={`${-viewExtent} ${-viewExtent} ${viewExtent * 2} ${viewExtent * 2}`}
+        viewBox={`${-viewExtent} ${-viewExtent} ${viewSize} ${viewSize}`}
         preserveAspectRatio="xMidYMid meet"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
+        onWheel={handleWheel}
+        style={{ cursor: dragging.current ? "grabbing" : "grab", touchAction: "none" }}
       >
+        <g transform={`translate(${pan.x}, ${pan.y}) scale(${zoom})`}>
         {/* Glow layer (renders behind) */}
         {cells.map(([q, r]) => {
           const style = styleFn(q, r);
@@ -345,16 +412,108 @@ export function PadicHexExplorer({
         {cells.map(([q, r]) => {
           const [cx, cy] = hexToWorld(q, r, hexSize);
           const style = styleFn(q, r);
+          const isFocused = focus !== null && focus.q === q && focus.r === r;
           return (
-            <polygon
-              key={`hex-${q},${r}`}
-              points={hexPoints(cx, cy, hexSize - gap)}
-              fill={style.fill}
-              stroke={style.stroke}
-              strokeWidth={style.strokeWidth}
-            />
+            <g key={`hex-${q},${r}`} onClick={() => handleHexClick(q, r)} className="cursor-pointer">
+              <polygon
+                points={hexPoints(cx, cy, hexSize - gap)}
+                fill={style.fill}
+                stroke={isFocused ? "#ffffff" : style.stroke}
+                strokeWidth={isFocused ? 2 : style.strokeWidth}
+              />
+              {isFocused && (
+                <polygon
+                  points={hexPoints(cx, cy, hexSize + 3)}
+                  fill="none"
+                  stroke="rgba(255,255,255,0.4)"
+                  strokeWidth={1}
+                />
+              )}
+            </g>
           );
         })}
+
+        {/* Coordinate labels */}
+        {showCoords &&
+          cells.map(([q, r]) => {
+            const [cx, cy] = hexToWorld(q, r, hexSize);
+            const isFocused = focus !== null && focus.q === q && focus.r === r;
+
+            // If a focus is set, show distance FROM focus; otherwise show absolute norm
+            const dq = focus ? q - focus.q : q;
+            const dr = focus ? r - focus.r : r;
+            const N = eisensteinNorm(dq, dr);
+            const v2 = vp(N, 2);
+            const v3 = vp(N, 3);
+            const isSelf = focus ? (q === focus.q && r === focus.r) : (q === 0 && r === 0);
+
+            // Scale font with hex size
+            const coordSize = Math.max(3, hexSize * 0.22);
+            const normSize = Math.max(2.5, hexSize * 0.18);
+            const valSize = Math.max(2, hexSize * 0.15);
+
+            // Wormhole strength indicator
+            const wormhole = !isSelf && v3 >= 1;
+            const wormholeDepth = v3;
+
+            return (
+              <g key={`label-${q},${r}`}>
+                {/* Axial coordinates */}
+                <text
+                  x={cx}
+                  y={cy - hexSize * 0.22}
+                  textAnchor="middle"
+                  fill={isFocused ? "#ffffff" : "rgba(226,224,240,0.7)"}
+                  fontSize={coordSize}
+                  fontFamily="var(--font-data, monospace)"
+                >
+                  {q},{r}
+                </text>
+                {/* Norm / distance */}
+                <text
+                  x={cx}
+                  y={cy + hexSize * 0.05}
+                  textAnchor="middle"
+                  fill={
+                    isSelf
+                      ? "#ffffff"
+                      : wormhole
+                        ? "rgba(139,92,246,0.9)"
+                        : "rgba(226,224,240,0.5)"
+                  }
+                  fontSize={normSize}
+                  fontFamily="var(--font-data, monospace)"
+                  fontWeight={wormhole ? "bold" : "normal"}
+                >
+                  {isSelf
+                    ? "\u25C9"
+                    : focus
+                      ? `d=${N}`
+                      : `N=${N}`}
+                </text>
+                {/* Valuations (only if nonzero) */}
+                {!isSelf && (v2 > 0 || v3 > 0) && (
+                  <text
+                    x={cx}
+                    y={cy + hexSize * 0.28}
+                    textAnchor="middle"
+                    fill={
+                      wormholeDepth >= 2
+                        ? "rgba(167,139,250,0.95)"
+                        : "rgba(139,92,246,0.8)"
+                    }
+                    fontSize={valSize}
+                    fontFamily="var(--font-data, monospace)"
+                    fontWeight={wormholeDepth >= 2 ? "bold" : "normal"}
+                  >
+                    {v2 > 0 ? `v\u2082=${v2}` : ""}
+                    {v2 > 0 && v3 > 0 ? " " : ""}
+                    {v3 > 0 ? `v\u2083=${v3}` : ""}
+                  </text>
+                )}
+              </g>
+            );
+          })}
 
         {/* Ball boundary edges (ultrametric mode only) */}
         {ballEdges.map((e, i) => (
@@ -369,6 +528,7 @@ export function PadicHexExplorer({
             strokeLinecap="round"
           />
         ))}
+        </g>
       </svg>
 
       {/* Info overlay */}
@@ -383,6 +543,15 @@ export function PadicHexExplorer({
           <p className="font-data text-[10px] text-text-muted/60 mt-2">
             N(q,r) = q² − qr + r² (Eisenstein norm)
           </p>
+          {focus ? (
+            <p className="font-data text-xs text-accent-violet mt-2">
+              Focus: ({focus.q},{focus.r}) — d = N(q−{focus.q}, r−{focus.r})
+            </p>
+          ) : (
+            <p className="font-data text-[10px] text-text-muted/40 mt-2">
+              Click a hex to set focus point
+            </p>
+          )}
         </div>
       </div>
     </div>

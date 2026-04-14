@@ -240,12 +240,40 @@ Other players can now add your universe as a remote and run `emanon merge`.
 
 ---
 
+## Part 7 — Publish to the registry
+
+Publish your universe listing so any player can discover and observe you:
+
+```sh
+# Configure your identity first (one-time setup):
+# edit ~/.config/emanon/config.toml — see registry-walkthrough.md
+
+emanon registry push
+```
+
+This opens a PR on the canonical registry.  Once merged, your universe appears in
+the global player list.
+
+```sh
+# Browse all published universes:
+emanon registry pull
+emanon registry list
+```
+
+For a full publishing walkthrough, see [registry-walkthrough.md](registry-walkthrough.md).
+
+To run a private registry for a friend group or league, see [federation.md](federation.md).
+
+---
+
 ## What's next
 
 - **Start from the template:** instead of `emanon init`, fork the [emanon-starter](https://github.com/forgetthefrets/emanon-starter) template for a pre-configured universe
 - **Understand the physics:** read [concepts.md](concepts.md) for plain-English explanations of every game term
 - **Go deeper:** [Gitverse Design](2026-04-13-gitverse-design.md) explains the full mathematical model
 - **Use the AI companion:** the [Claude Code skill](../src/skill/SKILL.md) can play alongside you, suggesting moves and explaining conflicts
+- **Publish your universe:** follow the [registry walkthrough](registry-walkthrough.md) to list your universe publicly
+- **Run a private league:** follow the [federation guide](federation.md) to host a registry for your group
 
 ---
 

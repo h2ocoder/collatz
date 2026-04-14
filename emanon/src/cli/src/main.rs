@@ -51,19 +51,29 @@ enum Commands {
     ///   2. Same oddity_s, different set_k → genus-attenuated merge
     ///   3. Unrelated sets (or no genus stamp) → exit 1 (defer to player)
     ///
-    /// Register in .gitattributes:
-    ///   regions/**  merge=emanon-collatz
-    /// And in .git/config:
-    ///   [merge "emanon-collatz"]
-    ///       name = Collatz conflict resolver
-    ///       driver = emanon merge-driver %O %A %B
+    /// Invoked automatically by git for paths registered in .gitattributes:
+    ///   regions/**     merge=emanon-collatz    → emanon merge-driver %O %A %B %P
+    ///   contracts/**   merge=emanon-contract   → emanon merge-driver --contract-mode %O %A %B %P
+    ///   scars/**       merge=emanon-append-only→ emanon merge-driver --append-only %O %A %B %P
     MergeDriver {
+        /// Contract merge mode — resolves conflicts under contracts/; full
+        /// implementation arrives in a later milestone (stub: falls back to
+        /// Collatz resolution with a diagnostic note).
+        #[arg(long)]
+        contract_mode: bool,
+        /// Append-only merge mode — resolves conflicts under scars/; full
+        /// implementation arrives in a later milestone (stub: falls back to
+        /// Collatz resolution with a diagnostic note).
+        #[arg(long)]
+        append_only: bool,
         /// Ancestor version path (git %O)
         base: String,
         /// Our version path (git %A); merged result is written here
         ours: String,
         /// Their version path (git %B)
         theirs: String,
+        /// The filename being merged (git %P); recorded for diagnostics
+        path: String,
         /// Optional explicit output path (default: writes to <ours>)
         #[arg(short = 'o', long)]
         output: Option<String>,
@@ -162,17 +172,13 @@ const VALUES_JSON: &str = r#"{
 "#;
 
 const GITATTRIBUTES: &str = "\
-# Register the Collatz merge driver for Emanon universes.
-# The driver is invoked by git when a conflict arises in a registered path.
+# Emanon merge driver registration.
+# Each path pattern is routed to a specific merge driver registered in .git/config.
+# These drivers are written automatically by `emanon init` — see .git/config for details.
 #
-# Activate by adding to .git/config (or run `git config` once):
-#   [merge \"emanon-collatz\"]
-#       name = Collatz conflict resolver
-#       driver = emanon merge-driver %O %A %B
-#
-regions/**    merge=emanon-collatz
-contracts/**  merge=emanon-collatz
-scars/**      merge=emanon-collatz
+regions/**       merge=emanon-collatz
+contracts/**     merge=emanon-contract
+scars/**         merge=emanon-append-only
 ";
 
 /// Ephemeral files excluded from snapshots.
@@ -196,7 +202,7 @@ fn readme_template(name: &str) -> String {
         - `forks/`     — active timeline divergences\n\
         - `.gitverse/values.json`    — resolution preferences for this universe\n\
         - `.gitverse/snapshot_count` — current snapshot counter\n\
-        - `.gitattributes`            — Collatz merge driver registration (placeholder)\n\
+        - `.gitattributes`            — merge driver registration (regions/contracts/scars)\n\
         \n\
         ## Getting Started\n\
         \n\
@@ -264,6 +270,65 @@ fn cmd_init(name: &str, force: bool) -> Result<(), Box<dyn std::error::Error>> {
             String::from_utf8_lossy(&git_init.stderr)
         )
         .into());
+    }
+
+    // --- Register merge drivers in .git/config ---
+    //
+    // Three drivers are registered per-repo so that `git merge` automatically
+    // routes conflicts to the right handler based on .gitattributes:
+    //   emanon-collatz    — Collatz genus-based merge for regions/**
+    //   emanon-contract   — contract-aware merge for contracts/**
+    //   emanon-append-only — append-only merge for scars/**
+    //
+    // %O = base, %A = ours (driver writes result here), %B = theirs, %P = path
+    // Each entry: (display_name, name_key, driver_key, driver_command)
+    let drivers: [(&str, &str, &str, &str); 3] = [
+        (
+            "Collatz merge driver",
+            "merge.emanon-collatz.name",
+            "merge.emanon-collatz.driver",
+            "emanon merge-driver %O %A %B %P",
+        ),
+        (
+            "Contract merge driver",
+            "merge.emanon-contract.name",
+            "merge.emanon-contract.driver",
+            "emanon merge-driver --contract-mode %O %A %B %P",
+        ),
+        (
+            "Append-only merge driver",
+            "merge.emanon-append-only.name",
+            "merge.emanon-append-only.driver",
+            "emanon merge-driver --append-only %O %A %B %P",
+        ),
+    ];
+
+    for (display_name, name_key, driver_key, driver_cmd) in drivers {
+        let cfg_name = Command::new("git")
+            .args(["config", name_key, display_name])
+            .current_dir(target)
+            .output()?;
+        if !cfg_name.status.success() {
+            return Err(format!(
+                "git config {} failed:\n{}",
+                name_key,
+                String::from_utf8_lossy(&cfg_name.stderr)
+            )
+            .into());
+        }
+
+        let cfg_driver = Command::new("git")
+            .args(["config", driver_key, driver_cmd])
+            .current_dir(target)
+            .output()?;
+        if !cfg_driver.status.success() {
+            return Err(format!(
+                "git config {} failed:\n{}",
+                driver_key,
+                String::from_utf8_lossy(&cfg_driver.stderr)
+            )
+            .into());
+        }
     }
 
     // --- git add . ---
@@ -507,19 +572,55 @@ fn write_conflict_markers(
     )
 }
 
-/// Implements `emanon merge-driver <base> <ours> <theirs> [--output <path>]`.
+/// Merge mode — controls which resolution strategy is attempted.
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum MergeMode {
+    /// Collatz genus-based merge (default, used for `regions/**`).
+    Collatz,
+    /// Contract-aware merge (used for `contracts/**`). Stub — full
+    /// implementation arrives in M2+.  Currently falls back to Collatz with
+    /// a stderr diagnostic so the driver is wired and testable.
+    Contract,
+    /// Append-only merge (used for `scars/**`). Stub — full implementation
+    /// arrives in M2+.  Currently falls back to Collatz with a stderr
+    /// diagnostic.
+    AppendOnly,
+}
+
+/// Implements `emanon merge-driver [--contract-mode|--append-only] <base> <ours> <theirs> <path>`.
 ///
 /// Returns the exit code that the driver should use:
 /// - `0` — conflict resolved, output file written
 /// - `1` — conflict deferred (git will show it as unresolved)
 /// - `2` — I/O or internal error (handled by `main`)
 fn cmd_merge_driver(
+    mode: &MergeMode,
     base: &str,
     ours: &str,
     theirs: &str,
+    path: &str,
     output: &str,
 ) -> Result<i32, Box<dyn std::error::Error>> {
-    let _ = base; // base content is available for future leverage computation
+    // Emit diagnostics for stub modes so the wiring is observable.
+    match mode {
+        MergeMode::Contract => {
+            eprintln!(
+                "emanon merge-driver: --contract-mode invoked for '{path}' \
+                 (stub — falling back to Collatz resolution; \
+                 full contract merge arrives in M2)"
+            );
+        }
+        MergeMode::AppendOnly => {
+            eprintln!(
+                "emanon merge-driver: --append-only invoked for '{path}' \
+                 (stub — falling back to Collatz resolution; \
+                 full append-only merge arrives in M2)"
+            );
+        }
+        MergeMode::Collatz => {}
+    }
+    let _ = base;  // base content is available for future leverage computation
+    let _ = path;  // recorded for diagnostics / future use
     let ours_content = std::fs::read_to_string(ours)?;
     let theirs_content = std::fs::read_to_string(theirs)?;
 
@@ -606,9 +707,16 @@ fn main() {
         Commands::Merge { remote_branch } => {
             not_yet(&format!("emanon merge {remote_branch}"));
         }
-        Commands::MergeDriver { base, ours, theirs, output } => {
+        Commands::MergeDriver { contract_mode, append_only, base, ours, theirs, path, output } => {
+            let mode = if contract_mode {
+                MergeMode::Contract
+            } else if append_only {
+                MergeMode::AppendOnly
+            } else {
+                MergeMode::Collatz
+            };
             let out_path = output.as_deref().unwrap_or(&ours);
-            match cmd_merge_driver(&base, &ours, &theirs, out_path) {
+            match cmd_merge_driver(&mode, &base, &ours, &theirs, &path, out_path) {
                 Ok(exit_code) => std::process::exit(exit_code),
                 Err(e) => {
                     eprintln!("merge-driver error: {e}");
@@ -799,9 +907,11 @@ mod tests {
         let out = dir.join("out.txt");
 
         let code = cmd_merge_driver(
+            &MergeMode::Collatz,
             base.to_str().unwrap(),
             ours.to_str().unwrap(),
             theirs.to_str().unwrap(),
+            "regions/test.rg",
             out.to_str().unwrap(),
         )
         .expect("should not error");
@@ -824,9 +934,11 @@ mod tests {
         let out = dir.join("out.txt");
 
         let code = cmd_merge_driver(
+            &MergeMode::Collatz,
             base.to_str().unwrap(),
             ours.to_str().unwrap(),
             theirs.to_str().unwrap(),
+            "regions/test.rg",
             out.to_str().unwrap(),
         )
         .expect("should not error");
@@ -849,9 +961,11 @@ mod tests {
         let out = dir.join("out.txt");
 
         let code = cmd_merge_driver(
+            &MergeMode::Collatz,
             base.to_str().unwrap(),
             ours.to_str().unwrap(),
             theirs.to_str().unwrap(),
+            "regions/test.rg",
             out.to_str().unwrap(),
         )
         .expect("should not error");
@@ -871,9 +985,11 @@ mod tests {
         let out = dir.join("out.txt");
 
         let code = cmd_merge_driver(
+            &MergeMode::Collatz,
             base.to_str().unwrap(),
             ours.to_str().unwrap(),
             theirs.to_str().unwrap(),
+            "regions/test.rg",
             out.to_str().unwrap(),
         )
         .expect("should not error");
@@ -881,6 +997,94 @@ mod tests {
         assert_eq!(code, 1, "missing genus stamp must exit 1");
         let conflict = std::fs::read_to_string(&out).unwrap();
         assert!(conflict.contains("no-genus-stamp"), "must note reason");
+    }
+
+    // -----------------------------------------------------------------------
+    // stub merge modes — contract and append-only fall back to Collatz
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn contract_mode_stub_exits_0_on_same_set_k() {
+        // --contract-mode is a stub; same-set_k still exits 0 via Collatz fallback
+        let dir = tempdir();
+        let ours_content = "# emanon:genus set_k=5 oddity_s=2 index_i=0\ncontract data\n";
+        let theirs_content = "# emanon:genus set_k=5 oddity_s=2 index_i=3\nother data\n";
+        let base = tmp_file(&dir, "base.txt", "# emanon:genus set_k=5 oddity_s=2 index_i=0\nbase\n");
+        let ours = tmp_file(&dir, "ours.txt", ours_content);
+        let theirs = tmp_file(&dir, "theirs.txt", theirs_content);
+        let out = dir.join("out.txt");
+
+        let code = cmd_merge_driver(
+            &MergeMode::Contract,
+            base.to_str().unwrap(),
+            ours.to_str().unwrap(),
+            theirs.to_str().unwrap(),
+            "contracts/deal.ct",
+            out.to_str().unwrap(),
+        )
+        .expect("should not error");
+
+        assert_eq!(code, 0, "contract-mode stub must exit 0 for same set_k");
+        let merged = std::fs::read_to_string(&out).unwrap();
+        assert!(merged.contains("contract data"), "must include ours content");
+        assert!(merged.contains("other data"), "must include theirs content");
+    }
+
+    #[test]
+    fn append_only_stub_exits_0_on_same_set_k() {
+        // --append-only is a stub; same-set_k still exits 0 via Collatz fallback
+        let dir = tempdir();
+        let ours_content = "# emanon:genus set_k=9 oddity_s=3 index_i=0\nscar data\n";
+        let theirs_content = "# emanon:genus set_k=9 oddity_s=3 index_i=2\nother scar\n";
+        let base = tmp_file(&dir, "base.txt", "# emanon:genus set_k=9 oddity_s=3 index_i=0\nbase\n");
+        let ours = tmp_file(&dir, "ours.txt", ours_content);
+        let theirs = tmp_file(&dir, "theirs.txt", theirs_content);
+        let out = dir.join("out.txt");
+
+        let code = cmd_merge_driver(
+            &MergeMode::AppendOnly,
+            base.to_str().unwrap(),
+            ours.to_str().unwrap(),
+            theirs.to_str().unwrap(),
+            "scars/event.sc",
+            out.to_str().unwrap(),
+        )
+        .expect("should not error");
+
+        assert_eq!(code, 0, "append-only stub must exit 0 for same set_k");
+        let merged = std::fs::read_to_string(&out).unwrap();
+        assert!(merged.contains("scar data"), "must include ours content");
+        assert!(merged.contains("other scar"), "must include theirs content");
+    }
+
+    // -----------------------------------------------------------------------
+    // .gitattributes content verification
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn gitattributes_has_correct_per_path_drivers() {
+        // Verify the GITATTRIBUTES constant routes each path to the right driver
+        assert!(
+            GITATTRIBUTES.contains("regions/**") && GITATTRIBUTES.contains("merge=emanon-collatz"),
+            "regions/** must use emanon-collatz"
+        );
+        assert!(
+            GITATTRIBUTES.contains("contracts/**") && GITATTRIBUTES.contains("merge=emanon-contract"),
+            "contracts/** must use emanon-contract"
+        );
+        assert!(
+            GITATTRIBUTES.contains("scars/**") && GITATTRIBUTES.contains("merge=emanon-append-only"),
+            "scars/** must use emanon-append-only"
+        );
+        // Ensure old incorrect routing is gone
+        assert!(
+            !GITATTRIBUTES.contains("contracts/**  merge=emanon-collatz"),
+            "contracts must NOT use emanon-collatz"
+        );
+        assert!(
+            !GITATTRIBUTES.contains("scars/**  merge=emanon-collatz"),
+            "scars must NOT use emanon-collatz"
+        );
     }
 
     // -----------------------------------------------------------------------

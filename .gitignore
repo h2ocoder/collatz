@@ -32,3 +32,10 @@ Thumbs.db
 site/node_modules/
 site/.vitepress/cache/
 site/.vitepress/dist/
+
+# Claude Code skill working state
+.superpowers/
+
+# .NET build artifacts
+emanon/src/**/bin/
+emanon/src/**/obj/

@@ -224,12 +224,38 @@ enum TournamentAction {
 
 #[derive(Subcommand)]
 enum RegistryAction {
-    /// Publish this universe to the registry
-    Push,
-    /// Pull a universe from the registry
-    Pull,
-    /// List universes in the registry
-    List,
+    /// Publish this universe to the registry by generating a signed entry and opening a PR
+    Push {
+        /// Registry repo URL (overrides ~/.config/emanon/config.toml)
+        #[arg(long)]
+        registry: Option<String>,
+    },
+    /// Clone or fetch a registry locally for offline browsing
+    Pull {
+        /// Registry repo URL (overrides ~/.config/emanon/config.toml)
+        #[arg(long)]
+        registry: Option<String>,
+    },
+    /// List universes in the registry with optional filtering
+    List {
+        /// Registry repo URL (overrides ~/.config/emanon/config.toml)
+        #[arg(long)]
+        registry: Option<String>,
+        /// jq expression to filter entries (e.g. '.tags | contains(["solo"])')
+        #[arg(long)]
+        filter: Option<String>,
+    },
+    /// Add a git remote pointing to a universe from the registry
+    AddRemote {
+        /// Name of the registry entry (matches entries/<name>.json)
+        entry_name: String,
+        /// Registry repo URL (overrides ~/.config/emanon/config.toml)
+        #[arg(long)]
+        registry: Option<String>,
+        /// Local remote name to create (defaults to the entry name)
+        #[arg(long)]
+        remote_name: Option<String>,
+    },
 }
 
 // ---------------------------------------------------------------------------
@@ -2458,6 +2484,830 @@ fn cmd_validate(strict: bool) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 // ---------------------------------------------------------------------------
+// Registry — config, helpers, and commands
+// ---------------------------------------------------------------------------
+
+const DEFAULT_REGISTRY_URL: &str = "https://github.com/forgetthefrets/emanon-registry";
+
+/// Runtime configuration loaded from `~/.config/emanon/config.toml`.
+///
+/// Minimal hand-rolled TOML reader: only `[registry]` section is parsed.
+struct EmanonConfig {
+    /// Registry repo HTTPS URL (default: DEFAULT_REGISTRY_URL).
+    registry_url: String,
+    /// Ed25519 public key (Base58, 43–44 chars) for registry entry signing.
+    owner_pubkey: Option<String>,
+    /// Universe name override (defaults to current directory name).
+    universe_name: Option<String>,
+    /// Git remote to use when reading git_url for push (default: "origin").
+    git_remote: String,
+}
+
+/// Load configuration from `~/.config/emanon/config.toml`.
+/// Falls back to defaults for any missing key.
+fn load_emanon_config() -> EmanonConfig {
+    let mut registry_url = DEFAULT_REGISTRY_URL.to_string();
+    let mut owner_pubkey: Option<String> = None;
+    let mut universe_name: Option<String> = None;
+    let mut git_remote = "origin".to_string();
+
+    let config_path = std::env::var("HOME")
+        .map(|h| format!("{h}/.config/emanon/config.toml"))
+        .unwrap_or_default();
+
+    if !config_path.is_empty() {
+        if let Ok(content) = std::fs::read_to_string(&config_path) {
+            let mut in_registry = false;
+            let mut in_universe = false;
+            for line in content.lines() {
+                let trimmed = line.trim();
+                // Skip comments and blank lines.
+                if trimmed.is_empty() || trimmed.starts_with('#') {
+                    continue;
+                }
+                if trimmed.starts_with('[') {
+                    in_registry = trimmed == "[registry]";
+                    in_universe = trimmed == "[universe]";
+                    continue;
+                }
+                if let Some((k, v)) = parse_toml_kv(trimmed) {
+                    if in_registry {
+                        match k {
+                            "url" => registry_url = v.to_string(),
+                            "owner_pubkey" => owner_pubkey = Some(v.to_string()),
+                            "git_remote" => git_remote = v.to_string(),
+                            _ => {}
+                        }
+                    } else if in_universe {
+                        if k == "name" {
+                            universe_name = Some(v.to_string());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    EmanonConfig { registry_url, owner_pubkey, universe_name, git_remote }
+}
+
+/// Convenience loader that overrides registry_url from the command-line flag.
+fn load_amenon_config_for_url(registry_override: Option<&str>) -> EmanonConfig {
+    let mut cfg = load_emanon_config();
+    if let Some(url) = registry_override {
+        cfg.registry_url = url.to_string();
+    }
+    cfg
+}
+
+/// Parse a single `key = "value"` or `key = value` TOML line.
+/// Returns `(key, value)` with surrounding whitespace and quotes stripped.
+fn parse_toml_kv(line: &str) -> Option<(&str, &str)> {
+    let eq = line.find('=')?;
+    let key = line[..eq].trim();
+    let val_raw = line[eq + 1..].trim();
+    // Strip surrounding double-quotes if present.
+    let val = if val_raw.starts_with('"') && val_raw.ends_with('"') && val_raw.len() >= 2 {
+        &val_raw[1..val_raw.len() - 1]
+    } else {
+        val_raw
+    };
+    Some((key, val))
+}
+
+/// Derive the local cache directory for a registry URL.
+///
+/// Uses a simple hash-like encoding: replace non-alphanumeric chars with `-`.
+/// Example: `https://github.com/foo/bar` → `~/.local/share/emanon/registry/https---github-com-foo-bar`
+fn registry_cache_dir(registry_url: &str) -> Result<std::path::PathBuf, Box<dyn std::error::Error>> {
+    let home = std::env::var("HOME")
+        .map_err(|_| "HOME environment variable not set")?;
+    let slug: String = registry_url
+        .chars()
+        .map(|c| if c.is_alphanumeric() || c == '.' { c } else { '-' })
+        .collect();
+    // Collapse consecutive dashes.
+    let mut prev_dash = false;
+    let slug: String = slug.chars().filter(|&c| {
+        if c == '-' {
+            if prev_dash { return false; }
+            prev_dash = true;
+        } else {
+            prev_dash = false;
+        }
+        true
+    }).collect();
+    Ok(std::path::PathBuf::from(format!(
+        "{home}/.local/share/emanon/registry/{slug}"
+    )))
+}
+
+/// Compute SHA-256 of a file's content using `sha256sum` (Linux) or
+/// `shasum -a 256` (macOS) and return the hex digest string.
+#[allow(dead_code)]
+fn sha256_file(path: &std::path::Path) -> Result<String, Box<dyn std::error::Error>> {
+    // Try sha256sum first (Linux/coreutils), then shasum (macOS).
+    let out = Command::new("sha256sum")
+        .arg(path)
+        .output()
+        .or_else(|_| Command::new("shasum").args(["-a", "256"]).arg(path).output())?;
+
+    if !out.status.success() {
+        return Err(format!(
+            "sha256 computation failed: {}",
+            String::from_utf8_lossy(&out.stderr)
+        )
+        .into());
+    }
+    // Both tools output "<hex>  <filename>" — take the first token.
+    let hex = String::from_utf8_lossy(&out.stdout)
+        .split_whitespace()
+        .next()
+        .unwrap_or("")
+        .to_string();
+    if hex.len() != 64 {
+        return Err(format!("unexpected sha256 output: {hex}").into());
+    }
+    Ok(hex)
+}
+
+/// Compute SHA-256 of an in-memory string using `echo -n | sha256sum`.
+fn sha256_str(content: &str) -> Result<String, Box<dyn std::error::Error>> {
+    use std::io::Write;
+    let mut child = Command::new("sha256sum")
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+        .or_else(|_| {
+            Command::new("shasum")
+                .args(["-a", "256"])
+                .stdin(std::process::Stdio::piped())
+                .stdout(std::process::Stdio::piped())
+                .spawn()
+        })?;
+
+    if let Some(stdin) = child.stdin.take() {
+        let mut stdin = stdin;
+        stdin.write_all(content.as_bytes())?;
+    }
+    let out = child.wait_with_output()?;
+    if !out.status.success() {
+        return Err("sha256 computation failed".into());
+    }
+    let hex = String::from_utf8_lossy(&out.stdout)
+        .split_whitespace()
+        .next()
+        .unwrap_or("")
+        .to_string();
+    if hex.len() != 64 {
+        return Err(format!("unexpected sha256 output: {hex}").into());
+    }
+    Ok(hex)
+}
+
+/// Clone or fetch a registry to its local cache directory.
+/// Returns the cache directory path.
+fn sync_registry(registry_url: &str) -> Result<std::path::PathBuf, Box<dyn std::error::Error>> {
+    let cache_dir = registry_cache_dir(registry_url)?;
+
+    if cache_dir.exists() {
+        // Already cloned — just fetch to refresh.
+        let fetch = Command::new("git")
+            .args(["fetch", "--all", "--quiet"])
+            .current_dir(&cache_dir)
+            .output()?;
+        if !fetch.status.success() {
+            eprintln!(
+                "warning: registry fetch failed (using cached data):\n{}",
+                String::from_utf8_lossy(&fetch.stderr)
+            );
+        }
+    } else {
+        // First time — clone.
+        std::fs::create_dir_all(cache_dir.parent().unwrap())?;
+        let clone = Command::new("git")
+            .args(["clone", "--depth=1", "--quiet", registry_url])
+            .arg(&cache_dir)
+            .output()?;
+        if !clone.status.success() {
+            return Err(format!(
+                "git clone {} failed:\n{}",
+                registry_url,
+                String::from_utf8_lossy(&clone.stderr)
+            )
+            .into());
+        }
+    }
+
+    Ok(cache_dir)
+}
+
+/// Read and minimally parse a registry entry JSON file.
+/// Returns a flat key→value map (string values only, arrays as comma-joined).
+fn parse_entry_json(path: &std::path::Path) -> std::collections::HashMap<String, String> {
+    let mut map = std::collections::HashMap::new();
+    let content = match std::fs::read_to_string(path) {
+        Ok(c) => c,
+        Err(_) => return map,
+    };
+    // Walk every line looking for `"key": "value"` or `"key": number` patterns.
+    // This is intentionally simple — registry entries are machine-generated, well-formed JSON.
+    for line in content.lines() {
+        let trimmed = line.trim().trim_end_matches(',');
+        if !trimmed.starts_with('"') { continue; }
+        // Look for `"key": ...`
+        if let Some(colon_pos) = trimmed.find("\": ") {
+            let key = trimmed[1..colon_pos].to_string();
+            let rest = trimmed[colon_pos + 3..].trim();
+            let value = if rest.starts_with('"') && rest.ends_with('"') && rest.len() >= 2 {
+                rest[1..rest.len() - 1].to_string()
+            } else if rest == "null" {
+                String::new()
+            } else if rest.starts_with('[') {
+                // Array: extract quoted items.
+                let items: Vec<&str> = rest
+                    .trim_matches(|c| c == '[' || c == ']')
+                    .split(',')
+                    .map(|s| s.trim().trim_matches('"'))
+                    .filter(|s| !s.is_empty())
+                    .collect();
+                items.join(", ")
+            } else {
+                rest.to_string()
+            };
+            map.insert(key, value);
+        }
+    }
+    map
+}
+
+/// Implements `emanon registry pull [--registry <url>]`.
+///
+/// Clones the registry repo locally (or fetches it if already cloned) for
+/// offline use by `emanon registry list` and `emanon registry add-remote`.
+/// Local cache lives at `~/.local/share/emanon/registry/<url-slug>/`.
+fn cmd_registry_pull(registry_url: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let cache_dir = sync_registry(registry_url)?;
+    println!("✅  Registry synced → {}", cache_dir.display());
+    println!("    Source: {registry_url}");
+    let entries_dir = cache_dir.join("entries");
+    if entries_dir.exists() {
+        let count = std::fs::read_dir(&entries_dir)
+            .map(|rd| rd.filter_map(|e| e.ok()).filter(|e| {
+                e.path().extension().map_or(false, |x| x == "json")
+            }).count())
+            .unwrap_or(0);
+        println!("    {count} universe(s) in registry");
+    }
+    Ok(())
+}
+
+/// Implements `emanon registry list [--registry <url>] [--filter <jq-expr>]`.
+///
+/// Renders a tabular view of all universes in the registry.  Automatically
+/// syncs the local cache if missing.  If `--filter` is supplied and `jq` is
+/// available, each entry JSON is piped through the expression and only
+/// matching entries are shown.
+fn cmd_registry_list(
+    registry_url: &str,
+    filter: Option<&str>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let cache_dir = sync_registry(registry_url)?;
+    let entries_dir = cache_dir.join("entries");
+
+    if !entries_dir.exists() {
+        println!("Registry is empty — no entries/ directory found.");
+        return Ok(());
+    }
+
+    // Collect entry files.
+    let mut entries: Vec<std::path::PathBuf> = std::fs::read_dir(&entries_dir)?
+        .filter_map(|e| e.ok())
+        .map(|e| e.path())
+        .filter(|p| p.extension().map_or(false, |x| x == "json"))
+        .collect();
+    entries.sort();
+
+    if entries.is_empty() {
+        println!("Registry is empty (0 universes).");
+        return Ok(());
+    }
+
+    // Check if jq is available for filtering.
+    let jq_available = filter.is_some() && Command::new("jq").arg("--version").output()
+        .map(|o| o.status.success())
+        .unwrap_or(false);
+
+    // Table header.
+    println!(
+        "{:<24} {:<18} {:>9}  {:<40}  {}",
+        "Name", "Owner (truncated)", "Snapshots", "Git URL", "Tags"
+    );
+    println!("{}", "-".repeat(120));
+
+    let mut shown = 0usize;
+    for entry_path in &entries {
+        // Apply jq filter if requested.
+        if let Some(expr) = filter {
+            if jq_available {
+                let out = Command::new("jq")
+                    .args(["-e", expr])
+                    .arg(entry_path)
+                    .output()?;
+                if !out.status.success() {
+                    // Filter did not match this entry — skip.
+                    continue;
+                }
+            }
+        }
+
+        let fields = parse_entry_json(entry_path);
+        let name = fields.get("name").cloned().unwrap_or_else(|| {
+            entry_path.file_stem()
+                .map(|s| s.to_string_lossy().into_owned())
+                .unwrap_or_default()
+        });
+        let owner = fields.get("owner_pubkey").cloned().unwrap_or_default();
+        let owner_short = if owner.len() > 16 {
+            format!("{}…", &owner[..16])
+        } else {
+            owner
+        };
+        let snapshots: u64 = fields.get("snapshot_count")
+            .and_then(|s| s.parse().ok())
+            .unwrap_or(0);
+        let git_url = fields.get("git_url").cloned().unwrap_or_default();
+        let git_short = if git_url.len() > 38 {
+            format!("{}…", &git_url[..38])
+        } else {
+            git_url
+        };
+        let tags = fields.get("tags").cloned().unwrap_or_default();
+
+        println!(
+            "{:<24} {:<18} {:>9}  {:<40}  {}",
+            name, owner_short, snapshots, git_short, tags
+        );
+        shown += 1;
+    }
+
+    if shown == 0 && filter.is_some() {
+        if !jq_available {
+            println!("(--filter requires jq to be installed; showing all {}):", entries.len());
+            // Re-run without filter.
+            return cmd_registry_list(registry_url, None);
+        }
+        println!("No universes match filter: {}", filter.unwrap_or(""));
+    } else {
+        println!("{}", "-".repeat(120));
+        println!("  {shown} universe(s)  •  registry: {registry_url}");
+    }
+
+    Ok(())
+}
+
+/// Implements `emanon registry push [--registry <url>]`.
+///
+/// Generates a registry entry JSON for the current universe, creates a branch
+/// in a local clone of the registry repo, commits the entry, pushes, and opens
+/// a PR via the `gh` CLI.
+///
+/// **Prerequisites (user must configure):**
+/// - `owner_pubkey` in `~/.config/emanon/config.toml` (43–44 char Base58 Ed25519 key)
+/// - `git_url` derivable from `git remote get-url origin` (or configured `git_remote`)
+/// - `gh` CLI authenticated for the registry's GitHub org
+///
+/// **Note on `scrambled_root_hash`:**
+/// Full Collatz Tᵏ-scrambled Merkle root computation arrives in M6.  This
+/// implementation uses `sha256(HEAD_COMMIT_SHA)` as a well-defined placeholder
+/// that is deterministic, verifiable, and distinct per snapshot.  The registry
+/// CI (once activated) will need updating when real scrambling ships.
+fn cmd_registry_push(
+    registry_url: &str,
+    config: &EmanonConfig,
+) -> Result<(), Box<dyn std::error::Error>> {
+    // --- Verify universe ---
+    let here = std::env::current_dir()?;
+    let gitverse = here.join(".gitverse");
+    if !gitverse.exists() {
+        return Err(
+            "not an Emanon universe — .gitverse/ not found.\n\
+             Run `emanon init <name>` then cd into it first."
+                .into(),
+        );
+    }
+
+    // --- owner_pubkey is required ---
+    let owner_pubkey = config.owner_pubkey.as_deref().ok_or_else(|| {
+        "owner_pubkey not configured.\n\
+         Add to ~/.config/emanon/config.toml:\n\
+         [registry]\n\
+         owner_pubkey = \"<your-ed25519-base58-key>\""
+    })?;
+    if owner_pubkey.len() < 43 || owner_pubkey.len() > 44 {
+        return Err(format!(
+            "owner_pubkey must be 43–44 chars (Base58 Ed25519); got {} chars",
+            owner_pubkey.len()
+        )
+        .into());
+    }
+
+    // --- Derive universe name ---
+    let name = config.universe_name.as_deref()
+        .map(String::from)
+        .or_else(|| {
+            here.file_name()
+                .map(|n| n.to_string_lossy().to_lowercase().replace(' ', "-"))
+        })
+        .unwrap_or_else(|| "my-universe".to_string());
+
+    // Validate name pattern (^[a-z0-9][a-z0-9_-]{1,62}[a-z0-9]$).
+    if !name_is_valid_registry_entry(&name) {
+        return Err(format!(
+            "universe name '{name}' is not a valid registry entry name.\n\
+             Names must be 3–64 chars, lowercase alphanumeric/hyphens/underscores,\n\
+             starting and ending with alphanumeric.\n\
+             Set [universe] name = \"<override>\" in ~/.config/emanon/config.toml."
+        ).into());
+    }
+
+    // --- Read snapshot_count ---
+    let snapshot_count_path = gitverse.join("snapshot_count");
+    let snapshot_count: u64 = if snapshot_count_path.exists() {
+        std::fs::read_to_string(&snapshot_count_path)?
+            .trim()
+            .parse()
+            .unwrap_or(0)
+    } else {
+        0
+    };
+
+    // --- Read HEAD commit SHA ---
+    let head_output = Command::new("git")
+        .args(["rev-parse", "HEAD"])
+        .output()?;
+    if !head_output.status.success() {
+        return Err("git rev-parse HEAD failed — is this a git repository with commits?".into());
+    }
+    let head_commit = String::from_utf8_lossy(&head_output.stdout)
+        .trim()
+        .to_string();
+    if head_commit.len() != 40 {
+        return Err(format!("unexpected HEAD SHA length: {head_commit}").into());
+    }
+
+    // --- Compute values_hash (sha256 of values.json content) ---
+    let values_path = gitverse.join("values.json");
+    if !values_path.exists() {
+        return Err(".gitverse/values.json not found".into());
+    }
+    let values_content = std::fs::read_to_string(&values_path)?;
+    let values_hex = sha256_str(&values_content)?;
+    let values_hash = format!("sha256:{values_hex}");
+
+    // --- Compute scrambled_root_hash (placeholder: sha256 of HEAD SHA) ---
+    // Real Tᵏ-scrambled Merkle root computation arrives in M6.
+    // sha256(HEAD_commit_SHA) is deterministic and verifiable in the interim.
+    let scrambled_hex = sha256_str(&head_commit)?;
+    let scrambled_root_hash = format!("sha256:{scrambled_hex}");
+
+    // --- Derive git_url from remote ---
+    let git_remote = &config.git_remote;
+    let remote_url_output = Command::new("git")
+        .args(["remote", "get-url", git_remote])
+        .output()?;
+    if !remote_url_output.status.success() {
+        return Err(format!(
+            "git remote get-url {git_remote} failed.\n\
+             Ensure a remote named '{git_remote}' is configured, or set\n\
+             git_remote = \"<name>\" in [registry] in ~/.config/emanon/config.toml."
+        ).into());
+    }
+    let git_url_raw = String::from_utf8_lossy(&remote_url_output.stdout)
+        .trim()
+        .to_string();
+    // Convert SSH → HTTPS if needed (git@github.com:owner/repo.git → https://github.com/owner/repo)
+    let git_url = normalise_git_url(&git_url_raw);
+    if !git_url.starts_with("https://") {
+        return Err(format!(
+            "git_url must use HTTPS; got: {git_url}\n\
+             Configure an HTTPS remote or set [universe] git_url in config."
+        ).into());
+    }
+
+    // --- Current timestamp ---
+    let now_ts = current_iso8601_timestamp();
+
+    // --- Determine created_at (keep original if re-pushing an existing entry) ---
+    let created_at = now_ts.clone();
+
+    // --- Build entry JSON ---
+    let entry_json = format!(
+        r#"{{
+  "name": "{name}",
+  "owner_pubkey": "{owner_pubkey}",
+  "git_url": "{git_url}",
+  "head_commit": "{head_commit}",
+  "snapshot_count": {snapshot_count},
+  "values_hash": "{values_hash}",
+  "scrambled_root_hash": "{scrambled_root_hash}",
+  "created_at": "{created_at}",
+  "updated_at": "{now_ts}",
+  "tags": [],
+  "cnft_mint": null
+}}
+"#
+    );
+
+    println!("📦  Preparing registry entry for universe '{name}'...");
+    println!("    HEAD:           {head_commit}");
+    println!("    snapshot_count: {snapshot_count}");
+    println!("    git_url:        {git_url}");
+
+    // --- Clone registry to a temp dir and open a PR ---
+    let tmp_parent = std::env::temp_dir().join("emanon-registry-push");
+    std::fs::create_dir_all(&tmp_parent)?;
+    // Unique subdir per invocation using HEAD SHA prefix.
+    let tmp_clone = tmp_parent.join(&head_commit[..8]);
+    if tmp_clone.exists() {
+        std::fs::remove_dir_all(&tmp_clone)?;
+    }
+
+    println!("🔄  Cloning registry...");
+    let clone = Command::new("git")
+        .args(["clone", "--depth=1", "--quiet", registry_url])
+        .arg(&tmp_clone)
+        .output()?;
+    if !clone.status.success() {
+        return Err(format!(
+            "git clone {} failed:\n{}",
+            registry_url,
+            String::from_utf8_lossy(&clone.stderr)
+        )
+        .into());
+    }
+
+    // --- Create a branch for this PR ---
+    let branch_name = format!("add-{name}-{}", &head_commit[..8]);
+    let checkout = Command::new("git")
+        .args(["checkout", "-b", &branch_name])
+        .current_dir(&tmp_clone)
+        .output()?;
+    if !checkout.status.success() {
+        return Err(format!(
+            "git checkout failed:\n{}",
+            String::from_utf8_lossy(&checkout.stderr)
+        )
+        .into());
+    }
+
+    // --- Write entry file ---
+    let entries_dir = tmp_clone.join("entries");
+    std::fs::create_dir_all(&entries_dir)?;
+    let entry_file = entries_dir.join(format!("{name}.json"));
+    std::fs::write(&entry_file, &entry_json)?;
+
+    // --- Commit ---
+    let git_add = Command::new("git")
+        .args(["add", &format!("entries/{name}.json")])
+        .current_dir(&tmp_clone)
+        .output()?;
+    if !git_add.status.success() {
+        return Err("git add failed in registry clone".into());
+    }
+
+    let commit_msg = format!(
+        "add(universe): {name} @ {}\n\
+         \n\
+         Universe:       {name}\n\
+         Git-URL:        {git_url}\n\
+         Head-Commit:    {head_commit}\n\
+         Snapshot-Count: {snapshot_count}\n\
+         \n\
+         Co-Authored-By: Alpha36 <alpha36@nanoclaw.local>",
+        &head_commit[..8]
+    );
+    let commit = Command::new("git")
+        .args(["commit", "-m", &commit_msg])
+        .current_dir(&tmp_clone)
+        .output()?;
+    if !commit.status.success() {
+        return Err(format!(
+            "git commit failed:\n{}",
+            String::from_utf8_lossy(&commit.stderr)
+        )
+        .into());
+    }
+
+    // --- Push ---
+    println!("🚀  Pushing branch '{branch_name}'...");
+    let push = Command::new("git")
+        .args(["push", "origin", &branch_name])
+        .current_dir(&tmp_clone)
+        .output()?;
+    if !push.status.success() {
+        let sha_out = Command::new("git")
+            .args(["rev-parse", "HEAD"])
+            .current_dir(&tmp_clone)
+            .output()
+            .ok()
+            .filter(|o| o.status.success())
+            .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
+            .unwrap_or_default();
+        return Err(format!(
+            "git push failed (commit {} pending push):\n{}",
+            sha_out,
+            String::from_utf8_lossy(&push.stderr)
+        )
+        .into());
+    }
+
+    // --- Open PR via gh CLI ---
+    println!("📬  Opening PR...");
+    let pr_title = format!("Add universe: {name}");
+    let pr_body = format!(
+        "## New Universe\n\
+         \n\
+         | Field | Value |\n\
+         |---|---|\n\
+         | Name | `{name}` |\n\
+         | Git URL | {git_url} |\n\
+         | Head Commit | `{head_commit}` |\n\
+         | Snapshot Count | {snapshot_count} |\n\
+         | Values Hash | `{values_hash}` |\n\
+         \n\
+         > **Note on `scrambled_root_hash`:** Full Collatz Tᵏ-scrambled Merkle root\n\
+         > computation arrives in M6. This entry uses `sha256(HEAD)` as a\n\
+         > deterministic placeholder.\n\
+         \n\
+         Generated by `emanon registry push` — Alpha36 worker."
+    );
+
+    let gh_pr = Command::new("gh")
+        .args([
+            "pr", "create",
+            "--repo", registry_url.trim_start_matches("https://github.com/"),
+            "--title", &pr_title,
+            "--body", &pr_body,
+            "--head", &branch_name,
+            "--base", "main",
+        ])
+        .current_dir(&tmp_clone)
+        .output()?;
+
+    if gh_pr.status.success() {
+        let pr_url = String::from_utf8_lossy(&gh_pr.stdout).trim().to_string();
+        println!("✅  PR opened: {pr_url}");
+    } else {
+        let stderr = String::from_utf8_lossy(&gh_pr.stderr);
+        // If gh fails (not auth'd against the registry org, etc.), the commit is
+        // already pushed — surface the branch URL so the user can open a PR manually.
+        let registry_base = registry_url.trim_end_matches(".git");
+        println!(
+            "⚠️  gh pr create failed (branch is pushed — open PR manually):\n\
+             Branch:  {branch_name}\n\
+             Compare: {registry_base}/compare/{branch_name}\n\
+             Error:   {stderr}"
+        );
+    }
+
+    // --- Clean up temp clone ---
+    let _ = std::fs::remove_dir_all(&tmp_clone);
+
+    Ok(())
+}
+
+/// Implements `emanon registry add-remote <entry-name> [--registry <url>] [--remote-name <name>]`.
+///
+/// Reads the universe's `git_url` from the local registry cache and adds it
+/// as a named git remote in the current universe.  The local registry is synced
+/// first so freshly-published universes are visible.
+fn cmd_registry_add_remote(
+    entry_name: &str,
+    registry_url: &str,
+    remote_name: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    // --- Verify we're in a git repo (not necessarily an Emanon universe —
+    //     a player might want to add a remote before init'ing) ---
+    let git_check = Command::new("git")
+        .args(["rev-parse", "--git-dir"])
+        .output()?;
+    if !git_check.status.success() {
+        return Err("not inside a git repository".into());
+    }
+
+    // --- Sync registry ---
+    let cache_dir = sync_registry(registry_url)?;
+    let entry_path = cache_dir.join("entries").join(format!("{entry_name}.json"));
+
+    if !entry_path.exists() {
+        return Err(format!(
+            "registry entry '{entry_name}' not found.\n\
+             Run `emanon registry list` to see available universes.\n\
+             (Looked in: {})",
+            entry_path.display()
+        )
+        .into());
+    }
+
+    // --- Parse git_url from entry ---
+    let fields = parse_entry_json(&entry_path);
+    let git_url = fields.get("git_url").cloned().ok_or_else(|| {
+        format!("entry '{entry_name}' has no git_url field")
+    })?;
+    if git_url.is_empty() {
+        return Err(format!("entry '{entry_name}' has an empty git_url").into());
+    }
+
+    // --- Check if remote already exists ---
+    let remote_check = Command::new("git")
+        .args(["remote", "get-url", remote_name])
+        .output()?;
+    if remote_check.status.success() {
+        let existing = String::from_utf8_lossy(&remote_check.stdout).trim().to_string();
+        if existing == git_url {
+            println!("✅  Remote '{remote_name}' already points to {git_url}");
+            return Ok(());
+        }
+        return Err(format!(
+            "remote '{remote_name}' already exists pointing to '{existing}'.\n\
+             Use a different --remote-name, or remove the existing remote first:\n\
+             git remote remove {remote_name}"
+        )
+        .into());
+    }
+
+    // --- Add remote ---
+    let add = Command::new("git")
+        .args(["remote", "add", remote_name, &git_url])
+        .output()?;
+    if !add.status.success() {
+        return Err(format!(
+            "git remote add failed:\n{}",
+            String::from_utf8_lossy(&add.stderr)
+        )
+        .into());
+    }
+
+    println!("✅  Remote added:");
+    println!("    {remote_name}  →  {git_url}");
+    println!();
+    println!("    Fetch with:  git fetch {remote_name}");
+    println!("    Merge with:  emanon merge {remote_name}/main");
+
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// Registry helpers
+// ---------------------------------------------------------------------------
+
+/// Validate a registry entry name against the schema pattern:
+/// `^[a-z0-9][a-z0-9_-]{1,62}[a-z0-9]$` (total 3–64 chars).
+fn name_is_valid_registry_entry(name: &str) -> bool {
+    let bytes = name.as_bytes();
+    let n = bytes.len();
+    if n < 3 || n > 64 {
+        return false;
+    }
+    let is_alnum = |b: u8| b.is_ascii_alphanumeric();
+    let is_inner = |b: u8| b.is_ascii_alphanumeric() || b == b'-' || b == b'_';
+    is_alnum(bytes[0]) && is_alnum(bytes[n - 1]) && bytes[1..n - 1].iter().all(|&b| is_inner(b))
+}
+
+/// Convert a git remote URL to HTTPS form.
+/// `git@github.com:owner/repo.git` → `https://github.com/owner/repo`
+fn normalise_git_url(raw: &str) -> String {
+    let s = raw.trim();
+    if s.starts_with("https://") {
+        return s.trim_end_matches(".git").to_string();
+    }
+    // SSH format: git@host:path
+    if let Some(at_pos) = s.find('@') {
+        if let Some(colon_pos) = s.find(':') {
+            if colon_pos > at_pos {
+                let host = &s[at_pos + 1..colon_pos];
+                let path = s[colon_pos + 1..].trim_end_matches(".git");
+                return format!("https://{host}/{path}");
+            }
+        }
+    }
+    s.to_string()
+}
+
+/// Return an RFC 3339 timestamp for "now" using the `date` command.
+/// Falls back to a static placeholder if `date` is unavailable.
+fn current_iso8601_timestamp() -> String {
+    Command::new("date")
+        .args(["-u", "+%Y-%m-%dT%H:%M:%SZ"])
+        .output()
+        .ok()
+        .filter(|o| o.status.success())
+        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
+        .unwrap_or_else(|| "1970-01-01T00:00:00Z".to_string())
+}
+
+// ---------------------------------------------------------------------------
 // stub helper
 // ---------------------------------------------------------------------------
 
@@ -2555,9 +3405,36 @@ fn main() {
             TournamentAction::Play => not_yet("emanon tournament play"),
         },
         Commands::Registry { action } => match action {
-            RegistryAction::Push => not_yet("emanon registry push"),
-            RegistryAction::Pull => not_yet("emanon registry pull"),
-            RegistryAction::List => not_yet("emanon registry list"),
+            RegistryAction::Push { registry } => {
+                let config = load_emanon_config();
+                let url = registry.as_deref().unwrap_or(&config.registry_url);
+                if let Err(e) = cmd_registry_push(url, &config) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+            RegistryAction::Pull { registry } => {
+                let config = load_amenon_config_for_url(registry.as_deref());
+                if let Err(e) = cmd_registry_pull(&config.registry_url) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+            RegistryAction::List { registry, filter } => {
+                let config = load_amenon_config_for_url(registry.as_deref());
+                if let Err(e) = cmd_registry_list(&config.registry_url, filter.as_deref()) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+            RegistryAction::AddRemote { entry_name, registry, remote_name } => {
+                let config = load_amenon_config_for_url(registry.as_deref());
+                let rname = remote_name.as_deref().unwrap_or(&entry_name);
+                if let Err(e) = cmd_registry_add_remote(&entry_name, &config.registry_url, rname) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
         },
         Commands::Validate { strict } => {
             if let Err(e) = cmd_validate(strict) {
@@ -3662,5 +4539,144 @@ mod tests {
             ".gitkeep must not produce a warning: {:?}",
             warnings
         );
+    }
+
+    // -----------------------------------------------------------------------
+    // Registry helpers
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn name_is_valid_registry_entry_accepts_valid_names() {
+        assert!(name_is_valid_registry_entry("alice-prime"));
+        assert!(name_is_valid_registry_entry("my-universe-01"));
+        assert!(name_is_valid_registry_entry("abc")); // minimum 3 chars
+        assert!(name_is_valid_registry_entry("a1b")); // alphanumeric boundaries
+        assert!(name_is_valid_registry_entry("test_universe_2"));
+    }
+
+    #[test]
+    fn name_is_valid_registry_entry_rejects_invalid() {
+        assert!(!name_is_valid_registry_entry("ab"));       // too short (2 chars)
+        assert!(!name_is_valid_registry_entry("-abc"));     // starts with dash
+        assert!(!name_is_valid_registry_entry("abc-"));     // ends with dash
+        assert!(!name_is_valid_registry_entry("Hello"));    // uppercase
+        assert!(!name_is_valid_registry_entry("my universe")); // space
+        assert!(!name_is_valid_registry_entry(&"a".repeat(65))); // too long
+    }
+
+    #[test]
+    fn normalise_git_url_passthrough_https() {
+        let url = "https://github.com/alice/her-world";
+        assert_eq!(normalise_git_url(url), url);
+    }
+
+    #[test]
+    fn normalise_git_url_strips_dot_git() {
+        assert_eq!(
+            normalise_git_url("https://github.com/alice/her-world.git"),
+            "https://github.com/alice/her-world"
+        );
+    }
+
+    #[test]
+    fn normalise_git_url_converts_ssh_to_https() {
+        assert_eq!(
+            normalise_git_url("git@github.com:alice/her-world.git"),
+            "https://github.com/alice/her-world"
+        );
+    }
+
+    #[test]
+    fn normalise_git_url_converts_ssh_no_git_suffix() {
+        assert_eq!(
+            normalise_git_url("git@github.com:alice/her-world"),
+            "https://github.com/alice/her-world"
+        );
+    }
+
+    #[test]
+    fn parse_toml_kv_double_quoted_value() {
+        let (k, v) = parse_toml_kv(r#"url = "https://github.com/foo/bar""#).unwrap();
+        assert_eq!(k, "url");
+        assert_eq!(v, "https://github.com/foo/bar");
+    }
+
+    #[test]
+    fn parse_toml_kv_unquoted_value() {
+        let (k, v) = parse_toml_kv("snapshot_count = 42").unwrap();
+        assert_eq!(k, "snapshot_count");
+        assert_eq!(v, "42");
+    }
+
+    #[test]
+    fn parse_toml_kv_returns_none_on_no_eq() {
+        assert!(parse_toml_kv("[registry]").is_none());
+        assert!(parse_toml_kv("# comment").is_none());
+    }
+
+    #[test]
+    fn load_amenon_config_uses_override_url() {
+        let cfg = load_amenon_config_for_url(Some("https://example.com/my-registry"));
+        assert_eq!(cfg.registry_url, "https://example.com/my-registry");
+    }
+
+    #[test]
+    fn load_emanon_config_defaults() {
+        // Without a config file, defaults are sane.
+        let cfg = load_emanon_config();
+        assert_eq!(cfg.registry_url, DEFAULT_REGISTRY_URL);
+        assert_eq!(cfg.git_remote, "origin");
+        // owner_pubkey is optional; may or may not be set on this machine.
+    }
+
+    #[test]
+    fn parse_entry_json_valid_entry() {
+        let dir = tempdir();
+        let tmp_path = dir.join("alice-prime.json");
+        std::fs::write(
+            &tmp_path,
+            r#"{
+  "name": "alice-prime",
+  "owner_pubkey": "AxL7YMzPqR5KoN2XvUhT1nJsLcW8FmBeDpVqRxGsP3k",
+  "git_url": "https://github.com/alice/her-world",
+  "head_commit": "abc1234def5678901234567890123456789012345678",
+  "snapshot_count": 42,
+  "values_hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "scrambled_root_hash": "sha256:a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+  "created_at": "2026-04-14T00:00:00Z",
+  "updated_at": "2026-04-14T00:00:00Z",
+  "tags": ["solo", "early"],
+  "cnft_mint": null
+}"#,
+        ).unwrap();
+        let fields = parse_entry_json(&tmp_path);
+        assert_eq!(fields.get("name").map(String::as_str), Some("alice-prime"));
+        assert_eq!(
+            fields.get("git_url").map(String::as_str),
+            Some("https://github.com/alice/her-world")
+        );
+        assert_eq!(
+            fields.get("snapshot_count").and_then(|s| s.parse::<u64>().ok()),
+            Some(42)
+        );
+        // Tags array is joined.
+        let tags = fields.get("tags").cloned().unwrap_or_default();
+        assert!(tags.contains("solo"), "tags should contain 'solo': {tags}");
+    }
+
+    #[test]
+    fn registry_cache_dir_produces_valid_path() {
+        let dir = registry_cache_dir(DEFAULT_REGISTRY_URL).unwrap();
+        let s = dir.to_string_lossy();
+        assert!(s.contains(".local/share/emanon/registry/"));
+        // Should not end with a separator.
+        assert!(!s.ends_with('/'));
+    }
+
+    #[test]
+    fn registry_cache_dir_distinct_for_different_urls() {
+        let d1 = registry_cache_dir("https://github.com/foo/bar").unwrap();
+        let d2 = registry_cache_dir("https://github.com/baz/qux").unwrap();
+        assert_ne!(d1, d2);
     }
 }

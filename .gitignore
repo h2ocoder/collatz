@@ -35,3 +35,7 @@ site/.vitepress/dist/
 
 # Claude Code skill working state
 .superpowers/
+
+# .NET build artifacts
+emanon/src/**/bin/
+emanon/src/**/obj/

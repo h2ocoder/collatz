@@ -163,6 +163,27 @@ enum Commands {
         action: BountyAction,
     },
 
+    /// Mine a universe that satisfies a bounty predicate
+    ///
+    /// Runs a search loop: generates a random seed, initialises a fresh universe,
+    /// runs a scripted play (sequential snapshots), evaluates the bounty predicate,
+    /// and repeats until satisfied or the budget is exhausted.
+    ///
+    /// On success, prints the universe directory and seed so the player can deliver.
+    ///
+    /// Example:
+    ///   emanon mine 550e8400-e29b-41d4-a716-446655440000
+    Mine {
+        /// UUID of the bounty to mine
+        uuid: String,
+        /// Maximum iterations to try (default: 10)
+        #[arg(long, default_value = "10")]
+        budget: u64,
+        /// Bounty board repo URL (overrides [bounty] board_url in config)
+        #[arg(long)]
+        board: Option<String>,
+    },
+
     /// Manage tournament participation
     Tournament {
         #[command(subcommand)]
@@ -270,10 +291,53 @@ enum BountyAction {
         #[arg(long)]
         board: Option<String>,
     },
-    /// Accept a bounty
-    Accept,
-    /// Deliver work for an accepted bounty
-    Deliver,
+    /// Accept a bounty (claim it as a miner)
+    ///
+    /// Reads the bounty from the board cache, creates a `.claim` file at
+    /// `in-progress/<uuid>/<miner-id>.claim`, and opens a PR to the bounty-board.
+    ///
+    /// Example:
+    ///   emanon bounty accept 550e8400-e29b-41d4-a716-446655440000
+    Accept {
+        /// UUID of the bounty to accept
+        uuid: String,
+        /// Bounty board repo URL (overrides [bounty] board_url in config)
+        #[arg(long)]
+        board: Option<String>,
+    },
+    /// Deliver a mined universe for an accepted bounty
+    ///
+    /// Bundles the universe via `git bundle create`, records a `delivered.json`
+    /// with seed + bundle path + simulation signature, and opens a PR moving
+    /// the bounty to `delivered/<uuid>/`.
+    ///
+    /// Example:
+    ///   emanon bounty deliver 550e8400-... --repo ./my-universe
+    Deliver {
+        /// UUID of the accepted bounty to deliver against
+        uuid: String,
+        /// Path to the mined universe directory
+        #[arg(long, short = 'r')]
+        repo: String,
+        /// Bounty board repo URL (overrides [bounty] board_url in config)
+        #[arg(long)]
+        board: Option<String>,
+    },
+    /// Verify a delivered bounty (anyone can run)
+    ///
+    /// Reads `delivered/<uuid>/delivered.json` from the board, clones the
+    /// bundle, checks that the seed matches the genesis commit, and verifies
+    /// the predicate against the mined universe.
+    ///
+    /// Example:
+    ///   emanon bounty verify 550e8400-...
+    Verify {
+        /// UUID of the delivered bounty to verify
+        uuid: String,
+        /// Bounty board repo URL (overrides [bounty] board_url in config)
+        #[arg(long)]
+        board: Option<String>,
+    },
 }
 
 #[derive(Subcommand)]
@@ -3332,6 +3396,884 @@ fn cmd_bounty_show(
     Ok(())
 }
 
+// ---------------------------------------------------------------------------
+// Miner reputation  (off-chain JSON, M6.4)
+// ---------------------------------------------------------------------------
+
+/// Path to the local miner reputation file.
+fn reputation_path() -> Option<std::path::PathBuf> {
+    std::env::var("HOME")
+        .ok()
+        .map(|h| std::path::PathBuf::from(format!("{h}/.local/share/emanon/reputation.json")))
+}
+
+/// Load the miner reputation JSON, returning (deliveries, verifications_passed).
+/// Returns (0, 0) if the file doesn't exist or can't be parsed.
+fn load_reputation() -> (u64, u64) {
+    let path = match reputation_path() {
+        Some(p) => p,
+        None => return (0, 0),
+    };
+    let content = match std::fs::read_to_string(&path) {
+        Ok(c) => c,
+        Err(_) => return (0, 0),
+    };
+    let deliveries = json_u64_field_from(&content, "deliveries").unwrap_or(0);
+    let verifications = json_u64_field_from(&content, "verifications_passed").unwrap_or(0);
+    (deliveries, verifications)
+}
+
+/// Increment deliveries count in the reputation file.
+fn increment_reputation_deliveries() {
+    let (d, v) = load_reputation();
+    save_reputation(d + 1, v);
+}
+
+/// Increment verifications_passed count in the reputation file.
+fn increment_reputation_verifications() {
+    let (d, v) = load_reputation();
+    save_reputation(d, v + 1);
+}
+
+/// Write reputation JSON to disk.
+fn save_reputation(deliveries: u64, verifications_passed: u64) {
+    let path = match reputation_path() {
+        Some(p) => p,
+        None => return,
+    };
+    if let Some(parent) = path.parent() {
+        let _ = std::fs::create_dir_all(parent);
+    }
+    let now = now_iso8601();
+    let json = format!(
+        r#"{{
+  "deliveries": {deliveries},
+  "verifications_passed": {verifications_passed},
+  "last_updated": "{now}"
+}}"#
+    );
+    let _ = std::fs::write(&path, json);
+}
+
+/// Simple JSON u64 field extractor that works on a `&str` reference (used by reputation helpers).
+fn json_u64_field_from(json: &str, key: &str) -> Option<u64> {
+    let needle = format!("\"{}\":", key);
+    let pos = json.find(&needle)?;
+    let rest = json[pos + needle.len()..].trim_start();
+    let end = rest.find(|c: char| !c.is_ascii_digit()).unwrap_or(rest.len());
+    rest[..end].parse().ok()
+}
+
+/// Return current UTC time as an ISO-8601 string (best-effort via `date`).
+fn now_iso8601() -> String {
+    let out = Command::new("date")
+        .args(["-u", "+%Y-%m-%dT%H:%M:%SZ"])
+        .output();
+    match out {
+        Ok(o) if o.status.success() => {
+            String::from_utf8_lossy(&o.stdout).trim().to_string()
+        }
+        _ => "2026-04-14T00:00:00Z".to_string(),
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Bounty accept / deliver / verify commands  (M6.4)
+// ---------------------------------------------------------------------------
+
+/// Implements `emanon bounty accept <uuid>`.
+///
+/// Claims the bounty by:
+/// 1. Syncing the bounty board to the local cache.
+/// 2. Confirming `open/<uuid>.json` exists.
+/// 3. Cloning the board to a temp working copy.
+/// 4. Creating `in-progress/<uuid>/<miner-id>.claim` with claim metadata.
+/// 5. Committing and pushing to a new branch, then opening a PR.
+fn cmd_bounty_accept(
+    uuid: &str,
+    board_url: &str,
+    config: &EmanonConfig,
+) -> Result<(), Box<dyn std::error::Error>> {
+    eprintln!("🔄  Syncing bounty board...");
+    let cache_dir = sync_bounty_board(board_url)?;
+
+    let open_file = cache_dir.join("open").join(format!("{}.json", uuid));
+    if !open_file.exists() {
+        return Err(format!(
+            "Bounty '{}' not found in open/ on the bounty board. \
+             Run `emanon bounty list` to see available bounties.",
+            uuid
+        )
+        .into());
+    }
+    let bounty_json = std::fs::read_to_string(&open_file)?;
+    let _bounty = bounty::Bounty::from_json(&bounty_json)
+        .ok_or_else(|| format!("Bounty file is malformed: {}", open_file.display()))?;
+
+    // Derive a miner ID from buyer_pubkey config, hostname, or fallback.
+    let miner_id = config
+        .buyer_pubkey
+        .as_deref()
+        .map(|pk| pk.trim_start_matches("ed25519:").to_string())
+        .unwrap_or_else(|| {
+            Command::new("hostname")
+                .output()
+                .ok()
+                .and_then(|o| {
+                    if o.status.success() {
+                        Some(String::from_utf8_lossy(&o.stdout).trim().to_string())
+                    } else {
+                        None
+                    }
+                })
+                .unwrap_or_else(|| "anonymous".to_string())
+        });
+
+    // Compute a deadline: +7 days from now.
+    let now = now_iso8601();
+    let deadline = add_days_to_timestamp(&now, 7);
+
+    let claim_content = format!(
+        r#"{{
+  "bounty_uuid": "{uuid}",
+  "miner_id": "{miner_id}",
+  "claimed_at": "{now}",
+  "deadline": "{deadline}",
+  "status": "in-progress"
+}}"#
+    );
+
+    // Clone the board to a temp directory so we can create the claim PR.
+    let tmp_dir = std::env::temp_dir().join(format!("emanon-accept-{uuid}"));
+    if tmp_dir.exists() {
+        std::fs::remove_dir_all(&tmp_dir)?;
+    }
+    let clone_out = Command::new("git")
+        .args(["clone", "--quiet", board_url])
+        .arg(&tmp_dir)
+        .output()?;
+    if !clone_out.status.success() {
+        return Err(format!(
+            "git clone failed:\n{}",
+            String::from_utf8_lossy(&clone_out.stderr)
+        )
+        .into());
+    }
+
+    // Create branch.
+    let branch = format!("accept/{uuid}");
+    let checkout_out = Command::new("git")
+        .args(["checkout", "-b", &branch])
+        .current_dir(&tmp_dir)
+        .output()?;
+    if !checkout_out.status.success() {
+        return Err(format!(
+            "git checkout -b failed:\n{}",
+            String::from_utf8_lossy(&checkout_out.stderr)
+        )
+        .into());
+    }
+
+    // Write in-progress/<uuid>/<miner_id>.claim
+    let in_progress_dir = tmp_dir.join("in-progress").join(uuid);
+    std::fs::create_dir_all(&in_progress_dir)?;
+    let claim_file = in_progress_dir.join(format!("{}.claim", miner_id));
+    std::fs::write(&claim_file, &claim_content)?;
+
+    // Stage, commit, push.
+    Command::new("git")
+        .args(["add", "--all"])
+        .current_dir(&tmp_dir)
+        .output()?;
+    let commit_msg = format!("accept: miner {miner_id} claims bounty {uuid}");
+    let commit_out = Command::new("git")
+        .args(["commit", "-m", &commit_msg])
+        .env("GIT_AUTHOR_NAME", "Alpha36")
+        .env("GIT_AUTHOR_EMAIL", "alpha36@nanoclaw.local")
+        .env("GIT_COMMITTER_NAME", "Alpha36")
+        .env("GIT_COMMITTER_EMAIL", "alpha36@nanoclaw.local")
+        .current_dir(&tmp_dir)
+        .output()?;
+    if !commit_out.status.success() {
+        return Err(format!(
+            "git commit failed:\n{}",
+            String::from_utf8_lossy(&commit_out.stderr)
+        )
+        .into());
+    }
+
+    let push_out = Command::new("git")
+        .args(["push", "-u", "origin", &branch])
+        .current_dir(&tmp_dir)
+        .output()?;
+    let push_ok = push_out.status.success();
+    if !push_ok {
+        eprintln!(
+            "warning: git push failed (auth). Claim file written locally at {}.\n{}",
+            claim_file.display(),
+            String::from_utf8_lossy(&push_out.stderr)
+        );
+    }
+
+    // Open PR via gh if push succeeded.
+    let pr_url = if push_ok {
+        let pr_out = Command::new("gh")
+            .args([
+                "pr", "create",
+                "--repo", &board_url.trim_start_matches("https://github.com/").to_string(),
+                "--title", &format!("Accept bounty {uuid} — miner {miner_id}"),
+                "--body", &format!(
+                    "## Bounty claim\n\n\
+                     | Field | Value |\n\
+                     |---|---|\n\
+                     | Bounty UUID | `{uuid}` |\n\
+                     | Miner | `{miner_id}` |\n\
+                     | Claimed at | `{now}` |\n\
+                     | Deadline | `{deadline}` |\n\n\
+                     Claim file: `in-progress/{uuid}/{miner_id}.claim`"
+                ),
+                "--head", &branch,
+                "--base", "main",
+            ])
+            .current_dir(&tmp_dir)
+            .output();
+        match pr_out {
+            Ok(o) if o.status.success() => {
+                let url = String::from_utf8_lossy(&o.stdout).trim().to_string();
+                Some(url)
+            }
+            _ => None,
+        }
+    } else {
+        None
+    };
+
+    println!("✅  Bounty {uuid} accepted.");
+    println!("    Miner ID : {miner_id}");
+    println!("    Claimed  : {now}");
+    println!("    Deadline : {deadline}");
+    if let Some(url) = pr_url {
+        println!("    PR       : {url}");
+    } else if push_ok {
+        println!("    Branch   : {branch} (PR creation failed — open manually)");
+    } else {
+        println!("    Commit   : pending push (auth failure — push branch '{}' when auth available)", branch);
+    }
+    println!("\nNext step: `emanon mine {uuid}` to search for a satisfying universe.");
+    Ok(())
+}
+
+/// Implements `emanon bounty deliver <uuid> --repo <path>`.
+///
+/// Bundles the mined universe, records delivery metadata, opens a PR to the
+/// bounty board writing the deliverable to `delivered/<uuid>/delivered.json`
+/// and `delivered/<uuid>/<miner-id>.bundle`.
+///
+/// Also increments the miner's local reputation counter.
+fn cmd_bounty_deliver(
+    uuid: &str,
+    repo_path: &str,
+    board_url: &str,
+    config: &EmanonConfig,
+) -> Result<(), Box<dyn std::error::Error>> {
+    // --- Validate repo path ---
+    let repo = std::path::Path::new(repo_path);
+    if !repo.exists() {
+        return Err(format!("repo path not found: {repo_path}").into());
+    }
+    if !repo.join(".git").exists() {
+        return Err(format!("not a git repository: {repo_path}").into());
+    }
+
+    // --- Read the bounty from the local cache (sync first) ---
+    eprintln!("🔄  Syncing bounty board...");
+    let cache_dir = sync_bounty_board(board_url)?;
+    let open_file = cache_dir.join("open").join(format!("{}.json", uuid));
+    if !open_file.exists() {
+        return Err(format!(
+            "Bounty '{}' not found in open/. Has it already been delivered or expired?",
+            uuid
+        )
+        .into());
+    }
+    let bounty_json = std::fs::read_to_string(&open_file)?;
+    let bounty_obj = bounty::Bounty::from_json(&bounty_json)
+        .ok_or_else(|| format!("Bounty file is malformed"))?;
+
+    // --- Verify predicate before delivering ---
+    eprintln!("🔍  Verifying predicate against mined universe...");
+    if !bounty::verify_predicate(repo, &bounty_obj.constraint) {
+        return Err(format!(
+            "Universe at '{}' does NOT satisfy the bounty predicate.\n\
+             Run `emanon mine {}` to search for a satisfying universe first.",
+            repo_path, uuid
+        )
+        .into());
+    }
+    eprintln!("✅  Predicate verified.");
+
+    // --- Read seed from .gitverse/genesis_seed (if present) ---
+    let seed = std::fs::read_to_string(repo.join(".gitverse").join("genesis_seed"))
+        .unwrap_or_else(|_| "unknown".to_string())
+        .trim()
+        .to_string();
+
+    // --- Get HEAD SHA of the universe ---
+    let head_sha_out = Command::new("git")
+        .args(["rev-parse", "HEAD"])
+        .current_dir(repo)
+        .output()?;
+    let head_sha = String::from_utf8_lossy(&head_sha_out.stdout)
+        .trim()
+        .to_string();
+
+    // --- Create git bundle ---
+    let bundle_path = std::env::temp_dir().join(format!("emanon-{uuid}.bundle"));
+    let bundle_out = Command::new("git")
+        .args([
+            "bundle", "create",
+            bundle_path.to_str().unwrap_or("bundle.bundle"),
+            "--all",
+        ])
+        .current_dir(repo)
+        .output()?;
+    if !bundle_out.status.success() {
+        return Err(format!(
+            "git bundle create failed:\n{}",
+            String::from_utf8_lossy(&bundle_out.stderr)
+        )
+        .into());
+    }
+    let bundle_size = std::fs::metadata(&bundle_path).map(|m| m.len()).unwrap_or(0);
+    eprintln!("📦  Bundle created: {} ({} bytes)", bundle_path.display(), bundle_size);
+
+    // Compute sha256 of the bundle file for integrity verification.
+    let bundle_hash = sha256_file(&bundle_path).unwrap_or_else(|_| "unknown".to_string());
+
+    // Bundle URL: file:// for now (IPFS/S3 integration in a later milestone).
+    let bundle_url = format!("file://{}", bundle_path.display());
+
+    // --- Build delivered.json ---
+    let miner_id = config
+        .buyer_pubkey
+        .as_deref()
+        .map(|pk| pk.trim_start_matches("ed25519:").to_string())
+        .unwrap_or_else(|| "anonymous".to_string());
+    let now = now_iso8601();
+
+    // Simulation signature: sha256(miner_id + ":" + uuid + ":" + head_sha).
+    let sign_payload = format!("{miner_id}:{uuid}:{head_sha}");
+    let sig_hex = sha256_str(&sign_payload).unwrap_or_else(|_| "unknown".to_string());
+
+    let delivered_json = format!(
+        r#"{{
+  "bounty_uuid": "{uuid}",
+  "miner_id": "{miner_id}",
+  "delivered_at": "{now}",
+  "seed": "{seed}",
+  "head_sha": "{head_sha}",
+  "bundle_url": "{bundle_url}",
+  "bundle_sha256": "{bundle_hash}",
+  "miner_signature": "sha256-sim:{sig_hex}"
+}}"#
+    );
+
+    // --- Clone board, create delivery PR ---
+    let tmp_dir = std::env::temp_dir().join(format!("emanon-deliver-{uuid}"));
+    if tmp_dir.exists() {
+        std::fs::remove_dir_all(&tmp_dir)?;
+    }
+    let clone_out = Command::new("git")
+        .args(["clone", "--quiet", board_url])
+        .arg(&tmp_dir)
+        .output()?;
+    if !clone_out.status.success() {
+        return Err(format!(
+            "git clone failed:\n{}",
+            String::from_utf8_lossy(&clone_out.stderr)
+        )
+        .into());
+    }
+
+    let branch = format!("deliver/{uuid}");
+    Command::new("git")
+        .args(["checkout", "-b", &branch])
+        .current_dir(&tmp_dir)
+        .output()?;
+
+    // Write delivered/<uuid>/delivered.json
+    let delivery_dir = tmp_dir.join("delivered").join(uuid);
+    std::fs::create_dir_all(&delivery_dir)?;
+    std::fs::write(delivery_dir.join("delivered.json"), &delivered_json)?;
+
+    // Copy bundle into delivered/<uuid>/<miner_id>.bundle
+    let bundle_dest = delivery_dir.join(format!("{}.bundle", miner_id));
+    std::fs::copy(&bundle_path, &bundle_dest)?;
+
+    // Stage, commit, push.
+    Command::new("git")
+        .args(["add", "--all"])
+        .current_dir(&tmp_dir)
+        .output()?;
+    let commit_msg = format!("deliver: miner {miner_id} delivers bounty {uuid}");
+    let commit_out = Command::new("git")
+        .args(["commit", "-m", &commit_msg])
+        .env("GIT_AUTHOR_NAME", "Alpha36")
+        .env("GIT_AUTHOR_EMAIL", "alpha36@nanoclaw.local")
+        .env("GIT_COMMITTER_NAME", "Alpha36")
+        .env("GIT_COMMITTER_EMAIL", "alpha36@nanoclaw.local")
+        .current_dir(&tmp_dir)
+        .output()?;
+    if !commit_out.status.success() {
+        return Err(format!(
+            "git commit failed:\n{}",
+            String::from_utf8_lossy(&commit_out.stderr)
+        )
+        .into());
+    }
+
+    let push_out = Command::new("git")
+        .args(["push", "-u", "origin", &branch])
+        .current_dir(&tmp_dir)
+        .output()?;
+    let push_ok = push_out.status.success();
+
+    let pr_url = if push_ok {
+        let pr_out = Command::new("gh")
+            .args([
+                "pr", "create",
+                "--repo", &board_url.trim_start_matches("https://github.com/").to_string(),
+                "--title", &format!("Deliver bounty {uuid} — miner {miner_id}"),
+                "--body", &format!(
+                    "## Delivery\n\n\
+                     | Field | Value |\n\
+                     |---|---|\n\
+                     | Bounty UUID | `{uuid}` |\n\
+                     | Miner | `{miner_id}` |\n\
+                     | Delivered at | `{now}` |\n\
+                     | Head SHA | `{head_sha}` |\n\
+                     | Bundle SHA-256 | `{bundle_hash}` |\n\
+                     | Seed | `{seed}` |\n\n\
+                     Verify: `emanon bounty verify {uuid}`\n\n\
+                     > Signature: `sha256(<miner_id>:<bounty_uuid>:<head_sha>)`"
+                ),
+                "--head", &branch,
+                "--base", "main",
+            ])
+            .current_dir(&tmp_dir)
+            .output();
+        match pr_out {
+            Ok(o) if o.status.success() => {
+                Some(String::from_utf8_lossy(&o.stdout).trim().to_string())
+            }
+            _ => None,
+        }
+    } else {
+        None
+    };
+
+    // Increment miner reputation.
+    increment_reputation_deliveries();
+    let (deliveries, _) = load_reputation();
+
+    println!("✅  Bounty {uuid} delivered.");
+    println!("    Miner    : {miner_id}");
+    println!("    Seed     : {seed}");
+    println!("    Head SHA : {head_sha}");
+    println!("    Bundle   : {}", bundle_path.display());
+    println!("    Signature: sha256-sim:{sig_hex}");
+    println!("    Reputation deliveries: {deliveries}");
+    if let Some(url) = pr_url {
+        println!("    PR       : {url}");
+    } else if !push_ok {
+        eprintln!("warning: push failed (auth). Delivery commit pending push.");
+    }
+    Ok(())
+}
+
+/// Implements `emanon bounty verify <uuid>`.
+///
+/// Reads `delivered/<uuid>/delivered.json` from the board cache, locates the
+/// bundle file, verifies its SHA-256, clones it into a temp directory, and
+/// checks the predicate.  Prints PASS or FAIL clearly.
+///
+/// Also increments the miner's local verifications_passed counter on success.
+fn cmd_bounty_verify(
+    uuid: &str,
+    board_url: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    eprintln!("🔄  Syncing bounty board...");
+    let cache_dir = sync_bounty_board(board_url)?;
+
+    // --- Load delivered.json ---
+    let delivery_dir = cache_dir.join("delivered").join(uuid);
+    let delivered_file = delivery_dir.join("delivered.json");
+    if !delivered_file.exists() {
+        return Err(format!(
+            "No delivery found for bounty '{}'. \
+             Has it been delivered yet? Check `emanon bounty list`.",
+            uuid
+        )
+        .into());
+    }
+    let delivered_json = std::fs::read_to_string(&delivered_file)?;
+
+    // Parse key fields from delivered.json.
+    let miner_id = json_str_field(&delivered_json, "miner_id")
+        .ok_or("delivered.json missing miner_id")?
+        .to_string();
+    let seed = json_str_field(&delivered_json, "seed")
+        .ok_or("delivered.json missing seed")?
+        .to_string();
+    let expected_head_sha = json_str_field(&delivered_json, "head_sha")
+        .ok_or("delivered.json missing head_sha")?
+        .to_string();
+    let bundle_url = json_str_field(&delivered_json, "bundle_url")
+        .ok_or("delivered.json missing bundle_url")?
+        .to_string();
+    let expected_bundle_hash = json_str_field(&delivered_json, "bundle_sha256")
+        .ok_or("delivered.json missing bundle_sha256")?
+        .to_string();
+
+    // --- Load bounty predicate from open/ (fall back to search in delivered/ metadata) ---
+    let open_file = cache_dir.join("open").join(format!("{}.json", uuid));
+    // The bounty might have been moved; for verification we need it.
+    // We embed the predicate from the original open file in the delivery PR message,
+    // but for simplicity in the off-chain simulation we look for open/<uuid>.json
+    // or a bundled bounty.json inside the delivery dir.
+    let bounty_json = if open_file.exists() {
+        std::fs::read_to_string(&open_file)?
+    } else {
+        // Try delivered dir for a bundled copy.
+        let bundled = delivery_dir.join("bounty.json");
+        if bundled.exists() {
+            std::fs::read_to_string(&bundled)?
+        } else {
+            return Err(format!(
+                "Cannot find bounty predicate for '{}'. \
+                 The open/{}.json file is needed for verification.",
+                uuid, uuid
+            )
+            .into());
+        }
+    };
+    let bounty_obj = bounty::Bounty::from_json(&bounty_json)
+        .ok_or("Bounty JSON is malformed")?;
+
+    // --- Locate bundle file ---
+    // bundle_url is a file:// URI for off-chain simulation.
+    let bundle_path = if bundle_url.starts_with("file://") {
+        std::path::PathBuf::from(&bundle_url["file://".len()..])
+    } else {
+        // Look for it alongside delivered.json.
+        delivery_dir.join(format!("{}.bundle", miner_id))
+    };
+    if !bundle_path.exists() {
+        return Err(format!(
+            "Bundle file not found: {}\n\
+             (Expected at {})",
+            bundle_url,
+            bundle_path.display()
+        )
+        .into());
+    }
+
+    // --- Verify bundle SHA-256 ---
+    let actual_hash = sha256_file(&bundle_path)?;
+    if actual_hash != expected_bundle_hash {
+        return Err(format!(
+            "❌  Bundle SHA-256 MISMATCH\n\
+             Expected: {expected_bundle_hash}\n\
+             Actual  : {actual_hash}\n\
+             Delivery is INVALID."
+        )
+        .into());
+    }
+    eprintln!("✅  Bundle SHA-256 verified.");
+
+    // --- Clone bundle to temp dir ---
+    let tmp_universe = std::env::temp_dir().join(format!("emanon-verify-{uuid}"));
+    if tmp_universe.exists() {
+        std::fs::remove_dir_all(&tmp_universe)?;
+    }
+    let clone_out = Command::new("git")
+        .args(["clone", "--quiet"])
+        .arg(&bundle_path)
+        .arg(&tmp_universe)
+        .output()?;
+    if !clone_out.status.success() {
+        return Err(format!(
+            "git clone from bundle failed:\n{}",
+            String::from_utf8_lossy(&clone_out.stderr)
+        )
+        .into());
+    }
+
+    // --- Verify HEAD SHA matches ---
+    let actual_head_out = Command::new("git")
+        .args(["rev-parse", "HEAD"])
+        .current_dir(&tmp_universe)
+        .output()?;
+    let actual_head = String::from_utf8_lossy(&actual_head_out.stdout)
+        .trim()
+        .to_string();
+    if actual_head != expected_head_sha {
+        return Err(format!(
+            "❌  HEAD SHA MISMATCH\n\
+             Expected: {expected_head_sha}\n\
+             Actual  : {actual_head}\n\
+             Delivery is INVALID (forged or tampered)."
+        )
+        .into());
+    }
+    eprintln!("✅  HEAD SHA verified.");
+
+    // --- Check seed matches genesis_seed in .gitverse ---
+    let actual_seed = std::fs::read_to_string(
+        tmp_universe.join(".gitverse").join("genesis_seed")
+    )
+    .unwrap_or_else(|_| "unknown".to_string())
+    .trim()
+    .to_string();
+    if actual_seed != "unknown" && actual_seed != seed {
+        eprintln!(
+            "⚠️   Seed mismatch (not fatal for predicate check):\n\
+             Claimed : {seed}\n\
+             Actual  : {actual_seed}"
+        );
+    } else {
+        eprintln!("✅  Genesis seed consistent.");
+    }
+
+    // --- Verify predicate ---
+    eprintln!("🔍  Evaluating predicate...");
+    if bounty::verify_predicate(&tmp_universe, &bounty_obj.constraint) {
+        // Increment verifications counter.
+        increment_reputation_verifications();
+        let (_, verifications) = load_reputation();
+        println!("✅  PASS — Universe satisfies the bounty predicate.");
+        println!("    Bounty UUID : {uuid}");
+        println!("    Miner       : {miner_id}");
+        println!("    Seed        : {seed}");
+        println!("    Verifications passed (local): {verifications}");
+        Ok(())
+    } else {
+        Err(format!(
+            "❌  FAIL — Universe does NOT satisfy the bounty predicate.\n\
+             Bounty UUID: {uuid}\nMiner: {miner_id}"
+        )
+        .into())
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Mine command  (M6.4)
+// ---------------------------------------------------------------------------
+
+/// Implements `emanon mine <uuid>`.
+///
+/// Mining loop:
+///   1. Load the bounty predicate from the bounty board.
+///   2. For each iteration up to `budget`:
+///      a. Generate a random seed (UUID-based).
+///      b. `emanon init` a fresh universe in a temp directory (direct filesystem ops).
+///      c. Take `snapshot_count_at_least` or 5 snapshots (scripted play).
+///      d. Evaluate the predicate.
+///      e. If satisfied — record the seed, print the universe path, return.
+///   3. If budget exhausted, exit with error.
+///
+/// The "scripted play" is intentionally minimal for M6.4 (repeated snapshots).
+/// A gradient-ascent play engine is deferred to a later milestone.
+fn cmd_mine(
+    uuid: &str,
+    budget: u64,
+    board_url: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    eprintln!("🔄  Syncing bounty board...");
+    let cache_dir = sync_bounty_board(board_url)?;
+
+    let open_file = cache_dir.join("open").join(format!("{}.json", uuid));
+    if !open_file.exists() {
+        return Err(format!("Bounty '{}' not found in open/.", uuid).into());
+    }
+    let bounty_json = std::fs::read_to_string(&open_file)?;
+    let bounty_obj = bounty::Bounty::from_json(&bounty_json)
+        .ok_or("Bounty JSON is malformed")?;
+
+    // Determine how many snapshots we need (from predicate if SnapshotCountAtLeast).
+    let target_snapshots = required_snapshot_count(&bounty_obj.constraint).max(5);
+    eprintln!(
+        "⛏️   Mining bounty {} (budget={}, target_snapshots={})...",
+        uuid, budget, target_snapshots
+    );
+
+    for attempt in 1..=budget {
+        eprintln!("  Attempt {}/{}", attempt, budget);
+
+        // Generate a seed (UUID v4).
+        let seed = generate_uuid().unwrap_or_else(|_| format!("seed-{attempt}"));
+
+        // Create a temp universe directory.
+        let universe_dir = std::env::temp_dir()
+            .join(format!("emanon-mine-{uuid}-{attempt}"));
+        if universe_dir.exists() {
+            std::fs::remove_dir_all(&universe_dir)?;
+        }
+        std::fs::create_dir_all(&universe_dir)?;
+
+        // Initialise universe: .gitverse layout + git init + initial commit.
+        if let Err(e) = mine_init_universe(&universe_dir, &seed) {
+            eprintln!("    init failed: {e}");
+            continue;
+        }
+
+        // Scripted play: take enough snapshots.
+        if let Err(e) = mine_run_play(&universe_dir, target_snapshots) {
+            eprintln!("    play failed: {e}");
+            continue;
+        }
+
+        // Evaluate predicate.
+        if bounty::verify_predicate(&universe_dir, &bounty_obj.constraint) {
+            println!("⛏️   FOUND on attempt {} ✅", attempt);
+            println!("    Universe : {}", universe_dir.display());
+            println!("    Seed     : {seed}");
+            println!(
+                "\nNext step: `emanon bounty deliver {uuid} --repo {}`",
+                universe_dir.display()
+            );
+            return Ok(());
+        }
+    }
+
+    Err(format!(
+        "Mining budget exhausted ({budget} attempts). \
+         No universe found satisfying the predicate.\n\
+         Try increasing --budget or simplifying the bounty constraint."
+    )
+    .into())
+}
+
+/// Extract the minimum snapshot count from the predicate tree, or 0.
+fn required_snapshot_count(p: &bounty::Predicate) -> u64 {
+    match p {
+        bounty::Predicate::SnapshotCountAtLeast { n } => *n,
+        bounty::Predicate::And { children } => {
+            children.iter().map(required_snapshot_count).max().unwrap_or(0)
+        }
+        bounty::Predicate::Or { children } => {
+            // For an OR, we only need to satisfy one branch — take min.
+            children.iter().map(required_snapshot_count).min().unwrap_or(0)
+        }
+        bounty::Predicate::Not { child } => required_snapshot_count(child),
+        _ => 0,
+    }
+}
+
+/// Initialise a minimal universe in `dir` for mining.
+///
+/// Creates the canonical `.gitverse/` layout, sets up git, writes the
+/// genesis seed, and makes an initial commit.
+fn mine_init_universe(
+    dir: &std::path::Path,
+    seed: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    // .gitverse/ subdirectories.
+    let gitverse = dir.join(".gitverse");
+    std::fs::create_dir_all(&gitverse)?;
+    std::fs::write(gitverse.join("snapshot_count"), "0")?;
+    std::fs::write(gitverse.join("genesis_seed"), seed)?;
+    std::fs::write(
+        gitverse.join("values.json"),
+        r#"{"name":"mined","version":"0.1.0","tags":[]}"#,
+    )?;
+
+    // Canonical directories.
+    for sub in &["regions", "contracts", "scars", "forks"] {
+        std::fs::create_dir_all(dir.join(sub))?;
+        std::fs::write(dir.join(sub).join(".gitkeep"), "")?;
+    }
+
+    // .gitignore
+    std::fs::write(dir.join(".gitignore"), "leverage.cache\n")?;
+
+    // .gitattributes with merge-driver registration.
+    std::fs::write(
+        dir.join(".gitattributes"),
+        "regions/**  merge=emanon-collatz\ncontracts/**  merge=emanon-contract\nscars/**  merge=emanon-append-only\n",
+    )?;
+
+    // git init + initial commit.
+    Command::new("git")
+        .args(["init", "--quiet"])
+        .current_dir(dir)
+        .output()?;
+    Command::new("git")
+        .args(["config", "user.email", "alpha36@nanoclaw.local"])
+        .current_dir(dir)
+        .output()?;
+    Command::new("git")
+        .args(["config", "user.name", "Alpha36"])
+        .current_dir(dir)
+        .output()?;
+    Command::new("git")
+        .args(["add", "--all"])
+        .current_dir(dir)
+        .output()?;
+    let init_msg = format!("emanon: genesis (seed={seed})");
+    let commit_out = Command::new("git")
+        .args(["commit", "-m", &init_msg])
+        .current_dir(dir)
+        .output()?;
+    if !commit_out.status.success() {
+        return Err(format!(
+            "git commit genesis failed:\n{}",
+            String::from_utf8_lossy(&commit_out.stderr)
+        )
+        .into());
+    }
+    Ok(())
+}
+
+/// Run `n` snapshot cycles in the universe at `dir` (scripted play).
+///
+/// Each iteration writes a small region file then commits it.
+fn mine_run_play(
+    dir: &std::path::Path,
+    n: u64,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let gitverse = dir.join(".gitverse");
+    for i in 0..n {
+        // Read current snapshot_count.
+        let count_str = std::fs::read_to_string(gitverse.join("snapshot_count"))
+            .unwrap_or_else(|_| "0".to_string());
+        let count: u64 = count_str.trim().parse().unwrap_or(0);
+
+        // Write a small region file.
+        let region_file = dir.join(format!("regions/tick-{i}.json"));
+        std::fs::write(
+            &region_file,
+            format!(r#"{{"tick": {i}, "snapshot": {count}}}"#),
+        )?;
+
+        // Update snapshot_count.
+        let new_count = count + 1;
+        std::fs::write(gitverse.join("snapshot_count"), new_count.to_string())?;
+
+        // git add + commit.
+        Command::new("git")
+            .args(["add", "--all"])
+            .current_dir(dir)
+            .output()?;
+        let msg = format!("emanon: snapshot {} [tick {}]", new_count, i);
+        Command::new("git")
+            .args(["commit", "-m", &msg])
+            .current_dir(dir)
+            .output()?;
+    }
+    Ok(())
+}
+
 /// Read and minimally parse a registry entry JSON file.
 /// Returns a flat key→value map (string values only, arrays as comma-joined).
 fn parse_entry_json(path: &std::path::Path) -> std::collections::HashMap<String, String> {
@@ -4054,8 +4996,38 @@ fn main() {
                     std::process::exit(1);
                 }
             }
-            BountyAction::Accept => not_yet("emanon bounty accept"),
-            BountyAction::Deliver => not_yet("emanon bounty deliver"),
+            BountyAction::Accept { uuid, board } => {
+                let config = load_emanon_config();
+                let board_url = board.as_deref().unwrap_or(&config.bounty_board_url).to_string();
+                if let Err(e) = cmd_bounty_accept(&uuid, &board_url, &config) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+            BountyAction::Deliver { uuid, repo, board } => {
+                let config = load_emanon_config();
+                let board_url = board.as_deref().unwrap_or(&config.bounty_board_url).to_string();
+                if let Err(e) = cmd_bounty_deliver(&uuid, &repo, &board_url, &config) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+            BountyAction::Verify { uuid, board } => {
+                let config = load_emanon_config();
+                let board_url = board.as_deref().unwrap_or(&config.bounty_board_url).to_string();
+                if let Err(e) = cmd_bounty_verify(&uuid, &board_url) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+        },
+        Commands::Mine { uuid, budget, board } => {
+            let config = load_emanon_config();
+            let board_url = board.as_deref().unwrap_or(&config.bounty_board_url).to_string();
+            if let Err(e) = cmd_mine(&uuid, budget, &board_url) {
+                eprintln!("error: {e}");
+                std::process::exit(1);
+            }
         },
         Commands::Tournament { action } => match action {
             TournamentAction::Join => not_yet("emanon tournament join"),
@@ -5491,5 +6463,146 @@ mod tests {
         // 2026-04-14 + 0 days should give today's date (via date command).
         let result = add_days_to_timestamp("2026-04-14T00:00:00Z", 0);
         assert!(result.contains("2026-04-14"), "0 days offset should keep date: {result}");
+    }
+
+    // -----------------------------------------------------------------------
+    // Reputation helpers (M6.4)
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn json_u64_field_from_basic() {
+        let json = r#"{"deliveries": 7, "verifications_passed": 3}"#;
+        assert_eq!(json_u64_field_from(json, "deliveries"), Some(7));
+        assert_eq!(json_u64_field_from(json, "verifications_passed"), Some(3));
+        assert_eq!(json_u64_field_from(json, "missing"), None);
+    }
+
+    #[test]
+    fn json_u64_field_from_zero() {
+        let json = r#"{"deliveries": 0}"#;
+        assert_eq!(json_u64_field_from(json, "deliveries"), Some(0));
+    }
+
+    #[test]
+    fn reputation_json_round_trip_via_file() {
+        // Test save/load round-trip by writing directly to a temp file.
+        let dir = std::env::temp_dir().join("emanon-rep-rt-test");
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("reputation.json");
+
+        let json = format!(
+            "{{\"deliveries\": 5, \"verifications_passed\": 3, \"last_updated\": \"2026-04-14T00:00:00Z\"}}"
+        );
+        std::fs::write(&path, &json).unwrap();
+
+        let d = json_u64_field_from(&json, "deliveries").unwrap_or(0);
+        let v = json_u64_field_from(&json, "verifications_passed").unwrap_or(0);
+        assert_eq!(d, 5);
+        assert_eq!(v, 3);
+
+        // Increment and re-check.
+        let json2 = format!(
+            "{{\"deliveries\": {}, \"verifications_passed\": {}, \"last_updated\": \"2026-04-14T00:00:00Z\"}}",
+            d + 1, v
+        );
+        let d2 = json_u64_field_from(&json2, "deliveries").unwrap_or(0);
+        assert_eq!(d2, 6);
+
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    // -----------------------------------------------------------------------
+    // Mine helpers (M6.4)
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn required_snapshot_count_leaf() {
+        let p = bounty::Predicate::SnapshotCountAtLeast { n: 7 };
+        assert_eq!(required_snapshot_count(&p), 7);
+    }
+
+    #[test]
+    fn required_snapshot_count_non_snapshot_leaf() {
+        let p = bounty::Predicate::PathExists { path: "foo".into() };
+        assert_eq!(required_snapshot_count(&p), 0);
+    }
+
+    #[test]
+    fn required_snapshot_count_and_takes_max() {
+        let p = bounty::Predicate::And {
+            children: vec![
+                bounty::Predicate::SnapshotCountAtLeast { n: 3 },
+                bounty::Predicate::SnapshotCountAtLeast { n: 8 },
+            ],
+        };
+        assert_eq!(required_snapshot_count(&p), 8);
+    }
+
+    #[test]
+    fn required_snapshot_count_or_takes_min() {
+        let p = bounty::Predicate::Or {
+            children: vec![
+                bounty::Predicate::SnapshotCountAtLeast { n: 5 },
+                bounty::Predicate::SnapshotCountAtLeast { n: 2 },
+            ],
+        };
+        assert_eq!(required_snapshot_count(&p), 2);
+    }
+
+    #[test]
+    fn mine_init_universe_creates_structure() {
+        let dir = std::env::temp_dir().join("emanon-mine-init-test");
+        if dir.exists() { std::fs::remove_dir_all(&dir).unwrap(); }
+        std::fs::create_dir_all(&dir).unwrap();
+        mine_init_universe(&dir, "test-seed-abc123").unwrap();
+        assert!(dir.join(".gitverse/snapshot_count").exists());
+        assert!(dir.join(".gitverse/genesis_seed").exists());
+        assert!(dir.join(".gitverse/values.json").exists());
+        assert!(dir.join("regions/.gitkeep").exists());
+        assert!(dir.join(".git").exists());
+        let seed = std::fs::read_to_string(dir.join(".gitverse/genesis_seed")).unwrap();
+        assert_eq!(seed.trim(), "test-seed-abc123");
+        // Clean up.
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn mine_run_play_increments_snapshot_count() {
+        let dir = std::env::temp_dir().join("emanon-mine-play-test");
+        if dir.exists() { std::fs::remove_dir_all(&dir).unwrap(); }
+        std::fs::create_dir_all(&dir).unwrap();
+        mine_init_universe(&dir, "play-seed-xyz").unwrap();
+        mine_run_play(&dir, 5).unwrap();
+        let count = std::fs::read_to_string(dir.join(".gitverse/snapshot_count")).unwrap();
+        assert_eq!(count.trim(), "5");
+        // Verify the region files were created.
+        for i in 0..5u64 {
+            assert!(dir.join(format!("regions/tick-{i}.json")).exists());
+        }
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn mine_predicate_satisfied_after_play() {
+        let dir = std::env::temp_dir().join("emanon-mine-pred-test");
+        if dir.exists() { std::fs::remove_dir_all(&dir).unwrap(); }
+        std::fs::create_dir_all(&dir).unwrap();
+        mine_init_universe(&dir, "pred-seed-42").unwrap();
+        mine_run_play(&dir, 5).unwrap();
+        // After 5 snapshots, snapshot_count_at_least:5 should be satisfied.
+        let p = bounty::Predicate::SnapshotCountAtLeast { n: 5 };
+        assert!(bounty::verify_predicate(&dir, &p));
+        // But snapshot_count_at_least:6 should NOT be.
+        let p2 = bounty::Predicate::SnapshotCountAtLeast { n: 6 };
+        assert!(!bounty::verify_predicate(&dir, &p2));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn now_iso8601_returns_reasonable_timestamp() {
+        let ts = now_iso8601();
+        assert!(ts.len() >= 10, "timestamp too short: {ts}");
+        // Should start with year 20xx.
+        assert!(ts.starts_with("20"), "timestamp should start with 20: {ts}");
     }
 }

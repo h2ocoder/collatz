@@ -1,0 +1,32 @@
+[package]
+name = "universe-cnft"
+version = "0.1.0"
+description = "Emanon Universe cNFT program — mints compressed NFTs via Metaplex Bubblegum"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "universe_cnft"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+# Anchor framework (matches bounty-escrow version)
+anchor-lang = { version = "0.30.1", features = ["init-if-needed"] }
+
+# NOTE: mpl-bubblegum is NOT listed as a Cargo dependency here because it
+# requires BPF target compilation and would break `cargo test --lib`.
+# The CPI is implemented by hand-rolling the Borsh-encoded instruction data
+# (see `build_mint_v1_data`) and calling `solana_program::program::invoke_signed`
+# directly.  This matches the verified approach used for Bubblegum CPI in many
+# production Anchor programs when the mpl-bubblegum crate version lag creates
+# dependency conflicts.
+#
+# If mpl-bubblegum 1.x becomes stable and compatible with Anchor 0.30.1, add:
+#   mpl-bubblegum = { version = "1.x", features = ["cpi"] }
+# and replace build_mint_v1_data with the generated CPI helper.

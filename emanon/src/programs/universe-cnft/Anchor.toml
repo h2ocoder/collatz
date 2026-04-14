@@ -1,0 +1,25 @@
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+universe-cnft = "UniVrsCNFTpq9wUf3NnMo9yGLc4K5AZPrMmQ8RkXhHj"
+
+[programs.devnet]
+universe-cnft = "UniVrsCNFTpq9wUf3NnMo9yGLc4K5AZPrMmQ8RkXhHj"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Devnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+
+# ---------------------------------------------------------------------------
+# Note: after first `anchor build`, run `anchor keys list` to get the real
+# program ID and replace the placeholder above (in both this file and
+# programs/universe-cnft/src/lib.rs).
+# ---------------------------------------------------------------------------

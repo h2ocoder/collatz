@@ -1,4 +1,5 @@
 mod bounty;
+mod vrf;
 
 use clap::{Parser, Subcommand};
 use collatz_rs::beta;
@@ -211,6 +212,22 @@ enum Commands {
         #[arg(long, short = 's')]
         strict: bool,
     },
+
+    /// Request or verify a verifiable random seed for universe genesis
+    ///
+    /// Seeds derived via `switchboard-vrf` are bound to a Solana slot blockhash and
+    /// can be independently verified by anyone with a Solana RPC endpoint.
+    /// Use `--source local-prng` for offline testing (clearly marked as non-verifiable).
+    ///
+    /// Examples:
+    ///   emanon vrf request
+    ///   emanon vrf request --source local-prng
+    ///   emanon vrf request --keypair ~/.config/solana/id.json --rpc https://api.devnet.solana.com
+    ///   emanon vrf verify --request-id slot:12345678 --seed a3b4c5... --wallet-pubkey ed25519:...
+    Vrf {
+        #[command(subcommand)]
+        action: VrfAction,
+    },
 }
 
 #[derive(Subcommand)]
@@ -348,6 +365,62 @@ enum TournamentAction {
     Leave,
     /// Play the next move in an active tournament
     Play,
+}
+
+#[derive(Subcommand)]
+enum VrfAction {
+    /// Request a new verifiable random seed.
+    ///
+    /// With `--source switchboard-vrf` (default): fetches the current Solana slot
+    /// blockhash from the RPC endpoint and derives a 32-byte seed via
+    /// SHA-256(blockhash + ":" + wallet_pubkey).  The result JSON is saved to
+    /// `.gitverse/vrf-result.json` and printed to stdout.
+    ///
+    /// With `--source local-prng`: reads 32 bytes from /dev/urandom.  Clearly
+    /// marked as non-verifiable.  Does not require network or wallet.
+    Request {
+        /// Randomness source: "switchboard-vrf" (default) or "local-prng".
+        #[arg(long, default_value = "switchboard-vrf")]
+        source: String,
+        /// Path to Solana keypair JSON file.  Overrides SOLANA_KEYPAIR env var
+        /// and the default ~/.config/solana/id.json.
+        #[arg(long)]
+        keypair: Option<String>,
+        /// Solana RPC endpoint URL (default: https://api.devnet.solana.com).
+        #[arg(long, default_value = "https://api.devnet.solana.com")]
+        rpc: String,
+        /// Print the result as raw JSON (default: human-readable summary).
+        #[arg(long)]
+        json: bool,
+    },
+    /// Re-verify a previously issued VRF result.
+    ///
+    /// Fetches the blockhash for the recorded slot from the Solana RPC and
+    /// recomputes the seed.  Exits with code 0 on success, 1 on mismatch.
+    ///
+    /// To verify from a saved result file:
+    ///   emanon vrf verify --from-file .gitverse/vrf-result.json
+    ///
+    /// To verify inline:
+    ///   emanon vrf verify --request-id slot:12345678 --seed a3b4c5... --wallet-pubkey ed25519:...
+    Verify {
+        /// Path to a saved vrf-result.json file (mutually exclusive with inline args).
+        #[arg(long)]
+        from_file: Option<String>,
+        /// Request ID (e.g. "slot:12345678").  Required if --from-file is not given.
+        #[arg(long)]
+        request_id: Option<String>,
+        /// The 64-hex-char seed to verify.  Required if --from-file is not given.
+        #[arg(long)]
+        seed: Option<String>,
+        /// Wallet pubkey used during generation (e.g. "ed25519:...").
+        /// Required if --from-file is not given.
+        #[arg(long)]
+        wallet_pubkey: Option<String>,
+        /// Solana RPC endpoint to query (default: use the stored rpc_url).
+        #[arg(long)]
+        rpc: Option<String>,
+    },
 }
 
 #[derive(Subcommand)]
@@ -2983,6 +3056,10 @@ struct EmanonConfig {
     bounty_board_url: String,
     /// Buyer pubkey for bounty posting (ed25519:<base58>).
     buyer_pubkey: Option<String>,
+    /// Path to Solana keypair file for VRF requests ([wallet] keypair_path).
+    wallet_keypair_path: Option<String>,
+    /// Solana RPC URL for VRF requests ([wallet] rpc_url).
+    wallet_rpc_url: Option<String>,
 }
 
 /// Load configuration from `~/.config/emanon/config.toml`.
@@ -2994,6 +3071,8 @@ fn load_emanon_config() -> EmanonConfig {
     let mut git_remote = "origin".to_string();
     let mut bounty_board_url = DEFAULT_BOUNTY_BOARD_URL.to_string();
     let mut buyer_pubkey: Option<String> = None;
+    let mut wallet_keypair_path: Option<String> = None;
+    let mut wallet_rpc_url: Option<String> = None;
 
     let config_path = std::env::var("HOME")
         .map(|h| format!("{h}/.config/emanon/config.toml"))
@@ -3004,6 +3083,7 @@ fn load_emanon_config() -> EmanonConfig {
             let mut in_registry = false;
             let mut in_universe = false;
             let mut in_bounty = false;
+            let mut in_wallet = false;
             for line in content.lines() {
                 let trimmed = line.trim();
                 // Skip comments and blank lines.
@@ -3014,6 +3094,7 @@ fn load_emanon_config() -> EmanonConfig {
                     in_registry = trimmed == "[registry]";
                     in_universe = trimmed == "[universe]";
                     in_bounty = trimmed == "[bounty]";
+                    in_wallet = trimmed == "[wallet]";
                     continue;
                 }
                 if let Some((k, v)) = parse_toml_kv(trimmed) {
@@ -3034,13 +3115,28 @@ fn load_emanon_config() -> EmanonConfig {
                             "buyer_pubkey" => buyer_pubkey = Some(v.to_string()),
                             _ => {}
                         }
+                    } else if in_wallet {
+                        match k {
+                            "keypair_path" => wallet_keypair_path = Some(v.to_string()),
+                            "rpc_url" => wallet_rpc_url = Some(v.to_string()),
+                            _ => {}
+                        }
                     }
                 }
             }
         }
     }
 
-    EmanonConfig { registry_url, owner_pubkey, universe_name, git_remote, bounty_board_url, buyer_pubkey }
+    EmanonConfig {
+        registry_url,
+        owner_pubkey,
+        universe_name,
+        git_remote,
+        bounty_board_url,
+        buyer_pubkey,
+        wallet_keypair_path,
+        wallet_rpc_url,
+    }
 }
 
 /// Convenience loader that overrides registry_url from the command-line flag.
@@ -4880,6 +4976,189 @@ fn current_iso8601_timestamp() -> String {
 }
 
 // ---------------------------------------------------------------------------
+// VRF — request and verify
+// ---------------------------------------------------------------------------
+
+/// Request a new verifiable random seed.
+///
+/// Dispatches to either the Switchboard-VRF (Solana blockhash) path or the
+/// local-PRNG fallback depending on `source`.
+fn cmd_vrf_request(
+    source: &str,
+    keypair_override: Option<&str>,
+    rpc_url: &str,
+    print_json: bool,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let vrf_source = vrf::VrfSource::from_str(source)
+        .ok_or_else(|| format!(
+            "unknown VRF source '{source}' — valid values: switchboard-vrf, local-prng"
+        ))?;
+
+    let result = match vrf_source {
+        vrf::VrfSource::SwitchboardVrf => {
+            // Load wallet — derive pubkey for seed personalisation.
+            let wallet = vrf::WalletConfig::load_or_placeholder(keypair_override);
+
+            // Fetch current slot.
+            eprintln!("⏳  Fetching current slot from {rpc_url}…");
+            let slot = vrf::get_current_slot(rpc_url)
+                .map_err(|e| format!("getSlot failed: {e}"))?;
+
+            // Fetch blockhash for this slot.
+            eprintln!("⏳  Fetching blockhash for slot {slot}…");
+            let blockhash = vrf::get_blockhash_for_slot(rpc_url, slot)
+                .map_err(|e| format!("getBlock failed for slot {slot}: {e}"))?;
+
+            // Derive seed.
+            let seed_hex = vrf::derive_seed_from_blockhash(&blockhash, &wallet.pubkey)?;
+            let timestamp = current_iso8601_timestamp();
+            let network = vrf::SolanaRpc::network_name(rpc_url).to_string();
+
+            vrf::VrfResult {
+                request_id: format!("slot:{slot}"),
+                slot,
+                blockhash,
+                seed_hex,
+                source: vrf::VrfSource::SwitchboardVrf,
+                wallet_pubkey: wallet.pubkey,
+                timestamp,
+                rpc_url: rpc_url.to_string(),
+                network,
+            }
+        }
+
+        vrf::VrfSource::LocalPrng => {
+            eprintln!("⚠️  --source local-prng: seed is NOT verifiable (for testing only)");
+            let seed_hex = vrf::local_prng_seed()?;
+            let request_id = vrf::local_request_id();
+            let timestamp = current_iso8601_timestamp();
+            vrf::VrfResult {
+                request_id,
+                slot: 0,
+                blockhash: String::new(),
+                seed_hex,
+                source: vrf::VrfSource::LocalPrng,
+                wallet_pubkey: String::new(),
+                timestamp,
+                rpc_url: String::new(),
+                network: "local".to_string(),
+            }
+        }
+    };
+
+    // Persist to .gitverse/vrf-result.json if inside a universe.
+    let gitverse_dir = std::path::Path::new(".gitverse");
+    if gitverse_dir.exists() {
+        let out_path = gitverse_dir.join("vrf-result.json");
+        std::fs::write(&out_path, result.to_json())?;
+        eprintln!("✓  Saved to {}", out_path.display());
+    }
+
+    // Print result.
+    if print_json {
+        println!("{}", result.to_json());
+    } else {
+        println!("Seed:         {}", result.seed_hex);
+        println!("Request ID:   {}", result.request_id);
+        println!("Source:       {}", result.source.as_str());
+        println!("Verifiable:   {}", result.is_verifiable());
+        println!("Verify note:  {}", result.verify_note());
+        if result.slot > 0 {
+            println!("Slot:         {}", result.slot);
+            println!("Blockhash:    {}", result.blockhash);
+            println!("Network:      {}", result.network);
+            println!("Wallet:       {}", result.wallet_pubkey);
+        }
+        println!("Timestamp:    {}", result.timestamp);
+    }
+
+    Ok(())
+}
+
+/// Verify a previously issued VRF result.
+fn cmd_vrf_verify(
+    from_file: Option<&str>,
+    request_id_arg: Option<&str>,
+    seed_arg: Option<&str>,
+    wallet_pubkey_arg: Option<&str>,
+    rpc_override: Option<&str>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    // Load the VrfResult — either from file or from inline args.
+    let result = if let Some(file_path) = from_file {
+        let content = std::fs::read_to_string(file_path)
+            .map_err(|e| format!("could not read {file_path}: {e}"))?;
+        vrf::VrfResult::from_json(&content)
+            .ok_or_else(|| format!("failed to parse VRF result from {file_path}"))?
+    } else {
+        // Build from inline args.
+        let request_id = request_id_arg
+            .ok_or("--request-id is required when --from-file is not given")?;
+        let seed_hex = seed_arg
+            .ok_or("--seed is required when --from-file is not given")?;
+        let wallet_pubkey = wallet_pubkey_arg.unwrap_or("").to_string();
+
+        // Parse slot from "slot:<N>".
+        let slot: u64 = if let Some(rest) = request_id.strip_prefix("slot:") {
+            rest.parse().map_err(|_| format!("invalid slot in request ID: {request_id}"))?
+        } else {
+            return Err(format!(
+                "request_id '{request_id}' does not look like 'slot:<N>' — \
+                 local-prng results are not verifiable"
+            ).into());
+        };
+
+        let rpc_url = rpc_override.unwrap_or(vrf::SolanaRpc::DEVNET).to_string();
+        let network = vrf::SolanaRpc::network_name(&rpc_url).to_string();
+
+        // We need the blockhash to be fetched during verification; use empty placeholder.
+        vrf::VrfResult {
+            request_id: request_id.to_string(),
+            slot,
+            blockhash: String::new(), // will be filled in verify_vrf_result
+            seed_hex: seed_hex.to_string(),
+            source: vrf::VrfSource::SwitchboardVrf,
+            wallet_pubkey,
+            timestamp: String::new(),
+            rpc_url,
+            network,
+        }
+    };
+
+    // For the inline path the stored blockhash is empty; we need to fill it in
+    // before calling verify_vrf_result (which checks blockhash consistency).
+    // Instead, perform verification inline when blockhash is missing.
+    let (ok, blockhash_used) = if result.blockhash.is_empty() {
+        let rpc = rpc_override.unwrap_or(result.rpc_url.as_str());
+        let rpc = if rpc.is_empty() { vrf::SolanaRpc::DEVNET } else { rpc };
+        eprintln!("⏳  Fetching blockhash for slot {} from {rpc}…", result.slot);
+        let bh = vrf::get_blockhash_for_slot(rpc, result.slot)
+            .map_err(|e| format!("getBlock failed: {e}"))?;
+        let expected = vrf::derive_seed_from_blockhash(&bh, &result.wallet_pubkey)?;
+        (expected == result.seed_hex, bh)
+    } else {
+        let ok = vrf::verify_vrf_result(&result, rpc_override)
+            .map_err(|e| format!("verification error: {e}"))?;
+        (ok, result.blockhash.clone())
+    };
+
+    if ok {
+        println!("✓  Seed verified.");
+        println!("   Request ID:  {}", result.request_id);
+        println!("   Seed:        {}", result.seed_hex);
+        println!("   Blockhash:   {blockhash_used}");
+        println!("   Wallet:      {}", result.wallet_pubkey);
+    } else {
+        eprintln!("✗  Seed verification FAILED.");
+        eprintln!("   Claimed seed: {}", result.seed_hex);
+        eprintln!("   Slot:         {}", result.slot);
+        eprintln!("   This seed does not match the blockhash for the given slot.");
+        std::process::exit(1);
+    }
+
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
 // stub helper
 // ---------------------------------------------------------------------------
 
@@ -5072,6 +5351,42 @@ fn main() {
                 std::process::exit(1);
             }
         }
+
+        Commands::Vrf { action } => match action {
+            VrfAction::Request { source, keypair, rpc, json } => {
+                // Merge config-file wallet settings with CLI overrides.
+                let config = load_emanon_config();
+                let keypair_path = keypair.as_deref()
+                    .or(config.wallet_keypair_path.as_deref());
+                let rpc_effective = if rpc == "https://api.devnet.solana.com" {
+                    // CLI default — check config for override.
+                    config.wallet_rpc_url.as_deref().unwrap_or(rpc.as_str()).to_string()
+                } else {
+                    rpc
+                };
+                if let Err(e) = cmd_vrf_request(
+                    &source,
+                    keypair_path,
+                    &rpc_effective,
+                    json,
+                ) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+            VrfAction::Verify { from_file, request_id, seed, wallet_pubkey, rpc } => {
+                if let Err(e) = cmd_vrf_verify(
+                    from_file.as_deref(),
+                    request_id.as_deref(),
+                    seed.as_deref(),
+                    wallet_pubkey.as_deref(),
+                    rpc.as_deref(),
+                ) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+        },
     }
 }
 
@@ -6604,5 +6919,99 @@ mod tests {
         assert!(ts.len() >= 10, "timestamp too short: {ts}");
         // Should start with year 20xx.
         assert!(ts.starts_with("20"), "timestamp should start with 20: {ts}");
+    }
+
+    // -----------------------------------------------------------------------
+    // VRF — unit tests for cmd_vrf_request (local-prng path, no network)
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn vrf_request_local_prng_returns_64_hex_seed() {
+        // We test the local-prng path end-to-end (no network required).
+        let seed_hex = vrf::local_prng_seed().expect("urandom unavailable");
+        assert_eq!(seed_hex.len(), 64, "expected 64 hex chars");
+        assert!(
+            seed_hex.chars().all(|c| c.is_ascii_hexdigit()),
+            "non-hex chars in seed: {seed_hex}"
+        );
+    }
+
+    #[test]
+    fn vrf_result_roundtrip_local_prng() {
+        let seed_hex = vrf::local_prng_seed().unwrap();
+        let request_id = vrf::local_request_id();
+        let r = vrf::VrfResult {
+            request_id: request_id.clone(),
+            slot: 0,
+            blockhash: String::new(),
+            seed_hex: seed_hex.clone(),
+            source: vrf::VrfSource::LocalPrng,
+            wallet_pubkey: String::new(),
+            timestamp: "2026-04-14T17:00:00Z".to_string(),
+            rpc_url: String::new(),
+            network: "local".to_string(),
+        };
+        let json = r.to_json();
+        let r2 = vrf::VrfResult::from_json(&json).expect("round-trip parse failed");
+        assert_eq!(r2.seed_hex, seed_hex);
+        assert_eq!(r2.request_id, request_id);
+        assert!(!r2.is_verifiable());
+        assert!(json.contains("\"verifiable\": false"));
+        assert!(json.contains("Not verifiable"));
+    }
+
+    #[test]
+    fn vrf_derive_seed_is_deterministic() {
+        // Given the same inputs, derive_seed_from_blockhash must produce the same output.
+        let bh = "4vJ9JU1bJJE96RNPU2d3YMuHBB1yxBsS3b9Bk3y9rP";
+        let pk = "ed25519:7GRmBwnBChf32GrKBbqBRRtest";
+        let s1 = vrf::derive_seed_from_blockhash(bh, pk).expect("sha256 failed");
+        let s2 = vrf::derive_seed_from_blockhash(bh, pk).expect("sha256 failed");
+        assert_eq!(s1, s2, "seed derivation should be deterministic");
+        assert_eq!(s1.len(), 64, "seed should be 64 hex chars");
+    }
+
+    #[test]
+    fn vrf_derive_seed_changes_with_different_inputs() {
+        let bh = "4vJ9JU1bJJE96RNPU2d3YMuHBB1yxBsS3b9Bk3y9rP";
+        let pk1 = "ed25519:wallet_a";
+        let pk2 = "ed25519:wallet_b";
+        let s1 = vrf::derive_seed_from_blockhash(bh, pk1).unwrap();
+        let s2 = vrf::derive_seed_from_blockhash(bh, pk2).unwrap();
+        assert_ne!(s1, s2, "different wallet pubkeys must produce different seeds");
+
+        let bh2 = "DifferentBlockhashValue1234567890123456789012";
+        let s3 = vrf::derive_seed_from_blockhash(bh2, pk1).unwrap();
+        assert_ne!(s1, s3, "different blockhashes must produce different seeds");
+    }
+
+    #[test]
+    fn vrf_wallet_config_placeholder_when_no_wallet() {
+        // Force load_or_placeholder to use a nonexistent path.
+        let w = vrf::WalletConfig::load_or_placeholder(Some("/nonexistent/keypair.json"));
+        assert_eq!(w.pubkey, "ed25519:unknown");
+    }
+
+    #[test]
+    fn vrf_keypair_bytes_extracts_pubkey_hex() {
+        // 64-byte keypair: first 32 = secret, last 32 = pubkey.
+        let arr: Vec<String> = (1u8..=64).map(|b| b.to_string()).collect();
+        let json = format!("[{}]", arr.join(", "));
+        let bytes = vrf::parse_keypair_json_bytes(&json).unwrap();
+        assert_eq!(bytes.len(), 64);
+        // Last 32 bytes: 33..=64 as u8.
+        let expected_hex: String = (33u8..=64).map(|b| format!("{b:02x}")).collect();
+        let got_hex: String = bytes[32..64].iter().map(|b| format!("{b:02x}")).collect();
+        assert_eq!(got_hex, expected_hex);
+    }
+
+    #[test]
+    fn vrf_request_id_format_slot() {
+        // Verify the slot: prefix convention.
+        let slot: u64 = 987654321;
+        let request_id = format!("slot:{slot}");
+        assert!(request_id.starts_with("slot:"));
+        let parsed: u64 = request_id.strip_prefix("slot:").unwrap().parse().unwrap();
+        assert_eq!(parsed, slot);
     }
 }

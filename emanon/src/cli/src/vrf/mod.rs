@@ -63,6 +63,8 @@ use std::process::Command;
 pub enum VrfSource {
     /// Derive seed from Solana slot blockhash (verifiable, requires network).
     SwitchboardVrf,
+    /// Derive seed from the drand public randomness beacon (verifiable, no wallet needed).
+    Drand,
     /// Read from /dev/urandom (non-verifiable, for local testing).
     LocalPrng,
 }
@@ -71,6 +73,7 @@ impl VrfSource {
     pub fn as_str(&self) -> &'static str {
         match self {
             VrfSource::SwitchboardVrf => "switchboard-vrf",
+            VrfSource::Drand => "drand",
             VrfSource::LocalPrng => "local-prng",
         }
     }
@@ -78,13 +81,14 @@ impl VrfSource {
     pub fn from_str(s: &str) -> Option<Self> {
         match s {
             "switchboard-vrf" => Some(VrfSource::SwitchboardVrf),
+            "drand" => Some(VrfSource::Drand),
             "local-prng" => Some(VrfSource::LocalPrng),
             _ => None,
         }
     }
 
     pub fn is_verifiable(&self) -> bool {
-        matches!(self, VrfSource::SwitchboardVrf)
+        matches!(self, VrfSource::SwitchboardVrf | VrfSource::Drand)
     }
 }
 
@@ -128,6 +132,9 @@ impl VrfResult {
         match self.source {
             VrfSource::SwitchboardVrf => {
                 r#"sha256(slot_blockhash + ":" + wallet_pubkey)"#
+            }
+            VrfSource::Drand => {
+                "drand randomness field from round; verify at https://drand.cloudflare.com/public/<round>"
             }
             VrfSource::LocalPrng => "Not verifiable — generated from /dev/urandom",
         }
@@ -508,6 +515,110 @@ fn parse_json_str_field(json: &str, key: &str) -> Option<String> {
 }
 
 // ---------------------------------------------------------------------------
+// drand beacon helpers
+// ---------------------------------------------------------------------------
+
+/// Default drand HTTP API (Cloudflare-hosted public randomness chain).
+pub const DRAND_API: &str = "https://drand.cloudflare.com/public/latest";
+
+/// Fetch the latest round of randomness from the drand public beacon.
+///
+/// Returns a `VrfResult` with `source = Drand`, using the randomness field
+/// as the `seed_hex` and the round number stored in `slot`.
+///
+/// The seed equals the `randomness` hex field returned by the API, which is
+/// publicly auditable at `https://drand.cloudflare.com/public/<round>`.
+pub fn fetch_drand_seed() -> Result<VrfResult, Box<dyn std::error::Error>> {
+    fetch_drand_seed_from(DRAND_API)
+}
+
+/// Fetch drand randomness from an explicit URL.
+pub fn fetch_drand_seed_from(api_url: &str) -> Result<VrfResult, Box<dyn std::error::Error>> {
+    let out = Command::new("curl")
+        .args([
+            "--silent",
+            "--max-time", "15",
+            "--header", "Accept: application/json",
+            api_url,
+        ])
+        .output()
+        .map_err(|e| format!("curl failed: {e}"))?;
+
+    if !out.status.success() {
+        return Err(format!(
+            "curl exited {}: {}",
+            out.status,
+            String::from_utf8_lossy(&out.stderr)
+        ).into());
+    }
+
+    let body = String::from_utf8_lossy(&out.stdout).to_string();
+    if body.is_empty() {
+        return Err("empty response from drand API".into());
+    }
+
+    // Extract fields from the drand response JSON:
+    //   { "round": 12345, "randomness": "<64-hex>", "signature": "...", ... }
+    let randomness = json_field(&body, "randomness")
+        .ok_or("drand response missing 'randomness' field")?
+        .to_string();
+
+    if randomness.len() != 64 || !randomness.chars().all(|c| c.is_ascii_hexdigit()) {
+        return Err(format!(
+            "drand 'randomness' field is not 64 hex chars: {}",
+            &randomness[..randomness.len().min(20)]
+        ).into());
+    }
+
+    let round_str = json_field_raw(&body, "round")
+        .ok_or("drand response missing 'round' field")?;
+    let round: u64 = round_str.trim().parse()
+        .map_err(|_| format!("could not parse drand round: {round_str}"))?;
+
+    let timestamp_str = json_field_raw(&body, "time")
+        .unwrap_or("0");
+    let timestamp_secs: u64 = timestamp_str.trim().parse().unwrap_or(0);
+    let timestamp = if timestamp_secs > 0 {
+        format!(
+            "{}-{}-{}T{}:{}:{}Z",
+            timestamp_secs / (365 * 24 * 3600) + 1970,  // rough year
+            1, 1, 0, 0, 0                                // minimal placeholder
+        )
+    } else {
+        "unknown".to_string()
+    };
+    // Use a proper ISO timestamp from the system clock instead.
+    let timestamp = {
+        use std::time::{SystemTime, UNIX_EPOCH};
+        let secs = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs();
+        // seconds since epoch → rough ISO string (good enough for a label)
+        let s = secs % 60;
+        let m = (secs / 60) % 60;
+        let h = (secs / 3600) % 24;
+        let days = secs / 86400;
+        // Simple date calculation from epoch days.
+        let year = 1970 + days / 365;
+        let _ = timestamp; // shadow the placeholder
+        format!("{year}-01-01T{h:02}:{m:02}:{s:02}Z")
+    };
+
+    Ok(VrfResult {
+        request_id: format!("drand:{round}"),
+        slot: round,
+        blockhash: String::new(),
+        seed_hex: randomness,
+        source: VrfSource::Drand,
+        wallet_pubkey: String::new(),
+        timestamp,
+        rpc_url: api_url.to_string(),
+        network: "drand-mainnet".to_string(),
+    })
+}
+
+// ---------------------------------------------------------------------------
 // Unit tests
 // ---------------------------------------------------------------------------
 
@@ -523,15 +634,43 @@ mod tests {
     fn vrf_source_round_trip() {
         assert_eq!(VrfSource::from_str("switchboard-vrf"), Some(VrfSource::SwitchboardVrf));
         assert_eq!(VrfSource::from_str("local-prng"), Some(VrfSource::LocalPrng));
+        assert_eq!(VrfSource::from_str("drand"), Some(VrfSource::Drand));
         assert_eq!(VrfSource::from_str("unknown"), None);
         assert_eq!(VrfSource::SwitchboardVrf.as_str(), "switchboard-vrf");
         assert_eq!(VrfSource::LocalPrng.as_str(), "local-prng");
+        assert_eq!(VrfSource::Drand.as_str(), "drand");
     }
 
     #[test]
     fn vrf_source_verifiability() {
         assert!(VrfSource::SwitchboardVrf.is_verifiable());
+        assert!(VrfSource::Drand.is_verifiable());
         assert!(!VrfSource::LocalPrng.is_verifiable());
+    }
+
+    #[test]
+    fn drand_vrf_result_json_round_trip() {
+        let r = VrfResult {
+            request_id: "drand:12345".to_string(),
+            slot: 12345,
+            blockhash: String::new(),
+            seed_hex: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2".to_string(),
+            source: VrfSource::Drand,
+            wallet_pubkey: String::new(),
+            timestamp: "2026-04-14T00:00:00Z".to_string(),
+            rpc_url: "https://drand.cloudflare.com/public/latest".to_string(),
+            network: "drand-mainnet".to_string(),
+        };
+        assert!(r.is_verifiable());
+        let json = r.to_json();
+        assert!(json.contains("\"source\": \"drand\""), "source missing");
+        assert!(json.contains("\"verifiable\": true"), "should be verifiable");
+        assert!(json.contains("drand.cloudflare.com"), "verify_note should mention drand");
+        let r2 = VrfResult::from_json(&json).expect("round-trip parse");
+        assert_eq!(r2.request_id, "drand:12345");
+        assert_eq!(r2.slot, 12345);
+        assert_eq!(r2.seed_hex, r.seed_hex);
+        assert!(matches!(r2.source, VrfSource::Drand));
     }
 
     // -----------------------------------------------------------------------

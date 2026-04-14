@@ -41,6 +41,16 @@ enum Commands {
         /// Override existing-directory check (will not re-initialize an existing universe)
         #[arg(long, short = 'f')]
         force: bool,
+        /// Verifiable randomness beacon for genesis seed.
+        /// Supported values: switchboard-vrf, drand, solana-slot:<N>
+        /// When used, writes .gitverse/genesis.json and adds a Beacon: trailer to the
+        /// genesis commit so the seed provenance can be independently verified.
+        #[arg(long)]
+        beacon: Option<String>,
+        /// Explicit genesis seed as 64 hex chars (no beacon verification).
+        /// Use --beacon instead for verifiable seeds.
+        #[arg(long)]
+        seed: Option<String>,
     },
 
     /// Capture the current state as a snapshot (commit)
@@ -183,6 +193,12 @@ enum Commands {
         /// Bounty board repo URL (overrides [bounty] board_url in config)
         #[arg(long)]
         board: Option<String>,
+        /// Verifiable randomness beacon for the first mining attempt.
+        /// When set, attempt 1 uses a beacon-derived seed (verifiable provenance).
+        /// Subsequent attempts fall back to local PRNG.
+        /// Values: switchboard-vrf, drand, solana-slot:<N>
+        #[arg(long)]
+        beacon: Option<String>,
     },
 
     /// Manage tournament participation
@@ -515,7 +531,12 @@ fn readme_template(name: &str) -> String {
     )
 }
 
-fn cmd_init(name: &str, force: bool) -> Result<(), Box<dyn std::error::Error>> {
+fn cmd_init(
+    name: &str,
+    force: bool,
+    beacon: Option<&str>,
+    seed_override: Option<&str>,
+) -> Result<(), Box<dyn std::error::Error>> {
     let target = Path::new(name);
 
     // --- Guard: existing directory ---
@@ -631,6 +652,26 @@ fn cmd_init(name: &str, force: bool) -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
+    // --- Resolve genesis seed ---
+    //
+    // Priority:  --seed <hex>  >  --beacon <source>  >  local PRNG (silent)
+    let (genesis_seed_hex, genesis_vrf) =
+        resolve_genesis_seed(beacon, seed_override)
+            .map_err(|e| format!("genesis seed error: {e}"))?;
+
+    // Write genesis seed and optional genesis.json BEFORE git add so they
+    // are included in the genesis commit.
+    std::fs::write(
+        target.join(".gitverse/genesis_seed"),
+        &genesis_seed_hex,
+    )?;
+    if let Some(ref vrf_result) = genesis_vrf {
+        std::fs::write(
+            target.join(".gitverse/genesis.json"),
+            vrf_result.to_json(),
+        )?;
+    }
+
     // --- git add . ---
     // leverage.cache is excluded via .gitignore; all other files are staged.
     let git_add = Command::new("git")
@@ -647,7 +688,27 @@ fn cmd_init(name: &str, force: bool) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // --- initial commit ---
-    let commit_msg = format!("init: bootstrap {} universe", name);
+    //
+    // When a beacon was used, include a `Beacon: <source>` trailer in the
+    // commit message so observers can verify the genesis seed provenance.
+    let commit_msg = if let Some(b) = beacon {
+        let beacon_source = if b.starts_with("solana-slot:") {
+            "switchboard-vrf".to_string()
+        } else {
+            b.to_string()
+        };
+        let request_id = genesis_vrf
+            .as_ref()
+            .map(|r| r.request_id.clone())
+            .unwrap_or_default();
+        format!(
+            "init: bootstrap {} universe\n\nBeacon: {}\nBeacon-RequestId: {}",
+            name, beacon_source, request_id
+        )
+    } else {
+        format!("init: bootstrap {} universe", name)
+    };
+
     let git_commit = Command::new("git")
         .args(["commit", "-m", &commit_msg])
         .current_dir(target)
@@ -661,10 +722,132 @@ fn cmd_init(name: &str, force: bool) -> Result<(), Box<dyn std::error::Error>> {
         .into());
     }
 
+    if let Some(ref vrf_result) = genesis_vrf {
+        println!("🎲  Genesis seed from {} beacon.", vrf_result.source.as_str());
+        println!("    RequestId : {}", vrf_result.request_id);
+        println!("    Seed      : {}", &genesis_seed_hex[..16]);
+        println!("    Verify    : {}", vrf_result.verify_note());
+    } else if seed_override.is_some() {
+        println!("🔑  Using explicit genesis seed (not beacon-attested).");
+    }
+
     println!("✨  Universe '{name}' initialised at ./{name}/");
     println!("    cd {name} && emanon snapshot -m 'first moment'");
 
     Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// resolve_genesis_seed — helper used by cmd_init and mine_init_universe
+// ---------------------------------------------------------------------------
+
+/// Resolve the genesis seed from a beacon, explicit override, or local PRNG.
+///
+/// Returns `(seed_hex, Option<VrfResult>)`.  A `VrfResult` is only returned
+/// when a beacon was used, indicating the seed is independently verifiable.
+///
+/// # Beacon values
+///
+/// | String             | Mechanism                                          |
+/// |--------------------|-----------------------------------------------------|
+/// | `switchboard-vrf`  | Solana devnet: current slot blockhash + wallet pubkey |
+/// | `drand`            | drand Cloudflare public beacon latest round        |
+/// | `solana-slot:N`    | Solana devnet: specific slot N + wallet pubkey     |
+///
+/// # Explicit seed
+///
+/// If `seed_override` is `Some("0xDEAD…")`, strip the `0x` prefix and
+/// left-pad to 64 hex chars.  No `VrfResult` is returned.
+///
+/// # Default
+///
+/// If both are `None`, generate 32 bytes from `/dev/urandom`.
+fn resolve_genesis_seed(
+    beacon: Option<&str>,
+    seed_override: Option<&str>,
+) -> Result<(String, Option<vrf::VrfResult>), Box<dyn std::error::Error>> {
+    // 1. Explicit seed — no verifiability.
+    if let Some(raw) = seed_override {
+        if beacon.is_some() {
+            return Err("--beacon and --seed are mutually exclusive".into());
+        }
+        let hex = raw.strip_prefix("0x").unwrap_or(raw).to_lowercase();
+        if hex.len() > 64 || !hex.chars().all(|c| c.is_ascii_hexdigit()) {
+            return Err(format!(
+                "--seed must be up to 64 lowercase hex chars (got '{}')",
+                &hex[..hex.len().min(20)]
+            ).into());
+        }
+        // Left-pad with zeros to 64 chars.
+        let padded = format!("{:0>64}", hex);
+        return Ok((padded, None));
+    }
+
+    // 2. Beacon sources.
+    if let Some(b) = beacon {
+        let rpc_url = vrf::SolanaRpc::DEVNET;
+
+        if b == "switchboard-vrf" {
+            // Solana devnet: current slot.
+            let wallet = vrf::WalletConfig::load_or_placeholder(None);
+            let slot = vrf::get_current_slot(rpc_url)
+                .map_err(|e| format!("switchboard-vrf: get slot failed: {e}"))?;
+            let blockhash = vrf::get_blockhash_for_slot(rpc_url, slot)
+                .map_err(|e| format!("switchboard-vrf: get blockhash failed: {e}"))?;
+            let seed_hex = vrf::derive_seed_from_blockhash(&blockhash, &wallet.pubkey)?;
+            let request_id = format!("slot:{slot}");
+            let result = vrf::VrfResult {
+                request_id,
+                slot,
+                blockhash,
+                seed_hex: seed_hex.clone(),
+                source: vrf::VrfSource::SwitchboardVrf,
+                wallet_pubkey: wallet.pubkey,
+                timestamp: now_iso8601(),
+                rpc_url: rpc_url.to_string(),
+                network: "devnet".to_string(),
+            };
+            return Ok((seed_hex, Some(result)));
+        }
+
+        if b == "drand" {
+            let result = vrf::fetch_drand_seed()
+                .map_err(|e| format!("drand: {e}"))?;
+            let seed_hex = result.seed_hex.clone();
+            return Ok((seed_hex, Some(result)));
+        }
+
+        if let Some(slot_str) = b.strip_prefix("solana-slot:") {
+            let slot: u64 = slot_str.parse()
+                .map_err(|_| format!("solana-slot: invalid slot number '{slot_str}'"))?;
+            let wallet = vrf::WalletConfig::load_or_placeholder(None);
+            let blockhash = vrf::get_blockhash_for_slot(rpc_url, slot)
+                .map_err(|e| format!("solana-slot: get blockhash failed: {e}"))?;
+            let seed_hex = vrf::derive_seed_from_blockhash(&blockhash, &wallet.pubkey)?;
+            let request_id = format!("slot:{slot}");
+            let result = vrf::VrfResult {
+                request_id,
+                slot,
+                blockhash,
+                seed_hex: seed_hex.clone(),
+                source: vrf::VrfSource::SwitchboardVrf,
+                wallet_pubkey: wallet.pubkey,
+                timestamp: now_iso8601(),
+                rpc_url: rpc_url.to_string(),
+                network: "devnet".to_string(),
+            };
+            return Ok((seed_hex, Some(result)));
+        }
+
+        return Err(format!(
+            "unknown beacon '{}'. Valid: switchboard-vrf, drand, solana-slot:<N>",
+            b
+        ).into());
+    }
+
+    // 3. Default: local PRNG (silent, no VrfResult).
+    let seed_hex = vrf::local_prng_seed()?;
+    Ok((seed_hex, None))
 }
 
 // ---------------------------------------------------------------------------
@@ -2644,6 +2827,63 @@ fn cmd_validate(strict: bool) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // ------------------------------------------------------------------
+    // Rule 7 (warn) — beacon-attested genesis seed consistency
+    //
+    // If .gitverse/genesis.json exists, the universe was initialised with
+    // --beacon.  Verify that the seed_hex in genesis.json matches the
+    // seed in .gitverse/genesis_seed (or the genesis commit trailer).
+    //
+    // Full on-chain re-verification (Solana RPC / drand) is NOT done here
+    // by default to avoid network dependencies; use `emanon vrf verify`
+    // for that.
+    // ------------------------------------------------------------------
+    let genesis_json_path = here.join(".gitverse/genesis.json");
+    let genesis_seed_path = here.join(".gitverse/genesis_seed");
+    if genesis_json_path.exists() {
+        match std::fs::read_to_string(&genesis_json_path) {
+            Err(e) => warnings.push(format!("cannot read .gitverse/genesis.json: {e}")),
+            Ok(gj_content) => {
+                // Extract seed_hex from genesis.json using the hand-rolled parser.
+                let beacon_source = vrf::json_field(&gj_content, "source")
+                    .unwrap_or("unknown")
+                    .to_string();
+                match vrf::json_field(&gj_content, "seed_hex") {
+                    None => warnings.push(
+                        "genesis.json is missing 'seed_hex' field".to_string(),
+                    ),
+                    Some(json_seed) => {
+                        if genesis_seed_path.exists() {
+                            match std::fs::read_to_string(&genesis_seed_path) {
+                                Err(e) => warnings.push(format!(
+                                    "cannot read .gitverse/genesis_seed: {e}"
+                                )),
+                                Ok(file_seed) => {
+                                    if file_seed.trim() != json_seed {
+                                        warnings.push(format!(
+                                            "genesis seed mismatch: genesis.json has '{j}…' \
+                                             but genesis_seed has '{f}…' \
+                                             (beacon: {s})",
+                                            j = &json_seed[..json_seed.len().min(12)],
+                                            f = &file_seed.trim()[..file_seed.trim().len().min(12)],
+                                            s = beacon_source,
+                                        ));
+                                    }
+                                }
+                            }
+                        } else {
+                            // genesis.json present but genesis_seed missing.
+                            warnings.push(
+                                ".gitverse/genesis.json present but .gitverse/genesis_seed missing"
+                                    .to_string(),
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------
     // Report
     // ------------------------------------------------------------------
     if !warnings.is_empty() {
@@ -4184,6 +4424,7 @@ fn cmd_mine(
     uuid: &str,
     budget: u64,
     board_url: &str,
+    beacon: Option<&str>,
 ) -> Result<(), Box<dyn std::error::Error>> {
     eprintln!("🔄  Syncing bounty board...");
     let cache_dir = sync_bounty_board(board_url)?;
@@ -4203,11 +4444,40 @@ fn cmd_mine(
         uuid, budget, target_snapshots
     );
 
+    // When --beacon is set, resolve a verifiable seed for attempt 1.
+    // Subsequent attempts fall back to local PRNG (to avoid RPC rate limits).
+    let beacon_vrf: Option<vrf::VrfResult> = if beacon.is_some() {
+        eprintln!("🎲  Fetching beacon seed for attempt 1...");
+        match resolve_genesis_seed(beacon, None) {
+            Ok((_, vrf_opt)) => {
+                if let Some(ref r) = vrf_opt {
+                    eprintln!("    Beacon    : {} ({})", r.source.as_str(), r.request_id);
+                }
+                vrf_opt
+            }
+            Err(e) => {
+                eprintln!("    ⚠️  Beacon failed ({e}), falling back to local seed.");
+                None
+            }
+        }
+    } else {
+        None
+    };
+
     for attempt in 1..=budget {
         eprintln!("  Attempt {}/{}", attempt, budget);
 
-        // Generate a seed (UUID v4).
-        let seed = generate_uuid().unwrap_or_else(|_| format!("seed-{attempt}"));
+        // For attempt 1 with a beacon, use the beacon-derived seed.
+        // All other attempts use a freshly generated UUID seed.
+        let (seed, attempt_genesis): (String, Option<&vrf::VrfResult>) = if attempt == 1 {
+            if let Some(ref vrf_result) = beacon_vrf {
+                (vrf_result.seed_hex.clone(), Some(vrf_result))
+            } else {
+                (generate_uuid().unwrap_or_else(|_| format!("seed-{attempt}")), None)
+            }
+        } else {
+            (generate_uuid().unwrap_or_else(|_| format!("seed-{attempt}")), None)
+        };
 
         // Create a temp universe directory.
         let universe_dir = std::env::temp_dir()
@@ -4218,7 +4488,7 @@ fn cmd_mine(
         std::fs::create_dir_all(&universe_dir)?;
 
         // Initialise universe: .gitverse layout + git init + initial commit.
-        if let Err(e) = mine_init_universe(&universe_dir, &seed) {
+        if let Err(e) = mine_init_universe(&universe_dir, &seed, attempt_genesis) {
             eprintln!("    init failed: {e}");
             continue;
         }
@@ -4273,12 +4543,17 @@ fn required_snapshot_count(p: &bounty::Predicate) -> u64 {
 fn mine_init_universe(
     dir: &std::path::Path,
     seed: &str,
+    genesis: Option<&vrf::VrfResult>,
 ) -> Result<(), Box<dyn std::error::Error>> {
     // .gitverse/ subdirectories.
     let gitverse = dir.join(".gitverse");
     std::fs::create_dir_all(&gitverse)?;
     std::fs::write(gitverse.join("snapshot_count"), "0")?;
     std::fs::write(gitverse.join("genesis_seed"), seed)?;
+    // Write genesis.json when a verifiable seed was used.
+    if let Some(vrf_result) = genesis {
+        std::fs::write(gitverse.join("genesis.json"), vrf_result.to_json())?;
+    }
     std::fs::write(
         gitverse.join("values.json"),
         r#"{"name":"mined","version":"0.1.0","tags":[]}"#,
@@ -4316,7 +4591,15 @@ fn mine_init_universe(
         .args(["add", "--all"])
         .current_dir(dir)
         .output()?;
-    let init_msg = format!("emanon: genesis (seed={seed})");
+    let init_msg = if let Some(vrf_result) = genesis {
+        format!(
+            "emanon: genesis (seed={seed})\n\nBeacon: {}\nBeacon-RequestId: {}",
+            vrf_result.source.as_str(),
+            vrf_result.request_id
+        )
+    } else {
+        format!("emanon: genesis (seed={seed})")
+    };
     let commit_out = Command::new("git")
         .args(["commit", "-m", &init_msg])
         .current_dir(dir)
@@ -5177,8 +5460,8 @@ fn main() {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Init { name, force } => {
-            if let Err(e) = cmd_init(&name, force) {
+        Commands::Init { name, force, beacon, seed } => {
+            if let Err(e) = cmd_init(&name, force, beacon.as_deref(), seed.as_deref()) {
                 eprintln!("error: {e}");
                 std::process::exit(1);
             }
@@ -5300,10 +5583,10 @@ fn main() {
                 }
             }
         },
-        Commands::Mine { uuid, budget, board } => {
+        Commands::Mine { uuid, budget, board, beacon } => {
             let config = load_emanon_config();
             let board_url = board.as_deref().unwrap_or(&config.bounty_board_url).to_string();
-            if let Err(e) = cmd_mine(&uuid, budget, &board_url) {
+            if let Err(e) = cmd_mine(&uuid, budget, &board_url, beacon.as_deref()) {
                 eprintln!("error: {e}");
                 std::process::exit(1);
             }
@@ -6869,7 +7152,7 @@ mod tests {
         let dir = std::env::temp_dir().join("emanon-mine-init-test");
         if dir.exists() { std::fs::remove_dir_all(&dir).unwrap(); }
         std::fs::create_dir_all(&dir).unwrap();
-        mine_init_universe(&dir, "test-seed-abc123").unwrap();
+        mine_init_universe(&dir, "test-seed-abc123", None).unwrap();
         assert!(dir.join(".gitverse/snapshot_count").exists());
         assert!(dir.join(".gitverse/genesis_seed").exists());
         assert!(dir.join(".gitverse/values.json").exists());
@@ -6886,7 +7169,7 @@ mod tests {
         let dir = std::env::temp_dir().join("emanon-mine-play-test");
         if dir.exists() { std::fs::remove_dir_all(&dir).unwrap(); }
         std::fs::create_dir_all(&dir).unwrap();
-        mine_init_universe(&dir, "play-seed-xyz").unwrap();
+        mine_init_universe(&dir, "play-seed-xyz", None).unwrap();
         mine_run_play(&dir, 5).unwrap();
         let count = std::fs::read_to_string(dir.join(".gitverse/snapshot_count")).unwrap();
         assert_eq!(count.trim(), "5");
@@ -6902,7 +7185,7 @@ mod tests {
         let dir = std::env::temp_dir().join("emanon-mine-pred-test");
         if dir.exists() { std::fs::remove_dir_all(&dir).unwrap(); }
         std::fs::create_dir_all(&dir).unwrap();
-        mine_init_universe(&dir, "pred-seed-42").unwrap();
+        mine_init_universe(&dir, "pred-seed-42", None).unwrap();
         mine_run_play(&dir, 5).unwrap();
         // After 5 snapshots, snapshot_count_at_least:5 should be satisfied.
         let p = bounty::Predicate::SnapshotCountAtLeast { n: 5 };
@@ -7013,5 +7296,111 @@ mod tests {
         assert!(request_id.starts_with("slot:"));
         let parsed: u64 = request_id.strip_prefix("slot:").unwrap().parse().unwrap();
         assert_eq!(parsed, slot);
+    }
+
+    // -----------------------------------------------------------------------
+    // resolve_genesis_seed
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn resolve_genesis_seed_local_prng_no_args() {
+        // Default: no beacon, no seed — returns 64 hex chars, no VrfResult.
+        let (seed, vrf) = resolve_genesis_seed(None, None).expect("should succeed");
+        assert_eq!(seed.len(), 64, "expected 64 hex chars");
+        assert!(seed.chars().all(|c| c.is_ascii_hexdigit()), "non-hex: {seed}");
+        assert!(vrf.is_none(), "local PRNG should not return a VrfResult");
+    }
+
+    #[test]
+    fn resolve_genesis_seed_explicit_hex_seed() {
+        let raw = "deadbeef";
+        let (seed, vrf) = resolve_genesis_seed(None, Some(raw)).expect("should succeed");
+        // Should be zero-padded to 64 chars.
+        assert_eq!(seed.len(), 64);
+        assert!(seed.ends_with("deadbeef"), "seed should end with deadbeef: {seed}");
+        assert!(vrf.is_none(), "--seed should not return a VrfResult");
+    }
+
+    #[test]
+    fn resolve_genesis_seed_explicit_seed_with_0x_prefix() {
+        let (seed, vrf) = resolve_genesis_seed(None, Some("0xdeadbeef"))
+            .expect("should strip 0x");
+        assert!(seed.ends_with("deadbeef"), "expected deadbeef suffix: {seed}");
+        assert!(vrf.is_none());
+    }
+
+    #[test]
+    fn resolve_genesis_seed_explicit_full_64_hex() {
+        let full = "a3b4c5d6e7f8a3b4c5d6e7f8a3b4c5d6e7f8a3b4c5d6e7f8a3b4c5d6e7f8a3b4";
+        let (seed, _) = resolve_genesis_seed(None, Some(full)).expect("full hex");
+        assert_eq!(seed, full);
+    }
+
+    #[test]
+    fn resolve_genesis_seed_beacon_and_seed_are_mutually_exclusive() {
+        let err = resolve_genesis_seed(Some("drand"), Some("deadbeef"));
+        assert!(err.is_err(), "should error when both --beacon and --seed given");
+        let msg = err.unwrap_err().to_string();
+        assert!(msg.contains("mutually exclusive"), "error should mention mutually exclusive: {msg}");
+    }
+
+    #[test]
+    fn resolve_genesis_seed_unknown_beacon_errors() {
+        let err = resolve_genesis_seed(Some("unknown-beacon"), None);
+        assert!(err.is_err(), "unknown beacon should error");
+        let msg = err.unwrap_err().to_string();
+        assert!(msg.contains("unknown beacon"), "error: {msg}");
+    }
+
+    #[test]
+    fn resolve_genesis_seed_invalid_seed_hex_errors() {
+        let err = resolve_genesis_seed(None, Some("gg_not_hex"));
+        assert!(err.is_err(), "invalid hex should error");
+    }
+
+    #[test]
+    fn resolve_genesis_seed_solana_slot_invalid_number_errors() {
+        let err = resolve_genesis_seed(Some("solana-slot:not-a-number"), None);
+        assert!(err.is_err(), "invalid slot number should error");
+        let msg = err.unwrap_err().to_string();
+        assert!(msg.contains("invalid slot"), "error: {msg}");
+    }
+
+    // -----------------------------------------------------------------------
+    // mine_init_universe with genesis.json
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn mine_init_universe_with_genesis_json() {
+        let dir = std::env::temp_dir().join("emanon-mine-genesis-json-test");
+        if dir.exists() { std::fs::remove_dir_all(&dir).unwrap(); }
+        std::fs::create_dir_all(&dir).unwrap();
+
+        let vrf_result = vrf::VrfResult {
+            request_id: "drand:99999".to_string(),
+            slot: 99999,
+            blockhash: String::new(),
+            seed_hex: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2".to_string(),
+            source: vrf::VrfSource::Drand,
+            wallet_pubkey: String::new(),
+            timestamp: "2026-04-14T00:00:00Z".to_string(),
+            rpc_url: "https://drand.cloudflare.com/public/latest".to_string(),
+            network: "drand-mainnet".to_string(),
+        };
+
+        mine_init_universe(&dir, &vrf_result.seed_hex, Some(&vrf_result)).unwrap();
+
+        // genesis.json should be written.
+        let genesis_json_path = dir.join(".gitverse/genesis.json");
+        assert!(genesis_json_path.exists(), "genesis.json should exist");
+        let genesis_content = std::fs::read_to_string(&genesis_json_path).unwrap();
+        assert!(genesis_content.contains("\"source\": \"drand\""));
+        assert!(genesis_content.contains("drand:99999"));
+
+        // genesis_seed should match.
+        let saved_seed = std::fs::read_to_string(dir.join(".gitverse/genesis_seed")).unwrap();
+        assert_eq!(saved_seed.trim(), vrf_result.seed_hex);
+
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }

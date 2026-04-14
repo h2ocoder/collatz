@@ -1,5 +1,6 @@
 mod bounty;
 mod vrf;
+mod wallet;
 
 use clap::{Parser, Subcommand};
 use collatz_rs::beta;
@@ -244,6 +245,21 @@ enum Commands {
         #[command(subcommand)]
         action: VrfAction,
     },
+
+    /// Manage your Solana wallet for on-chain Emanon actions
+    ///
+    /// The Emanon wallet is stored at `~/.config/emanon/wallet.json` and is used
+    /// automatically by `emanon bounty post`, `emanon registry push`, and future
+    /// cNFT / reputation commands.
+    ///
+    /// Quick start (devnet):
+    ///   emanon wallet init           # generate a new keypair
+    ///   emanon wallet airdrop        # request 1 SOL on devnet
+    ///   emanon wallet show           # verify balances
+    Wallet {
+        #[command(subcommand)]
+        action: WalletAction,
+    },
 }
 
 #[derive(Subcommand)]
@@ -436,6 +452,84 @@ enum VrfAction {
         /// Solana RPC endpoint to query (default: use the stored rpc_url).
         #[arg(long)]
         rpc: Option<String>,
+    },
+}
+
+#[derive(Subcommand)]
+enum WalletAction {
+    /// Generate a new Solana keypair and save it to ~/.config/emanon/wallet.json
+    ///
+    /// Requires `solana-keygen` from the Solana CLI:
+    ///   https://docs.solanalabs.com/cli/install
+    ///
+    /// The file is created with 0600 permissions (owner read+write only).
+    /// If a wallet already exists at the default path, use --force to overwrite it.
+    ///
+    /// Examples:
+    ///   emanon wallet init
+    ///   emanon wallet init --force
+    ///   emanon wallet init --network mainnet
+    Init {
+        /// Overwrite existing wallet file without prompting
+        #[arg(long, short = 'f')]
+        force: bool,
+        /// Target network: "devnet" (default) or "mainnet"
+        #[arg(long, default_value = "devnet")]
+        network: String,
+        /// Override default wallet output path
+        #[arg(long)]
+        output: Option<String>,
+    },
+
+    /// Import an existing Solana keypair as the Emanon wallet
+    ///
+    /// Copies the keypair file to `~/.config/emanon/wallet.json` and sets 0600
+    /// permissions.  The source must be a valid 64-byte Solana JSON array.
+    ///
+    /// Example:
+    ///   emanon wallet import ~/.config/solana/id.json
+    Import {
+        /// Path to the source keypair JSON file to import
+        keypair_path: String,
+        /// Override default wallet destination path
+        #[arg(long)]
+        output: Option<String>,
+    },
+
+    /// Display wallet pubkey and on-chain balances
+    ///
+    /// Queries SOL and USDC balances from the Solana RPC endpoint.
+    /// Balances are approximate (RPC latency may lag a few seconds).
+    ///
+    /// Examples:
+    ///   emanon wallet show
+    ///   emanon wallet show --network mainnet
+    Show {
+        /// Target network: "devnet" (default) or "mainnet"
+        #[arg(long, default_value = "devnet")]
+        network: String,
+        /// Override wallet path (default: ~/.config/emanon/wallet.json)
+        #[arg(long)]
+        keypair: Option<String>,
+    },
+
+    /// Request a small SOL airdrop on devnet (for testing)
+    ///
+    /// Requests 1 SOL from the devnet faucet.  Airdrops are unavailable on
+    /// mainnet-beta; this command will refuse to run with `--network mainnet`.
+    ///
+    /// Faucet rate limits apply — wait ~24 hours between requests.
+    ///
+    /// Example:
+    ///   emanon wallet airdrop
+    ///   emanon wallet airdrop --amount 2
+    Airdrop {
+        /// Amount of SOL to request (default: 1.0; faucet cap is 2 SOL/request)
+        #[arg(long, default_value = "1.0")]
+        amount: f64,
+        /// Override wallet path (default: ~/.config/emanon/wallet.json)
+        #[arg(long)]
+        keypair: Option<String>,
     },
 }
 
@@ -2967,12 +3061,34 @@ fn cmd_bounty_post(
         })?;
 
     // --- Resolve buyer_pubkey ---
-    let buyer_pubkey = config.buyer_pubkey.as_deref().ok_or_else(|| {
-        "buyer_pubkey not configured.\n\
-         Add to ~/.config/emanon/config.toml:\n\
-         [bounty]\n\
-         buyer_pubkey = \"ed25519:<your-base58-key>\""
-    })?;
+    // Priority: [bounty] buyer_pubkey in config → pubkey derived from wallet file.
+    let resolved_buyer_pubkey: String;
+    if let Some(bpk) = config.buyer_pubkey.as_deref() {
+        resolved_buyer_pubkey = bpk.to_string();
+    } else {
+        // Auto-derive from the Emanon wallet file if it exists.
+        let wallet_path = &config.wallet_json_path;
+        if std::path::Path::new(wallet_path).exists() {
+            let raw_pubkey = wallet::derive_pubkey_from_file(wallet_path)
+                .map_err(|e| format!("Cannot derive pubkey from wallet at {wallet_path}: {e}"))?;
+            // Normalise to ed25519:<key> prefix expected downstream.
+            resolved_buyer_pubkey = if raw_pubkey.starts_with("ed25519:") {
+                raw_pubkey
+            } else {
+                format!("ed25519:{raw_pubkey}")
+            };
+        } else {
+            return Err(
+                "buyer_pubkey not configured and no wallet found.\n\
+                 Either run `emanon wallet init` to create a wallet, or add:\n\
+                 [bounty]\n\
+                 buyer_pubkey = \"ed25519:<your-base58-key>\"\n\
+                 to ~/.config/emanon/config.toml."
+                    .into(),
+            );
+        }
+    };
+    let buyer_pubkey = resolved_buyer_pubkey.as_str();
     if !buyer_pubkey.starts_with("ed25519:") {
         return Err(format!(
             "buyer_pubkey must start with 'ed25519:'; got: {buyer_pubkey}"
@@ -3282,7 +3398,8 @@ const DEFAULT_BOUNTY_BOARD_URL: &str = "https://github.com/forgetthefrets/emanon
 
 /// Runtime configuration loaded from `~/.config/emanon/config.toml`.
 ///
-/// Minimal hand-rolled TOML reader: parses `[registry]`, `[universe]`, and `[bounty]` sections.
+/// Minimal hand-rolled TOML reader: parses `[registry]`, `[universe]`, `[bounty]`,
+/// and `[wallet]` sections.
 struct EmanonConfig {
     /// Registry repo HTTPS URL (default: DEFAULT_REGISTRY_URL).
     registry_url: String,
@@ -3295,11 +3412,15 @@ struct EmanonConfig {
     /// Bounty board repo HTTPS URL (default: DEFAULT_BOUNTY_BOARD_URL).
     bounty_board_url: String,
     /// Buyer pubkey for bounty posting (ed25519:<base58>).
+    /// If not set, derived automatically from the Emanon wallet file.
     buyer_pubkey: Option<String>,
     /// Path to Solana keypair file for VRF requests ([wallet] keypair_path).
     wallet_keypair_path: Option<String>,
     /// Solana RPC URL for VRF requests ([wallet] rpc_url).
     wallet_rpc_url: Option<String>,
+    /// Path to the Emanon player wallet file ([wallet] json_path).
+    /// Default: ~/.config/emanon/wallet.json
+    wallet_json_path: String,
 }
 
 /// Load configuration from `~/.config/emanon/config.toml`.
@@ -3313,6 +3434,7 @@ fn load_emanon_config() -> EmanonConfig {
     let mut buyer_pubkey: Option<String> = None;
     let mut wallet_keypair_path: Option<String> = None;
     let mut wallet_rpc_url: Option<String> = None;
+    let mut wallet_json_path = wallet::default_wallet_path();
 
     let config_path = std::env::var("HOME")
         .map(|h| format!("{h}/.config/emanon/config.toml"))
@@ -3359,6 +3481,7 @@ fn load_emanon_config() -> EmanonConfig {
                         match k {
                             "keypair_path" => wallet_keypair_path = Some(v.to_string()),
                             "rpc_url" => wallet_rpc_url = Some(v.to_string()),
+                            "json_path" => wallet_json_path = v.to_string(),
                             _ => {}
                         }
                     }
@@ -3376,6 +3499,7 @@ fn load_emanon_config() -> EmanonConfig {
         buyer_pubkey,
         wallet_keypair_path,
         wallet_rpc_url,
+        wallet_json_path,
     }
 }
 
@@ -5442,6 +5566,156 @@ fn cmd_vrf_verify(
 }
 
 // ---------------------------------------------------------------------------
+// emanon wallet — init, import, show, airdrop
+// ---------------------------------------------------------------------------
+
+/// `emanon wallet init` — generate a new Solana keypair and save it as the
+/// Emanon player wallet.
+///
+/// Requires the `solana-keygen` CLI from the Solana CLI suite.
+fn cmd_wallet_init(
+    force: bool,
+    network: &str,
+    output_override: Option<&str>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let wallet_path = output_override
+        .map(|s| s.to_string())
+        .unwrap_or_else(wallet::default_wallet_path);
+
+    // Guard: warn rather than silently overwrite an existing wallet.
+    if std::path::Path::new(&wallet_path).exists() && !force {
+        return Err(format!(
+            "Wallet already exists at {wallet_path}.\n\
+             Use --force to overwrite it (WARNING: the old private key will be lost)."
+        )
+        .into());
+    }
+
+    println!("Generating new Solana keypair...");
+    let pubkey = wallet::generate_keypair(&wallet_path)?;
+    wallet::check_and_warn_permissions(&wallet_path);
+
+    println!("✔ Wallet created: {wallet_path}");
+    println!("  Public key: {pubkey}");
+    println!("  Network:    {network}");
+    println!();
+    println!("Next steps:");
+    println!("  emanon wallet airdrop          # get 1 devnet SOL for testing");
+    println!("  emanon wallet show             # verify your balances");
+    println!();
+    println!("⚠ Keep {wallet_path} private — it contains your secret key.");
+    Ok(())
+}
+
+/// `emanon wallet import <keypair-path>` — import an existing Solana keypair.
+fn cmd_wallet_import(
+    src: &str,
+    output_override: Option<&str>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let wallet_path = output_override
+        .map(|s| s.to_string())
+        .unwrap_or_else(wallet::default_wallet_path);
+
+    let pubkey = wallet::import_keypair(src, &wallet_path)?;
+    wallet::check_and_warn_permissions(&wallet_path);
+
+    println!("✔ Wallet imported: {wallet_path}");
+    println!("  Public key: {pubkey}");
+    println!();
+    println!("Run `emanon wallet show` to verify balances.");
+    Ok(())
+}
+
+/// `emanon wallet show` — display pubkey and on-chain balances.
+fn cmd_wallet_show(
+    network: &str,
+    keypair_override: Option<&str>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let wallet_path = keypair_override
+        .map(|s| s.to_string())
+        .unwrap_or_else(wallet::default_wallet_path);
+
+    if !std::path::Path::new(&wallet_path).exists() {
+        return Err(format!(
+            "No wallet found at {wallet_path}.\n\
+             Run `emanon wallet init` to create one."
+        )
+        .into());
+    }
+
+    wallet::check_and_warn_permissions(&wallet_path);
+
+    let pubkey = wallet::derive_pubkey_from_file(&wallet_path)?;
+    let rpc_url = rpc_url_for_network(network);
+
+    println!("Emanon Wallet");
+    println!("=============");
+    println!("  File:       {wallet_path}");
+    println!("  Public key: {pubkey}");
+    println!("  Network:    {network}  ({})", rpc_url);
+    println!();
+
+    // SOL balance.
+    match wallet::get_sol_balance(&pubkey, &rpc_url) {
+        Ok(sol) => println!("  SOL:   {sol:.9} SOL"),
+        Err(e) => println!("  SOL:   (unavailable — {e})"),
+    }
+
+    // USDC balance.
+    match wallet::get_usdc_balance(&pubkey, &rpc_url) {
+        Ok(usdc) => println!("  USDC:  {usdc:.6} USDC"),
+        Err(e) => println!("  USDC:  (unavailable — {e})"),
+    }
+
+    println!();
+    Ok(())
+}
+
+/// `emanon wallet airdrop` — request devnet SOL from the faucet.
+fn cmd_wallet_airdrop(
+    amount_sol: f64,
+    keypair_override: Option<&str>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let wallet_path = keypair_override
+        .map(|s| s.to_string())
+        .unwrap_or_else(wallet::default_wallet_path);
+
+    if !std::path::Path::new(&wallet_path).exists() {
+        return Err(format!(
+            "No wallet found at {wallet_path}.\n\
+             Run `emanon wallet init` first."
+        )
+        .into());
+    }
+
+    let pubkey = wallet::derive_pubkey_from_file(&wallet_path)?;
+    let rpc_url = vrf::SolanaRpc::DEVNET;
+
+    println!("Requesting {amount_sol} SOL airdrop on devnet...");
+    println!("  Recipient: {pubkey}");
+    println!("  Faucet:    {rpc_url}");
+
+    let result = wallet::request_airdrop(&pubkey, rpc_url, amount_sol)
+        .map_err(|e| Box::<dyn std::error::Error>::from(e))?;
+
+    println!("✔ Airdrop confirmed: {result}");
+    println!();
+    println!("Run `emanon wallet show` to verify your updated balance.");
+    Ok(())
+}
+
+/// Return the canonical Solana RPC URL for the given network name.
+///
+/// `"devnet"` → devnet endpoint; anything else (including `"mainnet"`,
+/// `"mainnet-beta"`) → mainnet endpoint.
+fn rpc_url_for_network(network: &str) -> &'static str {
+    match network {
+        "devnet" | "dev" => vrf::SolanaRpc::DEVNET,
+        _ => vrf::SolanaRpc::MAINNET,
+    }
+}
+
+// ---------------------------------------------------------------------------
 // stub helper
 // ---------------------------------------------------------------------------
 
@@ -5665,6 +5939,33 @@ fn main() {
                     wallet_pubkey.as_deref(),
                     rpc.as_deref(),
                 ) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+        },
+
+        Commands::Wallet { action } => match action {
+            WalletAction::Init { force, network, output } => {
+                if let Err(e) = cmd_wallet_init(force, &network, output.as_deref()) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+            WalletAction::Import { keypair_path, output } => {
+                if let Err(e) = cmd_wallet_import(&keypair_path, output.as_deref()) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+            WalletAction::Show { network, keypair } => {
+                if let Err(e) = cmd_wallet_show(&network, keypair.as_deref()) {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+            WalletAction::Airdrop { amount, keypair } => {
+                if let Err(e) = cmd_wallet_airdrop(amount, keypair.as_deref()) {
                     eprintln!("error: {e}");
                     std::process::exit(1);
                 }
@@ -6973,6 +7274,9 @@ mod tests {
             git_remote: "origin".to_string(),
             bounty_board_url: DEFAULT_BOUNTY_BOARD_URL.to_string(),
             buyer_pubkey: Some("ed25519:TestKeyABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij".to_string()),
+            wallet_keypair_path: None,
+            wallet_rpc_url: None,
+            wallet_json_path: "/tmp/no-wallet-for-test.json".to_string(),
         };
 
         let result = cmd_bounty_post(
@@ -7001,13 +7305,20 @@ mod tests {
             universe_name: None,
             git_remote: "origin".to_string(),
             bounty_board_url: DEFAULT_BOUNTY_BOARD_URL.to_string(),
-            buyer_pubkey: None, // missing
+            buyer_pubkey: None, // missing — should fall back to wallet file (also missing)
+            wallet_keypair_path: None,
+            wallet_rpc_url: None,
+            wallet_json_path: "/tmp/no-wallet-for-test.json".to_string(),
         };
 
         let result = cmd_bounty_post(f.to_str().unwrap(), 2.0, DEFAULT_BOUNTY_BOARD_URL, 30, &cfg);
         assert!(result.is_err());
         let msg = result.unwrap_err().to_string();
-        assert!(msg.contains("buyer_pubkey"), "error should mention buyer_pubkey: {msg}");
+        // With wallet auto-derive, the error now mentions "wallet" or "buyer_pubkey".
+        assert!(
+            msg.contains("buyer_pubkey") || msg.contains("wallet"),
+            "error should mention buyer_pubkey or wallet: {msg}"
+        );
         let _ = std::fs::remove_dir_all(&dir);
     }
 
@@ -7025,6 +7336,9 @@ mod tests {
             git_remote: "origin".to_string(),
             bounty_board_url: DEFAULT_BOUNTY_BOARD_URL.to_string(),
             buyer_pubkey: Some("base58:wrongprefix".to_string()),
+            wallet_keypair_path: None,
+            wallet_rpc_url: None,
+            wallet_json_path: "/tmp/no-wallet-for-test.json".to_string(),
         };
 
         let result = cmd_bounty_post(f.to_str().unwrap(), 2.0, DEFAULT_BOUNTY_BOARD_URL, 30, &cfg);
@@ -7043,6 +7357,9 @@ mod tests {
             git_remote: "origin".to_string(),
             bounty_board_url: DEFAULT_BOUNTY_BOARD_URL.to_string(),
             buyer_pubkey: Some("ed25519:TestKeyABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij".to_string()),
+            wallet_keypair_path: None,
+            wallet_rpc_url: None,
+            wallet_json_path: "/tmp/no-wallet-for-test.json".to_string(),
         };
         let result = cmd_bounty_post(
             "/tmp/nonexistent-bounty-spec-zzz.json",
@@ -7402,5 +7719,83 @@ mod tests {
         assert_eq!(saved_seed.trim(), vrf_result.seed_hex);
 
         let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    // -----------------------------------------------------------------------
+    // wallet integration tests (main.rs layer)
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn rpc_url_for_devnet_returns_devnet_endpoint() {
+        let url = rpc_url_for_network("devnet");
+        assert!(url.contains("devnet"), "devnet → devnet endpoint: {url}");
+    }
+
+    #[test]
+    fn rpc_url_for_mainnet_returns_mainnet_endpoint() {
+        let url = rpc_url_for_network("mainnet");
+        assert!(url.contains("mainnet"), "mainnet → mainnet endpoint: {url}");
+    }
+
+    #[test]
+    fn rpc_url_for_unknown_returns_mainnet_endpoint() {
+        let url = rpc_url_for_network("unknown-network");
+        assert!(url.contains("mainnet"), "unknown network → mainnet fallback: {url}");
+    }
+
+    #[test]
+    fn cmd_wallet_init_errors_without_force_on_existing_file() {
+        let tmp = format!("/tmp/emanon-wallet-init-test-{}.json", std::process::id());
+        std::fs::write(&tmp, "existing").unwrap();
+        let result = cmd_wallet_init(false, "devnet", Some(&tmp));
+        assert!(result.is_err(), "should error when file exists and --force not set");
+        let msg = result.unwrap_err().to_string();
+        assert!(msg.contains("--force"), "error should mention --force: {msg}");
+        let _ = std::fs::remove_file(&tmp);
+    }
+
+    #[test]
+    fn cmd_wallet_show_errors_when_no_wallet_exists() {
+        let path = "/tmp/emanon-wallet-show-missing-99999999.json";
+        let result = cmd_wallet_show("devnet", Some(path));
+        assert!(result.is_err(), "should error when wallet file missing");
+        let msg = result.unwrap_err().to_string();
+        assert!(msg.contains("emanon wallet init"), "should suggest init: {msg}");
+    }
+
+    #[test]
+    fn cmd_wallet_airdrop_errors_when_no_wallet_exists() {
+        let path = "/tmp/emanon-wallet-airdrop-missing-99999999.json";
+        let result = cmd_wallet_airdrop(1.0, Some(path));
+        assert!(result.is_err(), "should error when wallet file missing");
+        let msg = result.unwrap_err().to_string();
+        assert!(msg.contains("emanon wallet init"), "should suggest init: {msg}");
+    }
+
+    #[test]
+    fn cmd_wallet_import_errors_on_bad_json() {
+        let src = format!("/tmp/emanon-import-bad-{}.json", std::process::id());
+        std::fs::write(&src, r#"{"not_an_array": true}"#).unwrap();
+        let dest = format!("{src}.dest");
+        let result = cmd_wallet_import(&src, Some(&dest));
+        assert!(result.is_err(), "should reject non-array keypair JSON");
+        let _ = std::fs::remove_file(&src);
+        let _ = std::fs::remove_file(&dest);
+    }
+
+    #[test]
+    fn load_config_wallet_json_path_defaults_to_emanon_wallet() {
+        // Verify that the default wallet_json_path points to the expected location.
+        let cfg = load_emanon_config();
+        assert!(
+            cfg.wallet_json_path.contains(".config/emanon/"),
+            "wallet_json_path should be in .config/emanon/: {}",
+            cfg.wallet_json_path
+        );
+        assert!(
+            cfg.wallet_json_path.ends_with("wallet.json"),
+            "wallet_json_path should end with wallet.json: {}",
+            cfg.wallet_json_path
+        );
     }
 }

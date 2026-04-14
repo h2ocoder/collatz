@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+:root {
+  /* Backgrounds */
+  --color-void: #0a0a12;
+  --color-deep: #0f0f1a;
+  --color-surface: #1a1520;
+  --color-raised: #242030;
+
+  /* Text */
+  --color-text-primary: #e2e0f0;
+  --color-text-secondary: #b8b0d0;
+  --color-text-muted: #6b6880;
+
+  /* Accents */
+  --color-accent-violet: #8b5cf6;
+  --color-accent-blue: #3b82f6;
+
+  /* Semantic */
+  --color-star: #f59e0b;
+  --color-danger: #ef4444;
+  --color-trust: #22c55e;
+
+  /* Borders */
+  --color-border: #2a2540;
+  --color-border-subtle: #1f1b2e;
+
+  /* Accent alphas */
+  --color-accent-violet-10: rgba(139, 92, 246, 0.1);
+  --color-accent-violet-15: rgba(139, 92, 246, 0.15);
+  --color-accent-violet-30: rgba(139, 92, 246, 0.3);
+  --color-accent-violet-40: rgba(139, 92, 246, 0.4);
+}
+
+@theme inline {
+  --color-void: var(--color-void);
+  --color-deep: var(--color-deep);
+  --color-surface: var(--color-surface);
+  --color-raised: var(--color-raised);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-accent-violet: var(--color-accent-violet);
+  --color-accent-blue: var(--color-accent-blue);
+  --color-star: var(--color-star);
+  --color-danger: var(--color-danger);
+  --color-trust: var(--color-trust);
+  --color-border: var(--color-border);
+  --color-border-subtle: var(--color-border-subtle);
+
+  --font-ui: var(--font-inter), system-ui, sans-serif;
+  --font-narrative: var(--font-literata), Georgia, serif;
+  --font-data: var(--font-jetbrains), monospace;
+}
+
+body {
+  background-color: var(--color-void);
+  color: var(--color-text-primary);
+}

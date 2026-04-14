@@ -30,6 +30,9 @@ enum Commands {
         /// Optional message describing this snapshot
         #[arg(short = 'm', long)]
         message: Option<String>,
+        /// Skip `git add -A`; only commit already-staged files
+        #[arg(long)]
+        no_stage: bool,
     },
 
     /// Merge a remote timeline using the Collatz merge driver
@@ -139,6 +142,13 @@ const GITATTRIBUTES: &str = "\
 *.contract  merge=collatz
 ";
 
+/// Ephemeral files excluded from snapshots.
+/// leverage.cache is regenerated at runtime; it must not be committed.
+const GITIGNORE: &str = "\
+# Emanon ephemeral files — regenerated at runtime, not part of universe state
+.gitverse/leverage.cache
+";
+
 fn readme_template(name: &str) -> String {
     format!(
         "# {name}\n\
@@ -151,8 +161,9 @@ fn readme_template(name: &str) -> String {
         - `contracts/` — agreements with other players and universes\n\
         - `scars/`     — records of resolved conflicts and merges\n\
         - `forks/`     — active timeline divergences\n\
-        - `.gitverse/values.json` — resolution preferences for this universe\n\
-        - `.gitattributes`         — Collatz merge driver registration (placeholder)\n\
+        - `.gitverse/values.json`    — resolution preferences for this universe\n\
+        - `.gitverse/snapshot_count` — current snapshot counter\n\
+        - `.gitattributes`            — Collatz merge driver registration (placeholder)\n\
         \n\
         ## Getting Started\n\
         \n\
@@ -196,7 +207,10 @@ fn cmd_init(name: &str, force: bool) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // --- Write template files ---
+    // .gitignore must be written before git add so leverage.cache stays untracked.
+    std::fs::write(target.join(".gitignore"), GITIGNORE)?;
     std::fs::write(target.join(".gitverse/values.json"), VALUES_JSON)?;
+    // leverage.cache is ephemeral — create it for runtime use but keep it gitignored.
     std::fs::write(target.join(".gitverse/leverage.cache"), "")?;
     std::fs::write(target.join(".gitattributes"), GITATTRIBUTES)?;
     std::fs::write(target.join("regions/.gitkeep"), "")?;
@@ -220,6 +234,7 @@ fn cmd_init(name: &str, force: bool) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // --- git add . ---
+    // leverage.cache is excluded via .gitignore; all other files are staged.
     let git_add = Command::new("git")
         .args(["add", "."])
         .current_dir(target)
@@ -255,6 +270,123 @@ fn cmd_init(name: &str, force: bool) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 // ---------------------------------------------------------------------------
+// emanon snapshot
+// ---------------------------------------------------------------------------
+
+fn cmd_snapshot(message: Option<String>, no_stage: bool) -> Result<(), Box<dyn std::error::Error>> {
+    // --- Verify we are inside an Emanon universe ---
+    let here = std::env::current_dir()?;
+    let gitverse = here.join(".gitverse");
+    if !gitverse.exists() {
+        return Err(
+            "not an Emanon universe — .gitverse/ not found in the current directory.\n\
+             Run `emanon init <name>` to create one, then `cd <name>` first."
+                .into(),
+        );
+    }
+
+    // --- Stage user changes (unless --no-stage) ---
+    if !no_stage {
+        let git_add = Command::new("git").args(["add", "-A"]).output()?;
+        if !git_add.status.success() {
+            return Err(format!(
+                "git add -A failed:\n{}",
+                String::from_utf8_lossy(&git_add.stderr)
+            )
+            .into());
+        }
+    }
+
+    // --- Check for staged user changes (excluding .gitverse/ engine files) ---
+    //
+    // We deliberately ignore changes inside .gitverse/ here because:
+    //   - leverage.cache is ephemeral (gitignored)
+    //   - snapshot_count is managed entirely by this command
+    // If only engine files changed, there is nothing meaningful to snapshot.
+    let git_diff = Command::new("git")
+        .args(["diff", "--cached", "--name-only"])
+        .output()?;
+    if !git_diff.status.success() {
+        return Err("git diff --cached --name-only failed".into());
+    }
+    let staged_output = String::from_utf8_lossy(&git_diff.stdout);
+    let user_changed: Vec<&str> = staged_output
+        .lines()
+        .filter(|f| !f.starts_with(".gitverse/"))
+        .collect();
+
+    if user_changed.is_empty() {
+        println!("📭  Nothing to snapshot — no changes staged.");
+        return Ok(());
+    }
+    let file_count = user_changed.len();
+
+    // --- Compute new snapshot number ---
+    let count_file = gitverse.join("snapshot_count");
+    let current_count: u64 = if count_file.exists() {
+        std::fs::read_to_string(&count_file)?
+            .trim()
+            .parse()
+            .unwrap_or(0)
+    } else {
+        0
+    };
+    let new_count = current_count + 1;
+
+    // --- Write updated snapshot counter and stage it ---
+    std::fs::write(&count_file, new_count.to_string())?;
+    let _ = Command::new("git")
+        .args(["add", ".gitverse/snapshot_count"])
+        .output()?;
+
+    // --- Build commit message with git trailers ---
+    //
+    // Format:
+    //   snapshot N: <message>
+    //
+    //   Snapshot: N
+    //   Genus: (placeholder — M1.4)
+    let msg_text = message.as_deref().unwrap_or("(no message)");
+    let commit_subject = format!("snapshot {new_count}: {msg_text}");
+    let commit_body = format!(
+        "Snapshot: {new_count}\nGenus: (placeholder \u{2014} M1.4)"
+    );
+    let full_message = format!("{commit_subject}\n\n{commit_body}");
+
+    // --- Commit ---
+    let git_commit = Command::new("git")
+        .args(["commit", "-m", &full_message])
+        .output()?;
+    if !git_commit.status.success() {
+        // Roll back the counter so the next attempt gets the same number.
+        let _ = std::fs::write(&count_file, current_count.to_string());
+        return Err(format!(
+            "git commit failed:\n{}",
+            String::from_utf8_lossy(&git_commit.stderr)
+        )
+        .into());
+    }
+
+    // --- Retrieve commit SHA for the summary line ---
+    let sha = Command::new("git")
+        .args(["rev-parse", "--short", "HEAD"])
+        .output()
+        .ok()
+        .filter(|o| o.status.success())
+        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
+        .unwrap_or_else(|| "(unknown)".to_string());
+
+    // --- Print summary ---
+    println!("📸  Snapshot {new_count} committed  [{sha}]");
+    println!("    {file_count} file(s) changed");
+    if let Some(ref m) = message {
+        println!("    Message: \"{m}\"");
+    }
+
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
 // stub helper
 // ---------------------------------------------------------------------------
 
@@ -279,11 +411,11 @@ fn main() {
                 std::process::exit(1);
             }
         }
-        Commands::Snapshot { message } => {
-            let flag = message
-                .map(|m| format!(" -m \"{m}\""))
-                .unwrap_or_default();
-            not_yet(&format!("emanon snapshot{flag}"));
+        Commands::Snapshot { message, no_stage } => {
+            if let Err(e) = cmd_snapshot(message, no_stage) {
+                eprintln!("error: {e}");
+                std::process::exit(1);
+            }
         }
         Commands::Merge { remote_branch } => {
             not_yet(&format!("emanon merge {remote_branch}"));

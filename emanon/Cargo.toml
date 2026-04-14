@@ -1,5 +1,6 @@
 [workspace]
 members = [
     "src/collatz-rs",
+    "src/cli",
 ]
 resolver = "2"

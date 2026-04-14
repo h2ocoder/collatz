@@ -1,4 +1,5 @@
 use clap::{Parser, Subcommand};
+use collatz_rs::beta;
 use std::path::Path;
 use std::process::Command;
 
@@ -39,6 +40,33 @@ enum Commands {
     Merge {
         /// Remote and branch in the form <remote>/<branch>
         remote_branch: String,
+    },
+
+    /// Low-level Collatz merge driver (invoked by git via .gitattributes)
+    ///
+    /// Implements git's custom merge driver protocol.  Reads genus stamps
+    /// from the base/ours/theirs files and applies one of three resolution
+    /// paths:
+    ///   1. Same set_k  → hybrid merge (both versions concatenated)
+    ///   2. Same oddity_s, different set_k → genus-attenuated merge
+    ///   3. Unrelated sets (or no genus stamp) → exit 1 (defer to player)
+    ///
+    /// Register in .gitattributes:
+    ///   regions/**  merge=emanon-collatz
+    /// And in .git/config:
+    ///   [merge "emanon-collatz"]
+    ///       name = Collatz conflict resolver
+    ///       driver = emanon merge-driver %O %A %B
+    MergeDriver {
+        /// Ancestor version path (git %O)
+        base: String,
+        /// Our version path (git %A); merged result is written here
+        ours: String,
+        /// Their version path (git %B)
+        theirs: String,
+        /// Optional explicit output path (default: writes to <ours>)
+        #[arg(short = 'o', long)]
+        output: Option<String>,
     },
 
     /// Fork the current timeline into a parallel branch
@@ -134,12 +162,17 @@ const VALUES_JSON: &str = r#"{
 "#;
 
 const GITATTRIBUTES: &str = "\
-# Register the Collatz merge driver for Emanon universes
-# To activate, add to .git/config:
-#   [merge \"collatz\"]
+# Register the Collatz merge driver for Emanon universes.
+# The driver is invoked by git when a conflict arises in a registered path.
+#
+# Activate by adding to .git/config (or run `git config` once):
+#   [merge \"emanon-collatz\"]
 #       name = Collatz conflict resolver
-#       driver = emanon-merge %O %A %B
-*.contract  merge=collatz
+#       driver = emanon merge-driver %O %A %B
+#
+regions/**    merge=emanon-collatz
+contracts/**  merge=emanon-collatz
+scars/**      merge=emanon-collatz
 ";
 
 /// Ephemeral files excluded from snapshots.
@@ -387,6 +420,159 @@ fn cmd_snapshot(message: Option<String>, no_stage: bool) -> Result<(), Box<dyn s
 }
 
 // ---------------------------------------------------------------------------
+// emanon merge-driver
+// ---------------------------------------------------------------------------
+
+/// A Collatz genus stamp parsed from an Emanon file header.
+///
+/// Files written by Emanon carry a one-line genus stamp as the **first line**
+/// of the file:
+///
+/// ```text
+/// # emanon:genus set_k=3 oddity_s=1 index_i=0
+/// ```
+///
+/// If this line is absent the file is considered "legacy" and the driver
+/// defers to the user (exits 1).
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct GenusStamp {
+    set_k: u64,
+    oddity_s: u64,
+    #[allow(dead_code)]
+    index_i: u64,
+}
+
+/// Parse a [`GenusStamp`] from the **first line** of `content`.
+///
+/// The first line must match exactly:
+/// ```text
+/// # emanon:genus set_k=<u64> oddity_s=<u64> index_i=<u64>
+/// ```
+/// Returns `None` if the line is absent or malformed.
+fn parse_genus_stamp(content: &str) -> Option<GenusStamp> {
+    let first = content.lines().next()?;
+    let rest = first.trim().strip_prefix("# emanon:genus ")?;
+    let mut set_k: Option<u64> = None;
+    let mut oddity_s: Option<u64> = None;
+    let mut index_i: Option<u64> = None;
+    for part in rest.split_whitespace() {
+        if let Some(v) = part.strip_prefix("set_k=") {
+            set_k = v.parse().ok();
+        } else if let Some(v) = part.strip_prefix("oddity_s=") {
+            oddity_s = v.parse().ok();
+        } else if let Some(v) = part.strip_prefix("index_i=") {
+            index_i = v.parse().ok();
+        }
+    }
+    match (set_k, oddity_s, index_i) {
+        (Some(k), Some(s), Some(i)) => Some(GenusStamp { set_k: k, oddity_s: s, index_i: i }),
+        _ => None,
+    }
+}
+
+/// Hybrid merge: both versions contributed; produces a concatenated file.
+///
+/// Preserves the genus stamp from `ours` (same set_k means same set identity).
+/// Inserts clear section markers so the content is readable by players.
+fn hybrid_merge(ours: &str, theirs: &str) -> String {
+    let separator_a = "<<<<<<< ours (same set_k — hybrid merge) >>>>>>>";
+    let separator_b = "======= theirs =======";
+    let separator_c = ">>>>>>> end hybrid merge >>>>>>>";
+    format!("{separator_a}\n{ours}\n{separator_b}\n{theirs}\n{separator_c}\n")
+}
+
+/// Genus-attenuated merge: `theirs` wins but is annotated with the attenuation
+/// coefficient β derived from the shared `oddity_s`.
+///
+/// Prepends an attenuation comment to the merged content and retains the
+/// theirs content (higher convergence pressure wins per Paper 1 §4).
+fn attenuated_merge(theirs: &str, oddity_s: u64) -> String {
+    let b = beta(oddity_s);
+    let comment = format!("# genus-attenuated by β={b:.7} (oddity_s={oddity_s})");
+    format!("{comment}\n{theirs}")
+}
+
+/// Write conflict markers to `output_path` for deferred (player-resolved)
+/// conflicts.
+///
+/// Uses the same format as git's own conflict markers so standard diff tools
+/// and editors will highlight the conflict correctly.
+fn write_conflict_markers(
+    ours: &str,
+    theirs: &str,
+    reason: &str,
+) -> String {
+    format!(
+        "<<<<<<< ours (emanon: {reason})\n{ours}=======\n{theirs}>>>>>>> theirs\n"
+    )
+}
+
+/// Implements `emanon merge-driver <base> <ours> <theirs> [--output <path>]`.
+///
+/// Returns the exit code that the driver should use:
+/// - `0` — conflict resolved, output file written
+/// - `1` — conflict deferred (git will show it as unresolved)
+/// - `2` — I/O or internal error (handled by `main`)
+fn cmd_merge_driver(
+    base: &str,
+    ours: &str,
+    theirs: &str,
+    output: &str,
+) -> Result<i32, Box<dyn std::error::Error>> {
+    let _ = base; // base content is available for future leverage computation
+    let ours_content = std::fs::read_to_string(ours)?;
+    let theirs_content = std::fs::read_to_string(theirs)?;
+
+    let g_ours = parse_genus_stamp(&ours_content);
+    let g_theirs = parse_genus_stamp(&theirs_content);
+
+    match (g_ours, g_theirs) {
+        // ----------------------------------------------------------------
+        // Rule 1: same set_k → hybrid merge
+        // ----------------------------------------------------------------
+        (Some(go), Some(gt)) if go.set_k == gt.set_k => {
+            let merged = hybrid_merge(&ours_content, &theirs_content);
+            std::fs::write(output, merged)?;
+            eprintln!(
+                "emanon merge-driver: hybrid merge (set_k={}) → {}",
+                go.set_k, output
+            );
+            Ok(0)
+        }
+
+        // ----------------------------------------------------------------
+        // Rule 2: same oddity_s, different set_k → genus-attenuated merge
+        // ----------------------------------------------------------------
+        (Some(go), Some(gt)) if go.oddity_s == gt.oddity_s => {
+            let merged = attenuated_merge(&theirs_content, go.oddity_s);
+            std::fs::write(output, merged)?;
+            eprintln!(
+                "emanon merge-driver: attenuated merge \
+                 (oddity_s={}, set_k {} vs {}) → {}",
+                go.oddity_s, go.set_k, gt.set_k, output
+            );
+            Ok(0)
+        }
+
+        // ----------------------------------------------------------------
+        // Rule 3: unrelated sets or missing genus → defer to player
+        // ----------------------------------------------------------------
+        (g_o, g_t) => {
+            let reason = match (&g_o, &g_t) {
+                (None, _) | (_, None) => "no-genus-stamp",
+                _ => "unrelated-sets",
+            };
+            let conflict = write_conflict_markers(&ours_content, &theirs_content, reason);
+            std::fs::write(output, conflict)?;
+            eprintln!(
+                "emanon merge-driver: deferred ({reason}) — conflict markers written to {output}"
+            );
+            Ok(1)
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
 // stub helper
 // ---------------------------------------------------------------------------
 
@@ -420,6 +606,16 @@ fn main() {
         Commands::Merge { remote_branch } => {
             not_yet(&format!("emanon merge {remote_branch}"));
         }
+        Commands::MergeDriver { base, ours, theirs, output } => {
+            let out_path = output.as_deref().unwrap_or(&ours);
+            match cmd_merge_driver(&base, &ours, &theirs, out_path) {
+                Ok(exit_code) => std::process::exit(exit_code),
+                Err(e) => {
+                    eprintln!("merge-driver error: {e}");
+                    std::process::exit(2);
+                }
+            }
+        }
         Commands::Fork { reason } => {
             let flag = reason
                 .map(|r| format!(" -r \"{r}\""))
@@ -450,5 +646,256 @@ fn main() {
             RegistryAction::Pull => not_yet("emanon registry pull"),
             RegistryAction::List => not_yet("emanon registry list"),
         },
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Unit tests — merge-driver resolution rules
+// ---------------------------------------------------------------------------
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -----------------------------------------------------------------------
+    // parse_genus_stamp
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn parse_genus_stamp_valid() {
+        let content = "# emanon:genus set_k=3 oddity_s=1 index_i=0\nsome content\n";
+        let g = parse_genus_stamp(content).expect("should parse");
+        assert_eq!(g.set_k, 3);
+        assert_eq!(g.oddity_s, 1);
+        assert_eq!(g.index_i, 0);
+    }
+
+    #[test]
+    fn parse_genus_stamp_missing_prefix() {
+        let content = "# not-a-genus-stamp\nsome content\n";
+        assert!(parse_genus_stamp(content).is_none());
+    }
+
+    #[test]
+    fn parse_genus_stamp_empty_file() {
+        assert!(parse_genus_stamp("").is_none());
+    }
+
+    #[test]
+    fn parse_genus_stamp_partial_fields() {
+        // Missing index_i — should return None
+        let content = "# emanon:genus set_k=3 oddity_s=1\n";
+        assert!(parse_genus_stamp(content).is_none());
+    }
+
+    #[test]
+    fn parse_genus_stamp_large_values() {
+        let content = "# emanon:genus set_k=96 oddity_s=37 index_i=0\n";
+        let g = parse_genus_stamp(content).expect("should parse");
+        assert_eq!(g.set_k, 96);
+        assert_eq!(g.oddity_s, 37);
+    }
+
+    // -----------------------------------------------------------------------
+    // hybrid_merge — Rule 1: same set_k
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn hybrid_merge_contains_both_versions() {
+        let ours = "# emanon:genus set_k=3 oddity_s=1 index_i=0\nours content\n";
+        let theirs = "# emanon:genus set_k=3 oddity_s=1 index_i=5\ntheirs content\n";
+        let merged = hybrid_merge(ours, theirs);
+        assert!(merged.contains("ours content"), "must contain ours body");
+        assert!(merged.contains("theirs content"), "must contain theirs body");
+        assert!(merged.contains("hybrid merge"), "must include hybrid merge marker");
+    }
+
+    #[test]
+    fn hybrid_merge_has_separator_markers() {
+        let merged = hybrid_merge("A\n", "B\n");
+        assert!(merged.contains("<<<<<<<"), "must have opening marker");
+        assert!(merged.contains("======="), "must have middle separator");
+        assert!(merged.contains(">>>>>>>"), "must have closing marker");
+    }
+
+    // -----------------------------------------------------------------------
+    // attenuated_merge — Rule 2: same oddity_s, different set_k
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn attenuated_merge_contains_theirs_content() {
+        let theirs = "# emanon:genus set_k=11 oddity_s=4 index_i=0\ntheirs data\n";
+        let result = attenuated_merge(theirs, 4);
+        assert!(result.contains("theirs data"), "attenuated merge must include theirs content");
+    }
+
+    #[test]
+    fn attenuated_merge_has_beta_comment() {
+        let theirs = "# emanon:genus set_k=11 oddity_s=4 index_i=0\ncontent\n";
+        let result = attenuated_merge(theirs, 4);
+        assert!(
+            result.contains("genus-attenuated by β="),
+            "must have attenuation comment; got: {result}"
+        );
+        assert!(result.contains("oddity_s=4"), "comment must include oddity_s");
+    }
+
+    #[test]
+    fn attenuated_merge_beta_is_valid() {
+        // β(s) must be in (0, 1] for any s
+        for s in [0u64, 1, 2, 4, 7, 37] {
+            let b = collatz_rs::beta(s);
+            assert!(b > 0.0 && b <= 1.0, "β({s}) = {b} out of range");
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // write_conflict_markers — Rule 3: unrelated sets / no genus
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn conflict_markers_contain_both_sides() {
+        let conflict = write_conflict_markers("ours\n", "theirs\n", "unrelated-sets");
+        assert!(conflict.contains("ours"), "must contain ours");
+        assert!(conflict.contains("theirs"), "must contain theirs");
+    }
+
+    #[test]
+    fn conflict_markers_have_git_format() {
+        // Must use git-compatible conflict markers so editors highlight them
+        let conflict = write_conflict_markers("A\n", "B\n", "test");
+        assert!(conflict.contains("<<<<<<<"), "must have git opening marker");
+        assert!(conflict.contains("======="), "must have git separator");
+        assert!(conflict.contains(">>>>>>>"), "must have git closing marker");
+    }
+
+    #[test]
+    fn conflict_markers_embed_reason() {
+        let conflict = write_conflict_markers("A\n", "B\n", "no-genus-stamp");
+        assert!(
+            conflict.contains("no-genus-stamp"),
+            "reason must appear in conflict marker; got: {conflict}"
+        );
+    }
+
+    // -----------------------------------------------------------------------
+    // cmd_merge_driver integration — via temp files
+    // -----------------------------------------------------------------------
+
+    fn tmp_file(dir: &std::path::Path, name: &str, content: &str) -> std::path::PathBuf {
+        let p = dir.join(name);
+        std::fs::write(&p, content).unwrap();
+        p
+    }
+
+    #[test]
+    fn driver_same_set_k_exits_0() {
+        let dir = tempdir();
+        let ours_content = "# emanon:genus set_k=3 oddity_s=1 index_i=0\nours data\n";
+        let theirs_content = "# emanon:genus set_k=3 oddity_s=1 index_i=5\ntheirs data\n";
+        let base = tmp_file(&dir, "base.txt", "# emanon:genus set_k=3 oddity_s=1 index_i=0\nbase\n");
+        let ours = tmp_file(&dir, "ours.txt", ours_content);
+        let theirs = tmp_file(&dir, "theirs.txt", theirs_content);
+        let out = dir.join("out.txt");
+
+        let code = cmd_merge_driver(
+            base.to_str().unwrap(),
+            ours.to_str().unwrap(),
+            theirs.to_str().unwrap(),
+            out.to_str().unwrap(),
+        )
+        .expect("should not error");
+
+        assert_eq!(code, 0, "same set_k must exit 0");
+        let merged = std::fs::read_to_string(&out).unwrap();
+        assert!(merged.contains("ours data"));
+        assert!(merged.contains("theirs data"));
+    }
+
+    #[test]
+    fn driver_same_oddity_different_k_exits_0() {
+        let dir = tempdir();
+        // set_k 3 vs 11, both oddity_s=1
+        let ours_content = "# emanon:genus set_k=3 oddity_s=1 index_i=0\nours content\n";
+        let theirs_content = "# emanon:genus set_k=11 oddity_s=1 index_i=0\ntheirs content\n";
+        let base = tmp_file(&dir, "base.txt", "# emanon:genus set_k=3 oddity_s=1 index_i=0\nbase\n");
+        let ours = tmp_file(&dir, "ours.txt", ours_content);
+        let theirs = tmp_file(&dir, "theirs.txt", theirs_content);
+        let out = dir.join("out.txt");
+
+        let code = cmd_merge_driver(
+            base.to_str().unwrap(),
+            ours.to_str().unwrap(),
+            theirs.to_str().unwrap(),
+            out.to_str().unwrap(),
+        )
+        .expect("should not error");
+
+        assert_eq!(code, 0, "same oddity_s must exit 0");
+        let merged = std::fs::read_to_string(&out).unwrap();
+        assert!(merged.contains("theirs content"), "attenuated merge should use theirs");
+        assert!(merged.contains("genus-attenuated by β="), "must have attenuation comment");
+    }
+
+    #[test]
+    fn driver_unrelated_sets_exits_1() {
+        let dir = tempdir();
+        // set_k 3 (s=1) vs set_k 7 (s=4) — different k and different s
+        let ours_content = "# emanon:genus set_k=3 oddity_s=1 index_i=0\nours content\n";
+        let theirs_content = "# emanon:genus set_k=7 oddity_s=4 index_i=0\ntheirs content\n";
+        let base = tmp_file(&dir, "base.txt", "# emanon:genus set_k=3 oddity_s=1 index_i=0\nbase\n");
+        let ours = tmp_file(&dir, "ours.txt", ours_content);
+        let theirs = tmp_file(&dir, "theirs.txt", theirs_content);
+        let out = dir.join("out.txt");
+
+        let code = cmd_merge_driver(
+            base.to_str().unwrap(),
+            ours.to_str().unwrap(),
+            theirs.to_str().unwrap(),
+            out.to_str().unwrap(),
+        )
+        .expect("should not error");
+
+        assert_eq!(code, 1, "unrelated sets must exit 1");
+        let conflict = std::fs::read_to_string(&out).unwrap();
+        assert!(conflict.contains("<<<<<<<"), "must have conflict markers");
+        assert!(conflict.contains("unrelated-sets"), "must note reason");
+    }
+
+    #[test]
+    fn driver_no_genus_stamp_exits_1() {
+        let dir = tempdir();
+        let base = tmp_file(&dir, "base.txt", "legacy content\n");
+        let ours = tmp_file(&dir, "ours.txt", "legacy ours\n");
+        let theirs = tmp_file(&dir, "theirs.txt", "legacy theirs\n");
+        let out = dir.join("out.txt");
+
+        let code = cmd_merge_driver(
+            base.to_str().unwrap(),
+            ours.to_str().unwrap(),
+            theirs.to_str().unwrap(),
+            out.to_str().unwrap(),
+        )
+        .expect("should not error");
+
+        assert_eq!(code, 1, "missing genus stamp must exit 1");
+        let conflict = std::fs::read_to_string(&out).unwrap();
+        assert!(conflict.contains("no-genus-stamp"), "must note reason");
+    }
+
+    // -----------------------------------------------------------------------
+    // Helper: create a temporary directory that cleans up on drop
+    // -----------------------------------------------------------------------
+
+    fn tempdir() -> std::path::PathBuf {
+        let path = std::env::temp_dir().join(format!(
+            "emanon-test-{}",
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap_or_default()
+                .subsec_nanos()
+        ));
+        std::fs::create_dir_all(&path).unwrap();
+        path
     }
 }

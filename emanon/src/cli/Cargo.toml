@@ -1,0 +1,13 @@
+[package]
+name = "emanon"
+version = "0.1.0"
+edition = "2021"
+description = "Emanon CLI — git-based game engine for the Emanon multiverse"
+authors = ["Darcy Thomas <darcy@alpha36.me>"]
+
+[[bin]]
+name = "emanon"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }

@@ -1,5 +1,19 @@
 use clap::{Parser, Subcommand};
 use collatz_rs::beta;
+use crossterm::{
+    event::{self, Event, KeyCode, KeyModifiers},
+    execute,
+    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+};
+use ratatui::{
+    backend::CrosstermBackend,
+    layout::{Constraint, Direction, Layout},
+    style::{Color, Modifier, Style},
+    text::{Line, Span},
+    widgets::{Block, Borders, List, ListItem, ListState, Paragraph},
+    Terminal,
+};
+use std::io;
 use std::path::Path;
 use std::process::Command;
 
@@ -40,6 +54,21 @@ enum Commands {
     Merge {
         /// Remote and branch in the form <remote>/<branch>
         remote_branch: String,
+    },
+
+    /// Interactively resolve conflicts left by `emanon merge`
+    ///
+    /// Opens a terminal UI showing every conflict in `.gitverse/pending-merge.json`
+    /// and lets the user pick a resolution for each: battle, contract, fork, or manual.
+    /// After all conflicts are resolved, creates a merge commit.
+    ///
+    /// Pass `--non-interactive` to drive resolution programmatically: provide a
+    /// JSON array on stdin, one entry per conflict, e.g.:
+    ///   [{"path":"regions/foo.json","resolution":"battle","force_size":512}]
+    Negotiate {
+        /// Accept a JSON resolution plan from stdin instead of opening the TUI
+        #[arg(long)]
+        non_interactive: bool,
     },
 
     /// Low-level Collatz merge driver (invoked by git via .gitattributes)
@@ -1228,6 +1257,942 @@ fn cmd_genus(path: &str) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 // ---------------------------------------------------------------------------
+// emanon negotiate
+// ---------------------------------------------------------------------------
+
+/// A pending conflict loaded from `.gitverse/pending-merge.json`.
+#[derive(Debug, Clone)]
+struct PendingConflict {
+    path: String,
+    ours_leverage: u64,
+    theirs_leverage: u64,
+    ours_genus_str: String,
+    theirs_genus_str: String,
+}
+
+/// Parse the pending-merge.json file and return a list of conflicts.
+///
+/// The JSON is hand-parsed (no serde dep) using the same approach as the rest
+/// of the codebase — substring search for known keys.
+fn load_pending_conflicts(
+    gitverse: &std::path::Path,
+) -> Result<Vec<PendingConflict>, Box<dyn std::error::Error>> {
+    let pending_path = gitverse.join("pending-merge.json");
+    if !pending_path.exists() {
+        return Err(
+            "no pending conflicts found (.gitverse/pending-merge.json does not exist).\n\
+             Run `emanon merge <remote>/<branch>` first."
+                .into(),
+        );
+    }
+    let raw = std::fs::read_to_string(&pending_path)?;
+
+    // Extract "conflicts": [ ... ] array — find the array bounds by counting brackets.
+    let conflicts_key = "\"conflicts\": [";
+    let start = raw.find(conflicts_key).ok_or("malformed pending-merge.json: missing 'conflicts'")?;
+    let array_start = start + conflicts_key.len() - 1; // position of '['
+
+    // Walk forward counting [ and ] to find matching ]
+    let mut depth = 0usize;
+    let mut array_end = array_start;
+    for (i, ch) in raw[array_start..].char_indices() {
+        match ch {
+            '[' => depth += 1,
+            ']' => {
+                depth -= 1;
+                if depth == 0 {
+                    array_end = array_start + i;
+                    break;
+                }
+            }
+            _ => {}
+        }
+    }
+    let array_content = &raw[array_start + 1..array_end]; // contents between [ and ]
+
+    // Split into individual object strings — split on "},\n    {" patterns.
+    // Simpler: find each { ... } top-level object.
+    let mut conflicts = Vec::new();
+    let mut depth = 0i32;
+    let mut obj_start: Option<usize> = None;
+    for (i, ch) in array_content.char_indices() {
+        match ch {
+            '{' => {
+                if depth == 0 {
+                    obj_start = Some(i);
+                }
+                depth += 1;
+            }
+            '}' => {
+                depth -= 1;
+                if depth == 0 {
+                    if let Some(start) = obj_start.take() {
+                        let obj_str = &array_content[start..=i];
+                        if let Some(c) = parse_conflict_obj(obj_str) {
+                            conflicts.push(c);
+                        }
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+
+    Ok(conflicts)
+}
+
+/// Extract a string value for `"key": "value"` from a JSON object string.
+fn json_str_field<'a>(obj: &'a str, key: &str) -> Option<&'a str> {
+    let search = format!("\"{}\":", key);
+    let pos = obj.find(&search)?;
+    let after = obj[pos + search.len()..].trim_start();
+    if after.starts_with('"') {
+        let inner = &after[1..];
+        let end = inner.find('"')?;
+        Some(&inner[..end])
+    } else {
+        None
+    }
+}
+
+/// Extract a u64 value for `"key": N` from a JSON object string.
+fn json_u64_field(obj: &str, key: &str) -> Option<u64> {
+    let search = format!("\"{}\":", key);
+    let pos = obj.find(&search)?;
+    let after = obj[pos + search.len()..].trim_start();
+    let digits: String = after.chars().take_while(|c| c.is_ascii_digit()).collect();
+    digits.parse().ok()
+}
+
+/// Parse a single conflict object `{...}` string into a [`PendingConflict`].
+fn parse_conflict_obj(obj: &str) -> Option<PendingConflict> {
+    let path = json_str_field(obj, "path")?.to_string();
+    let ours_leverage = json_u64_field(obj, "ours_leverage").unwrap_or(0);
+    let theirs_leverage = json_u64_field(obj, "theirs_leverage").unwrap_or(0);
+
+    // Summarise genus as a human string for display.
+    let genus_str = |prefix: &str| -> String {
+        // Look for `"<prefix>_genus": null` or `"<prefix>_genus": {..}`
+        let genus_key = format!("\"{prefix}_genus\":");
+        if let Some(pos) = obj.find(&genus_key) {
+            let after = obj[pos + genus_key.len()..].trim_start();
+            if after.starts_with("null") {
+                "no stamp".to_string()
+            } else if after.starts_with('{') {
+                // Extract set_k and oddity_s from the sub-object.
+                let k = json_u64_field(after, "set_k").map(|v| v.to_string()).unwrap_or_else(|| "?".to_string());
+                let s = json_u64_field(after, "oddity_s").map(|v| v.to_string()).unwrap_or_else(|| "?".to_string());
+                format!("Set_{k}/s={s}")
+            } else {
+                "?".to_string()
+            }
+        } else {
+            "?".to_string()
+        }
+    };
+
+    Some(PendingConflict {
+        path,
+        ours_leverage,
+        theirs_leverage,
+        ours_genus_str: genus_str("ours"),
+        theirs_genus_str: genus_str("theirs"),
+    })
+}
+
+// ---------------------------------------------------------------------------
+// Resolution types
+// ---------------------------------------------------------------------------
+
+/// The chosen resolution for one conflict.
+#[derive(Debug, Clone)]
+enum Resolution {
+    /// Accept ours; write a battle record noting the force committed.
+    Battle { force_size: u64 },
+    /// Write a contract file and accept theirs.
+    Contract { terms: String },
+    /// Branch theirs into a new branch; keep ours on main.
+    Fork,
+    /// Open $EDITOR so the user can manually resolve.
+    Manual,
+}
+
+// ---------------------------------------------------------------------------
+// Non-interactive path
+// ---------------------------------------------------------------------------
+
+/// Parse a JSON array of resolution plans from `input`.
+///
+/// Expected format:
+/// ```json
+/// [
+///   {"path":"regions/foo.json","resolution":"battle","force_size":512},
+///   {"path":"regions/bar.json","resolution":"contract","terms":"50/50 split"},
+///   {"path":"regions/baz.json","resolution":"fork"},
+///   {"path":"regions/qux.json","resolution":"manual"}
+/// ]
+/// ```
+fn parse_resolution_plan(input: &str) -> Result<Vec<(String, Resolution)>, Box<dyn std::error::Error>> {
+    let mut result = Vec::new();
+    let mut depth = 0i32;
+    let mut obj_start: Option<usize> = None;
+    for (i, ch) in input.char_indices() {
+        match ch {
+            '{' => {
+                if depth == 0 {
+                    obj_start = Some(i);
+                }
+                depth += 1;
+            }
+            '}' => {
+                depth -= 1;
+                if depth == 0 {
+                    if let Some(start) = obj_start.take() {
+                        let obj = &input[start..=i];
+                        let path = json_str_field(obj, "path")
+                            .ok_or_else(|| format!("resolution entry missing 'path': {obj}"))?
+                            .to_string();
+                        let res_str = json_str_field(obj, "resolution")
+                            .ok_or_else(|| format!("resolution entry missing 'resolution': {obj}"))?;
+                        let resolution = match res_str {
+                            "battle" => {
+                                let force_size = json_u64_field(obj, "force_size").unwrap_or(256);
+                                Resolution::Battle { force_size }
+                            }
+                            "contract" => {
+                                let terms = json_str_field(obj, "terms")
+                                    .unwrap_or("(no terms specified)")
+                                    .to_string();
+                                Resolution::Contract { terms }
+                            }
+                            "fork" => Resolution::Fork,
+                            "manual" => Resolution::Manual,
+                            other => {
+                                return Err(format!("unknown resolution '{other}' for path '{path}'").into());
+                            }
+                        };
+                        result.push((path, resolution));
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+    Ok(result)
+}
+
+// ---------------------------------------------------------------------------
+// Apply a single resolution
+// ---------------------------------------------------------------------------
+
+/// Apply one resolution to a conflicted path.
+///
+/// Mutates the working tree and index so the path is no longer in conflict.
+/// Does NOT commit — the caller finalises with a merge commit.
+fn apply_resolution(
+    here: &std::path::Path,
+    conflict: &PendingConflict,
+    resolution: &Resolution,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let path = &conflict.path;
+
+    match resolution {
+        Resolution::Battle { force_size } => {
+            // Battle: accept our version (keep ours, discard theirs).
+            // Write a battle record into scars/ so the outcome is traceable.
+            let checkout = Command::new("git")
+                .args(["checkout", "--ours", "--", path])
+                .output()?;
+            if !checkout.status.success() {
+                return Err(format!(
+                    "git checkout --ours failed for '{path}': {}",
+                    String::from_utf8_lossy(&checkout.stderr)
+                )
+                .into());
+            }
+
+            // Write a battle scar.
+            let scars_dir = here.join("scars");
+            std::fs::create_dir_all(&scars_dir)?;
+            let timestamp = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            let scar_name = format!(
+                "{timestamp}-battle-{}.scar",
+                path.replace('/', "-").replace('.', "_")
+            );
+            let scar_content = format!(
+                "battle_path: {path}\n\
+                 force_size: {force_size}\n\
+                 outcome: ours_wins\n\
+                 ours_leverage: {}\n\
+                 theirs_leverage: {}\n\
+                 timestamp: {timestamp}\n",
+                conflict.ours_leverage, conflict.theirs_leverage
+            );
+            std::fs::write(scars_dir.join(&scar_name), &scar_content)?;
+
+            // Stage both the resolved file and the new scar.
+            let add = Command::new("git")
+                .args(["add", "--", path, &format!("scars/{scar_name}")])
+                .output()?;
+            if !add.status.success() {
+                return Err(format!(
+                    "git add failed after battle resolution: {}",
+                    String::from_utf8_lossy(&add.stderr)
+                )
+                .into());
+            }
+            println!("  ⚔  Battle resolved: kept ours for '{path}' (force={force_size}), scar written.");
+        }
+
+        Resolution::Contract { terms } => {
+            // Contract: accept theirs; write a contract file.
+            let checkout = Command::new("git")
+                .args(["checkout", "--theirs", "--", path])
+                .output()?;
+            if !checkout.status.success() {
+                return Err(format!(
+                    "git checkout --theirs failed for '{path}': {}",
+                    String::from_utf8_lossy(&checkout.stderr)
+                )
+                .into());
+            }
+
+            // Write contract file.
+            let contracts_dir = here.join("contracts");
+            std::fs::create_dir_all(&contracts_dir)?;
+            let timestamp = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            let contract_name = format!(
+                "{timestamp}-contract-{}.contract",
+                path.replace('/', "-").replace('.', "_")
+            );
+            let contract_content = format!(
+                "path: {path}\nterms: {terms}\nours_leverage: {}\ntheirs_leverage: {}\ntimestamp: {timestamp}\n",
+                conflict.ours_leverage, conflict.theirs_leverage
+            );
+            std::fs::write(contracts_dir.join(&contract_name), &contract_content)?;
+
+            let add = Command::new("git")
+                .args(["add", "--", path, &format!("contracts/{contract_name}")])
+                .output()?;
+            if !add.status.success() {
+                return Err(format!(
+                    "git add failed after contract resolution: {}",
+                    String::from_utf8_lossy(&add.stderr)
+                )
+                .into());
+            }
+            println!("  📜 Contract resolved: accepted theirs for '{path}', contract written.");
+        }
+
+        Resolution::Fork => {
+            // Fork: create a new git branch from FETCH_HEAD (which contains theirs),
+            // then keep ours on the current branch.
+            // This fulfils: "create a new branch with theirs, accept ours on main".
+
+            let timestamp = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            let branch_name = format!(
+                "fork-{timestamp}-{}",
+                path.split('/').last().unwrap_or("conflict").replace('.', "_")
+            );
+
+            // Create the fork branch at FETCH_HEAD (their universe's HEAD).
+            // `git branch <name> FETCH_HEAD` works even during a pending merge.
+            let branch_out = Command::new("git")
+                .args(["branch", &branch_name, "FETCH_HEAD"])
+                .output()?;
+            if !branch_out.status.success() {
+                return Err(format!(
+                    "git branch {} FETCH_HEAD failed: {}",
+                    branch_name,
+                    String::from_utf8_lossy(&branch_out.stderr)
+                )
+                .into());
+            }
+
+            // Accept ours on main.
+            let checkout = Command::new("git")
+                .args(["checkout", "--ours", "--", path])
+                .output()?;
+            if !checkout.status.success() {
+                return Err(format!(
+                    "git checkout --ours failed for fork of '{path}': {}",
+                    String::from_utf8_lossy(&checkout.stderr)
+                )
+                .into());
+            }
+
+            // Write a fork pointer recording the branch name.
+            let forks_dir = here.join("forks");
+            std::fs::create_dir_all(&forks_dir)?;
+            let fork_name = format!(
+                "{timestamp}-fork-{}.ref",
+                path.replace('/', "-").replace('.', "_")
+            );
+            let fork_content = format!(
+                "forked_path: {path}\nbranch: {branch_name}\nours_genus: {}\ntheirs_genus: {}\ntimestamp: {timestamp}\n\
+                 note: theirs timeline diverged; branch '{branch_name}' holds their version.\n",
+                conflict.ours_genus_str, conflict.theirs_genus_str
+            );
+            std::fs::write(forks_dir.join(&fork_name), &fork_content)?;
+
+            let add = Command::new("git")
+                .args(["add", "--", path, &format!("forks/{fork_name}")])
+                .output()?;
+            if !add.status.success() {
+                return Err(format!(
+                    "git add failed after fork resolution: {}",
+                    String::from_utf8_lossy(&add.stderr)
+                )
+                .into());
+            }
+            println!(
+                "  🌿 Fork resolved: kept ours for '{path}', branch '{branch_name}' holds theirs."
+            );
+        }
+
+        Resolution::Manual => {
+            // Open $EDITOR on the conflict file with markers intact.
+            // After the editor exits, `git add` the file.
+            let editor = std::env::var("EDITOR")
+                .or_else(|_| std::env::var("VISUAL"))
+                .unwrap_or_else(|_| "vi".to_string());
+            let status = Command::new(&editor)
+                .arg(here.join(path))
+                .status()?;
+            if !status.success() {
+                return Err(format!("editor '{editor}' exited with non-zero status for '{path}'").into());
+            }
+
+            // After manual edit: re-check for conflict markers.
+            let file_content = std::fs::read_to_string(here.join(path))?;
+            if file_content.contains("<<<<<<<") {
+                return Err(format!(
+                    "file '{path}' still contains conflict markers after manual edit; \
+                     resolve fully before continuing."
+                )
+                .into());
+            }
+
+            let add = Command::new("git").args(["add", "--", path]).output()?;
+            if !add.status.success() {
+                return Err(format!(
+                    "git add failed after manual edit: {}",
+                    String::from_utf8_lossy(&add.stderr)
+                )
+                .into());
+            }
+            println!("  ✏  Manual resolved: '{path}' staged.");
+        }
+    }
+
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// Finalize: merge commit
+// ---------------------------------------------------------------------------
+
+fn finalize_merge(
+    conflicts: &[PendingConflict],
+    pending_path: &std::path::Path,
+) -> Result<(), Box<dyn std::error::Error>> {
+    // Remove the pending-merge.json file — conflicts are resolved.
+    std::fs::remove_file(pending_path)?;
+    let _ = Command::new("git")
+        .args(["rm", "--cached", "--", ".gitverse/pending-merge.json"])
+        .output(); // best-effort; file was written outside git so may not be tracked
+
+    // Build merge commit message with resolution trailers.
+    let resolution_notes: Vec<String> = conflicts
+        .iter()
+        .map(|c| format!("Resolved-path: {}", c.path))
+        .collect();
+    let mut commit_msg = format!(
+        "emanon: negotiate — {} conflict{} resolved\n\n{}\n",
+        conflicts.len(),
+        if conflicts.len() == 1 { "" } else { "s" },
+        resolution_notes.join("\n")
+    );
+    commit_msg.push_str("\nEmanon-negotiate: complete\n");
+
+    let commit = Command::new("git")
+        .args(["commit", "--no-edit", "-m", &commit_msg])
+        .output()?;
+    if !commit.status.success() {
+        // --no-edit might fail if there's nothing to commit or MERGE_HEAD is gone.
+        // Try a plain commit.
+        let commit2 = Command::new("git")
+            .args(["commit", "-m", &commit_msg])
+            .output()?;
+        if !commit2.status.success() {
+            return Err(format!(
+                "git commit failed after conflict resolution:\n{}",
+                String::from_utf8_lossy(&commit2.stderr)
+            )
+            .into());
+        }
+    }
+
+    let sha = Command::new("git")
+        .args(["rev-parse", "--short", "HEAD"])
+        .output()
+        .ok()
+        .filter(|o| o.status.success())
+        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
+        .unwrap_or_else(|| "(unknown)".to_string());
+
+    println!("\nAll conflicts resolved. Merge committed [{sha}].");
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// TUI
+// ---------------------------------------------------------------------------
+
+/// UI state machine.
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum UiMode {
+    /// Browsing the conflict list.
+    ConflictList,
+    /// Selecting a resolution action for the currently highlighted conflict.
+    ActionMenu,
+    /// Prompting for a text parameter (force size for battle, terms for contract).
+    TextPrompt { action_idx: usize },
+    /// All done — exit TUI with resolutions collected.
+    Done,
+    /// User requested quit without completing (q or Ctrl-C).
+    Quit,
+}
+
+const ACTIONS: &[&str] = &["Battle  (keep ours, write scar)", "Contract  (accept theirs, draft contract)", "Fork  (keep ours, write fork pointer)", "Manual  (open $EDITOR)"];
+
+struct NegotiateState {
+    conflicts: Vec<PendingConflict>,
+    /// Which resolution (if any) has been chosen for each conflict.
+    resolutions: Vec<Option<Resolution>>,
+    /// The currently highlighted row in the list.
+    list_state: ListState,
+    /// The highlighted option in the action menu.
+    action_cursor: usize,
+    mode: UiMode,
+    /// Text being typed in TextPrompt mode.
+    prompt_buf: String,
+    /// Status message shown at bottom.
+    status: String,
+}
+
+impl NegotiateState {
+    fn new(conflicts: Vec<PendingConflict>) -> Self {
+        let n = conflicts.len();
+        let mut list_state = ListState::default();
+        if n > 0 {
+            list_state.select(Some(0));
+        }
+        NegotiateState {
+            conflicts,
+            resolutions: vec![None; n],
+            list_state,
+            action_cursor: 0,
+            mode: UiMode::ConflictList,
+            prompt_buf: String::new(),
+            status: "↑/↓ navigate  Enter to pick resolution  q to quit".to_string(),
+        }
+    }
+
+    fn selected(&self) -> usize {
+        self.list_state.selected().unwrap_or(0)
+    }
+
+    fn all_resolved(&self) -> bool {
+        self.resolutions.iter().all(|r| r.is_some())
+    }
+}
+
+fn run_tui(state: &mut NegotiateState) -> Result<(), Box<dyn std::error::Error>> {
+    enable_raw_mode()?;
+    let mut stdout = io::stdout();
+    execute!(stdout, EnterAlternateScreen)?;
+    let backend = CrosstermBackend::new(stdout);
+    let mut terminal = Terminal::new(backend)?;
+
+    let result = tui_loop(&mut terminal, state);
+
+    // Always restore terminal even if we errored or the user quit.
+    disable_raw_mode()?;
+    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
+    terminal.show_cursor()?;
+
+    result?;
+
+    if state.mode == UiMode::Quit {
+        println!("Negotiate cancelled.");
+        std::process::exit(0);
+    }
+
+    Ok(())
+}
+
+fn tui_loop<B: ratatui::backend::Backend>(
+    terminal: &mut Terminal<B>,
+    state: &mut NegotiateState,
+) -> Result<(), Box<dyn std::error::Error>> {
+    loop {
+        terminal.draw(|f| draw_ui(f, state))?;
+
+        match state.mode {
+            UiMode::Done | UiMode::Quit => break,
+            _ => {}
+        }
+
+        // Poll for events with a 200ms timeout so the UI stays responsive.
+        if event::poll(std::time::Duration::from_millis(200))? {
+            if let Event::Key(key) = event::read()? {
+                handle_key(state, key.code, key.modifiers);
+            }
+        }
+
+        match state.mode {
+            UiMode::Done | UiMode::Quit => break,
+            _ => {}
+        }
+    }
+    Ok(())
+}
+
+fn handle_key(state: &mut NegotiateState, code: KeyCode, modifiers: KeyModifiers) {
+    // Ctrl-C always quits (terminal cleanup happens in run_tui).
+    if modifiers.contains(KeyModifiers::CONTROL) && code == KeyCode::Char('c') {
+        state.mode = UiMode::Quit;
+        return;
+    }
+
+    match &state.mode.clone() {
+        UiMode::ConflictList => {
+            match code {
+                KeyCode::Char('q') => {
+                    state.mode = UiMode::Quit;
+                }
+                KeyCode::Down | KeyCode::Char('j') => {
+                    let n = state.conflicts.len();
+                    let next = (state.selected() + 1) % n;
+                    state.list_state.select(Some(next));
+                }
+                KeyCode::Up | KeyCode::Char('k') => {
+                    let n = state.conflicts.len();
+                    let sel = state.selected();
+                    let prev = if sel == 0 { n - 1 } else { sel - 1 };
+                    state.list_state.select(Some(prev));
+                }
+                KeyCode::Enter => {
+                    state.action_cursor = 0;
+                    state.mode = UiMode::ActionMenu;
+                    state.status = "↑/↓ choose resolution  Enter confirm  Esc back".to_string();
+                }
+                _ => {}
+            }
+        }
+
+        UiMode::ActionMenu => {
+            match code {
+                KeyCode::Esc => {
+                    state.mode = UiMode::ConflictList;
+                    state.status = "↑/↓ navigate  Enter to pick resolution  q to quit".to_string();
+                }
+                KeyCode::Down | KeyCode::Char('j') => {
+                    state.action_cursor = (state.action_cursor + 1) % ACTIONS.len();
+                }
+                KeyCode::Up | KeyCode::Char('k') => {
+                    state.action_cursor = if state.action_cursor == 0 {
+                        ACTIONS.len() - 1
+                    } else {
+                        state.action_cursor - 1
+                    };
+                }
+                KeyCode::Enter => {
+                    // action_cursor: 0=battle, 1=contract, 2=fork, 3=manual
+                    match state.action_cursor {
+                        0 => {
+                            // Battle — prompt for force size
+                            state.prompt_buf = "512".to_string();
+                            state.mode = UiMode::TextPrompt { action_idx: 0 };
+                            state.status = "Enter force size (bits) then press Enter".to_string();
+                        }
+                        1 => {
+                            // Contract — prompt for terms
+                            state.prompt_buf.clear();
+                            state.mode = UiMode::TextPrompt { action_idx: 1 };
+                            state.status = "Enter contract terms then press Enter".to_string();
+                        }
+                        2 => {
+                            // Fork — no params needed
+                            let sel = state.selected();
+                            state.resolutions[sel] = Some(Resolution::Fork);
+                            state.mode = UiMode::ConflictList;
+                            if state.all_resolved() {
+                                state.mode = UiMode::Done;
+                            } else {
+                                state.status = format!(
+                                    "Fork chosen for '{}'. {}/{} resolved.",
+                                    state.conflicts[sel].path,
+                                    state.resolutions.iter().filter(|r| r.is_some()).count(),
+                                    state.conflicts.len()
+                                );
+                            }
+                        }
+                        3 => {
+                            // Manual — no params needed in TUI; will open editor when applied
+                            let sel = state.selected();
+                            state.resolutions[sel] = Some(Resolution::Manual);
+                            state.mode = UiMode::ConflictList;
+                            if state.all_resolved() {
+                                state.mode = UiMode::Done;
+                            } else {
+                                state.status = format!(
+                                    "Manual chosen for '{}'. {}/{} resolved.",
+                                    state.conflicts[sel].path,
+                                    state.resolutions.iter().filter(|r| r.is_some()).count(),
+                                    state.conflicts.len()
+                                );
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+                _ => {}
+            }
+        }
+
+        UiMode::TextPrompt { action_idx } => {
+            let action_idx = *action_idx;
+            match code {
+                KeyCode::Esc => {
+                    state.mode = UiMode::ActionMenu;
+                    state.prompt_buf.clear();
+                    state.status = "↑/↓ choose resolution  Enter confirm  Esc back".to_string();
+                }
+                KeyCode::Backspace => {
+                    state.prompt_buf.pop();
+                }
+                KeyCode::Enter => {
+                    let input = state.prompt_buf.trim().to_string();
+                    let sel = state.selected();
+                    let resolution = match action_idx {
+                        0 => {
+                            let force_size = input.parse::<u64>().unwrap_or(512);
+                            Resolution::Battle { force_size }
+                        }
+                        1 => {
+                            let terms = if input.is_empty() { "(no terms)".to_string() } else { input };
+                            Resolution::Contract { terms }
+                        }
+                        _ => unreachable!(),
+                    };
+                    state.resolutions[sel] = Some(resolution);
+                    state.prompt_buf.clear();
+                    state.mode = UiMode::ConflictList;
+                    if state.all_resolved() {
+                        state.mode = UiMode::Done;
+                    } else {
+                        let resolved = state.resolutions.iter().filter(|r| r.is_some()).count();
+                        state.status = format!(
+                            "{}/{} conflicts resolved. Select next.",
+                            resolved,
+                            state.conflicts.len()
+                        );
+                    }
+                }
+                KeyCode::Char(c) => {
+                    state.prompt_buf.push(c);
+                }
+                _ => {}
+            }
+        }
+
+        UiMode::Done => {}
+    }
+}
+
+fn draw_ui(f: &mut ratatui::Frame, state: &mut NegotiateState) {
+    let area = f.area();
+    let chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Min(5),
+            Constraint::Length(10),
+            Constraint::Length(3),
+        ])
+        .split(area);
+
+    // -- Top: conflict list --
+    let items: Vec<ListItem> = state
+        .conflicts
+        .iter()
+        .enumerate()
+        .map(|(i, c)| {
+            let resolved_tag = match &state.resolutions[i] {
+                Some(Resolution::Battle { .. }) => " [⚔ battle]",
+                Some(Resolution::Contract { .. }) => " [📜 contract]",
+                Some(Resolution::Fork) => " [🌿 fork]",
+                Some(Resolution::Manual) => " [✏ manual]",
+                None => "",
+            };
+            let text = format!(
+                "{} ours:{}/lev{} ↔ theirs:{}/lev{}{}",
+                c.path,
+                c.ours_genus_str,
+                c.ours_leverage,
+                c.theirs_genus_str,
+                c.theirs_leverage,
+                resolved_tag
+            );
+            ListItem::new(text)
+        })
+        .collect();
+
+    let list = List::new(items)
+        .block(Block::default().borders(Borders::ALL).title(" Pending Conflicts "))
+        .highlight_style(Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD))
+        .highlight_symbol("▶ ");
+
+    f.render_stateful_widget(list, chunks[0], &mut state.list_state);
+
+    // -- Middle: action menu or prompt --
+    match &state.mode {
+        UiMode::ActionMenu => {
+            let action_items: Vec<ListItem> = ACTIONS
+                .iter()
+                .enumerate()
+                .map(|(i, &a)| {
+                    if i == state.action_cursor {
+                        ListItem::new(Line::from(vec![
+                            Span::styled("▶ ", Style::default().fg(Color::Yellow)),
+                            Span::styled(a, Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+                        ]))
+                    } else {
+                        ListItem::new(format!("  {a}"))
+                    }
+                })
+                .collect();
+            let sel = state.selected();
+            let title = format!(" Resolve: {} ", state.conflicts[sel].path);
+            let menu = List::new(action_items)
+                .block(Block::default().borders(Borders::ALL).title(title));
+            f.render_widget(menu, chunks[1]);
+        }
+        UiMode::TextPrompt { action_idx } => {
+            let label = match action_idx {
+                0 => "Force size (bits): ",
+                1 => "Contract terms: ",
+                _ => "Input: ",
+            };
+            let text = format!("{}{}_", label, state.prompt_buf);
+            let prompt = Paragraph::new(text)
+                .block(Block::default().borders(Borders::ALL).title(" Input "))
+                .style(Style::default().fg(Color::Cyan));
+            f.render_widget(prompt, chunks[1]);
+        }
+        _ => {
+            // Show a help panel.
+            let resolved = state.resolutions.iter().filter(|r| r.is_some()).count();
+            let help_text = format!(
+                "{}/{} conflicts resolved\n\nPress Enter on a conflict to select its resolution.",
+                resolved,
+                state.conflicts.len()
+            );
+            let help = Paragraph::new(help_text)
+                .block(Block::default().borders(Borders::ALL).title(" Help "));
+            f.render_widget(help, chunks[1]);
+        }
+    }
+
+    // -- Bottom: status bar --
+    let status = Paragraph::new(state.status.clone())
+        .block(Block::default().borders(Borders::ALL))
+        .style(Style::default().fg(Color::DarkGray));
+    f.render_widget(status, chunks[2]);
+}
+
+// ---------------------------------------------------------------------------
+// Main cmd_negotiate entry point
+// ---------------------------------------------------------------------------
+
+fn cmd_negotiate(non_interactive: bool) -> Result<(), Box<dyn std::error::Error>> {
+    let here = std::env::current_dir()?;
+    let gitverse = here.join(".gitverse");
+    if !gitverse.exists() {
+        return Err(
+            "not an Emanon universe — .gitverse/ not found.\n\
+             Run `emanon init <name>` and `cd <name>` first."
+                .into(),
+        );
+    }
+
+    let conflicts = load_pending_conflicts(&gitverse)?;
+    if conflicts.is_empty() {
+        println!("No pending conflicts. Nothing to negotiate.");
+        return Ok(());
+    }
+
+    println!("Negotiating {} conflict{}...", conflicts.len(), if conflicts.len() == 1 { "" } else { "s" });
+
+    let resolved_pairs: Vec<(PendingConflict, Resolution)> = if non_interactive {
+        // Read JSON plan from stdin.
+        let mut input = String::new();
+        use std::io::Read;
+        io::stdin().read_to_string(&mut input)?;
+        let plan = parse_resolution_plan(&input)?;
+
+        // Match plan entries to conflicts by path.
+        let mut out = Vec::new();
+        for conflict in &conflicts {
+            let entry = plan.iter().find(|(p, _)| p == &conflict.path).ok_or_else(|| {
+                format!(
+                    "no resolution provided for path '{}' in the JSON plan",
+                    conflict.path
+                )
+            })?;
+            out.push((conflict.clone(), entry.1.clone()));
+        }
+        out
+    } else {
+        // Interactive TUI.
+        let mut state = NegotiateState::new(conflicts.clone());
+        run_tui(&mut state)?;
+
+        // Collect results.
+        conflicts
+            .into_iter()
+            .zip(state.resolutions.into_iter())
+            .map(|(c, r)| {
+                (c.clone(), r.unwrap_or(Resolution::Manual))
+            })
+            .collect()
+    };
+
+    // Apply each resolution.
+    for (conflict, resolution) in &resolved_pairs {
+        println!("Resolving '{}'...", conflict.path);
+        apply_resolution(&here, conflict, resolution)?;
+    }
+
+    // Finalize with a merge commit.
+    let all_conflicts: Vec<PendingConflict> = resolved_pairs.into_iter().map(|(c, _)| c).collect();
+    let pending_path = gitverse.join("pending-merge.json");
+    finalize_merge(&all_conflicts, &pending_path)?;
+
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
 // stub helper
 // ---------------------------------------------------------------------------
 
@@ -1260,6 +2225,12 @@ fn main() {
         }
         Commands::Merge { remote_branch } => {
             if let Err(e) = cmd_merge(&remote_branch) {
+                eprintln!("error: {e}");
+                std::process::exit(1);
+            }
+        }
+        Commands::Negotiate { non_interactive } => {
+            if let Err(e) = cmd_negotiate(non_interactive) {
                 eprintln!("error: {e}");
                 std::process::exit(1);
             }
@@ -2093,5 +3064,150 @@ mod tests {
                 panic!("cmd_merge failed on a clean merge: {e}");
             }
         }
+    }
+
+    // -----------------------------------------------------------------------
+    // parse_conflict_obj / load_pending_conflicts parsing
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn parse_conflict_obj_with_both_genera() {
+        let obj = r#"{
+      "path": "regions/foo.json",
+      "base_sha": "abc",
+      "ours_sha": "def",
+      "theirs_sha": "ghi",
+      "ours_genus": {"set_k": 13, "oddity_s": 5, "index_i": 2},
+      "theirs_genus": {"set_k": 6, "oddity_s": 2, "index_i": 1},
+      "ours_leverage": 387,
+      "theirs_leverage": 112
+    }"#;
+        let c = parse_conflict_obj(obj).expect("should parse");
+        assert_eq!(c.path, "regions/foo.json");
+        assert_eq!(c.ours_leverage, 387);
+        assert_eq!(c.theirs_leverage, 112);
+        assert!(c.ours_genus_str.contains("Set_13"), "ours genus; got: {}", c.ours_genus_str);
+        assert!(c.theirs_genus_str.contains("Set_6"), "theirs genus; got: {}", c.theirs_genus_str);
+    }
+
+    #[test]
+    fn parse_conflict_obj_with_null_genus() {
+        let obj = r#"{
+      "path": "regions/bar.json",
+      "base_sha": "",
+      "ours_sha": "x1",
+      "theirs_sha": "x2",
+      "ours_genus": null,
+      "theirs_genus": null,
+      "ours_leverage": 10,
+      "theirs_leverage": 5
+    }"#;
+        let c = parse_conflict_obj(obj).expect("should parse");
+        assert_eq!(c.path, "regions/bar.json");
+        assert_eq!(c.ours_genus_str, "no stamp");
+        assert_eq!(c.theirs_genus_str, "no stamp");
+    }
+
+    // -----------------------------------------------------------------------
+    // parse_resolution_plan (non-interactive input)
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn parse_resolution_plan_battle() {
+        let input = r#"[{"path":"regions/a.json","resolution":"battle","force_size":1024}]"#;
+        let plan = parse_resolution_plan(input).expect("should parse");
+        assert_eq!(plan.len(), 1);
+        assert_eq!(plan[0].0, "regions/a.json");
+        match &plan[0].1 {
+            Resolution::Battle { force_size } => assert_eq!(*force_size, 1024),
+            other => panic!("expected Battle, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn parse_resolution_plan_contract() {
+        let input = r#"[{"path":"regions/b.json","resolution":"contract","terms":"50/50 resources"}]"#;
+        let plan = parse_resolution_plan(input).expect("should parse");
+        assert_eq!(plan.len(), 1);
+        match &plan[0].1 {
+            Resolution::Contract { terms } => assert_eq!(terms, "50/50 resources"),
+            other => panic!("expected Contract, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn parse_resolution_plan_fork_and_manual() {
+        let input = r#"[
+          {"path":"regions/c.json","resolution":"fork"},
+          {"path":"regions/d.json","resolution":"manual"}
+        ]"#;
+        let plan = parse_resolution_plan(input).expect("should parse");
+        assert_eq!(plan.len(), 2);
+        assert!(matches!(plan[0].1, Resolution::Fork));
+        assert!(matches!(plan[1].1, Resolution::Manual));
+    }
+
+    #[test]
+    fn parse_resolution_plan_unknown_resolution_errors() {
+        let input = r#"[{"path":"regions/e.json","resolution":"surrender"}]"#;
+        let err = parse_resolution_plan(input);
+        assert!(err.is_err(), "unknown resolution must be an error");
+    }
+
+    #[test]
+    fn parse_resolution_plan_default_force_size() {
+        // Omitting force_size in a battle entry defaults to 256.
+        let input = r#"[{"path":"regions/f.json","resolution":"battle"}]"#;
+        let plan = parse_resolution_plan(input).expect("should parse");
+        match &plan[0].1 {
+            Resolution::Battle { force_size } => assert_eq!(*force_size, 256, "default force_size must be 256"),
+            other => panic!("expected Battle, got {other:?}"),
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // load_pending_conflicts — round-trip through pending-merge.json
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn load_pending_conflicts_round_trip() {
+        // Build a minimal pending-merge.json using conflict_entry_to_json.
+        let entry = ConflictEntry {
+            path: "regions/test.json".to_string(),
+            base_sha: "base000".to_string(),
+            ours_sha: "ours111".to_string(),
+            theirs_sha: "theirs222".to_string(),
+            ours_genus: Some(GenusStamp { set_k: 13, oddity_s: 5, index_i: 0 }),
+            theirs_genus: None,
+            ours_leverage: 42,
+            theirs_leverage: 7,
+        };
+        let entries_json = conflict_entry_to_json(&entry);
+        let pending_json = format!(
+            "{{\n  \"remote_branch\": \"origin/main\",\n  \"conflicts\": [\n{entries_json}\n  ]\n}}"
+        );
+
+        let dir = tempdir();
+        let gitverse = dir.join(".gitverse");
+        std::fs::create_dir_all(&gitverse).unwrap();
+        std::fs::write(gitverse.join("pending-merge.json"), &pending_json).unwrap();
+
+        let conflicts = load_pending_conflicts(&gitverse).expect("should load");
+        assert_eq!(conflicts.len(), 1);
+        assert_eq!(conflicts[0].path, "regions/test.json");
+        assert_eq!(conflicts[0].ours_leverage, 42);
+        assert_eq!(conflicts[0].theirs_leverage, 7);
+        assert!(conflicts[0].ours_genus_str.contains("Set_13"), "ours genus; got: {}", conflicts[0].ours_genus_str);
+        assert_eq!(conflicts[0].theirs_genus_str, "no stamp");
+    }
+
+    #[test]
+    fn load_pending_conflicts_missing_file_errors() {
+        let dir = tempdir();
+        let gitverse = dir.join(".gitverse");
+        std::fs::create_dir_all(&gitverse).unwrap();
+        // Don't write pending-merge.json
+        let err = load_pending_conflicts(&gitverse);
+        assert!(err.is_err(), "missing file must be an error");
     }
 }

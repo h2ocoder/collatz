@@ -1,0 +1,6 @@
+@Emanon.Server_HostAddress = http://localhost:5088
+
+GET {{Emanon.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

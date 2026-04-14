@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emanon.Cli", "Emanon.Cli\Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emanon.Tests", "Emanon.Tests\Emanon.Tests.csproj", "{ACDA101B-168F-4B76-A9D4-B81ED42CEAA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emanon.Server", "Emanon.Server\Emanon.Server.csproj", "{E92B8B85-20AE-46B7-A5A6-4166037B967A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{ACDA101B-168F-4B76-A9D4-B81ED42CEAA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACDA101B-168F-4B76-A9D4-B81ED42CEAA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACDA101B-168F-4B76-A9D4-B81ED42CEAA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E92B8B85-20AE-46B7-A5A6-4166037B967A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E92B8B85-20AE-46B7-A5A6-4166037B967A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E92B8B85-20AE-46B7-A5A6-4166037B967A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E92B8B85-20AE-46B7-A5A6-4166037B967A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -20,8 +20,21 @@
               "icon": "lucide-file",
               "title": "Bit Destruction Bound"
             }
+          },
+          {
+            "id": "708c4326765e243b",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.12.7"
+              },
+              "icon": "lucide-book-up",
+              "title": "Release Notes 1.12.7"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -180,7 +193,7 @@
       "bases:Create new base": false
     }
   },
-  "active": "370ad03d900037bd",
+  "active": "708c4326765e243b",
   "lastOpenFiles": [
     "plans/path-to-proof.md.tmp.51024.1775185082869",
     "plans/path-to-proof.md.tmp.51024.1775184806232",

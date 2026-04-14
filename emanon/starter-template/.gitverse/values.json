@@ -1,0 +1,6 @@
+{
+  "conflict_preference": "contract",
+  "fork_readiness": "medium",
+  "battle_threshold": 0.5,
+  "host_authority_mode": "partition"
+}

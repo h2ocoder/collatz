@@ -1,0 +1,7 @@
+# Emanon merge driver registration.
+# Each path pattern is routed to a specific merge driver registered in .git/config.
+# These drivers are written automatically by `emanon init` — see .git/config for details.
+#
+regions/**       merge=emanon-collatz
+contracts/**     merge=emanon-contract
+scars/**         merge=emanon-append-only

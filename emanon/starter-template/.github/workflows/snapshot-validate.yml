@@ -1,0 +1,84 @@
+name: Snapshot Validate
+
+# Runs on every push to validate that this universe is in a healthy state.
+# Requires the `emanon` CLI to be available — install via the setup step below.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  validate:
+    name: Validate universe structure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout universe
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history needed for leverage computation
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/emanon-cli/target
+          key: ${{ runner.os }}-cargo-emanon-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-emanon-
+
+      - name: Build and install emanon CLI
+        run: |
+          git clone --depth=1 https://github.com/h2ocoder/collatz emanon-repo
+          cd emanon-repo/emanon/src/cli
+          cargo install --path . --locked 2>/dev/null || cargo install --path .
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Verify universe structure
+        run: |
+          echo "=== Emanon Universe Validation ==="
+          echo "Checking canonical directory layout..."
+
+          for dir in regions contracts scars forks .gitverse; do
+            if [ -d "$dir" ]; then
+              echo "  ✓ $dir/"
+            else
+              echo "  ✗ MISSING: $dir/"
+              exit 1
+            fi
+          done
+
+          for file in .gitattributes .gitignore .gitverse/values.json; do
+            if [ -f "$file" ]; then
+              echo "  ✓ $file"
+            else
+              echo "  ✗ MISSING: $file"
+              exit 1
+            fi
+          done
+
+          echo ""
+          echo "=== Snapshot count ==="
+          if [ -f ".gitverse/snapshot_count" ]; then
+            echo "  snapshot_count: $(cat .gitverse/snapshot_count)"
+          else
+            echo "  snapshot_count: not yet set (pre-genesis)"
+          fi
+
+          echo ""
+          echo "=== emanon CLI version ==="
+          emanon --version || echo "  (version flag not yet implemented)"
+
+          echo ""
+          echo "✓ Universe structure valid."
+
+      # NOTE: `emanon validate` is a planned subcommand (tracked in future milestone).
+      # When available, replace the manual checks above with:
+      #   emanon validate

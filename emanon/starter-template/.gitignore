@@ -1,0 +1,10 @@
+# Emanon ephemeral files — regenerated at runtime, not part of universe state
+.gitverse/leverage.cache
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/

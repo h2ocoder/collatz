@@ -1,0 +1,16 @@
+# CODEOWNERS — Emanon universe ownership rules
+#
+# The universe host owns the root. Region maintainers own their subtrees.
+# Contracts require both parties to review (add their GitHub usernames below).
+#
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Universe host owns everything by default
+*                    @your-github-username
+
+# Specific region maintainers (example)
+# regions/alpha/     @alpha-keeper
+# regions/beta/      @beta-keeper
+
+# Contracts require review by both parties
+# contracts/         @your-github-username @counterparty-username

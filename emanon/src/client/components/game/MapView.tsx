@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { PrimeNode } from "./PrimeNode";
 import { StarNode } from "./StarNode";
 import { AnomalyNode } from "./AnomalyNode";
@@ -129,75 +129,134 @@ export function MapView({
     [playerPosition.x, playerPosition.y, scanRadius]
   );
 
+  // --- Pan & zoom state ---
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const dragging = useRef<{ startX: number; startY: number; panX: number; panY: number } | null>(null);
+
+  const MIN_ZOOM = 0.3;
+  const MAX_ZOOM = 4;
+  const VIEW_SIZE = 600;
+  const HALF = VIEW_SIZE / 2;
+
+  // Mouse/touch → SVG coordinate scale factor
+  const clientToSvg = useCallback((clientDx: number, clientDy: number): [number, number] => {
+    if (!svgRef.current) return [clientDx, clientDy];
+    const rect = svgRef.current.getBoundingClientRect();
+    const scale = VIEW_SIZE / Math.min(rect.width, rect.height);
+    return [clientDx * scale, clientDy * scale];
+  }, []);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    if (e.button !== 0) return;
+    (e.target as Element).setPointerCapture(e.pointerId);
+    dragging.current = { startX: e.clientX, startY: e.clientY, panX: pan.x, panY: pan.y };
+  }, [pan]);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    const [dx, dy] = clientToSvg(
+      e.clientX - dragging.current.startX,
+      e.clientY - dragging.current.startY,
+    );
+    setPan({
+      x: dragging.current.panX + dx / zoom,
+      y: dragging.current.panY + dy / zoom,
+    });
+  }, [zoom, clientToSvg]);
+
+  const handlePointerUp = useCallback(() => {
+    dragging.current = null;
+  }, []);
+
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const factor = e.deltaY > 0 ? 0.9 : 1.1;
+    setZoom((z) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z * factor)));
+  }, []);
+
+  // Background rect big enough to cover viewport at any zoom/pan
+  const bgExtent = HALF / Math.max(MIN_ZOOM, 0.1) + 500;
+
   return (
     <div className="relative w-full h-full bg-surface overflow-hidden">
       <svg
+        ref={svgRef}
         className="w-full h-full"
-        viewBox="-300 -300 600 600"
+        viewBox={`${-HALF} ${-HALF} ${VIEW_SIZE} ${VIEW_SIZE}`}
         preserveAspectRatio="xMidYMid meet"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
+        onWheel={handleWheel}
+        style={{ cursor: dragging.current ? "grabbing" : "grab", touchAction: "none" }}
       >
-        {/* Eisenstein integer lattice — flat-top hexagonal grid */}
-        <defs>
-          <pattern id="hex-grid" width="75" height="43.3" patternUnits="userSpaceOnUse">
-            <polygon
-              points="25,0 12.5,21.65 -12.5,21.65 -25,0 -12.5,-21.65 12.5,-21.65"
-              fill="none" stroke="#342f4a" strokeWidth="0.5"
-            />
-            <polygon
-              points="62.5,21.65 50,43.3 25,43.3 12.5,21.65 25,0 50,0"
-              fill="none" stroke="#342f4a" strokeWidth="0.5"
-            />
-          </pattern>
-        </defs>
-        <rect x="-300" y="-300" width="600" height="600" fill="url(#hex-grid)" />
+        <g transform={`translate(${pan.x}, ${pan.y}) scale(${zoom})`}>
+          {/* Eisenstein integer lattice — flat-top hexagonal grid */}
+          <defs>
+            <pattern id="hex-grid" width="75" height="43.3" patternUnits="userSpaceOnUse">
+              <polygon
+                points="25,0 12.5,21.65 -12.5,21.65 -25,0 -12.5,-21.65 12.5,-21.65"
+                fill="none" stroke="#342f4a" strokeWidth="0.5"
+              />
+              <polygon
+                points="62.5,21.65 50,43.3 25,43.3 12.5,21.65 25,0 50,0"
+                fill="none" stroke="#342f4a" strokeWidth="0.5"
+              />
+            </pattern>
+          </defs>
+          <rect x={-bgExtent} y={-bgExtent} width={bgExtent * 2} height={bgExtent * 2} fill="url(#hex-grid)" />
 
-        {/* Scan boundary — traces hex cell edges */}
-        {scanPath && (
-          <path
-            d={scanPath}
-            fill="none"
-            stroke="#8b5cf6"
-            strokeWidth="1"
-            opacity="0.5"
-          />
-        )}
-
-        {/* Stars */}
-        {stars.map((star) => (
-          <g key={star.id} transform={`translate(${star.x}, ${star.y})`}>
-            <StarNode
-              luminosity={star.luminosity}
-              state={star.state}
-              label={star.label}
-              onClick={() => onStarClick?.(star.id)}
+          {/* Scan boundary — traces hex cell edges */}
+          {scanPath && (
+            <path
+              d={scanPath}
+              fill="none"
+              stroke="#8b5cf6"
+              strokeWidth="1"
+              opacity="0.5"
             />
-          </g>
-        ))}
+          )}
 
-        {/* Anomalies */}
-        {anomalies.map((anomaly) => (
-          <g key={anomaly.id} transform={`translate(${anomaly.x}, ${anomaly.y})`}>
-            <AnomalyNode
-              type={anomaly.type}
-              label={anomaly.label}
-              onClick={() => onAnomalyClick?.(anomaly.id)}
-            />
-          </g>
-        ))}
+          {/* Stars */}
+          {stars.map((star) => (
+            <g key={star.id} transform={`translate(${star.x}, ${star.y})`}>
+              <StarNode
+                luminosity={star.luminosity}
+                state={star.state}
+                label={star.label}
+                onClick={() => onStarClick?.(star.id)}
+              />
+            </g>
+          ))}
 
-        {/* Primes */}
-        {primes.map((prime) => (
-          <g key={prime.id} transform={`translate(${prime.x}, ${prime.y})`}>
-            <PrimeNode
-              id={prime.id}
-              type={prime.type}
-              mass={prime.mass}
-              label={prime.label}
-              isPlayer={prime.isPlayer}
-              onClick={() => onPrimeClick?.(prime.id)}
-            />
-          </g>
-        ))}
+          {/* Anomalies */}
+          {anomalies.map((anomaly) => (
+            <g key={anomaly.id} transform={`translate(${anomaly.x}, ${anomaly.y})`}>
+              <AnomalyNode
+                type={anomaly.type}
+                label={anomaly.label}
+                onClick={() => onAnomalyClick?.(anomaly.id)}
+              />
+            </g>
+          ))}
+
+          {/* Primes */}
+          {primes.map((prime) => (
+            <g key={prime.id} transform={`translate(${prime.x}, ${prime.y})`}>
+              <PrimeNode
+                id={prime.id}
+                type={prime.type}
+                mass={prime.mass}
+                label={prime.label}
+                isPlayer={prime.isPlayer}
+                onClick={() => onPrimeClick?.(prime.id)}
+              />
+            </g>
+          ))}
+        </g>
       </svg>
 
       {/* Energy HUD */}

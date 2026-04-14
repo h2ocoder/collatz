@@ -1,0 +1,11 @@
+[package]
+name = "collatz-rs"
+version = "0.1.0"
+edition = "2021"
+description = "Collatz dropping-time library for the Emanon game engine — genus, orbit, and Syracuse map"
+authors = ["Darcy Thomas <darcy@alpha36.me>"]
+
+[dependencies]
+num-bigint = { version = "0.4", features = ["std"] }
+num-traits = "0.2"
+num-integer = "0.1"

@@ -42,3 +42,6 @@ app.MapRegistry();
 app.MapBounties();
 
 app.Run();
+
+// Required for WebApplicationFactory in integration tests
+public partial class Program { }

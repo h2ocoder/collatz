@@ -96,7 +96,7 @@ public static class BountyEndpoints
             if (b.Status != BountyStatus.Accepted)
                 return Results.Conflict($"Bounty must be Accepted before delivery (current: {b.Status}).");
             if (!b.AcceptedBy!.Equals(req.DeliveredBy, StringComparison.OrdinalIgnoreCase))
-                return Results.Forbid();
+                return Results.StatusCode(403);
 
             // Validate delivery proof (genus stamp)
             Genus? genus = null;

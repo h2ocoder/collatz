@@ -513,6 +513,308 @@ fn cmd_snapshot(message: Option<String>, no_stage: bool) -> Result<(), Box<dyn s
 }
 
 // ---------------------------------------------------------------------------
+// emanon merge
+// ---------------------------------------------------------------------------
+
+/// A single file conflict deferred to player negotiation.
+///
+/// Produced by `cmd_merge` when the Collatz merge driver exits 1 (unrelated
+/// genus sets or missing stamps that it cannot auto-resolve).
+#[derive(Debug)]
+struct ConflictEntry {
+    /// Repo-relative path of the conflicted file.
+    path: String,
+    /// Git object SHA of the base (common ancestor) blob; empty if no common ancestor.
+    base_sha: String,
+    /// Git object SHA of our version of the blob.
+    ours_sha: String,
+    /// Git object SHA of their version of the blob.
+    theirs_sha: String,
+    /// Genus stamp embedded in our version (if any).
+    ours_genus: Option<GenusStamp>,
+    /// Genus stamp embedded in their version (if any).
+    theirs_genus: Option<GenusStamp>,
+    /// Leverage score for our side (commit count in our HEAD).
+    ours_leverage: u64,
+    /// Leverage score for their side (commit count reachable from FETCH_HEAD).
+    theirs_leverage: u64,
+}
+
+/// Read a genus stamp from a git blob identified by SHA.
+///
+/// Uses `git cat-file -p <sha>` to retrieve the blob content, then parses
+/// the embedded genus stamp.  Returns `None` if the SHA is empty, the blob
+/// cannot be read, or no stamp is present.
+fn read_genus_from_sha(sha: &str) -> Option<GenusStamp> {
+    if sha.is_empty() {
+        return None;
+    }
+    let output = Command::new("git")
+        .args(["cat-file", "-p", sha])
+        .output()
+        .ok()?;
+    if !output.status.success() {
+        return None;
+    }
+    let content = String::from_utf8_lossy(&output.stdout);
+    parse_genus_stamp(&content)
+}
+
+/// Compute leverage as the count of commits reachable from `refspec`.
+///
+/// Leverage in the gitverse is a pure function of the git object database.
+/// This implementation uses `git rev-list --count <refspec>` — the total
+/// commits accumulated, which is the primary leverage component from the
+/// design doc.  Returns 0 if the refspec is invalid or git fails.
+fn compute_leverage(refspec: &str) -> u64 {
+    let output = Command::new("git")
+        .args(["rev-list", "--count", refspec])
+        .output()
+        .ok();
+    match output {
+        Some(o) if o.status.success() => String::from_utf8_lossy(&o.stdout)
+            .trim()
+            .parse()
+            .unwrap_or(0),
+        _ => 0,
+    }
+}
+
+/// Serialize a [`ConflictEntry`] to a JSON object string.
+///
+/// Avoids a JSON dependency by constructing the object inline.  `null` is
+/// used for missing genus fields so the downstream `emanon negotiate` command
+/// can distinguish "no stamp" from "stamp with zero values".
+fn conflict_entry_to_json(c: &ConflictEntry) -> String {
+    let genus_json = |g: &Option<GenusStamp>| match g {
+        Some(stamp) => format!(
+            r#"{{"set_k": {}, "oddity_s": {}, "index_i": {}}}"#,
+            stamp.set_k, stamp.oddity_s, stamp.index_i
+        ),
+        None => "null".to_string(),
+    };
+    format!(
+        r#"    {{
+      "path": "{}",
+      "base_sha": "{}",
+      "ours_sha": "{}",
+      "theirs_sha": "{}",
+      "ours_genus": {},
+      "theirs_genus": {},
+      "ours_leverage": {},
+      "theirs_leverage": {}
+    }}"#,
+        c.path,
+        c.base_sha,
+        c.ours_sha,
+        c.theirs_sha,
+        genus_json(&c.ours_genus),
+        genus_json(&c.theirs_genus),
+        c.ours_leverage,
+        c.theirs_leverage,
+    )
+}
+
+/// Implements `emanon merge <remote>/<branch>`.
+///
+/// 1. `git fetch <remote>` — sync the remote.
+/// 2. `git merge --no-commit --no-ff <remote>/<branch>` — run merge with the
+///    Collatz driver active via `.gitattributes`.
+/// 3. Inspect the outcome:
+///    - No unmerged paths + exit 0 → auto-commit the merge.
+///    - Unmerged paths exist → build conflict report, write
+///      `.gitverse/pending-merge.json`, print summary.
+fn cmd_merge(remote_branch: &str) -> Result<(), Box<dyn std::error::Error>> {
+    // --- Parse <remote>/<branch> ---
+    let slash_pos = remote_branch.find('/').ok_or_else(|| {
+        format!(
+            "invalid remote/branch '{}': expected format <remote>/<branch>\n\
+             Example: emanon merge origin/main",
+            remote_branch
+        )
+    })?;
+    let remote = &remote_branch[..slash_pos];
+
+    // --- Verify universe ---
+    let here = std::env::current_dir()?;
+    let gitverse = here.join(".gitverse");
+    if !gitverse.exists() {
+        return Err(
+            "not an Emanon universe — .gitverse/ not found in the current directory.\n\
+             Run `emanon init <name>` to create one, then `cd <name>` first."
+                .into(),
+        );
+    }
+
+    println!("Merging from {}...", remote_branch);
+
+    // --- git fetch <remote> ---
+    let fetch = Command::new("git")
+        .args(["fetch", remote])
+        .output()?;
+    if !fetch.status.success() {
+        return Err(format!(
+            "git fetch {} failed:\n{}",
+            remote,
+            String::from_utf8_lossy(&fetch.stderr)
+        )
+        .into());
+    }
+
+    // --- git merge --no-commit --no-ff <remote>/<branch> ---
+    //
+    // --no-commit stops before the commit even when merge succeeds (so we can
+    // inspect the result and optionally auto-commit).
+    // --no-ff always creates a merge commit, which is correct for universe
+    // timeline merges (fast-forwards would erase the fork history).
+    // The Collatz merge driver fires automatically for paths in .gitattributes;
+    // if a driver exits 1, git marks that path as unmerged and exits 1 itself.
+    let merge = Command::new("git")
+        .args(["merge", "--no-commit", "--no-ff", remote_branch])
+        .output()?;
+
+    // --- Identify unmerged paths ---
+    //
+    // `git diff --name-only --diff-filter=U` lists paths still in conflict
+    // (unmerged, i.e. the driver returned 1 for them).
+    let unmerged_output = Command::new("git")
+        .args(["diff", "--name-only", "--diff-filter=U"])
+        .output()?;
+    let unmerged_paths: Vec<String> = if unmerged_output.status.success() {
+        String::from_utf8_lossy(&unmerged_output.stdout)
+            .lines()
+            .filter(|l| !l.is_empty())
+            .map(String::from)
+            .collect()
+    } else {
+        vec![]
+    };
+
+    // --- Branch: no conflicts ---
+    if unmerged_paths.is_empty() && merge.status.success() {
+        // All paths were auto-resolved by the merge driver — commit the result.
+        let commit = Command::new("git")
+            .args(["commit", "--no-edit"])
+            .output()?;
+        if !commit.status.success() {
+            return Err(format!(
+                "git commit failed after clean merge:\n{}",
+                String::from_utf8_lossy(&commit.stderr)
+            )
+            .into());
+        }
+        let sha = Command::new("git")
+            .args(["rev-parse", "--short", "HEAD"])
+            .output()
+            .ok()
+            .filter(|o| o.status.success())
+            .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
+            .unwrap_or_else(|| "(unknown)".to_string());
+        println!("Merge complete — no conflicts.  [{sha}]");
+        return Ok(());
+    }
+
+    // --- Branch: conflicts need negotiation ---
+
+    // Precompute leverage for both sides.  Leverage is a universe-level
+    // quantity (commit count), not per-file, so we compute it once and reuse.
+    let ours_leverage = compute_leverage("HEAD");
+    let theirs_leverage = compute_leverage("FETCH_HEAD");
+
+    // Build one ConflictEntry per unresolved path.
+    let mut conflicts: Vec<ConflictEntry> = Vec::new();
+
+    for path in &unmerged_paths {
+        // `git ls-files -u -- <path>` lists index entries for this path.
+        // Each line: "<mode> <sha> <stage>\t<path>"
+        //   stage 1 = base (common ancestor)
+        //   stage 2 = ours
+        //   stage 3 = theirs
+        let ls = Command::new("git")
+            .args(["ls-files", "-u", "--", path])
+            .output()?;
+        let ls_out = String::from_utf8_lossy(&ls.stdout);
+
+        let mut base_sha = String::new();
+        let mut ours_sha = String::new();
+        let mut theirs_sha = String::new();
+
+        for line in ls_out.lines() {
+            // Format: "mode sha stage\tpath"
+            // Split on tab first to get "<mode> <sha> <stage>" and "<path>".
+            let tab = line.find('\t').unwrap_or(line.len());
+            let meta_str = &line[..tab];
+            let meta: Vec<&str> = meta_str.splitn(3, ' ').collect();
+            if meta.len() < 3 {
+                continue;
+            }
+            let sha = meta[1];
+            let stage = meta[2].trim();
+            match stage {
+                "1" => base_sha = sha.to_string(),
+                "2" => ours_sha = sha.to_string(),
+                "3" => theirs_sha = sha.to_string(),
+                _ => {}
+            }
+        }
+
+        // Read genus stamps from the blob objects.
+        let ours_genus = read_genus_from_sha(&ours_sha);
+        let theirs_genus = read_genus_from_sha(&theirs_sha);
+
+        conflicts.push(ConflictEntry {
+            path: path.clone(),
+            base_sha,
+            ours_sha,
+            theirs_sha,
+            ours_genus,
+            theirs_genus,
+            ours_leverage,
+            theirs_leverage,
+        });
+    }
+
+    // --- Write .gitverse/pending-merge.json ---
+    let n = conflicts.len();
+    let entries: Vec<String> = conflicts.iter().map(conflict_entry_to_json).collect();
+    let pending_json = format!(
+        "{{\n  \"remote_branch\": \"{remote_branch}\",\n  \"conflicts\": [\n{}\n  ]\n}}",
+        entries.join(",\n")
+    );
+    let pending_path = gitverse.join("pending-merge.json");
+    std::fs::write(&pending_path, &pending_json)?;
+
+    // --- Print conflict summary ---
+    println!(
+        "{n} conflict{} deferred to negotiation:",
+        if n == 1 { "" } else { "s" }
+    );
+    for c in &conflicts {
+        println!("  {}", c.path);
+        match &c.ours_genus {
+            Some(g) => println!(
+                "    your genus: Set_{} / s={} / leverage {}",
+                g.set_k, g.oddity_s, c.ours_leverage
+            ),
+            None => println!("    your genus: unknown (no stamp) / leverage {}", c.ours_leverage),
+        }
+        match &c.theirs_genus {
+            Some(g) => println!(
+                "    their genus: Set_{} / s={} / leverage {}",
+                g.set_k, g.oddity_s, c.theirs_leverage
+            ),
+            None => println!(
+                "    their genus: unknown (no stamp) / leverage {}",
+                c.theirs_leverage
+            ),
+        }
+    }
+    println!("\nRun `emanon negotiate` to resolve.");
+
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
 // emanon merge-driver
 // ---------------------------------------------------------------------------
 
@@ -957,7 +1259,10 @@ fn main() {
             }
         }
         Commands::Merge { remote_branch } => {
-            not_yet(&format!("emanon merge {remote_branch}"));
+            if let Err(e) = cmd_merge(&remote_branch) {
+                eprintln!("error: {e}");
+                std::process::exit(1);
+            }
         }
         Commands::MergeDriver { contract_mode, append_only, base, ours, theirs, path, output } => {
             let mode = if contract_mode {
@@ -1519,5 +1824,274 @@ mod tests {
         ));
         std::fs::create_dir_all(&path).unwrap();
         path
+    }
+
+    // -----------------------------------------------------------------------
+    // cmd_merge helpers — unit tests (no git required)
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn conflict_entry_to_json_with_both_genera() {
+        let entry = ConflictEntry {
+            path: "regions/planet-xyz/settlement.json".to_string(),
+            base_sha: "aaa111".to_string(),
+            ours_sha: "bbb222".to_string(),
+            theirs_sha: "ccc333".to_string(),
+            ours_genus: Some(GenusStamp { set_k: 13, oddity_s: 5, index_i: 2 }),
+            theirs_genus: Some(GenusStamp { set_k: 6, oddity_s: 2, index_i: 1 }),
+            ours_leverage: 387,
+            theirs_leverage: 112,
+        };
+        let json = conflict_entry_to_json(&entry);
+        assert!(
+            json.contains("\"path\": \"regions/planet-xyz/settlement.json\""),
+            "must contain path; got: {json}"
+        );
+        assert!(json.contains("\"base_sha\": \"aaa111\""), "must contain base_sha; got: {json}");
+        assert!(json.contains("\"ours_sha\": \"bbb222\""), "must contain ours_sha; got: {json}");
+        assert!(json.contains("\"theirs_sha\": \"ccc333\""), "must contain theirs_sha; got: {json}");
+        assert!(json.contains("\"set_k\": 13"), "must contain ours set_k; got: {json}");
+        assert!(json.contains("\"set_k\": 6"), "must contain theirs set_k; got: {json}");
+        assert!(json.contains("\"ours_leverage\": 387"), "must contain ours leverage; got: {json}");
+        assert!(json.contains("\"theirs_leverage\": 112"), "must contain theirs leverage; got: {json}");
+    }
+
+    #[test]
+    fn conflict_entry_to_json_null_genus_when_missing() {
+        let entry = ConflictEntry {
+            path: "regions/binary.bin".to_string(),
+            base_sha: String::new(),
+            ours_sha: "abc".to_string(),
+            theirs_sha: "def".to_string(),
+            ours_genus: None,
+            theirs_genus: None,
+            ours_leverage: 5,
+            theirs_leverage: 3,
+        };
+        let json = conflict_entry_to_json(&entry);
+        assert!(
+            json.contains("\"ours_genus\": null"),
+            "missing ours genus must serialize to null; got: {json}"
+        );
+        assert!(
+            json.contains("\"theirs_genus\": null"),
+            "missing theirs genus must serialize to null; got: {json}"
+        );
+    }
+
+    #[test]
+    fn conflict_entry_to_json_mixed_genus() {
+        // One side has a stamp, the other doesn't.
+        let entry = ConflictEntry {
+            path: "regions/notes.txt".to_string(),
+            base_sha: String::new(),
+            ours_sha: "s1".to_string(),
+            theirs_sha: "s2".to_string(),
+            ours_genus: Some(GenusStamp { set_k: 44, oddity_s: 17, index_i: 0 }),
+            theirs_genus: None,
+            ours_leverage: 612,
+            theirs_leverage: 0,
+        };
+        let json = conflict_entry_to_json(&entry);
+        assert!(json.contains("\"set_k\": 44"), "must contain ours genus; got: {json}");
+        assert!(
+            json.contains("\"theirs_genus\": null"),
+            "missing theirs genus must be null; got: {json}"
+        );
+        assert!(json.contains("\"ours_leverage\": 612"), "leverage mismatch; got: {json}");
+    }
+
+    #[test]
+    fn read_genus_from_sha_empty_returns_none() {
+        // Empty SHA → no blob to read → None
+        assert!(read_genus_from_sha("").is_none());
+    }
+
+    #[test]
+    fn read_genus_from_sha_invalid_sha_returns_none() {
+        // Invalid SHA → git cat-file fails → None (not an error)
+        assert!(read_genus_from_sha("0000000000000000000000000000000000000000").is_none());
+    }
+
+    #[test]
+    fn compute_leverage_invalid_refspec_returns_zero() {
+        // A refspec that doesn't exist returns 0, not an error.
+        let leverage = compute_leverage("refs/nonexistent/branch/xyz/abc");
+        assert_eq!(leverage, 0, "invalid refspec must return 0");
+    }
+
+    // -----------------------------------------------------------------------
+    // cmd_merge integration test — requires git
+    // -----------------------------------------------------------------------
+
+    /// Shared mutex to prevent concurrent tests from corrupting each other's cwd.
+    static CWD_MUTEX: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
+    /// Run a git command inside `dir` with test identity env vars.
+    fn git_in(dir: &std::path::Path, args: &[&str]) -> bool {
+        Command::new("git")
+            .args(args)
+            .current_dir(dir)
+            .env("GIT_AUTHOR_NAME", "Tester")
+            .env("GIT_AUTHOR_EMAIL", "tester@emanon.test")
+            .env("GIT_COMMITTER_NAME", "Tester")
+            .env("GIT_COMMITTER_EMAIL", "tester@emanon.test")
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .status()
+            .map(|s| s.success())
+            .unwrap_or(false)
+    }
+
+    /// Initialise a minimal Emanon universe in `dir` and make an initial commit.
+    fn init_universe(dir: &std::path::Path) {
+        std::fs::create_dir_all(dir.join(".gitverse")).unwrap();
+        std::fs::create_dir_all(dir.join("regions")).unwrap();
+        std::fs::write(dir.join(".gitverse/snapshot_count"), "1").unwrap();
+        std::fs::write(dir.join(".gitattributes"), "regions/** merge=emanon-collatz\n").unwrap();
+        std::fs::write(dir.join("README.md"), "universe\n").unwrap();
+        assert!(git_in(dir, &["init", "-b", "main"]), "git init failed");
+        assert!(git_in(dir, &["add", "."]), "git add failed");
+        assert!(git_in(dir, &["commit", "-m", "init"]), "git commit failed");
+    }
+
+    #[test]
+    fn cmd_merge_writes_pending_json_on_conflict() {
+        let _lock = CWD_MUTEX.lock().unwrap_or_else(|p| p.into_inner());
+
+        let base = tempdir();
+        let local_dir = base.join("local");
+        let remote_dir = base.join("remote");
+        std::fs::create_dir_all(&local_dir).unwrap();
+        std::fs::create_dir_all(&remote_dir).unwrap();
+
+        // ── Step 1: Remote: init (no regions/shared.txt yet) + commit ──────────
+        init_universe(&remote_dir);
+
+        // ── Step 2: Clone into local (both sides share the same initial commit) ─
+        assert!(
+            git_in(&base, &["clone", remote_dir.to_str().unwrap(), "local"]),
+            "git clone failed"
+        );
+
+        // ── Step 3: Local independently adds regions/shared.txt with set_k=3 ───
+        // set_k=3, oddity_s=1 — these must differ from remote's genus below
+        // so that the merge driver's Rule 3 (unrelated sets) fires → conflict.
+        std::fs::write(
+            local_dir.join("regions/shared.txt"),
+            "local content\n# emanon:genus set_k=3 oddity_s=1 index_i=0\n",
+        )
+        .unwrap();
+        assert!(git_in(&local_dir, &["add", "regions/shared.txt"]), "git add (local) failed");
+        assert!(git_in(&local_dir, &["commit", "-m", "local: add shared"]), "git commit (local) failed");
+
+        // ── Step 4: Remote independently adds the SAME file with set_k=7 ───────
+        // Different set_k AND different oddity_s → merge driver exits 1 → conflict.
+        std::fs::write(
+            remote_dir.join("regions/shared.txt"),
+            "remote content\n# emanon:genus set_k=7 oddity_s=4 index_i=0\n",
+        )
+        .unwrap();
+        assert!(git_in(&remote_dir, &["add", "regions/shared.txt"]), "git add (remote) failed");
+        assert!(git_in(&remote_dir, &["commit", "-m", "remote: add shared"]), "git commit (remote) failed");
+
+        // ── Step 5: Run cmd_merge("origin/main") from inside local ──────────────
+        // After git fetch, the merge sees:
+        //   base  = (empty blob — file didn't exist at clone point)
+        //   ours  = set_k=3  (local commit)
+        //   theirs= set_k=7  (remote commit)
+        // Merge driver: unrelated sets → exit 1 → conflict.
+        let orig_dir = std::env::current_dir().ok();
+        std::env::set_current_dir(&local_dir).expect("set_current_dir failed");
+
+        let result = cmd_merge("origin/main");
+
+        // Restore original cwd before any assertions.
+        if let Some(orig) = orig_dir {
+            let _ = std::env::set_current_dir(orig);
+        }
+
+        // Abort the merge state so subsequent tests are clean.
+        let _ = git_in(&local_dir, &["merge", "--abort"]);
+
+        match result {
+            Ok(()) => {
+                // Conflicts were deferred → pending-merge.json must exist.
+                let pending = local_dir.join(".gitverse/pending-merge.json");
+                assert!(
+                    pending.exists(),
+                    "pending-merge.json must be written when merge driver exits 1"
+                );
+                let json_str = std::fs::read_to_string(&pending).unwrap();
+                let trimmed = json_str.trim();
+                assert!(trimmed.starts_with('{'), "pending-merge.json must be a JSON object");
+                assert!(trimmed.ends_with('}'), "pending-merge.json must be a complete JSON object");
+                assert!(
+                    json_str.contains("\"remote_branch\": \"origin/main\""),
+                    "must record remote_branch; got: {json_str}"
+                );
+                assert!(
+                    json_str.contains("\"conflicts\""),
+                    "must contain conflicts array; got: {json_str}"
+                );
+                assert!(
+                    json_str.contains("regions/shared.txt"),
+                    "must list the conflicted file; got: {json_str}"
+                );
+            }
+            Err(e) => {
+                panic!("cmd_merge returned an unexpected error: {e}");
+            }
+        }
+    }
+
+    #[test]
+    fn cmd_merge_clean_merge_no_pending_json() {
+        let _lock = CWD_MUTEX.lock().unwrap_or_else(|p| p.into_inner());
+
+        let base = tempdir();
+        let local_dir = base.join("local");
+        let remote_dir = base.join("remote");
+        std::fs::create_dir_all(&local_dir).unwrap();
+        std::fs::create_dir_all(&remote_dir).unwrap();
+
+        // Set up the "remote" universe.
+        init_universe(&remote_dir);
+
+        // Clone locally; local is now identical to remote — no divergence.
+        assert!(
+            git_in(&base, &["clone", remote_dir.to_str().unwrap(), "local"]),
+            "git clone failed"
+        );
+
+        // Remote adds a new file (non-conflicting with anything local has).
+        let new_file = remote_dir.join("regions/new.txt");
+        std::fs::write(&new_file, "brand new content\n").unwrap();
+        assert!(git_in(&remote_dir, &["add", "regions/new.txt"]), "git add failed");
+        assert!(git_in(&remote_dir, &["commit", "-m", "add new"]), "git commit failed");
+
+        // Local has no changes — a merge of origin/main should be clean.
+        let orig_dir = std::env::current_dir().ok();
+        std::env::set_current_dir(&local_dir).expect("set_current_dir failed");
+
+        let result = cmd_merge("origin/main");
+
+        if let Some(orig) = orig_dir {
+            let _ = std::env::set_current_dir(orig);
+        }
+
+        match result {
+            Ok(()) => {
+                // Clean merge — pending-merge.json should NOT exist (or be absent).
+                let pending = local_dir.join(".gitverse/pending-merge.json");
+                assert!(
+                    !pending.exists(),
+                    "clean merge must not write pending-merge.json"
+                );
+            }
+            Err(e) => {
+                panic!("cmd_merge failed on a clean merge: {e}");
+            }
+        }
     }
 }

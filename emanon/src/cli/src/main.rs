@@ -92,6 +92,34 @@ enum Commands {
         action: ContractAction,
     },
 
+    /// Write a file into the universe with an embedded Collatz genus stamp
+    ///
+    /// Stamps are derived from the current snapshot count and the file path,
+    /// ensuring every file written in the same snapshot has a unique genus.
+    /// Text files get a trailing `# emanon-genus: {...}` line; binary files
+    /// (piped via stdin without a content argument) get a `<file>.genus` sidecar.
+    ///
+    /// Example:
+    ///   emanon write regions/alpha/test.json '{"foo": 1}'
+    Write {
+        /// Path to write (relative to universe root)
+        path: String,
+        /// Text content to write (omit to read binary content from stdin)
+        content: Option<String>,
+    },
+
+    /// Print the Collatz genus stamp embedded in a file
+    ///
+    /// Reads the file and extracts the `# emanon-genus:` stamp written by
+    /// `emanon write`.  Exits 1 if no stamp is found.
+    ///
+    /// Example:
+    ///   emanon genus regions/alpha/test.json
+    Genus {
+        /// Path to the file to inspect (relative to universe root)
+        path: String,
+    },
+
     /// Scan a remote universe for open bounties and forks
     Scan {
         /// Remote name or URL to scan
@@ -488,16 +516,21 @@ fn cmd_snapshot(message: Option<String>, no_stage: bool) -> Result<(), Box<dyn s
 // emanon merge-driver
 // ---------------------------------------------------------------------------
 
-/// A Collatz genus stamp parsed from an Emanon file header.
+/// A Collatz genus stamp parsed from an Emanon file.
 ///
-/// Files written by Emanon carry a one-line genus stamp as the **first line**
-/// of the file:
+/// Two stamp formats are supported (both produced by different commands):
 ///
+/// **Legacy first-line format** (written by earlier tooling):
 /// ```text
 /// # emanon:genus set_k=3 oddity_s=1 index_i=0
 /// ```
 ///
-/// If this line is absent the file is considered "legacy" and the driver
+/// **JSON trailing-line format** (written by `emanon write`, M1.4+):
+/// ```text
+/// # emanon-genus: {"set_k": 3, "oddity_s": 1, "index_i": 0, "writer": "...", "snapshot": 42}
+/// ```
+///
+/// If neither format is found the file is considered "legacy" and the driver
 /// defers to the user (exits 1).
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct GenusStamp {
@@ -507,32 +540,70 @@ struct GenusStamp {
     index_i: u64,
 }
 
-/// Parse a [`GenusStamp`] from the **first line** of `content`.
+/// Parse a [`GenusStamp`] from any line of `content`.
 ///
-/// The first line must match exactly:
-/// ```text
-/// # emanon:genus set_k=<u64> oddity_s=<u64> index_i=<u64>
-/// ```
-/// Returns `None` if the line is absent or malformed.
+/// Scans every line looking for either:
+/// 1. `# emanon:genus set_k=<u64> oddity_s=<u64> index_i=<u64>`
+/// 2. `# emanon-genus: {"set_k": <u64>, "oddity_s": <u64>, "index_i": <u64>, ...}`
+///
+/// Returns the first match found, or `None` if no stamp is present.
 fn parse_genus_stamp(content: &str) -> Option<GenusStamp> {
-    let first = content.lines().next()?;
-    let rest = first.trim().strip_prefix("# emanon:genus ")?;
-    let mut set_k: Option<u64> = None;
-    let mut oddity_s: Option<u64> = None;
-    let mut index_i: Option<u64> = None;
-    for part in rest.split_whitespace() {
-        if let Some(v) = part.strip_prefix("set_k=") {
-            set_k = v.parse().ok();
-        } else if let Some(v) = part.strip_prefix("oddity_s=") {
-            oddity_s = v.parse().ok();
-        } else if let Some(v) = part.strip_prefix("index_i=") {
-            index_i = v.parse().ok();
+    for line in content.lines() {
+        let trimmed = line.trim();
+
+        // ------------------------------------------------------------------
+        // Format 1 (legacy): # emanon:genus set_k=K oddity_s=S index_i=I
+        // ------------------------------------------------------------------
+        if let Some(rest) = trimmed.strip_prefix("# emanon:genus ") {
+            let mut set_k: Option<u64> = None;
+            let mut oddity_s: Option<u64> = None;
+            let mut index_i: Option<u64> = None;
+            for part in rest.split_whitespace() {
+                if let Some(v) = part.strip_prefix("set_k=") {
+                    set_k = v.parse().ok();
+                } else if let Some(v) = part.strip_prefix("oddity_s=") {
+                    oddity_s = v.parse().ok();
+                } else if let Some(v) = part.strip_prefix("index_i=") {
+                    index_i = v.parse().ok();
+                }
+            }
+            if let (Some(k), Some(s), Some(i)) = (set_k, oddity_s, index_i) {
+                return Some(GenusStamp { set_k: k, oddity_s: s, index_i: i });
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // Format 2 (M1.4): # emanon-genus: {"set_k": K, "oddity_s": S, ...}
+        // ------------------------------------------------------------------
+        if let Some(json_str) = trimmed.strip_prefix("# emanon-genus: ") {
+            if let Some(stamp) = parse_genus_json(json_str) {
+                return Some(stamp);
+            }
         }
     }
-    match (set_k, oddity_s, index_i) {
-        (Some(k), Some(s), Some(i)) => Some(GenusStamp { set_k: k, oddity_s: s, index_i: i }),
-        _ => None,
+    None
+}
+
+/// Parse a [`GenusStamp`] from a JSON object string produced by `emanon write`.
+///
+/// Handles the compact inline JSON format:
+/// `{"set_k": 13, "oddity_s": 5, "index_i": 2, "writer": "...", "snapshot": 42}`
+///
+/// Uses simple substring search to avoid a JSON dependency.
+fn parse_genus_json(json: &str) -> Option<GenusStamp> {
+    fn extract_u64(json: &str, key: &str) -> Option<u64> {
+        // Find `"key": N` where N is a sequence of digits.
+        let search = format!("\"{}\":", key);
+        let pos = json.find(&search)?;
+        let after = json[pos + search.len()..].trim_start();
+        // After the colon, collect digits (possibly quoted number but we emit unquoted).
+        let digits: String = after.chars().take_while(|c| c.is_ascii_digit()).collect();
+        digits.parse().ok()
     }
+    let k = extract_u64(json, "set_k")?;
+    let s = extract_u64(json, "oddity_s")?;
+    let i = extract_u64(json, "index_i")?;
+    Some(GenusStamp { set_k: k, oddity_s: s, index_i: i })
 }
 
 /// Hybrid merge: both versions contributed; produces a concatenated file.
@@ -674,6 +745,187 @@ fn cmd_merge_driver(
 }
 
 // ---------------------------------------------------------------------------
+// emanon write
+// ---------------------------------------------------------------------------
+
+/// Low 8 bits of the default hash of `path`.
+///
+/// Provides per-file genus variation: two files written in the same snapshot
+/// use different seeds so they receive different genera.  8 bits (0–255) keeps
+/// `n = snapshot + hash` small enough for `dropping_genus_u64` to run fast.
+fn path_hash_low_bits(path: &str) -> u64 {
+    use std::collections::hash_map::DefaultHasher;
+    use std::hash::{Hash, Hasher};
+    let mut h = DefaultHasher::new();
+    path.hash(&mut h);
+    h.finish() & 0xFF
+}
+
+/// Serialize a [`collatz_rs::Genus`] to the inline JSON stamp string used by
+/// `emanon write`, including the `writer` and `snapshot` fields.
+fn genus_stamp_json(genus: &collatz_rs::Genus, writer: &str, snapshot: u64) -> String {
+    format!(
+        r#"# emanon-genus: {{"set_k": {}, "oddity_s": {}, "index_i": {}, "writer": "{}", "snapshot": {}}}"#,
+        genus.set_k, genus.oddity_s, genus.index_i, writer, snapshot
+    )
+}
+
+/// Implements `emanon write <path> [content]`.
+///
+/// Writes `content` (or stdin if omitted) into `path` relative to the universe
+/// root, appending a Collatz genus stamp computed from the current snapshot
+/// count and the file path.
+///
+/// - Text content (supplied as a CLI arg or valid-UTF-8 stdin): stamp is
+///   appended as a trailing `# emanon-genus: {...}` line.
+/// - Binary stdin: stamp is written to a `<path>.genus` sidecar file as raw
+///   JSON (without the `#` comment prefix, so binary files aren't corrupted).
+fn cmd_write(path: &str, content: Option<String>) -> Result<(), Box<dyn std::error::Error>> {
+    // --- Verify universe ---
+    let here = std::env::current_dir()?;
+    let gitverse = here.join(".gitverse");
+    if !gitverse.exists() {
+        return Err(
+            "not an Emanon universe — .gitverse/ not found in the current directory.\n\
+             Run `emanon init <name>` to create one, then `cd <name>` first."
+                .into(),
+        );
+    }
+
+    // --- Read snapshot count ---
+    let count_file = gitverse.join("snapshot_count");
+    let snapshot: u64 = if count_file.exists() {
+        std::fs::read_to_string(&count_file)?.trim().parse().unwrap_or(0)
+    } else {
+        0
+    };
+
+    // --- Compute genus ---
+    //
+    // n = snapshot_count + path_hash_low_bits + 2
+    //   - +2 ensures n > 1 (dropping_genus panics for n ≤ 1)
+    //   - path_hash_low_bits (0–255) varies genus per file within a snapshot
+    //   - Total n is small (< 2^16 in practice), so dropping_index is fast.
+    let seed = snapshot.saturating_add(path_hash_low_bits(path)).saturating_add(2);
+    let genus = collatz_rs::dropping_genus_u64(seed);
+
+    // --- Get git author (best-effort) ---
+    let writer = Command::new("git")
+        .args(["config", "user.email"])
+        .output()
+        .ok()
+        .filter(|o| o.status.success())
+        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
+        .unwrap_or_else(|| "unknown".to_string());
+
+    // --- Resolve target path ---
+    let file_path = here.join(path);
+    if let Some(parent) = file_path.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+
+    let stamp_line = genus_stamp_json(&genus, &writer, snapshot);
+
+    match content {
+        // ------------------------------------------------------------------
+        // Text path: content supplied as CLI arg (always valid UTF-8)
+        // ------------------------------------------------------------------
+        Some(text) => {
+            // Ensure content ends with a newline before appending stamp.
+            let stamped = if text.ends_with('\n') {
+                format!("{text}{stamp_line}\n")
+            } else {
+                format!("{text}\n{stamp_line}\n")
+            };
+            std::fs::write(&file_path, &stamped)?;
+
+            println!("✍️  {path}");
+            println!("    set_k={} oddity_s={} index_i={}", genus.set_k, genus.oddity_s, genus.index_i);
+            println!("    snapshot={snapshot}  seed={seed}");
+        }
+
+        // ------------------------------------------------------------------
+        // Binary/stdin path: read raw bytes from stdin
+        // ------------------------------------------------------------------
+        None => {
+            use std::io::Read;
+            let mut raw: Vec<u8> = Vec::new();
+            std::io::stdin().read_to_end(&mut raw)?;
+
+            if let Ok(text) = std::str::from_utf8(&raw) {
+                // Valid UTF-8 — treat as text, embed stamp at bottom.
+                let stamped = if text.ends_with('\n') {
+                    format!("{text}{stamp_line}\n")
+                } else {
+                    format!("{text}\n{stamp_line}\n")
+                };
+                std::fs::write(&file_path, stamped.as_bytes())?;
+            } else {
+                // True binary — write raw bytes and create sidecar.
+                std::fs::write(&file_path, &raw)?;
+                let sidecar_path = format!("{path}.genus");
+                let sidecar = here.join(&sidecar_path);
+                // Sidecar is plain JSON (no `#` comment prefix; binary files
+                // cannot safely embed line comments).
+                let sidecar_json = format!(
+                    r#"{{"set_k": {}, "oddity_s": {}, "index_i": {}, "writer": "{}", "snapshot": {}}}"#,
+                    genus.set_k, genus.oddity_s, genus.index_i, writer, snapshot
+                );
+                std::fs::write(&sidecar, sidecar_json)?;
+                println!("✍️  {path} (binary — genus written to {sidecar_path})");
+                println!("    set_k={} oddity_s={} index_i={}", genus.set_k, genus.oddity_s, genus.index_i);
+                return Ok(());
+            }
+
+            println!("✍️  {path}");
+            println!("    set_k={} oddity_s={} index_i={}", genus.set_k, genus.oddity_s, genus.index_i);
+            println!("    snapshot={snapshot}  seed={seed}");
+        }
+    }
+
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// emanon genus
+// ---------------------------------------------------------------------------
+
+/// Implements `emanon genus <path>`.
+///
+/// Reads `path` (relative to universe root) and extracts the embedded genus
+/// stamp, printing it to stdout as JSON.  For binary files with a `.genus`
+/// sidecar, reads the sidecar instead.
+///
+/// Exits 1 if no genus stamp is found (via `eprintln!` + error return).
+fn cmd_genus(path: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let here = std::env::current_dir()?;
+    let file_path = here.join(path);
+
+    // Try reading the file as text.
+    if let Ok(content) = std::fs::read_to_string(&file_path) {
+        // Scan for embedded stamp.
+        if let Some(stamp) = parse_genus_stamp(&content) {
+            println!(
+                r#"{{"set_k": {}, "oddity_s": {}, "index_i": {}}}"#,
+                stamp.set_k, stamp.oddity_s, stamp.index_i
+            );
+            return Ok(());
+        }
+        // No embedded stamp — check for sidecar (file might be "binary" stored as text).
+    }
+
+    // Try binary sidecar <path>.genus.
+    let sidecar_path = here.join(format!("{path}.genus"));
+    if sidecar_path.exists() {
+        let sidecar = std::fs::read_to_string(&sidecar_path)?;
+        println!("{}", sidecar.trim());
+        return Ok(());
+    }
+
+    Err(format!("no genus stamp found in '{path}' (or '{path}.genus')").into())
+}
+
+// ---------------------------------------------------------------------------
 // stub helper
 // ---------------------------------------------------------------------------
 
@@ -735,6 +987,18 @@ fn main() {
             ContractAction::Sign => not_yet("emanon contract sign"),
             ContractAction::List => not_yet("emanon contract list"),
         },
+        Commands::Write { path, content } => {
+            if let Err(e) = cmd_write(&path, content) {
+                eprintln!("error: {e}");
+                std::process::exit(1);
+            }
+        }
+        Commands::Genus { path } => {
+            if let Err(e) = cmd_genus(&path) {
+                eprintln!("error: {e}");
+                std::process::exit(1);
+            }
+        }
         Commands::Scan { remote } => {
             not_yet(&format!("emanon scan {remote}"));
         }
@@ -1085,6 +1349,160 @@ mod tests {
             !GITATTRIBUTES.contains("scars/**  merge=emanon-collatz"),
             "scars must NOT use emanon-collatz"
         );
+    }
+
+    // -----------------------------------------------------------------------
+    // parse_genus_stamp — JSON format (M1.4)
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn parse_genus_stamp_json_bottom_line() {
+        // JSON stamp at the bottom — as written by `emanon write`
+        let content = "{\"foo\": 1}\n# emanon-genus: {\"set_k\": 13, \"oddity_s\": 5, \"index_i\": 2, \"writer\": \"a@b.com\", \"snapshot\": 42}\n";
+        let g = parse_genus_stamp(content).expect("should parse JSON stamp");
+        assert_eq!(g.set_k, 13);
+        assert_eq!(g.oddity_s, 5);
+        assert_eq!(g.index_i, 2);
+    }
+
+    #[test]
+    fn parse_genus_stamp_json_only() {
+        // File with only the stamp line (edge case)
+        let content = "# emanon-genus: {\"set_k\": 1, \"oddity_s\": 0, \"index_i\": 0, \"writer\": \"x\", \"snapshot\": 0}\n";
+        let g = parse_genus_stamp(content).expect("should parse JSON stamp");
+        assert_eq!(g.set_k, 1);
+        assert_eq!(g.oddity_s, 0);
+        assert_eq!(g.index_i, 0);
+    }
+
+    #[test]
+    fn parse_genus_stamp_legacy_mid_file() {
+        // Legacy format not on first line — now found because we scan all lines
+        let content = "line1\nline2\n# emanon:genus set_k=7 oddity_s=4 index_i=1\nline4\n";
+        let g = parse_genus_stamp(content).expect("should parse legacy stamp");
+        assert_eq!(g.set_k, 7);
+        assert_eq!(g.oddity_s, 4);
+        assert_eq!(g.index_i, 1);
+    }
+
+    #[test]
+    fn parse_genus_stamp_no_match() {
+        let content = "just plain text\nno stamps here\n";
+        assert!(parse_genus_stamp(content).is_none());
+    }
+
+    // -----------------------------------------------------------------------
+    // parse_genus_json
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn parse_genus_json_valid() {
+        let json = r#"{"set_k": 96, "oddity_s": 37, "index_i": 5, "writer": "dev@example.com", "snapshot": 7}"#;
+        let g = parse_genus_json(json).expect("should parse");
+        assert_eq!(g.set_k, 96);
+        assert_eq!(g.oddity_s, 37);
+        assert_eq!(g.index_i, 5);
+    }
+
+    #[test]
+    fn parse_genus_json_missing_key() {
+        let json = r#"{"set_k": 3, "oddity_s": 1}"#; // no index_i
+        assert!(parse_genus_json(json).is_none());
+    }
+
+    // -----------------------------------------------------------------------
+    // path_hash_low_bits
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn path_hash_low_bits_range() {
+        let h = path_hash_low_bits("regions/alpha/test.json");
+        assert!(h < 256, "must be 0–255, got {h}");
+    }
+
+    #[test]
+    fn path_hash_low_bits_different_paths() {
+        // Different paths should not always hash to the same value.
+        // This could theoretically collide — but with 256 buckets the probability
+        // of any two of these colliding is low.
+        let paths = ["a.json", "b.json", "regions/x", "regions/y", "scars/z"];
+        let hashes: Vec<u64> = paths.iter().map(|p| path_hash_low_bits(p)).collect();
+        // At least 2 of 5 must differ (probability of all equal is (1/256)^4 ≈ 0)
+        let first = hashes[0];
+        assert!(
+            hashes.iter().any(|&h| h != first),
+            "all paths hashed to the same value — hash is degenerate"
+        );
+    }
+
+    // -----------------------------------------------------------------------
+    // genus_stamp_json
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn genus_stamp_json_format() {
+        let genus = collatz_rs::Genus { set_k: 13, oddity_s: 5, index_i: 2 };
+        let stamp = genus_stamp_json(&genus, "a@b.com", 42);
+        assert!(stamp.starts_with("# emanon-genus: "), "must start with prefix");
+        assert!(stamp.contains("\"set_k\": 13"), "must contain set_k");
+        assert!(stamp.contains("\"oddity_s\": 5"), "must contain oddity_s");
+        assert!(stamp.contains("\"index_i\": 2"), "must contain index_i");
+        assert!(stamp.contains("\"writer\": \"a@b.com\""), "must contain writer");
+        assert!(stamp.contains("\"snapshot\": 42"), "must contain snapshot");
+    }
+
+    #[test]
+    fn genus_stamp_json_parseable_by_parse_genus_stamp() {
+        // Round-trip: genus_stamp_json → parse_genus_stamp
+        let genus = collatz_rs::Genus { set_k: 7, oddity_s: 4, index_i: 3 };
+        let stamp = genus_stamp_json(&genus, "test@test.com", 10);
+        let content = format!("some content\n{stamp}\n");
+        let parsed = parse_genus_stamp(&content).expect("stamp must be parseable");
+        assert_eq!(parsed.set_k, 7);
+        assert_eq!(parsed.oddity_s, 4);
+        assert_eq!(parsed.index_i, 3);
+    }
+
+    // -----------------------------------------------------------------------
+    // merge driver can extract stamps from files written by cmd_write
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn merge_driver_understands_m14_stamps() {
+        // Simulate two files written by `emanon write` with same set_k
+        // (Genus { set_k: 1, oddity_s: 1, index_i: 0 } for seed=2)
+        let genus_ours = collatz_rs::Genus { set_k: 1, oddity_s: 1, index_i: 0 };
+        let genus_theirs = collatz_rs::Genus { set_k: 1, oddity_s: 1, index_i: 0 };
+        let ours_content = format!(
+            "{{\"foo\": 1}}\n{}\n",
+            genus_stamp_json(&genus_ours, "alice@test.com", 5)
+        );
+        let theirs_content = format!(
+            "{{\"foo\": 2}}\n{}\n",
+            genus_stamp_json(&genus_theirs, "bob@test.com", 5)
+        );
+
+        let dir = tempdir();
+        let base = tmp_file(&dir, "base.txt", "");
+        let ours = tmp_file(&dir, "ours.txt", &ours_content);
+        let theirs = tmp_file(&dir, "theirs.txt", &theirs_content);
+        let out = dir.join("out.txt");
+
+        let code = cmd_merge_driver(
+            &MergeMode::Collatz,
+            base.to_str().unwrap(),
+            ours.to_str().unwrap(),
+            theirs.to_str().unwrap(),
+            "regions/alpha/test.json",
+            out.to_str().unwrap(),
+        )
+        .expect("should not error");
+
+        // same set_k → hybrid merge → exit 0
+        assert_eq!(code, 0, "M1.4 stamps with same set_k must produce hybrid merge");
+        let merged = std::fs::read_to_string(&out).unwrap();
+        assert!(merged.contains("\"foo\": 1"), "must contain ours data");
+        assert!(merged.contains("\"foo\": 2"), "must contain theirs data");
     }
 
     // -----------------------------------------------------------------------

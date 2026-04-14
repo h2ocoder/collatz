@@ -216,6 +216,17 @@ pub fn dropping_genus(n: &BigUint) -> Genus {
     }
 }
 
+/// Convenience wrapper: compute [`dropping_genus`] from a plain `u64`.
+///
+/// Converts `n` to [`BigUint`] internally.  Suitable for the small values
+/// used in `emanon write` (snapshot_count + path_hash — typically < 2^20).
+///
+/// # Panics
+/// Panics if `n ≤ 1`.
+pub fn dropping_genus_u64(n: u64) -> Genus {
+    dropping_genus(&BigUint::from(n))
+}
+
 /// Single step of the Syracuse (odd-only) map.
 ///
 /// ```text

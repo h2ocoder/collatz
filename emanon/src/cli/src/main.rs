@@ -1,3 +1,5 @@
+mod bounty;
+
 use clap::{Parser, Subcommand};
 use collatz_rs::beta;
 use crossterm::{

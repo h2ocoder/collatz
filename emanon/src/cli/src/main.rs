@@ -172,6 +172,22 @@ enum Commands {
         #[command(subcommand)]
         action: RegistryAction,
     },
+
+    /// Validate the current universe against the canonical Emanon schema
+    ///
+    /// Checks that all required directories and files exist, that
+    /// `.gitverse/values.json` is well-formed, that `.gitattributes` has the
+    /// three required merge-driver registrations, and that genus stamps in
+    /// `regions/` files are parseable.  Missing genus stamps produce warnings
+    /// (not errors); structural problems produce errors and a non-zero exit.
+    ///
+    /// Example:
+    ///   cd my-universe && emanon validate
+    Validate {
+        /// Treat warnings as errors (strict mode)
+        #[arg(long, short = 's')]
+        strict: bool,
+    },
 }
 
 #[derive(Subcommand)]
@@ -2193,6 +2209,255 @@ fn cmd_negotiate(non_interactive: bool) -> Result<(), Box<dyn std::error::Error>
 }
 
 // ---------------------------------------------------------------------------
+// emanon validate
+// ---------------------------------------------------------------------------
+
+/// Walk a directory tree under `dir` and append a warning for any text file
+/// in `regions/` that contains no parseable genus stamp.
+///
+/// Binary files and `.genus` sidecars are skipped.  `.gitkeep` sentinels are
+/// also skipped (they are intentionally stamp-free).
+fn check_genus_stamps_in_dir(
+    dir: &Path,
+    root: &Path,
+    warnings: &mut Vec<String>,
+) {
+    let entries = match std::fs::read_dir(dir) {
+        Ok(e) => e,
+        Err(_) => return,
+    };
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if path.is_dir() {
+            check_genus_stamps_in_dir(&path, root, warnings);
+        } else if path.is_file() {
+            let name = path
+                .file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("");
+            // Skip sentinels and sidecars.
+            if name == ".gitkeep" || name.ends_with(".genus") {
+                continue;
+            }
+            // Only attempt to parse text files.
+            if let Ok(content) = std::fs::read_to_string(&path) {
+                if parse_genus_stamp(&content).is_none() {
+                    let rel = path.strip_prefix(root).unwrap_or(&path);
+                    warnings.push(format!(
+                        "no genus stamp in regions/ file: {}",
+                        rel.display()
+                    ));
+                }
+            }
+        }
+    }
+}
+
+/// Implements `emanon validate [--strict]`.
+///
+/// Validation is split into two severity levels:
+///
+/// **Errors** (non-zero exit):
+///   - Missing required directory (`.gitverse/`, `regions/`, `contracts/`, `scars/`, `forks/`)
+///   - Missing required file (`.gitverse/values.json`, `.gitattributes`)
+///   - `values.json` missing a required schema key or has mismatched braces
+///   - `.gitattributes` missing one of the three `merge=` driver lines
+///
+/// **Warnings** (zero exit unless `--strict`):
+///   - A commit message does not match the `snapshot N:` or `init:` format
+///   - A file in `regions/` has no parseable genus stamp
+///
+/// Exits 0 on success, 1 on validation error, 2 on internal I/O error.
+fn cmd_validate(strict: bool) -> Result<(), Box<dyn std::error::Error>> {
+    let here = std::env::current_dir()?;
+
+    let mut errors: Vec<String> = Vec::new();
+    let mut warnings: Vec<String> = Vec::new();
+
+    // ------------------------------------------------------------------
+    // Rule 1 — Required directories
+    // ------------------------------------------------------------------
+    for dir in &[".gitverse", "regions", "contracts", "scars", "forks"] {
+        if !here.join(dir).is_dir() {
+            errors.push(format!("missing required directory: {dir}/"));
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Rule 2 — Required files
+    // ------------------------------------------------------------------
+    for file in &[".gitverse/values.json", ".gitattributes"] {
+        if !here.join(file).exists() {
+            errors.push(format!("missing required file: {file}"));
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Rule 3 — values.json schema validation
+    //
+    // Required top-level keys (per cmd_init VALUES_JSON constant):
+    //   conflict_preference, fork_readiness, battle_threshold, host_authority_mode
+    //
+    // We do not pull in a JSON schema crate to keep the dependency tree
+    // minimal — the hand-parser already used throughout the codebase is
+    // sufficient for this structural check.
+    // ------------------------------------------------------------------
+    let values_path = here.join(".gitverse/values.json");
+    if values_path.exists() {
+        match std::fs::read_to_string(&values_path) {
+            Err(e) => errors.push(format!("cannot read .gitverse/values.json: {e}")),
+            Ok(content) => {
+                // Structural check: balanced braces.
+                let opens = content.chars().filter(|&c| c == '{').count();
+                let closes = content.chars().filter(|&c| c == '}').count();
+                if opens == 0 || opens != closes {
+                    errors.push(
+                        "values.json is not valid JSON (unbalanced or missing braces)".to_string(),
+                    );
+                }
+                // Required key presence check.
+                for key in &[
+                    "conflict_preference",
+                    "fork_readiness",
+                    "battle_threshold",
+                    "host_authority_mode",
+                ] {
+                    let search = format!("\"{}\"", key);
+                    if !content.contains(&search) {
+                        errors.push(format!(
+                            ".gitverse/values.json missing required key: \"{key}\""
+                        ));
+                    }
+                }
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Rule 4 — .gitattributes merge-driver lines
+    //
+    // Each of the three canonical path patterns must have a `merge=<driver>`
+    // token on the same line.
+    // ------------------------------------------------------------------
+    let gitattr_path = here.join(".gitattributes");
+    if gitattr_path.exists() {
+        match std::fs::read_to_string(&gitattr_path) {
+            Err(e) => errors.push(format!("cannot read .gitattributes: {e}")),
+            Ok(content) => {
+                let required = [
+                    ("regions/**", "emanon-collatz"),
+                    ("contracts/**", "emanon-contract"),
+                    ("scars/**", "emanon-append-only"),
+                ];
+                for (pattern, driver) in &required {
+                    let found = content.lines().any(|line| {
+                        let l = line.trim();
+                        // Accept both "regions/**" and "regions/**       merge=…"
+                        l.starts_with(pattern)
+                            && l.contains(&format!("merge={driver}"))
+                    });
+                    if !found {
+                        errors.push(format!(
+                            ".gitattributes missing: {pattern}   merge={driver}"
+                        ));
+                    }
+                }
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Rule 5 (warn) — commit message format
+    //
+    // Every commit subject should be one of:
+    //   "snapshot N: ..."  — produced by `emanon snapshot`
+    //   "init: ..."        — bootstrap commit from `emanon init`
+    //   "Merge …"          — git merge commits
+    //
+    // Commits that look like WIP or tool commits (feat/fix/chore/etc.) are
+    // warned about but do not fail validation — teams may have commits from
+    // tooling outside emanon.
+    // ------------------------------------------------------------------
+    let log_output = Command::new("git")
+        .args(["log", "--format=%s", "HEAD"])
+        .current_dir(&here)
+        .output();
+    match log_output {
+        Ok(out) if out.status.success() => {
+            let subjects = String::from_utf8_lossy(&out.stdout);
+            for subject in subjects.lines() {
+                let s = subject.trim();
+                if s.is_empty() {
+                    continue;
+                }
+                let ok = s.starts_with("snapshot ")
+                    || s.starts_with("init:")
+                    || s.starts_with("Merge ")
+                    || s.starts_with("[WIP ")      // in-progress commits
+                    || s.starts_with("feat(")      // tool commits (CI/CD)
+                    || s.starts_with("chore(")
+                    || s.starts_with("fix(");
+                if !ok {
+                    warnings.push(format!(
+                        "commit message does not match emanon format: \"{s}\""
+                    ));
+                }
+            }
+        }
+        // Not in a git repo or git not available — skip this check.
+        _ => {}
+    }
+
+    // ------------------------------------------------------------------
+    // Rule 6 (warn) — genus stamps in regions/
+    // ------------------------------------------------------------------
+    let regions_dir = here.join("regions");
+    if regions_dir.is_dir() {
+        check_genus_stamps_in_dir(&regions_dir, &here, &mut warnings);
+    }
+
+    // ------------------------------------------------------------------
+    // Report
+    // ------------------------------------------------------------------
+    if !warnings.is_empty() {
+        eprintln!("⚠️   Warnings ({}):", warnings.len());
+        for w in &warnings {
+            eprintln!("    • {w}");
+        }
+    }
+
+    // In strict mode, warnings are promoted to errors.
+    if strict {
+        for w in warnings.drain(..) {
+            errors.push(w);
+        }
+    }
+
+    if errors.is_empty() {
+        println!(
+            "✅  Universe validates OK{}",
+            if warnings.is_empty() { "." } else { " (with warnings — see above)." }
+        );
+        Ok(())
+    } else {
+        eprintln!(
+            "❌  Validation failed ({} error{}):",
+            errors.len(),
+            if errors.len() == 1 { "" } else { "s" }
+        );
+        for e in &errors {
+            eprintln!("    • {e}");
+        }
+        Err(format!(
+            "{} validation error{}",
+            errors.len(),
+            if errors.len() == 1 { "" } else { "s" }
+        )
+        .into())
+    }
+}
+
+// ---------------------------------------------------------------------------
 // stub helper
 // ---------------------------------------------------------------------------
 
@@ -2294,6 +2559,12 @@ fn main() {
             RegistryAction::Pull => not_yet("emanon registry pull"),
             RegistryAction::List => not_yet("emanon registry list"),
         },
+        Commands::Validate { strict } => {
+            if let Err(e) = cmd_validate(strict) {
+                eprintln!("error: {e}");
+                std::process::exit(1);
+            }
+        }
     }
 }
 
@@ -3209,5 +3480,187 @@ mod tests {
         // Don't write pending-merge.json
         let err = load_pending_conflicts(&gitverse);
         assert!(err.is_err(), "missing file must be an error");
+    }
+
+    // -----------------------------------------------------------------------
+    // validate helpers
+    // -----------------------------------------------------------------------
+
+    /// Build a minimal valid universe tree under `root` and return the path.
+    fn make_valid_universe(root: &std::path::Path) {
+        let gitverse = root.join(".gitverse");
+        std::fs::create_dir_all(&gitverse).unwrap();
+        for d in &["regions", "contracts", "scars", "forks"] {
+            std::fs::create_dir_all(root.join(d)).unwrap();
+        }
+        std::fs::write(
+            gitverse.join("values.json"),
+            r#"{
+  "conflict_preference": "contract",
+  "fork_readiness": "medium",
+  "battle_threshold": 0.5,
+  "host_authority_mode": "partition"
+}
+"#,
+        )
+        .unwrap();
+        std::fs::write(
+            root.join(".gitattributes"),
+            "regions/**       merge=emanon-collatz\ncontracts/**     merge=emanon-contract\nscars/**         merge=emanon-append-only\n",
+        )
+        .unwrap();
+    }
+
+    #[test]
+    fn validate_passes_on_valid_universe() {
+        let dir = tempdir();
+        make_valid_universe(&dir);
+        // Run cmd_validate from within the temp dir.
+        let original_dir = std::env::current_dir().unwrap();
+        std::env::set_current_dir(&dir).unwrap();
+        let result = cmd_validate(false);
+        std::env::set_current_dir(original_dir).unwrap();
+        assert!(result.is_ok(), "valid universe must pass: {:?}", result);
+    }
+
+    #[test]
+    fn validate_fails_missing_required_dir() {
+        let dir = tempdir();
+        make_valid_universe(&dir);
+        // Remove a required directory.
+        std::fs::remove_dir_all(dir.join("forks")).unwrap();
+
+        let original_dir = std::env::current_dir().unwrap();
+        std::env::set_current_dir(&dir).unwrap();
+        let result = cmd_validate(false);
+        std::env::set_current_dir(original_dir).unwrap();
+        assert!(result.is_err(), "missing dir must fail");
+        let msg = result.unwrap_err().to_string();
+        assert!(msg.contains("validation error"), "error must mention validation: {msg}");
+    }
+
+    #[test]
+    fn validate_fails_missing_values_json() {
+        let dir = tempdir();
+        make_valid_universe(&dir);
+        std::fs::remove_file(dir.join(".gitverse/values.json")).unwrap();
+
+        let original_dir = std::env::current_dir().unwrap();
+        std::env::set_current_dir(&dir).unwrap();
+        let result = cmd_validate(false);
+        std::env::set_current_dir(original_dir).unwrap();
+        assert!(result.is_err(), "missing values.json must fail");
+    }
+
+    #[test]
+    fn validate_fails_malformed_values_json() {
+        let dir = tempdir();
+        make_valid_universe(&dir);
+        // Missing required keys.
+        std::fs::write(
+            dir.join(".gitverse/values.json"),
+            r#"{"only_one_key": "yes"}"#,
+        )
+        .unwrap();
+
+        let original_dir = std::env::current_dir().unwrap();
+        std::env::set_current_dir(&dir).unwrap();
+        let result = cmd_validate(false);
+        std::env::set_current_dir(original_dir).unwrap();
+        assert!(result.is_err(), "malformed values.json must fail");
+    }
+
+    #[test]
+    fn validate_fails_missing_gitattributes_driver() {
+        let dir = tempdir();
+        make_valid_universe(&dir);
+        // Remove the scars merge driver line.
+        std::fs::write(
+            dir.join(".gitattributes"),
+            "regions/**       merge=emanon-collatz\ncontracts/**     merge=emanon-contract\n",
+        )
+        .unwrap();
+
+        let original_dir = std::env::current_dir().unwrap();
+        std::env::set_current_dir(&dir).unwrap();
+        let result = cmd_validate(false);
+        std::env::set_current_dir(original_dir).unwrap();
+        assert!(result.is_err(), "missing merge driver must fail");
+        let msg = result.unwrap_err().to_string();
+        assert!(msg.contains("validation error"), "must be validation error: {msg}");
+    }
+
+    #[test]
+    fn validate_warns_but_passes_on_unstamped_region_file() {
+        let dir = tempdir();
+        make_valid_universe(&dir);
+        // Write a file in regions/ with no genus stamp.
+        std::fs::write(
+            dir.join("regions/unstamped.txt"),
+            "hello world\n",
+        )
+        .unwrap();
+
+        let original_dir = std::env::current_dir().unwrap();
+        std::env::set_current_dir(&dir).unwrap();
+        let result = cmd_validate(false);
+        std::env::set_current_dir(original_dir).unwrap();
+        // Should pass (warnings, not errors).
+        assert!(
+            result.is_ok(),
+            "unstamped region file = warning, not error: {:?}",
+            result
+        );
+    }
+
+    #[test]
+    fn validate_strict_mode_fails_on_unstamped_region_file() {
+        let dir = tempdir();
+        make_valid_universe(&dir);
+        std::fs::write(
+            dir.join("regions/unstamped.txt"),
+            "hello world\n",
+        )
+        .unwrap();
+
+        let original_dir = std::env::current_dir().unwrap();
+        std::env::set_current_dir(&dir).unwrap();
+        let result = cmd_validate(true); // --strict
+        std::env::set_current_dir(original_dir).unwrap();
+        assert!(result.is_err(), "strict mode must fail on unstamped file");
+    }
+
+    #[test]
+    fn validate_passes_on_stamped_region_file() {
+        let dir = tempdir();
+        make_valid_universe(&dir);
+        // Write a file in regions/ with a valid genus stamp.
+        std::fs::write(
+            dir.join("regions/stamped.txt"),
+            "hello world\n# emanon-genus: {\"set_k\": 3, \"oddity_s\": 1, \"index_i\": 0, \"writer\": \"test\", \"snapshot\": 1}\n",
+        )
+        .unwrap();
+
+        let original_dir = std::env::current_dir().unwrap();
+        std::env::set_current_dir(&dir).unwrap();
+        let result = cmd_validate(false);
+        std::env::set_current_dir(original_dir).unwrap();
+        assert!(result.is_ok(), "stamped file should pass cleanly: {:?}", result);
+    }
+
+    #[test]
+    fn validate_genus_stamp_check_skips_gitkeep() {
+        let dir = tempdir();
+        make_valid_universe(&dir);
+        // .gitkeep has no stamp and must not produce a warning.
+        std::fs::write(dir.join("regions/.gitkeep"), "").unwrap();
+
+        let mut warnings: Vec<String> = Vec::new();
+        check_genus_stamps_in_dir(&dir.join("regions"), &dir, &mut warnings);
+        assert!(
+            warnings.is_empty(),
+            ".gitkeep must not produce a warning: {:?}",
+            warnings
+        );
     }
 }

@@ -1,4 +1,6 @@
 use clap::{Parser, Subcommand};
+use std::path::Path;
+use std::process::Command;
 
 /// Emanon — git-based game engine for the multiverse
 ///
@@ -14,10 +16,13 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Initialize a new Emanon universe (git repo)
+    /// Initialize a new Emanon universe (git repo with canonical .gitverse layout)
     Init {
-        /// Name for the new universe
+        /// Name for the new universe directory
         name: String,
+        /// Override existing-directory check (will not re-initialize an existing universe)
+        #[arg(long, short = 'f')]
+        force: bool,
     },
 
     /// Capture the current state as a snapshot (commit)
@@ -113,6 +118,146 @@ enum RegistryAction {
     List,
 }
 
+// ---------------------------------------------------------------------------
+// emanon init
+// ---------------------------------------------------------------------------
+
+const VALUES_JSON: &str = r#"{
+  "conflict_preference": "contract",
+  "fork_readiness": "medium",
+  "battle_threshold": 0.5,
+  "host_authority_mode": "partition"
+}
+"#;
+
+const GITATTRIBUTES: &str = "\
+# Register the Collatz merge driver for Emanon universes
+# To activate, add to .git/config:
+#   [merge \"collatz\"]
+#       name = Collatz conflict resolver
+#       driver = emanon-merge %O %A %B
+*.contract  merge=collatz
+";
+
+fn readme_template(name: &str) -> String {
+    format!(
+        "# {name}\n\
+        \n\
+        This is an Emanon universe — a git-based multiverse simulation.\n\
+        \n\
+        ## Structure\n\
+        \n\
+        - `regions/`  — spatial partitions of this universe\n\
+        - `contracts/` — agreements with other players and universes\n\
+        - `scars/`     — records of resolved conflicts and merges\n\
+        - `forks/`     — active timeline divergences\n\
+        - `.gitverse/values.json` — resolution preferences for this universe\n\
+        - `.gitattributes`         — Collatz merge driver registration (placeholder)\n\
+        \n\
+        ## Getting Started\n\
+        \n\
+        ```sh\n\
+        cd {name}\n\
+        emanon snapshot -m 'first moment'\n\
+        ```\n\
+        \n\
+        Run `emanon --help` to see available commands.\n"
+    )
+}
+
+fn cmd_init(name: &str, force: bool) -> Result<(), Box<dyn std::error::Error>> {
+    let target = Path::new(name);
+
+    // --- Guard: existing directory ---
+    if target.exists() {
+        if !force {
+            return Err(format!(
+                "directory '{}' already exists.\n\
+                 Use --force to initialise inside an existing directory\n\
+                 (will not overwrite an existing Emanon universe).",
+                name
+            )
+            .into());
+        }
+        // Even with --force, refuse to clobber an existing universe.
+        if target.join(".gitverse").exists() {
+            return Err(format!(
+                "'{name}' is already an Emanon universe (.gitverse exists).\n\
+                 --force does not re-initialise existing universes."
+            )
+            .into());
+        }
+    }
+
+    // --- Create directory tree ---
+    let dirs = [".gitverse", "regions", "contracts", "scars", "forks"];
+    for dir in &dirs {
+        std::fs::create_dir_all(target.join(dir))?;
+    }
+
+    // --- Write template files ---
+    std::fs::write(target.join(".gitverse/values.json"), VALUES_JSON)?;
+    std::fs::write(target.join(".gitverse/leverage.cache"), "")?;
+    std::fs::write(target.join(".gitattributes"), GITATTRIBUTES)?;
+    std::fs::write(target.join("regions/.gitkeep"), "")?;
+    std::fs::write(target.join("contracts/.gitkeep"), "")?;
+    std::fs::write(target.join("scars/.gitkeep"), "")?;
+    std::fs::write(target.join("forks/.gitkeep"), "")?;
+    std::fs::write(target.join("README.md"), readme_template(name))?;
+
+    // --- git init ---
+    let git_init = Command::new("git")
+        .args(["init", "-b", "main"])
+        .current_dir(target)
+        .output()?;
+
+    if !git_init.status.success() {
+        return Err(format!(
+            "git init failed:\n{}",
+            String::from_utf8_lossy(&git_init.stderr)
+        )
+        .into());
+    }
+
+    // --- git add . ---
+    let git_add = Command::new("git")
+        .args(["add", "."])
+        .current_dir(target)
+        .output()?;
+
+    if !git_add.status.success() {
+        return Err(format!(
+            "git add failed:\n{}",
+            String::from_utf8_lossy(&git_add.stderr)
+        )
+        .into());
+    }
+
+    // --- initial commit ---
+    let commit_msg = format!("init: bootstrap {} universe", name);
+    let git_commit = Command::new("git")
+        .args(["commit", "-m", &commit_msg])
+        .current_dir(target)
+        .output()?;
+
+    if !git_commit.status.success() {
+        return Err(format!(
+            "git commit failed:\n{}",
+            String::from_utf8_lossy(&git_commit.stderr)
+        )
+        .into());
+    }
+
+    println!("✨  Universe '{name}' initialised at ./{name}/");
+    println!("    cd {name} && emanon snapshot -m 'first moment'");
+
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// stub helper
+// ---------------------------------------------------------------------------
+
 fn not_yet(feature: &str) {
     eprintln!("⏳  `{feature}` is not yet implemented.");
     eprintln!("    This subcommand is stubbed in milestone M0.");
@@ -120,12 +265,19 @@ fn not_yet(feature: &str) {
     std::process::exit(1);
 }
 
+// ---------------------------------------------------------------------------
+// main
+// ---------------------------------------------------------------------------
+
 fn main() {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Init { name } => {
-            not_yet(&format!("emanon init {name}"));
+        Commands::Init { name, force } => {
+            if let Err(e) = cmd_init(&name, force) {
+                eprintln!("error: {e}");
+                std::process::exit(1);
+            }
         }
         Commands::Snapshot { message } => {
             let flag = message

@@ -38,11 +38,7 @@ public class WriteCommand : Command<WriteCommand.Settings>
         File.WriteAllText(absPath, content);
 
         // Stamp with Collatz genus
-        var values = GitverseLayout.ReadValues(repoRoot);
-        int snapshotCount = values != null
-            && values.TryGetValue("snapshot_count", out var sc)
-            ? sc.GetInt32()
-            : 0;
+        int snapshotCount = GitverseLayout.ReadValues(repoRoot)?.SnapshotCount ?? 0;
         string email = GitService.UserEmail(repoRoot);
         var genus = GenusStamper.StampFile(absPath, snapshotCount, email);
 

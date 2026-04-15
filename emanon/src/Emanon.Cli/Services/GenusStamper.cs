@@ -1,9 +1,49 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Emanon.Collatz;
 
 namespace Emanon.Cli.Services;
+
+/// <summary>
+/// Serialised form of an on-file genus stamp.
+///
+/// The optional <c>Displaced*</c> fields form an audit trail: when a merge
+/// driver resolves a conflict in favour of this stamp, it records the losing
+/// side's genus + writer here so the decision is visible in the merged file
+/// itself (since git discards merge-driver stdout).
+/// </summary>
+public sealed record GenusStamp(
+    [property: JsonPropertyName("set_k")]    int SetK,
+    [property: JsonPropertyName("oddity_s")] int OddityS,
+    [property: JsonPropertyName("index_i")]  int Index,
+    [property: JsonPropertyName("writer")]   string Writer,
+    [property: JsonPropertyName("snapshot")] int Snapshot,
+
+    [property: JsonPropertyName("displaced_set_k"),
+               JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    int? DisplacedSetK = null,
+
+    [property: JsonPropertyName("displaced_oddity_s"),
+               JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    int? DisplacedOddityS = null,
+
+    [property: JsonPropertyName("displaced_index_i"),
+               JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    int? DisplacedIndex = null,
+
+    [property: JsonPropertyName("displaced_writer"),
+               JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    string? DisplacedWriter = null)
+{
+    public Genus ToGenus() => new(SetK, OddityS, Index);
+
+    public Genus? DisplacedGenus =>
+        DisplacedSetK is int k && DisplacedOddityS is int s && DisplacedIndex is int i
+            ? new Genus(k, s, i)
+            : null;
+}
 
 /// <summary>
 /// Attaches and reads Collatz genus stamps on files.
@@ -37,10 +77,15 @@ public static class GenusStamper
     }
 
     /// <summary>Read the genus stamp from a file (or its sidecar). Returns null if absent.</summary>
-    public static Genus? ReadStamp(string filePath)
-    {
-        string stampLine = null!;
+    public static Genus? ReadStamp(string filePath) => ReadFullStamp(filePath)?.ToGenus();
 
+    /// <summary>
+    /// Read the full stamp record from a file (or its sidecar), including any
+    /// displacement audit fields. Returns null if no stamp is present.
+    /// </summary>
+    public static GenusStamp? ReadFullStamp(string filePath)
+    {
+        string? stampLine = null;
         var sidecar = filePath + ".genus";
         if (File.Exists(sidecar))
         {
@@ -49,25 +94,9 @@ public static class GenusStamper
         else if (File.Exists(filePath))
         {
             var lines = File.ReadAllLines(filePath);
-            stampLine = Array.FindLast(lines, l => l.StartsWith(StampPrefix))!;
+            stampLine = Array.FindLast(lines, l => l.StartsWith(StampPrefix));
         }
-
-        if (stampLine == null) return null;
-
-        try
-        {
-            var json = stampLine[StampPrefix.Length..].Trim();
-            var obj  = JsonSerializer.Deserialize<JsonElement>(json);
-            return new Genus(
-                obj.GetProperty("set_k").GetInt32(),
-                obj.GetProperty("oddity_s").GetInt32(),
-                obj.GetProperty("index_i").GetInt32()
-            );
-        }
-        catch
-        {
-            return null;
-        }
+        return stampLine is null ? null : ParseStampLine(stampLine);
     }
 
     // -------------------------------------------------------------------------
@@ -82,15 +111,50 @@ public static class GenusStamper
 
     private static string BuildStamp(Genus genus, string writer, int snapshot)
     {
-        var obj = new
+        var stamp = new GenusStamp(genus.SetK, genus.OddityS, genus.Index, writer, snapshot);
+        return StampPrefix + JsonSerializer.Serialize(stamp);
+    }
+
+    /// <summary>
+    /// Read a text file that already carries a stamp, produce new file content
+    /// where the stamp line is replaced with an enriched version carrying the
+    /// given displacement audit fields. Does NOT write anything — caller is
+    /// responsible for durable write (see MergeDriverCommand for an atomic
+    /// temp-file pattern).
+    /// </summary>
+    /// <returns>The enriched content, or null if the source file has no stamp.</returns>
+    public static string? BuildContentWithDisplacement(
+        string sourceFilePath,
+        Genus displacedGenus,
+        string displacedWriter)
+    {
+        if (!File.Exists(sourceFilePath)) return null;
+        var lines = File.ReadAllLines(sourceFilePath).ToList();
+        int idx = lines.FindLastIndex(l => l.StartsWith(StampPrefix));
+        if (idx < 0) return null;
+
+        var existing = ParseStampLine(lines[idx]);
+        if (existing is null) return null;
+
+        var enriched = existing with
         {
-            set_k    = genus.SetK,
-            oddity_s = genus.OddityS,
-            index_i  = genus.Index,
-            writer,
-            snapshot
+            DisplacedSetK    = displacedGenus.SetK,
+            DisplacedOddityS = displacedGenus.OddityS,
+            DisplacedIndex   = displacedGenus.Index,
+            DisplacedWriter  = displacedWriter,
         };
-        return StampPrefix + JsonSerializer.Serialize(obj);
+        lines[idx] = StampPrefix + JsonSerializer.Serialize(enriched);
+        return string.Join(Environment.NewLine, lines) + Environment.NewLine;
+    }
+
+    private static GenusStamp? ParseStampLine(string stampLine)
+    {
+        try
+        {
+            var json = stampLine[StampPrefix.Length..].Trim();
+            return JsonSerializer.Deserialize<GenusStamp>(json);
+        }
+        catch { return null; }
     }
 
     private static void AppendOrReplaceStamp(string filePath, string stamp)

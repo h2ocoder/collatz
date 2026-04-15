@@ -23,6 +23,9 @@ app.Configure(config =>
     config.AddCommand<MergeCommand>("merge")
           .WithDescription("Merge a remote branch, invoking the Collatz merge driver on conflicts.");
 
+    config.AddCommand<MergeDriverCommand>("merge-driver")
+          .WithDescription("Internal: custom git merge driver. Invoked by git, not directly.");
+
     config.AddCommand<NegotiateCommand>("negotiate")
           .WithDescription("Open the negotiation UI for pending merge conflicts.");
 

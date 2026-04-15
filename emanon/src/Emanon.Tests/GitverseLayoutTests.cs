@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Emanon.Cli.Services;
 
 namespace Emanon.Tests;
@@ -8,19 +7,21 @@ public class GitverseLayoutTests
     // ── DefaultValues ─────────────────────────────────────────────────────────
 
     [Fact]
-    public void DefaultValues_ContainsRequiredKeys()
+    public void DefaultValues_HasSensibleDefaults()
     {
         var defaults = GitverseLayout.DefaultValues();
-        Assert.True(defaults.ContainsKey("universe_name"), "missing universe_name");
-        Assert.True(defaults.ContainsKey("version"),       "missing version");
-        Assert.True(defaults.ContainsKey("snapshot_count"), "missing snapshot_count");
+        Assert.Equal("my-universe", defaults.UniverseName);
+        Assert.Equal("0.1.0",       defaults.Version);
+        Assert.Equal(0,             defaults.SnapshotCount);
+        Assert.Null(defaults.RegistryId);
+        Assert.Null(defaults.RegistryServer);
     }
 
     [Fact]
-    public void DefaultValues_SnapshotCount_IsZero()
+    public void DefaultValues_ResolutionPriorityPopulated()
     {
         var defaults = GitverseLayout.DefaultValues();
-        Assert.Equal(0, defaults["snapshot_count"]);
+        Assert.Equal(["contract", "battle", "fork"], defaults.ResolutionPriority);
     }
 
     // ── ReadValues / WriteValues round-trip ───────────────────────────────────
@@ -28,29 +29,29 @@ public class GitverseLayoutTests
     [Fact]
     public void WriteValues_Then_ReadValues_RoundTrips()
     {
-        var tmpDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-        Directory.CreateDirectory(Path.Combine(tmpDir, ".gitverse"));
-
+        var tmpDir = CreateTempUniverse();
         try
         {
-            var values = new Dictionary<string, object>
+            var values = new GitverseValues
             {
-                ["universe_name"]   = "round-trip-test",
-                ["version"]         = "1.2.3",
-                ["snapshot_count"]  = 42,
+                UniverseName   = "round-trip-test",
+                Version        = "1.2.3",
+                SnapshotCount  = 42,
+                RegistryId     = "universe-abc",
+                RegistryServer = "http://localhost:5050",
             };
 
             GitverseLayout.WriteValues(tmpDir, values);
             var read = GitverseLayout.ReadValues(tmpDir);
 
             Assert.NotNull(read);
-            Assert.Equal("round-trip-test", read["universe_name"].GetString());
-            Assert.Equal(42, read["snapshot_count"].GetInt32());
+            Assert.Equal("round-trip-test",     read.UniverseName);
+            Assert.Equal("1.2.3",               read.Version);
+            Assert.Equal(42,                    read.SnapshotCount);
+            Assert.Equal("universe-abc",        read.RegistryId);
+            Assert.Equal("http://localhost:5050", read.RegistryServer);
         }
-        finally
-        {
-            Directory.Delete(tmpDir, recursive: true);
-        }
+        finally { Directory.Delete(tmpDir, recursive: true); }
     }
 
     [Fact]
@@ -58,16 +59,25 @@ public class GitverseLayoutTests
     {
         var tmpDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         Directory.CreateDirectory(tmpDir);
-
         try
         {
-            var result = GitverseLayout.ReadValues(tmpDir);
-            Assert.Null(result);
+            Assert.Null(GitverseLayout.ReadValues(tmpDir));
         }
-        finally
+        finally { Directory.Delete(tmpDir, recursive: true); }
+    }
+
+    [Fact]
+    public void WriteValues_OmitsNullRegistryFields_ByDefault()
+    {
+        var tmpDir = CreateTempUniverse();
+        try
         {
-            Directory.Delete(tmpDir, recursive: true);
+            GitverseLayout.WriteValues(tmpDir, GitverseLayout.DefaultValues());
+            var raw = File.ReadAllText(Path.Combine(tmpDir, GitverseLayout.ValuesFile));
+            Assert.DoesNotContain("registry_id", raw);
+            Assert.DoesNotContain("registry_server", raw);
         }
+        finally { Directory.Delete(tmpDir, recursive: true); }
     }
 
     // ── IncrementSnapshotCount ────────────────────────────────────────────────
@@ -75,74 +85,82 @@ public class GitverseLayoutTests
     [Fact]
     public void IncrementSnapshotCount_StartsAtZero_ReturnsOne()
     {
-        var tmpDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-        Directory.CreateDirectory(Path.Combine(tmpDir, ".gitverse"));
-
+        var tmpDir = CreateTempUniverse();
         try
         {
-            GitverseLayout.WriteValues(tmpDir, new Dictionary<string, object>
-            {
-                ["universe_name"]   = "inc-test",
-                ["snapshot_count"]  = 0,
-            });
-
-            var next = GitverseLayout.IncrementSnapshotCount(tmpDir);
-            Assert.Equal(1, next);
-
-            var values = GitverseLayout.ReadValues(tmpDir)!;
-            Assert.Equal(1, values["snapshot_count"].GetInt32());
+            GitverseLayout.WriteValues(tmpDir, new GitverseValues { UniverseName = "inc-test" });
+            Assert.Equal(1, GitverseLayout.IncrementSnapshotCount(tmpDir));
+            Assert.Equal(1, GitverseLayout.ReadValues(tmpDir)!.SnapshotCount);
         }
-        finally
-        {
-            Directory.Delete(tmpDir, recursive: true);
-        }
+        finally { Directory.Delete(tmpDir, recursive: true); }
     }
 
     [Fact]
-    public void IncrementSnapshotCount_Idempotent_IncreasesMonotonically()
+    public void IncrementSnapshotCount_IncreasesMonotonically()
     {
-        var tmpDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-        Directory.CreateDirectory(Path.Combine(tmpDir, ".gitverse"));
-
+        var tmpDir = CreateTempUniverse();
         try
         {
-            GitverseLayout.WriteValues(tmpDir, new Dictionary<string, object>
+            GitverseLayout.WriteValues(tmpDir, new GitverseValues
             {
-                ["universe_name"]   = "mono-test",
-                ["snapshot_count"]  = 5,
+                UniverseName  = "mono-test",
+                SnapshotCount = 5,
             });
 
-            var a = GitverseLayout.IncrementSnapshotCount(tmpDir);
-            var b = GitverseLayout.IncrementSnapshotCount(tmpDir);
-            var c = GitverseLayout.IncrementSnapshotCount(tmpDir);
+            Assert.Equal(6, GitverseLayout.IncrementSnapshotCount(tmpDir));
+            Assert.Equal(7, GitverseLayout.IncrementSnapshotCount(tmpDir));
+            Assert.Equal(8, GitverseLayout.IncrementSnapshotCount(tmpDir));
+        }
+        finally { Directory.Delete(tmpDir, recursive: true); }
+    }
 
-            Assert.Equal(6, a);
-            Assert.Equal(7, b);
-            Assert.Equal(8, c);
-        }
-        finally
+    [Fact]
+    public void UpdateValues_PreservesUnmentionedFields()
+    {
+        var tmpDir = CreateTempUniverse();
+        try
         {
-            Directory.Delete(tmpDir, recursive: true);
+            GitverseLayout.WriteValues(tmpDir, new GitverseValues
+            {
+                UniverseName  = "preserve-test",
+                SnapshotCount = 3,
+            });
+
+            GitverseLayout.UpdateValues(tmpDir, v => v with
+            {
+                RegistryId     = "uid-42",
+                RegistryServer = "http://registry.local",
+            });
+
+            var read = GitverseLayout.ReadValues(tmpDir)!;
+            Assert.Equal("preserve-test",        read.UniverseName);
+            Assert.Equal(3,                      read.SnapshotCount);
+            Assert.Equal("uid-42",               read.RegistryId);
+            Assert.Equal("http://registry.local", read.RegistryServer);
         }
+        finally { Directory.Delete(tmpDir, recursive: true); }
     }
 
     // ── Constants ─────────────────────────────────────────────────────────────
 
     [Fact]
     public void RequiredDirs_ContainsGitverseDir()
-    {
-        Assert.Contains(".gitverse", GitverseLayout.RequiredDirs);
-    }
+        => Assert.Contains(".gitverse", GitverseLayout.RequiredDirs);
 
     [Fact]
     public void RequiredDirs_ContainsRegionsDir()
-    {
-        Assert.Contains("regions", GitverseLayout.RequiredDirs);
-    }
+        => Assert.Contains("regions", GitverseLayout.RequiredDirs);
 
     [Fact]
     public void ValuesFile_Constant_HasExpectedPath()
+        => Assert.Equal(".gitverse/values.json", GitverseLayout.ValuesFile);
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private static string CreateTempUniverse()
     {
-        Assert.Equal(".gitverse/values.json", GitverseLayout.ValuesFile);
+        var tmpDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        Directory.CreateDirectory(Path.Combine(tmpDir, ".gitverse"));
+        return tmpDir;
     }
 }

@@ -1,8 +1,8 @@
 using System.ComponentModel;
-using System.Text.Json;
 using Emanon.Cli.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
+
 
 namespace Emanon.Cli.Commands;
 
@@ -35,7 +35,7 @@ public class ValidateCommand : Command<ValidateCommand.Settings>
                 errors.Add($"Missing required directory: {dir}");
         }
 
-        // Rule 2: values.json exists and is valid JSON
+        // Rule 2: values.json exists, is valid JSON, and has required fields populated
         var valuesPath = Path.Combine(repoRoot, GitverseLayout.ValuesFile);
         if (!File.Exists(valuesPath))
         {
@@ -45,14 +45,18 @@ public class ValidateCommand : Command<ValidateCommand.Settings>
         {
             try
             {
-                var values = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(
-                    File.ReadAllText(valuesPath));
-                // Rule 3: required keys
-                foreach (var key in new[] { "universe_name", "version", "snapshot_count" })
-                    if (values == null || !values.ContainsKey(key))
-                        errors.Add($"values.json missing required key: {key}");
+                var values = GitverseLayout.ReadValues(repoRoot);
+                if (values is null)
+                    errors.Add("values.json failed to deserialise");
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(values.UniverseName))
+                        errors.Add("values.json missing required field: universe_name");
+                    if (string.IsNullOrWhiteSpace(values.Version))
+                        errors.Add("values.json missing required field: version");
+                }
             }
-            catch (JsonException ex)
+            catch (System.Text.Json.JsonException ex)
             {
                 errors.Add($"values.json is invalid JSON: {ex.Message}");
             }

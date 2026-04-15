@@ -1,0 +1,6 @@
+- [Everything must be strongly typed](feedback_typed_objects.md) — no `object`, anonymous types, or loose dicts on C# API/service boundaries
+- [Re-confirm when new info changes "done"](feedback_reconfirm_on_new_info.md) — mid-task discoveries that diverge from approved approach need a pause, not silent adaptation
+- [Genus is a classifier, not a magnitude](project_genus_is_classifier.md) — Collatz genus identifies *kind*, not *size*; design comparisons as equivalence/relatedness first, ordering only when needed
+- [Server is a coordinator, not truth](project_server_is_coordinator.md) — math + genus are self-verifying; the server's only real role is ordering races (e.g. bounty acceptance)
+- [The merge driver is the physics](project_merge_driver_is_the_physics.md) — Collatz-genus-as-conflict-resolution is the protocol's load-bearing mechanism; weight roadmap toward it
+- [Half-formed observations are load-bearing](user_half_formed_observations_are_load_bearing.md) — user's hedged asides ("this seems like…", "isn't that just…") are reframings; unpack, don't validate-and-continue

@@ -54,9 +54,9 @@ public class InitCommand : Command<InitCommand.Settings>
         var valuesPath = Path.Combine(targetDir, GitverseLayout.ValuesFile);
         if (!File.Exists(valuesPath))
         {
-            var defaults = GitverseLayout.DefaultValues();
-            defaults["universe_name"] = universeName;
-            GitverseLayout.WriteValues(targetDir, defaults);
+            GitverseLayout.WriteValues(
+                targetDir,
+                GitverseLayout.DefaultValues() with { UniverseName = universeName });
         }
 
         // 5. .gitattributes
@@ -69,10 +69,15 @@ public class InitCommand : Command<InitCommand.Settings>
         if (!File.Exists(ignorePath))
             File.WriteAllText(ignorePath, GitverseLayout.DefaultGitIgnore + Environment.NewLine);
 
-        // 7. Register the Collatz merge driver in local git config
-        GitService.Run("config merge.emanon-collatz.driver \"emanon merge-driver %O %A %B %P\"", targetDir);
-        GitService.Run("config merge.emanon-contract.driver \"emanon merge-driver --contract-mode %O %A %B %P\"", targetDir);
-        GitService.Run("config merge.emanon-append-only.driver \"emanon merge-driver --append-only %O %A %B %P\"", targetDir);
+        // 7. Register the Collatz merge driver in local git config.
+        //    The command emanon itself invokes can be overridden via $EMANON_CMD
+        //    — required for tests (and for any setup where `emanon` isn't on PATH).
+        //    Defaults to "emanon" so a standard install works unchanged.
+        var emanonCmd = Environment.GetEnvironmentVariable("EMANON_CMD");
+        if (string.IsNullOrWhiteSpace(emanonCmd)) emanonCmd = "emanon";
+        GitService.Run($"config merge.emanon-collatz.driver \"{emanonCmd} merge-driver %O %A %B %P\"", targetDir);
+        GitService.Run($"config merge.emanon-contract.driver \"{emanonCmd} merge-driver --contract-mode %O %A %B %P\"", targetDir);
+        GitService.Run($"config merge.emanon-append-only.driver \"{emanonCmd} merge-driver --append-only %O %A %B %P\"", targetDir);
 
         // 8. Stage everything and make initial commit
         GitService.Run("add -A", targetDir);

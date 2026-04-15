@@ -1,6 +1,33 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Emanon.Cli.Services;
+
+/// <summary>Typed model of <c>.gitverse/values.json</c>.</summary>
+public sealed record GitverseValues
+{
+    [JsonPropertyName("universe_name")]
+    public string UniverseName { get; init; } = "my-universe";
+
+    [JsonPropertyName("version")]
+    public string Version { get; init; } = "0.1.0";
+
+    [JsonPropertyName("resolution_priority")]
+    public string[] ResolutionPriority { get; init; } = ["contract", "battle", "fork"];
+
+    [JsonPropertyName("snapshot_count")]
+    public int SnapshotCount { get; init; }
+
+    /// <summary>Server-assigned universe ID (set by first <c>registry push</c>).</summary>
+    [JsonPropertyName("registry_id")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? RegistryId { get; init; }
+
+    /// <summary>Registry server URL this universe pushes to.</summary>
+    [JsonPropertyName("registry_server")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? RegistryServer { get; init; }
+}
 
 /// <summary>
 /// Canonical .gitverse layout helpers — paths, defaults, read/write.
@@ -32,46 +59,44 @@ public static class GitverseLayout
         bin/
         """;
 
-    public static Dictionary<string, object> DefaultValues() => new()
+    private static readonly JsonSerializerOptions JsonOpts = new()
     {
-        ["universe_name"]       = "my-universe",
-        ["version"]             = "0.1.0",
-        ["resolution_priority"] = new[] { "contract", "battle", "fork" },
-        ["snapshot_count"]      = 0,
+        WriteIndented = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     };
 
+    public static GitverseValues DefaultValues() => new();
+
     /// <summary>Read values.json from a repo root. Returns null if not found.</summary>
-    public static Dictionary<string, JsonElement>? ReadValues(string repoRoot)
+    public static GitverseValues? ReadValues(string repoRoot)
     {
         var path = Path.Combine(repoRoot, ValuesFile);
         if (!File.Exists(path)) return null;
         var json = File.ReadAllText(path);
-        return JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json);
+        return JsonSerializer.Deserialize<GitverseValues>(json, JsonOpts);
     }
 
     /// <summary>Write values.json.</summary>
-    public static void WriteValues(string repoRoot, object values)
+    public static void WriteValues(string repoRoot, GitverseValues values)
     {
         var path = Path.Combine(repoRoot, ValuesFile);
-        var json = JsonSerializer.Serialize(values, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(values, JsonOpts);
         File.WriteAllText(path, json);
+    }
+
+    /// <summary>
+    /// Read values.json, apply an immutable update, write it back, return the new value.
+    /// Creates the file with defaults if missing.
+    /// </summary>
+    public static GitverseValues UpdateValues(string repoRoot, Func<GitverseValues, GitverseValues> mutate)
+    {
+        var current = ReadValues(repoRoot) ?? DefaultValues();
+        var next = mutate(current);
+        WriteValues(repoRoot, next);
+        return next;
     }
 
     /// <summary>Increment snapshot_count in values.json and return the new count.</summary>
     public static int IncrementSnapshotCount(string repoRoot)
-    {
-        var values = ReadValues(repoRoot) ?? new Dictionary<string, JsonElement>();
-        int current = values.TryGetValue("snapshot_count", out var el)
-            ? el.GetInt32()
-            : 0;
-        int next = current + 1;
-
-        // Rebuild as a plain dict for serialisation
-        var updated = new Dictionary<string, object>();
-        foreach (var (k, v) in values)
-            updated[k] = v.ValueKind == JsonValueKind.Number ? (object)v.GetInt32() : v.GetString()!;
-        updated["snapshot_count"] = next;
-        WriteValues(repoRoot, updated);
-        return next;
-    }
+        => UpdateValues(repoRoot, v => v with { SnapshotCount = v.SnapshotCount + 1 }).SnapshotCount;
 }

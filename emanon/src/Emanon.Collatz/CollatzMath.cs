@@ -93,8 +93,10 @@ public static class CollatzMath
     /// </summary>
     public static Genus DroppingGenusFromSeed(ulong seed)
     {
-        // Ensure odd and > 1 for interesting orbits
-        ulong n = (seed | 1UL) % 1_000_000 + 3;
+        // Map the seed into a *odd* n ≥ 3 for interesting Collatz orbits.
+        // The earlier formula ((seed | 1) % 1_000_000 + 3) produced only even n,
+        // because odd % even is odd and odd + 3 is even — giving dt=1 always.
+        ulong n = (seed % 500_000) * 2UL + 3UL;   // 3, 5, 7, … , 999_999
         return DroppingGenus(n);
     }
 

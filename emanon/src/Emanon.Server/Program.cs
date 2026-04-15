@@ -34,7 +34,7 @@ if (app.Environment.IsDevelopment())
 // app.UseHttpsRedirection();
 
 // ── Health check ──────────────────────────────────────────────────────────────
-app.MapGet("/health", () => Results.Ok(new { status = "ok", server = "emanon-central", version = "0.1.0" }))
+app.MapGet("/health", () => Results.Ok(new HealthResponse("ok", "emanon-central", "0.1.0")))
    .WithTags("System");
 
 // ── API endpoints ─────────────────────────────────────────────────────────────
@@ -42,6 +42,8 @@ app.MapRegistry();
 app.MapBounties();
 
 app.Run();
+
+public record HealthResponse(string Status, string Server, string Version);
 
 // Required for WebApplicationFactory in integration tests
 public partial class Program { }

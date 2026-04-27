@@ -28,7 +28,7 @@ Collatz splits canonically into **No Cycles** + **No Divergence**. No Cycles is 
 | 3 | Pointwise bit-destruction $\geq c$ | Open (avg proved) | ★★★ | WKL₀ | Yes (with bit-destruction lemma) |
 | 4 | Multi-bit mixing (orbit hits Set_k≥6 w/ positive density) | Open | ★★★ | ACA₀ | Yes (closes Denjoy Bridge) |
 | 5 | Discrete Denjoy theorem | Open | ★★★★ | beyond ACA₀ | Yes (with bit-mixing) |
-| 6 | Adelic Conservation $\prod_\ell \rho_\ell \le 1 \Rightarrow$ termination | Open (axiom-form) | ★★★★ | ? | Yes (subsumes most) |
+| 6 | ~~Adelic Conservation $\prod_\ell \rho_\ell \le 1$~~ — **withdrawn (tautology, see §6)** | — | — | — | — |
 | 7 | Bounded orbits (orbit max $\le f(n)$) | Open | ★★★★ | PA-edge | Yes (with No Cycles = Collatz) |
 | 8 | Tao-gap closure (almost-all → all; $f(n) \to \infty$ → 1) | Theorem (almost-all) | ★★★★ | ACA₀ | Yes |
 | 9 | Density refinement (Krasikov-Lagarias style) | Partial, improvable | ★★★★★ | ACA₀ | No (needs full density 1) |
@@ -127,23 +127,29 @@ Collatz splits canonically into **No Cycles** + **No Divergence**. No Cycles is 
 
 ---
 
-## 6. Adelic Conservation Axiom
+## 6. ~~Adelic Conservation Axiom~~ — Withdrawn
 
-**Statement.** Let $H$ be a finite Hydra (Siegel) on $\mathbb{Z}$ with rational ratios $r_j$. If $\prod_\ell \rho_{H,\ell} \leq 1$ over all places $\ell$ (archimedean and finite), then $H$ terminates on every input.
+**Original statement.** "Let $H$ be a Hydra on $\mathbb{Z}$ with rational ratios $r_j$. If $\prod_\ell \rho_{H,\ell} \leq 1$ over all places $\ell$, then $H$ terminates."
 
-**Status.** Hypothesis-form. For Collatz: $(3/4)(4)(1/3) = 1$, exactly the boundary. Need a theorem for $\leq 1$ to apply.
+**Why withdrawn.** The product $\prod_\ell \rho_\ell$ is **identically 1** for any Hydra with nonzero rational ratios, by the adelic product formula:
 
-**Implication chain.** Conservation axiom (special case Collatz) ⇒ Collatz.
+$$\prod_\ell \rho_\ell \;=\; \prod_\ell |r_0|_\ell \cdot |r_1|_\ell \;=\; \left(\prod_\ell |r_0|_\ell\right)\left(\prod_\ell |r_1|_\ell\right) \;=\; 1 \cdot 1 \;=\; 1$$
 
-**Tools required.** Adelic dynamical systems, Hydra theory (Siegel), $p$-adic functional analysis. May connect to abc conjecture (rad-product structure).
+since $\prod_\ell |x|_\ell = 1$ for every nonzero $x \in \mathbb{Q}$.
 
-**Distance ★★★★.** Full theory does not yet exist. But the partial form (strict inequality $\prod \rho < 1$) may be tractable via straightforward Lyapunov arguments. The knife-edge case $= 1$ is harder.
+**Sanity check.** Collatz: $(3/4)(4)(1/3) = 1$. $5n+1$: $(5/4)(4)(1/5) = 1$. $7n+1$: $(7/4)(4)(1/7) = 1$. All identically 1. The "knife edge at 1" framing in [[Proof Attempt - Adelic IFS Bridge]] is automatic, not a Collatz-specific property.
 
-**Strength estimate.** Likely beyond PA — the axiom *is* a structural principle.
+**Where the structural content actually lives.** The discriminator between Collatz and divergent $(an+1)/2$ maps is the **archimedean Lyapunov** $\rho_\infty = a/4$:
 
-**Why promising.** Subsumes most other lenses (#1–4 are special facets of this conservation). If proved at the structural level, every $(an+1)/2$ map is decided simultaneously. **Highest payoff in the catalog**, but also the highest risk and longest horizon.
+| Map | $\rho_\infty$ | Behavior |
+|-----|--------------|----------|
+| $a = 3$ (Collatz) | $3/4$ | contracts |
+| $a = 5$ | $5/4$ | expands |
+| $a = 7$ | $7/4$ | expands |
 
-**Empirical pre-spike.** Tabulate $\prod_\ell \rho_\ell$ for $a \in \{3,5,7,9,11,13,15\}$ and check whether termination/divergence/cycle behavior correlates exactly with the inequality. This is a few-hour notebook experiment that either supports or kills the axiom cheaply.
+The 2-adic and 3-adic places provide the local structure (integers as 2-adic boundary, 3-adic lock from [[Affine Orbit Structure]]) but their contributions to the global product are mechanical — what matters is $\rho_\infty < 1$ plus AC of $\mu$.
+
+**Conclusion.** This candidate collapses into **#1 (AC of Collatz IFS measure)**, which already captures the real content. No separate attack target. The pre-spike previously proposed for #6 is unnecessary — it would just confirm $\prod = 1$.
 
 ---
 
@@ -205,26 +211,15 @@ Collatz splits canonically into **No Cycles** + **No Divergence**. No Cycles is 
 
 ### Dependency structure
 
-```
-                  Adelic Conservation (#6)
-                  /         |          \
-                 v          v           v
-       AC of IFS (#1)  Multi-bit (#4)  Pointwise β (#3)
-            \           /                /
-             v         v                v
-           Discrete Denjoy (#5) ----- Bit Destruction
-                       \                /
-                        v              v
-                     Sector Monotonicity (#2)
-                              |
-                              v
-                        Bounded Orbits (#7)
-                              |
-                              v
-                          COLLATZ
-```
+Three roughly independent attack groups:
 
-Roughly: #6 (Conservation) is the structural root; #1, #4 are specific facets; #5 is a near-classical theorem path; #2 is the most direct elementary route; #3 is a strengthening of an existing tool; #7 is the conjecture restated; #8 is the published-program path; #9 is a dead end for our purpose.
+- **Algebraic / elementary**: Sector Monotonicity (#2) — closes Collatz alone via $O(\log^2 n)$ bound. Eisenstein-integer tools, no ergodic input.
+- **Ergodic / fractal**: AC of IFS (#1) → Multi-bit Mixing (#4) → Discrete Denjoy (#5). Each is a stronger version of "orbits inherit invariant-measure statistics pointwise."
+- **Diophantine**: Pointwise bit-destruction (#3), upgrades the existing average bound on $\beta(s) = 1 - \{s \log_2 3\}$ to a uniform pointwise bound.
+
+Each group, if proved, closes the conjecture independently of the others. The published-program path (#8 Tao-gap) sits outside all three groups — methodologically isolated.
+
+#7 (Bounded Orbits) is the conjecture restated; #9 (Density refinement) does not reach "every $n$." Both are listed only for completeness.
 
 ### Independence of attacks
 
@@ -245,17 +240,18 @@ Roughly: #6 (Conservation) is the structural root; #1, #4 are specific facets; #
 
 **Attack order:**
 
-1. **Sector Monotonicity (#2)** — first. Lowest distance, highest payoff (alone gives $O(\log^2 n)$ ⇒ Collatz), uses local algebra not found in any other lens. The Eisenstein period-12 + radial-monotonicity decomposition is a *single algebraic argument* with empirical support of 0/135K. Even partial progress (e.g., monotonicity within 11 of 12 sectors) is publishable and suggests the full result.
+1. **Sector Monotonicity (#2)** — primary. Lowest distance, highest payoff (alone gives $O(\log^2 n)$ ⇒ Collatz), uses local Eisenstein algebra not found in any other lens. The period-12 + radial-monotonicity decomposition is a *single algebraic argument* with empirical support of 135,565/135,565. Even partial progress (e.g., monotonicity within 11 of 12 sectors) is publishable and signals the full result.
 
-2. **Adelic Conservation Pre-Spike (#6 empirical)** — concurrent. Few hours of notebook work to tabulate $\prod_\ell \rho_\ell$ for $(an+1)/2$ family and check correlation with termination. Either supports or refutes the axiom cheaply.
+2. **AC of Collatz IFS measure (#1)** — secondary. The structural fractal-geometry route. Now subsumes the original #6 (which collapsed into a tautology, see §6). Worth pursuing in parallel since it uses different tools (Hochman/Shmerkin extension) than #2.
 
-3. **Multi-bit Mixing (#4)** — fallback if #2 stalls. Smallest semantic gap to existing user results (Spectral Mixing Theorem upgrade from average to pointwise).
+3. **Multi-bit Mixing (#4)** — fallback. Smallest semantic gap to existing user results (Spectral Mixing Theorem upgraded from average to pointwise).
 
 **Defer or skip:**
 
 - #5 (Discrete Denjoy): high effort, high risk.
+- #6: withdrawn (tautology).
 - #7 (Bounded Orbits): equivalent to Collatz.
 - #8 (Tao gap): outside our methodological lane.
 - #9 (Density refinement): does not reach the conclusion.
 
-**Decision needed:** confirm Sector Monotonicity as primary target, and whether to run the Adelic Conservation pre-spike in parallel.
+**Confirmed:** Sector Monotonicity is the primary attack target.

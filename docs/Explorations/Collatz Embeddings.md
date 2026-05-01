@@ -36,13 +36,33 @@ This is a *positive but narrow* result: the embedding captures one specific stru
 relation (Syracuse-step transformation) via one specific lens. Whether it captures
 richer semantic relationships requires v2 work.
 
-## v2 candidates
+## v2 finding: lens space is NOT smooth under iteration
 
-- **Component coupling.** Apply T to whichever component has highest `force` rather
+Notebook `10-embeddings-v2-force-drift.ipynb` tested whether high-force quads
+preserve analogies through Syracuse iteration. Result: clean falsification.
+
+- **Cosine of `Phi(b) - Phi(a)` vs `Phi(T(b)) - Phi(T(a))` flips to ~ -0.27 at k=1**, then wanders around 0 for k=2..8.
+- Force-tertile binning shows no separation — high/mid/low all decay together within noise.
+
+**Diagnosis:** sector is one-hot encoded, and we proved it decrements by 1 mod 12
+per Syracuse step. So the sector segment of every embedding *shifts its support
+by one index* every step — vector arithmetic is dominated by orthogonal one-hot
+flips, making lens space non-smooth under iteration even though the integer
+dynamics underneath are deterministic.
+
+**Updated reading of v1:** force is the analogy carrier *statically* (at k=0),
+but it is not a temporal anchor. The "epistemic confidence persists through
+iteration" interpretation is not supported.
+
+## v3 candidates (post-v2)
+
+- **Angular encoding of sector.** Replace one-hot with `(cos(2*pi*s/12), sin(2*pi*s/12))`
+  so the rotation becomes smooth in lens space rather than a discrete index hop. Re-run drift.
+- **Trajectory-space embedding** (Approach B from spec). If static lens space is
+  fragile, embed the *whole orbit* (or its alpha-sequence) and use orbit-overlap distance.
+- **Component coupling.** Apply T to whichever component has highest force rather
   than independently — treat the concept as a single dynamical entity.
-- **Learned lens weights.** The ablation result above is a primitive form of feature
-  importance; gradient-fit weights against a labeled analogy set.
-- **Force-binned drift analysis.** Hypothesis: high-force quads preserve analogy under
-  iteration longer than low-force quads.
 - **Cross-component lens correlations** (`sector(n_i) - sector(n_j)`, etc.) to capture
   internal concept structure.
+- **Accept lens space as static-only.** Use `Phi` for similarity / clustering / one-shot
+  analogy at k=0; don't expect it to survive iteration.

@@ -69,15 +69,50 @@ The angular fix improved drift by ~0.04 — well within the noise. Sign-flip
 count went 47 -> 45, also within noise. The v2 diagnosis was wrong: sector's
 discrete encoding is not the dominant source of lens-space discontinuity.
 
-## v4 candidates (post-v3)
+## v4 finding: the k=1 flip is a geometric artifact of one-hot encoding
 
-- **Per-lens drift contribution analysis.** For each lens individually, compute
-  `cos(Phi_lens(b) - Phi_lens(a), Phi_lens(T(b)) - Phi_lens(T(a)))` and identify
-  which lens(es) are flipping sign at k=1. Cheap; should pinpoint the culprit.
-- **Trajectory-space embedding** (Approach B from spec). Possibly the right
-  abstraction — give up on smooth lens-space iteration, embed the whole orbit instead.
-- **Force-only embedding test.** Set every lens weight to 0 except force; see if the
-  resulting 1D embedding is smooth. If yes, force is the well-behaved component
-  and the discontinuity is the ensemble effect of one-hot lenses.
-- **Accept lens space as static-only.** Use `Phi` for similarity / clustering / one-shot
-  analogy at k=0; don't expect it to survive iteration.
+Notebook `12-embeddings-v4-per-lens-drift.ipynb` projected the drift cosine onto
+each lens's subspace alone:
+
+| lens | k=1 cos | flips at k=1 |
+|---|---|---|
+| sector | -0.486 | **60/60** |
+| alpha_prefix | -0.406 | 59/60 |
+| drop_class | -0.405 | 51/60 |
+| slope_log | -0.325 | 38/60 |
+| mod3 | -0.292 | 37/60 |
+| **force** | **-0.086** | 31/60 |
+| (full Phi) | -0.267 | 47/60 |
+
+Every lens flips. But the *reason* is structural, not dynamical.
+
+**The math:** for a one-hot lens that shifts by one index per Syracuse step
+(sector does this provably; alpha_prefix and drop_class do it noisily), the diff
+vector `Phi_lens(b) - Phi_lens(a)` at step 0 has support on indices {s, s-1},
+one with +1 and one with -1. At step 1 the support shifts to {s-1, s-2}. The two
+diff vectors overlap on exactly one index, with opposite signs. Dot product = -1,
+norms = sqrt(2) each, **cosine = -1/2 exactly**. sector measured -0.486 -- right at
+the predicted -0.5. 60/60 quads, deterministically.
+
+So the v2 "k=1 sign flip" wasn't a discontinuity in Collatz lens-space dynamics.
+**It was the natural geometry of cosine on one-hot diff vectors under any shift dynamic.**
+
+**force is the ONLY lens whose temporal behavior cosine can meaningfully measure**,
+because it's real-valued. Its k=1 cosine of -0.09 is near-zero (uncorrelated), not
+catastrophically negative. This re-validates v1's emphasis on force.
+
+## v5 candidates (post-v4)
+
+- **Real-valued-lenses-only drift test.** Re-run nb 10's force-binned drift
+  experiment using only `force` and `slope_log` as the embedding. If those alone
+  give a force-anchoring effect, v1's "epistemic confidence persists through iteration"
+  interpretation comes back from the dead.
+- **Structured per-lens similarity metric.** For sector, define
+  `sim_sector(a, b) = 1 if sector(b) = sector(a) - delta_predicted else 0` -- respects the
+  rotation. For alpha_prefix, define a left-shift overlap. Combine into a custom metric
+  that doesn't naively cosine the one-hot diffs.
+- **Trajectory-space embedding** (Approach B from spec). Embed orbits, use orbit-overlap
+  distance. Side-steps the encoding issue entirely.
+- **Done.** Accept that `Phi` is a working static embedding (force-driven). Use it for
+  k=0 similarity / clustering / analogy. Don't try to track concepts through iteration
+  in this representation.

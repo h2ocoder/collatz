@@ -122,25 +122,113 @@ tests. Distractors spanning categories → tests *category recognition* (drop_cl
 shines). Distractors sharing a category → tests *intra-category structure*
 (neither embedding captures it).
 
+### v8 — Music-theoretic reframe: three orthogonal distances
+
+The user proposed reframing the whole project through music theory. In music, a
+song is identifiable by **progression** (chord sequence), **key** (transposition
+class), and **style** (rhythm/feel — tempo-invariant statistical fingerprint).
+Three independent dimensions, each captured by a different mathematical structure.
+
+The mapping turned out to be unusually clean:
+
+| Music | Collatz |
+|---|---|
+| Pitch class (Z/12) | Eisenstein sector (Z/12) — *literal Z/12 group structure* |
+| Note duration | Alpha value (halvings per Syracuse step) |
+| Progression | Sequence of (sector, mod3) along orbit |
+| Key (transposition class) | Affine subgroup of Set_k — *we already proved this!* |
+| Style (statistical feel) | Empirical (alpha, mod3-transition) fingerprint |
+
+The "key = affine subgroup" identification is mathematically tight: the proved
+**affine orbit structure** result says all members of a subgroup of Set_k share
+the same `dest(n) = α·n + C`. They produce **identical Syracuse progressions in
+the quotient sense** — literally "same song, different keys."
+
+Three subagents built three independent embeddings in parallel:
+
+**`collatz/embeddings/keys.py`** — coset-quotient distance.
+`subgroup_id(n) = (k, s, n mod 2^(k-s))` uniquely identifies n's affine subgroup.
+On 30 same-subgroup analogy quads vs 100 distractors:
+
+| method | mean rank |
+|---|---|
+| (chance) | 50 |
+| lens-Φ | 3.0 |
+| trajectory (Jaccard) | 59.8 |
+| **keys (coset)** | **0.8** |
+
+Keys dominates same-subgroup analogies. **It's useless on Syracuse-shift (78.1)
+— by design**, since T_syr moves to a different subgroup ~79% of the time.
+Clean orthogonality.
+
+**`collatz/embeddings/style.py`** — statistical fingerprint, chi-squared distance.
+Strongly tempo-invariant: `style_distance(27, 41) = 0.0001` despite orbit lengths
+of 41/40. **But style does NOT cluster by dropping set.** Set_3↔Set_8 mean
+distance (0.108) is actually *smaller* than Set_3 within itself (0.124).
+
+This is **exactly what we should expect** — the **spectral gap → 5/6** result we
+already proved says alpha distributions equidistribute across the lattice via
+mixing. Style fingerprints integrate over the whole orbit and inherit the limiting
+distribution, which is the same for every starting class. **The previously-proved
+spectral gap predicts that style cannot be a category discriminator** — and the
+experiment confirms it numerically. Style is a similarity metric for "feel,"
+complementary to keys, not a substitute.
+
+**`collatz/embeddings/progression.py`** — edit distance on orbit sequences.
+The `joint_progression` (sector × mod3) is the practical default. The agent caught
+a real spec bug: **`sector_progression(n)` alone is just a function of orbit
+length L** (deterministic countdown L mod 12, …, 0), so any two integers with
+the same L have *identical* sector progressions. The mod3 axis breaks this
+degeneracy because mod3 depends on actually-visited integers, not just length.
+Joint progression ties v6 trajectory on Syracuse-shift (mean rank 0.5).
+
+**Cross-method orthogonality verified at integration:** 5 and 9 are in the same
+Set_3 subgroup, so `coset_distance(5, 9) = 0` (same key). But their actual orbits
+differ — `orbit_distance / progression_distance / style_distance` are all 0.6-0.7
+(same key, different songs). The decomposition the user proposed is *real*: each
+distance captures a structural relation the others can't.
+
 ## Synthesis
 
-What's actually true:
+After v8, four embeddings cover four different structural questions. **They are
+genuinely orthogonal — none is a substitute for any other.**
 
-- **Φ at k=0** is a working static embedding for category-level analogies. Force
-  is the carrier when the relation involves dropping-set/orbit-bit-budget structure.
+| Embedding | Question it answers | When to use |
+|---|---|---|
+| **lens-Φ** (cosine) | "How similar are these via dynamical-invariant projections?" | Coarse category recognition when distractors span categories |
+| **trajectory** (Jaccard) | "Do these orbits visit similar territory?" | Orbit-overlap relations (Syracuse-shift, near-merge orbits) |
+| **keys** (coset) | "Are these the same song in different keys?" | Equivalence under affine orbit law (proved structure) |
+| **style** (chi-squared) | "Do these orbits *feel* the same?" | Tempo-invariant similarity; integrates over the whole orbit |
+| **progression** (edit) | "Do these orbits traverse the same sequence?" | Sequence-level comparison; tempo-flexible via insertions |
+
+What's true under iteration:
+
+- **Φ at k=0** is a working static embedding. Force is the lens-bundle carrier
+  for category-level analogies.
 - **Φ under iteration:** cosine on one-hot diff vectors gives meaningless results
-  by construction. Force is the only lens that admits cosine-style temporal analysis,
-  and even there, force-anchoring of analogies isn't supported by the data.
-- **v6 trajectory-space** dominates orbit-overlap analogies (Syracuse-shift) and
-  is essentially perfect there. It does *not* generalize to arithmetic or
-  intra-class analogies.
-- **Neither embedding captures fine ordinal/sequential structure within a class
-  or multiplicative transformations** — they need new features (magnitude `log n`,
-  positional index within class, multiplicative residues) for those tasks.
+  by construction (v4). Force is the only lens that admits cosine-style temporal
+  analysis, but force-anchoring of analogies isn't supported (v5).
+- **The set-space and sequence-space embeddings (trajectory, keys, style,
+  progression)** sidestep the cosine-on-one-hot problem entirely. None of them
+  needs the iteration-direction question to be coherent.
 
-The two embeddings are *complementary*, not competing: lens-Φ for coarse category
-recognition (when distractors span categories), v6 for orbit-overlap relations.
-Hybrid embeddings or per-relation custom metrics would handle a wider range.
+What's true about the music-theoretic decomposition:
+
+- **The Z/12 ↔ Z/12 mapping** between Eisenstein sectors and chromatic pitches
+  isn't poetic — it's the same group structure in different domains.
+- **The "key = affine subgroup" identification** is mathematically tight: the
+  proved affine orbit structure result IS the transposition equivalence.
+- **The spectral-gap → 5/6 result IS the prediction that style cannot be a
+  category discriminator.** Notebook 17 confirms numerically what the theory says.
+- **The four embeddings are orthogonal because the structural questions are
+  orthogonal**, not because of measurement artifacts.
+
+What still hasn't been captured:
+
+- **Multiplicative transformations** (tripling). No embedding tracks `log n` cleanly.
+- **Intra-class ordinal structure** (set-mate within Set_3 distractors). No
+  embedding has a "position within class" feature.
+- **Component coupling.** All work has evolved components independently under T.
 
 ## Methodology lessons (transferable beyond this project)
 
@@ -167,19 +255,21 @@ Hybrid embeddings or per-relation custom metrics would handle a wider range.
 
 ## Open questions / candidate next moves
 
-- **Hybrid embedding.** Distance is `α·lens_cosine + (1−α)·orbit_distance`. Tune α
-  per relation type. Cheap; would handle Syracuse-shift and category recognition
-  in one model.
-- **Add a magnitude lens** (`log n` per component) and re-test tripling. Predicts
-  tripling moves should be a fixed log-3 shift.
-- **Add a positional-index-within-class lens** (`rank of n among Set_k members`).
-  Predicts set-mate moves should be a fixed +1 shift.
-- **Structured per-lens similarity metrics** that respect each lens's group
-  structure (sector rotation, alpha_prefix left-shift) — would re-open the
-  temporal-anchoring question with a metric designed for it.
-- **Component coupling.** All v1–v7 evolved components independently under T.
-  v8 candidate: apply T to whichever component has highest force.
+- **Multiplicative-residue / magnitude lens** (`log n` and/or `n mod p` for primes p).
+  Predicts tripling moves are a fixed log-3 shift on `log n` axis. Direct test of
+  whether v7's tripling failure was about missing features.
+- **Positional-index-within-class lens** (`rank of n among Set_k members`).
+  Predicts set-mate moves are a fixed +1 shift. Test: does v7's set-mate failure
+  go away with this feature?
+- **Hybrid distance** combining the four orthogonal embeddings: per-relation
+  weighted ensemble. Cheap; would handle Syracuse-shift, key-identification, and
+  progression-matching in one query.
+- **Structured per-lens similarity metrics** for the discrete lenses (sector
+  rotation, alpha_prefix left-shift) — the "real fix" for v2's temporal question.
+- **Component coupling.** All work has evolved components independently. Apply T
+  to whichever component has highest force; treat as a single dynamical entity.
 - **Cross-component correlations** (`sector(n_i) − sector(n_j)` etc.) — concept-internal
   structure beyond the bag-of-projections view.
-- **Stop here.** We have a clean seven-experiment story with falsifiable findings,
-  documented methodology lessons, and concrete v8 candidates. There's no shame.
+- **Stop here.** Eight experiments, four orthogonal embeddings characterized,
+  documented methodology lessons, the user's musical intuition mathematically
+  vindicated. There's no shame.

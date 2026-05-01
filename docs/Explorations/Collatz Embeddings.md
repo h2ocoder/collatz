@@ -124,14 +124,33 @@ These are general points that apply beyond this project:
    transition" from cos=1 to cos=−0.27), suspect the metric before the
    dynamics. The diagnostic experiment is cheap; do it before designing fixes.
 
+### v5 — Real-only drift partially fixes the artifact, but no force anchoring
+
+Notebook `13-embeddings-v5-real-only-drift.ipynb` re-ran v2's force-binned drift
+test on the same 60 quads, restricting Φ to only `force` and `slope_log` axes.
+
+**Artifact reduction confirmed:**
+- k=1 cosine: −0.267 (full Φ) → **−0.091** (real-only). 3× improvement.
+- Sign flips at k=1: 47/60 → **32/60**, around chance for random 6-D vectors.
+
+So v4's diagnosis was right: removing one-hots eliminates most of the
+cosine-on-one-hot-diffs artifact.
+
+**But force-binning still doesn't separate.** At k=1: low-force tertile +0.04,
+mid −0.10, high −0.21. That's actually the *opposite* of v1's prediction
+(high − low = −0.25, not the predicted positive). The pattern doesn't sustain —
+k=5 reverses it — and there's a confound: low-force quads sometimes have
+*zero* diff vector in the real subspace (when components share an odd part,
+force and slope_log values match), so their cosine is undefined-and-returned-as-0,
+pulling the low-force mean toward 0 artificially.
+
+**Honest read:** Φ is a working static embedding (v1 stands), but it does NOT
+exhibit force-anchored temporal preservation of analogies. The "force =
+epistemic confidence persists through iteration" interpretation is *not*
+supported by clean measurement.
+
 ## Open questions
 
-- **v5 — does force-binned drift in the real-valued subspace anchor?**
-  Re-run v2's experiment using only `force` and `slope_log` (the two scalar
-  lenses). If high-force quads preserve cosine longer than low-force, v1's
-  "epistemic confidence" interpretation is back on the table. This is the
-  next obvious experiment — it actually tests v2's original question
-  with a clean metric.
 - **Structured per-lens similarity.** For sector, define `sim_sector(a,b)
   = δ(sector(b) − sector(a) = predicted_shift)`. For alpha_prefix, a
   left-shift overlap. Combine into a metric that respects each lens's
@@ -139,7 +158,9 @@ These are general points that apply beyond this project:
 - **Trajectory-space embedding** (Approach B from spec). Embed full
   orbits with orbit-overlap distance; sidesteps the encoding question
   entirely.
-- **Component coupling.** v1/v2/v3/v4 all evolved components independently
-  under T. v2 candidate: apply T to whichever component has highest force.
+- **Component coupling.** v1–v5 all evolved components independently under T.
+  Apply T to whichever component has highest force; treat as single dynamical entity.
 - **Cross-component correlations.** `sector(n_i) − sector(n_j)` etc.,
   capturing concept-internal structure beyond the bag-of-projections view.
+- **Better static benchmarks.** v1 used 5 hand-built quads. Bigger, cleaner
+  static evaluation could sharpen our claim about *what* Φ captures at k=0.

@@ -288,3 +288,82 @@ def test_advance_lens_mod3_not_supported():
 def test_advance_lens_unsupported_lens_raises():
     with pytest.raises(ValueError):
         advance_lens(5, "force")
+
+
+# ---- Trajectory-space embedding (v6) ------------------------------------
+
+
+from collatz.embeddings import (
+    concept_orbit_distance,
+    jaccard,
+    orbit_distance,
+    orbit_set,
+    syracuse_orbit,
+    trajectory_analogy,
+)
+
+
+def test_syracuse_orbit_basic():
+    # 3 -> 5 -> 1
+    assert syracuse_orbit(3) == (3, 5, 1)
+    # 7 -> 11 -> 17 -> 13 -> 5 -> 1
+    assert syracuse_orbit(7) == (7, 11, 17, 13, 5, 1)
+
+
+def test_syracuse_orbit_lifts_evens():
+    # 6 = 2*3, lifted to 3 first.
+    assert syracuse_orbit(6) == syracuse_orbit(3)
+
+
+def test_syracuse_orbit_n_one():
+    assert syracuse_orbit(1) == (1,)
+
+
+def test_orbit_set_drops_order():
+    assert orbit_set(7) == frozenset({1, 5, 7, 11, 13, 17})
+
+
+def test_jaccard_identical_is_one():
+    s = {1, 2, 3}
+    assert jaccard(s, s) == 1.0
+
+
+def test_jaccard_disjoint_is_zero():
+    assert jaccard({1, 2, 3}, {4, 5, 6}) == 0.0
+
+
+def test_jaccard_known():
+    # |{1,2,3} ∩ {2,3,4}| / |{1,2,3,4}| = 2/4 = 0.5
+    assert jaccard({1, 2, 3}, {2, 3, 4}) == 0.5
+
+
+def test_orbit_distance_self_is_zero():
+    assert orbit_distance(7, 7) == 0.0
+
+
+def test_orbit_distance_in_unit_interval():
+    d = orbit_distance(3, 27)
+    assert 0.0 <= d <= 1.0
+
+
+def test_concept_orbit_distance_self_is_zero():
+    c = Concept("x", (3, 5, 7))
+    assert concept_orbit_distance(c, c) == 0.0
+
+
+def test_concept_orbit_distance_mismatched_length_raises():
+    a = Concept("a", (3, 5))
+    b = Concept("b", (3, 5, 7))
+    with pytest.raises(ValueError):
+        concept_orbit_distance(a, b)
+
+
+def test_trajectory_analogy_self_consistency():
+    """If a == b (zero relationship distance), expected d should be the candidate
+    closest to c."""
+    a = Concept("a", (3, 5, 7))
+    c = Concept("c", (11, 13, 17))
+    near = c  # zero distance from c
+    far = Concept("far", (101, 103, 105))
+    ranked = trajectory_analogy(a, a, c, [far, near])
+    assert ranked[0][0] is near

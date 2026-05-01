@@ -54,15 +54,30 @@ dynamics underneath are deterministic.
 but it is not a temporal anchor. The "epistemic confidence persists through
 iteration" interpretation is not supported.
 
-## v3 candidates (post-v2)
+## v3 finding: sector encoding is NOT the cause
 
-- **Angular encoding of sector.** Replace one-hot with `(cos(2*pi*s/12), sin(2*pi*s/12))`
-  so the rotation becomes smooth in lens space rather than a discrete index hop. Re-run drift.
-- **Trajectory-space embedding** (Approach B from spec). If static lens space is
-  fragile, embed the *whole orbit* (or its alpha-sequence) and use orbit-overlap distance.
-- **Component coupling.** Apply T to whichever component has highest force rather
-  than independently — treat the concept as a single dynamical entity.
-- **Cross-component lens correlations** (`sector(n_i) - sector(n_j)`, etc.) to capture
-  internal concept structure.
+Notebook `11-embeddings-v3-angular-sector.ipynb` swapped sector's one-hot
+encoding for `(cos(2*pi*s/12), sin(2*pi*s/12))` and re-ran the v2 drift test
+on the same 60 quads (same seed).
+
+| | k=1 cosine | sign flips at k=1 | mean drift k=1..8 |
+|---|---|---|---|
+| one-hot sector | -0.267 | 47/60 | -0.042 |
+| angular sector | -0.224 | 45/60 | -0.040 |
+
+The angular fix improved drift by ~0.04 — well within the noise. Sign-flip
+count went 47 -> 45, also within noise. The v2 diagnosis was wrong: sector's
+discrete encoding is not the dominant source of lens-space discontinuity.
+
+## v4 candidates (post-v3)
+
+- **Per-lens drift contribution analysis.** For each lens individually, compute
+  `cos(Phi_lens(b) - Phi_lens(a), Phi_lens(T(b)) - Phi_lens(T(a)))` and identify
+  which lens(es) are flipping sign at k=1. Cheap; should pinpoint the culprit.
+- **Trajectory-space embedding** (Approach B from spec). Possibly the right
+  abstraction — give up on smooth lens-space iteration, embed the whole orbit instead.
+- **Force-only embedding test.** Set every lens weight to 0 except force; see if the
+  resulting 1D embedding is smooth. If yes, force is the well-behaved component
+  and the discontinuity is the ensemble effect of one-hot lenses.
 - **Accept lens space as static-only.** Use `Phi` for similarity / clustering / one-shot
   analogy at k=0; don't expect it to survive iteration.

@@ -39,12 +39,24 @@ class Concept:
         return len(self.vec)
 
 
-def _encode_lens_value(spec, value) -> np.ndarray:
+def _angular(value: int, cardinality: int) -> np.ndarray:
+    """Encode a cyclic discrete value as (cos, sin) on the unit circle.
+
+    Smooth alternative to one-hot for lenses whose values rotate predictably
+    (notably: sector, which decrements by 1 mod 12 per Syracuse step).
+    """
+    theta = 2.0 * np.pi * (int(value) % cardinality) / cardinality
+    return np.array([np.cos(theta), np.sin(theta)], dtype=np.float64)
+
+
+def _encode_lens_value(spec, value, *, sector_angular: bool = False) -> np.ndarray:
     """Encode one lens output for one component as a flat float vector."""
     if spec.name == "alpha_prefix":
         parts = [one_hot(v, spec.cardinality) for v in value]
         return np.concatenate(parts)
     if spec.kind == "discrete":
+        if sector_angular and spec.name == "sector":
+            return _angular(int(value), spec.cardinality)
         return one_hot(int(value), spec.cardinality)
     return np.array([float(value)], dtype=np.float64)
 
@@ -60,4 +72,20 @@ def Phi(c: Concept) -> np.ndarray:
     for n in c.vec:
         for spec in LENS_REGISTRY:
             rows.append(_encode_lens_value(spec, spec.fn(n)))
+    return np.concatenate(rows)
+
+
+def Phi_angular(c: Concept) -> np.ndarray:
+    """Variant of Phi where `sector` is encoded as (cos, sin) on the unit circle.
+
+    Smooth under Syracuse iteration: a -1-mod-12 sector step becomes a
+    -30 deg rotation in the sector subspace rather than a one-hot index flip.
+    All other lenses unchanged. Vector size is m*(D - 12 + 2) = m*63.
+    """
+    from collatz.embeddings.lenses import LENS_REGISTRY
+
+    rows = []
+    for n in c.vec:
+        for spec in LENS_REGISTRY:
+            rows.append(_encode_lens_value(spec, spec.fn(n), sector_angular=True))
     return np.concatenate(rows)

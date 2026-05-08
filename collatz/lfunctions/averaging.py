@@ -17,6 +17,7 @@ to pi.
 
 from __future__ import annotations
 
+import cmath
 import math
 from dataclasses import dataclass
 
@@ -172,3 +173,46 @@ def D_chi_by_dropping_set(
         cur, cnt = sums.get(s, (0.0 + 0j, 0))
         sums[s] = (cur + v, cnt + 1)
     return sums
+
+
+def sector_twist_chi(
+    chi: HeckeCharacter, k: int, N: int
+) -> TwistedSumResult:
+    """Sector-twisted orbit-pair sum.
+
+    D_{chi, k}(N) = sum_{n odd, 3 <= n <= N} chi(orbit_pair(n)) * exp(2 pi i k s(n) / 12)
+
+    where s(n) is the Eisenstein sector (oddity count mod 12). For k=0 this
+    coincides with D_chi(N); for k=1..11 it extracts the k-th Fourier
+    component of the orbit-pair distribution along the sector index.
+
+    Captures the period-12 sector dynamics that no single Hecke character on
+    Z[omega] of small conductor can express directly.
+    """
+    if not (0 <= k < 12):
+        raise ValueError("k must be in 0..11")
+    omega12 = cmath.exp(2j * math.pi * k / 12)
+    total = 0.0 + 0j
+    count = 0
+    for n in range(3, N + 1, 2):
+        alpha = orbit_pair(n)
+        v = chi.evaluate(alpha)
+        if v == 0:
+            count += 1
+            continue
+        s = oddity_count(n) % 12
+        total += v * (omega12 ** s)
+        count += 1
+    abs_sum = abs(total)
+    sqrtN = math.sqrt(N)
+    return TwistedSumResult(
+        statistic=f"sector_twist_chi(k={k})",
+        character=chi.name,
+        N=N,
+        n_terms=count,
+        raw_sum=total,
+        abs_sum=abs_sum,
+        bound_sqrt_N=sqrtN,
+        bound_n_logn=sqrtN * max(math.log(N), 1),
+        ratio_to_sqrt_N=abs_sum / sqrtN if sqrtN > 0 else 0.0,
+    )

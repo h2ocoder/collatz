@@ -11,6 +11,9 @@ from .characters import (
     TrivialCharacter,
     CubicResidueCharacter,
     SexticResidueCharacter,
+    NormPullbackCharacter,
+    cubic_character_mod_7,
+    sextic_character_mod_7,
 )
 
 __all__ = [
@@ -23,4 +26,7 @@ __all__ = [
     "TrivialCharacter",
     "CubicResidueCharacter",
     "SexticResidueCharacter",
+    "NormPullbackCharacter",
+    "cubic_character_mod_7",
+    "sextic_character_mod_7",
 ]

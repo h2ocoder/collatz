@@ -219,6 +219,112 @@ class SexticResidueCharacter:
 
 
 # ---------------------------------------------------------------------------
+# Norm-pullback Dirichlet character: control for Phase 1 sanity check.
+#
+# Given a rational Dirichlet character chi_q: (Z/qZ)* -> C* of conductor q
+# coprime to 3, define a Hecke character on Z[omega] by
+#   chi(alpha) := chi_q(N(alpha) mod q)
+# where N(alpha) = a^2 - ab + b^2 is the Eisenstein norm.
+#
+# This is multiplicative because the Eisenstein norm is multiplicative.
+# Its conductor is supported only at primes above q, so it is coprime to
+# (pi) as long as q is coprime to 3. Used as a control: if the orbit-twisted
+# sum behaves randomly against this character (sqrt(N) cancellation), then
+# the chi_3/chi_6 signal we observe is specifically a 3-adic-lock effect,
+# not a generic L-function-correlation phenomenon.
+# ---------------------------------------------------------------------------
+
+
+class NormPullbackCharacter:
+    """Pullback of a rational Dirichlet character via the Eisenstein norm.
+
+    chi(alpha) = chi_rat(N(alpha) mod q).
+
+    Parameters
+    ----------
+    q : int
+        Modulus of the rational Dirichlet character. Must be coprime to 3
+        for the pullback to be coprime to (pi).
+    rat_char : callable[[int], complex]
+        The rational Dirichlet character: rat_char(k) for k in 0..q-1.
+        Must be 0 on k that share a factor with q. The character order is
+        inferred from rat_char's image (must be a root of unity).
+    name : str
+        Human-readable name for diagnostics.
+    order : int
+        Character order (smallest n with chi^n = trivial).
+    """
+
+    def __init__(self, q: int, rat_char, name: str, order: int):
+        if q % 3 == 0:
+            raise ValueError(
+                "Norm-pullback requires q coprime to 3 to be coprime to (pi)"
+            )
+        self.q = q
+        self.rat_char = rat_char
+        self._name = name
+        self._order = order
+
+    def evaluate(self, alpha: EisensteinInt) -> complex:
+        n = alpha.norm()
+        return complex(self.rat_char(n % self.q))
+
+    @property
+    def order(self) -> int:
+        return self._order
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+
+def cubic_character_mod_7() -> NormPullbackCharacter:
+    """Cubic character on Z[omega] pulled back from (Z/7Z)* via norm.
+
+    (Z/7Z)* is cyclic of order 6 with generator 3 (verified). Cubic character
+    sends 3 -> omega, 3^2 -> omega^2, 3^3 = 6 -> 1, 3^4 = 4 -> omega, etc.
+    Equivalently chi(k) = omega^(log_3(k) mod 3).
+    """
+    omega_3 = cmath.exp(2j * math.pi / 3)
+    # Build the discrete-log table for (Z/7Z)* with generator 3.
+    # Powers of 3 mod 7: 3^0=1, 3^1=3, 3^2=2, 3^3=6, 3^4=4, 3^5=5, 3^6=1.
+    log_table: dict[int, int] = {}
+    cur = 1
+    for k in range(6):
+        log_table[cur] = k
+        cur = (cur * 3) % 7
+    # log_table now {1:0, 3:1, 2:2, 6:3, 4:4, 5:5}.
+
+    def rat_char(k: int) -> complex:
+        if k == 0:
+            return 0.0 + 0j
+        return omega_3 ** (log_table[k % 7] % 3)
+
+    return NormPullbackCharacter(
+        q=7, rat_char=rat_char, name="cubic_norm_pullback_7", order=3
+    )
+
+
+def sextic_character_mod_7() -> NormPullbackCharacter:
+    """Sextic character on Z[omega] pulled back from (Z/7Z)* via norm."""
+    zeta_6 = cmath.exp(1j * math.pi / 3)
+    log_table: dict[int, int] = {}
+    cur = 1
+    for k in range(6):
+        log_table[cur] = k
+        cur = (cur * 3) % 7
+
+    def rat_char(k: int) -> complex:
+        if k == 0:
+            return 0.0 + 0j
+        return zeta_6 ** log_table[k % 7]
+
+    return NormPullbackCharacter(
+        q=7, rat_char=rat_char, name="sextic_norm_pullback_7", order=6
+    )
+
+
+# ---------------------------------------------------------------------------
 # Diagnostics
 # ---------------------------------------------------------------------------
 

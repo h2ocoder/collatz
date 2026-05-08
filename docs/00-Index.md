@@ -53,6 +53,12 @@ Findings from notebook investigations:
 - [[Affine Orbit Structure]] — dest(n) = (3^s / 2^(k-s))·n + C within each subgroup, proved by induction
 - [[Logarithmic Escape Theorem]] — self-chains in any Set_k bounded by O(log n) via modular tightening
 - [[Bit Destruction Bound]] — bits destroyed per drop = 1 - {s·log₂3}, bounded by Roth's theorem; 3-adic mixing proved
+- [[Multiplication Symmetry Theorem]] — P(shift=+s) = P(shift=-s) under x3; mod-4 wall partitions odd numbers
+- [[Lattice Path Formula]] — N(s) = lattice paths below y = x·log₂(3); explains subgroup counts 1,2,3,7,12,30,85,...
+- [[Collatz Complementarity Principle]] — narrow bandwidth creates mod-p uncertainty relations; C as hidden variable
+- [[Eisenstein Factorization]] — 3n+1 = pi*pi_bar*n+1 in Z[omega]; decouples into period-12 angular + radial dynamics
+- [[Sector Monotonicity]] — within each Eisenstein sector, orbit values strictly decrease; 135K revisits, 0 violations
+- [[Proof Attempt - Adelic IFS Bridge]] — reduces Collatz to absolute continuity of a self-similar measure via Siegel's Hydra framework
 
 ## Papers
 1. "The Collatz Conjecture, Pythagorean Triples, and the Riemann Hypothesis" — Dropping Sets, Genus, Orbital Triples, Complex Plane

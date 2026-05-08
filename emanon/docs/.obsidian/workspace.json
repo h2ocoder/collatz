@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Specs/Em Language Spec.md",
+                "file": "Lore/Log Types.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Em Language Spec"
+              "title": "Log Types"
             }
           }
         ]
@@ -183,18 +183,18 @@
       "bases:Create new base": false
     }
   },
-  "active": "3e54d76ab9730329",
+  "active": "e81b3cb152e237ba",
   "lastOpenFiles": [
+    "Lore/Cosmology.md",
+    "Specs/Em Language Spec.md",
     "2026-04-13-collatz-scrambling-protocol.md",
     "2026-04-13-collatz-scrambling-protocol.md.tmp.149748.1776131770651",
     "2026-04-13-multiverse-ontology-design.md",
     "Specs/Bloom Filters & Scanning.md",
     "Specs/Energy & Conservation.md",
-    "Specs/Em Language Spec.md",
     "Lore/Log Types.md",
     "Lore/Genesis.md",
     "Lore/Factions & Governance.md",
-    "Lore/Cosmology.md",
     "Reference/External Sources.md",
     "Reference/Collatz Integration.md",
     "2026-04-13-plan-1-frontend-design-system.md",

@@ -25,12 +25,14 @@
             "id": "708c4326765e243b",
             "type": "leaf",
             "state": {
-              "type": "release-notes",
+              "type": "markdown",
               "state": {
-                "currentVersion": "1.12.7"
+                "file": "Explorations/Machine Learning.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-book-up",
-              "title": "Release Notes 1.12.7"
+              "icon": "lucide-file",
+              "title": "Machine Learning"
             }
           }
         ],
@@ -195,13 +197,23 @@
   },
   "active": "708c4326765e243b",
   "lastOpenFiles": [
-    "plans/path-to-proof.md.tmp.51024.1775185082869",
-    "plans/path-to-proof.md.tmp.51024.1775184806232",
-    "plans/path-to-proof.md.tmp.51024.1775179196112",
-    "plans/path-to-proof.md.tmp.51024.1775173886965",
-    "plans/path-to-proof.md.tmp.51024.1775173131229",
-    "plans/path-to-proof.md.tmp.51024.1775173118575",
-    "plans/path-to-proof.md.tmp.51024.1775173100058",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777606258036",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777606245144",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777606231534",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777606195438",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777606133739",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777603138000",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777603044934",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777602367463",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777602202754",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777601962422",
+    "Explorations/Collatz Embeddings.md.tmp.45504.1777601687428",
+    "Explorations/Collatz Embeddings.md",
+    "superpowers/plans/2026-04-30-collatz-embeddings.md",
+    "superpowers/specs/2026-04-30-collatz-embeddings-design.md",
+    "00-Index.md",
+    "Explorations/Machine Learning.md",
+    "Definitions/Syracuse Map.md",
     "Conjectures/Affine Orbit Structure.md",
     "Definitions/Orbital Oddity.md",
     "Definitions/Alpha Value.md",
@@ -210,14 +222,9 @@
     "Conjectures/Bit Destruction Bound.md",
     "Conjectures/Odd Stopping Time Spectrum.md",
     "Untitled.md",
-    "plans/2026-04-02-vitepress-implementation.md.tmp.51024.1775135125332",
     "plans/2026-04-02-vitepress-implementation.md",
-    "plans/2026-04-02-vitepress-site-design.md.tmp.51024.1775134693301",
-    "plans/2026-04-02-vitepress-site-design.md.tmp.51024.1775134668123",
     "plans/2026-04-02-vitepress-site-design.md",
-    "00-Index.md.tmp.51024.1775134097255",
     "plans/path-to-proof.md",
-    "Conjectures/Logarithmic Escape Theorem.md",
-    "Definitions/Syracuse Map.md"
+    "Conjectures/Logarithmic Escape Theorem.md"
   ]
 }

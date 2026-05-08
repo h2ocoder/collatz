@@ -18,7 +18,9 @@
       "Bash(npx storybook@latest init --type react --yes)",
       "Bash(npm install:*)",
       "Bash(npm view:*)",
-      "Bash(npm search:*)"
+      "Bash(npm search:*)",
+      "Read(//c/Users/darcy/.claude/plugins/cache/**)",
+      "Read(//c/Users/darcy/.claude/plugins/**)"
     ]
   }
 }

@@ -15,6 +15,13 @@ from .characters import (
     cubic_character_mod_7,
     sextic_character_mod_7,
 )
+from .lattice_paths import (
+    b_imbalance_term,
+    count_by_dest_residue,
+    enumerate_subgroups,
+    k_of,
+    rho_diff_partial,
+)
 
 __all__ = [
     "EisensteinInt",
@@ -29,4 +36,9 @@ __all__ = [
     "NormPullbackCharacter",
     "cubic_character_mod_7",
     "sextic_character_mod_7",
+    "b_imbalance_term",
+    "count_by_dest_residue",
+    "enumerate_subgroups",
+    "k_of",
+    "rho_diff_partial",
 ]

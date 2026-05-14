@@ -77,7 +77,8 @@ export default defineConfig({
           { text: 'abc Conjecture', link: '/connections/abc-conjecture' },
           { text: 'Universal Dynamics', link: '/connections/universal-dynamics' },
           { text: 'The Transfer Operator', link: '/connections/hilbert-polya' },
-          { text: 'Eisenstein Lattice', link: '/connections/eisenstein' }
+          { text: 'Eisenstein Lattice', link: '/connections/eisenstein' },
+          { text: 'The Sturmian L-Probe', link: '/connections/sturmian-l-probe' }
         ]
       },
       {

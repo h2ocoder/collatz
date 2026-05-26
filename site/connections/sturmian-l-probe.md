@@ -34,6 +34,8 @@ For $o = 3$ (i.e. $k = 8$): $D_{\chi_6}^{(8)}(N) = 0$ exactly.
 
 The phase $\epsilon_o$ is the **Sturmian cutting sequence of $\log_2 3$** — the canonical irrational-rotation signal.
 
+![Per-Dset character magnitudes α_k and signed phases, with the √3/2, √3/6, √3/14 tier structure visible](/data/dropping_set_l_function.png)
+
 ## What the closed form looks like
 
 | $o$ | $k_o$ | gap | $\alpha_o$ | $\arg$ | per-$n$ size | clean form |
@@ -68,6 +70,8 @@ Equivalently, by the Beatty fractional-part characterization:
 $$\text{gap}_o = 3 \iff \{(o-1) \log_2 3\} \ge 2 - \log_2 3 \approx 0.4150$$
 
 The probe's phase pattern *is* the irrational rotation of $\log_2 3$, made arithmetic-visible.
+
+![Empirical signs (open circles) sit exactly on the Sturmian-rule prediction (filled green for gap=3, red for gap=2). Bottom panel shows the Beatty fractional part vs the threshold 0.4150 — green points above, red below](/data/sturmian_sign_pattern.png)
 
 ## Proof outline
 

@@ -2,7 +2,7 @@ name: Deploy VitePress to GitHub Pages
 
 on:
   push:
-    branches: [main, feature/orbit-structure]
+    branches: [main]
   workflow_dispatch:
 
 permissions:

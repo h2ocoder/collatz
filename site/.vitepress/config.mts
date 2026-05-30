@@ -85,7 +85,9 @@ export default defineConfig({
         text: 'Explore',
         items: [
           { text: 'Alpha Sequence', link: '/explore/alpha-sequence' },
-          { text: 'Binary Shortcut', link: '/explore/binary-shortcut' }
+          { text: 'Binary Shortcut', link: '/explore/binary-shortcut' },
+          { text: 'Sturmian Bridge', link: '/explore/sturmian-bridge' },
+          { text: 'Sturmian Fractals', link: '/explore/sturmian-fractals' }
         ]
       }
     ],

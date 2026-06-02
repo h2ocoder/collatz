@@ -42,7 +42,6 @@ import numpy as np
 
 from collatz.stopping import stopping_time
 from collatz.utils import (
-    LOG2_3,
     beatty_to_o,
     bits_to_2d,
     sturmian_sign,

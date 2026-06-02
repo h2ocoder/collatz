@@ -8,6 +8,7 @@ from collatz.utils import (
     beatty_to_o,
     bits_to_2d,
     sturmian_sign,
+    trailing_zeros_vec,
 )
 
 
@@ -47,6 +48,14 @@ def test_bits_to_2d_split():
     assert bits_to_2d(0, K) == (0, 0)
     # n = 2^K - 1 -> (max, max)
     assert bits_to_2d((1 << K) - 1, K) == ((1 << (K - K // 2)) - 1, (1 << (K // 2)) - 1)
+
+
+def test_trailing_zeros_vec_known_values():
+    """v_2(n) returns the 2-adic valuation; vectorized via a & -a + log2."""
+    arr = np.array([1, 2, 3, 4, 6, 8, 12, 16])
+    expected = np.array([0, 1, 0, 2, 1, 3, 2, 4])
+    result = trailing_zeros_vec(arr)
+    np.testing.assert_array_equal(result, expected)
 
 
 def test_helpers_are_pure():

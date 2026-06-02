@@ -1,4 +1,4 @@
-"""Shared helpers: caching, batch computation."""
+"""Shared helpers: caching, batch computation, Sturmian/Beatty utilities."""
 
 import math
 from functools import lru_cache
@@ -58,7 +58,7 @@ def sturmian_sign(o: int) -> int:
     The threshold is 2 - log2(3); compared against fractional part of
     (o - 1) * log2(3).
 
-    Example: sturmian_sign(1) == 1; sturmian_sign(2) == -1.
+    Example: sturmian_sign(1) == -1; sturmian_sign(2) == 1.
     """
     threshold = 2.0 - LOG2_3
     frac = ((o - 1) * LOG2_3) % 1.0

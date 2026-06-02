@@ -69,7 +69,7 @@ def test_walsh_constant_mode_matches_haar():
 
 
 def test_weight_energies_covers_parseval():
-    """F[0]^2 + sum_w W_w == ||f||^2."""
+    """sum_w W_w == ||f||^2 (W[0] already includes F[0]^2)."""
     rng = np.random.default_rng(34)
     K = 7
     N = 1 << K
@@ -77,11 +77,8 @@ def test_weight_energies_covers_parseval():
     F = walsh_forward(f)
     W = weight_energies(F, K)
     assert W.shape == (K + 1,)
-    total = F[0] ** 2 + float(W.sum())
-    # weight_energies includes w=0 (which is F[0]^2 alone in this bucket).
-    # So actually total == ||f||^2 OR W.sum() == ||f||^2; verify the spec'd convention.
-    # Per spec: W_w = sum_{popcount(m) = w} |F[m]|^2, so w=0 includes only F[0].
-    # Then sum_w W_w = sum_m |F[m]|^2 = ||f||^2 by Parseval. Both should equal ||f||^2.
+    # Per spec: W_w = sum_{popcount(m) = w} |F[m]|^2 — w=0 bucket = F[0]^2.
+    # So sum_w W_w = sum_m |F[m]|^2 = ||f||^2 by Parseval.
     assert abs(float(W.sum()) - float(f @ f)) / float(f @ f) < 1e-12
 
 

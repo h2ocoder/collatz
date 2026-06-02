@@ -30,7 +30,7 @@ Kozyrev wavelets are the *exact* operator-eigenfunction analogue of spherical ha
 | Operator | Vladimirov $D^\alpha$ on $\mathbb{Z}_2 / 2^K \mathbb{Z}_2$ | Canonical 2-adic Laplacian; eigenfunctions are Kozyrev wavelets |
 | Basis realization | Dyadic Haar wavelets indexed by shell $j \in \{0,\dots,K{-}1\}$ and offset $a \in \{0,\dots,2^j{-}1\}$, plus constant mode | Kozyrev = Haar for $p=2$; admits $O(N\log N)$ FHT |
 | Depth | $K = 11$ for headline, scalable up to $K = 16$ | Matches existing `collatz_2adic_potential.py`; reusable bit-split coords |
-| Input fields | $\chi(n)$, $\mathbf{1}_{D_k}$ for $k \in \{1,2,4,5,7,8\}$, $T(n)$ | $\chi$ tests Sturmian claim; $D_k$ tests fingerprint claim; $T$ is control |
+| Input fields | $\chi(n)$, $\mathbf{1}_{D_k}$ for $k \in \{1,3,6,8,11,13,16\}$, $T(n)$ | $\chi$ tests Sturmian claim; $D_k$ tests fingerprint claim; $T$ is control |
 | Off-Beatty handling | $\chi = 0$ at off-Beatty values (existing convention) | Preserves Parseval; no special-case in the transform |
 | Numeric type | `np.float64` throughout | Exact-`Fraction` adds nothing; Haar coefficients are inherently floating energies |
 | Visualization output | Single PNG `data/collatz_kozyrev_spectrum.png` | Matches existing script convention |
@@ -144,6 +144,7 @@ DPI 120, figsize ≈ (16, 17), `RdBu_r` for signed quantities, `viridis` for ene
 - **N not a power of 2.** Not supported; the script generates exactly $N = 2^K$ inputs.
 - **Off-Beatty $\chi = 0$ values.** Handled implicitly — zero contribution to every coefficient; Parseval holds.
 - **Empty dropping classes.** Some $D_k$ may be empty for small $K$ (notably large $k$); script skips those with a logged warning.
+- **Beatty-rung correction.** The originally-proposed $k \in \{2, 4, 5, 7\}$ are structurally empty under the standard Collatz map (stopping times are always 1 or a Beatty rung $k_o = o + \lfloor o \log_2 3 \rfloor + 1$). The delivered list uses the first seven non-empty Beatty rungs $\{1, 3, 6, 8, 11, 13, 16\}$.
 - **Stopping time non-droppers ($T = 0$).** Treated as zero in $T(n)$ field; documented in script header.
 
 ## Out of scope

@@ -19,7 +19,6 @@ Output: data/collatz_kozyrev_spectrum.png
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Callable
 
 import matplotlib
 
@@ -127,6 +126,14 @@ def duality_entropies(
     Walsh:   distribution over (K+1) Hamming-weight buckets, INCLUDING w=0.
     Conventions match the spec's H4 sub-claims.
     """
+    # Note on asymmetry: H_K is over K shell-energies (constant mode excluded
+    # via Kozyrev's c0 split), while H_W is over K+1 weight-energy buckets
+    # (w=0 bucket included = F[0]^2 = c0^2). For DC-heavy fields (e.g.
+    # dropping-set indicators) this inflates H_W relative to H_K and biases
+    # the duality scatter toward the "Kozyrev-localized" half-plane. The
+    # asymmetry is a deliberate spec choice (the constant mode lives in the
+    # same array as Walsh wavelet coefficients but is split out in the Haar
+    # representation); read the scatter accordingly.
     E = shell_energies(coeffs_kozyrev, K)
     W = weight_energies(F_walsh, K)
     E_total = E.sum()

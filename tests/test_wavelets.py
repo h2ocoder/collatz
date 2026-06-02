@@ -171,3 +171,47 @@ def test_haar_inverse_ball_indicator_concentrates_at_coarse_shells():
     for j in range(j0 + 1, K):
         for a in range(1 << j):
             assert abs(coeffs[idx(j, a)]) < 1e-12, f"nonzero at j={j}, a={a}"
+
+
+from collatz.wavelets import coefficient_grid, shell_energies
+
+
+def test_shell_energies_sum_to_total_wavelet_energy():
+    """sum(shell_energies) == sum(coeffs^2)."""
+    rng = np.random.default_rng(3)
+    K = 7
+    N = 1 << K
+    f = rng.standard_normal(N)
+    _, coeffs = haar_forward(f)
+    E = shell_energies(coeffs, K)
+    assert E.shape == (K,)
+    np.testing.assert_allclose(E.sum(), coeffs @ coeffs, rtol=1e-12)
+
+
+def test_shell_energies_basis_vector():
+    """A single basis vector psi_{j0, a0} has all its energy at shell j0."""
+    K = 5
+    j0 = 2
+    a0 = 1
+    psi = kozyrev_basis_vector(j0, a0, K)
+    _, coeffs = haar_forward(psi)
+    E = shell_energies(coeffs, K)
+    expected = np.zeros(K)
+    expected[j0] = 1.0
+    np.testing.assert_allclose(E, expected, atol=1e-12)
+
+
+def test_coefficient_grid_shape_and_padding():
+    """Triangle grid is (K, 2^(K-1)) with NaN padding outside (j, a) range."""
+    K = 4
+    N = 1 << K
+    coeffs = np.arange(N - 1, dtype=np.float64)
+    grid = coefficient_grid(coeffs, K)
+    assert grid.shape == (K, 1 << (K - 1))
+    # Row j = 0 has 1 valid entry (rest NaN)
+    assert not np.isnan(grid[0, 0])
+    assert np.isnan(grid[0, 1])
+    # Row j = K - 1 is fully populated
+    assert not np.any(np.isnan(grid[K - 1]))
+    # Value at (j, a) should be coeffs[idx(j, a)]^2
+    assert abs(grid[2, 0] - coeffs[idx(2, 0)] ** 2) < 1e-12

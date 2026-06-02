@@ -129,3 +129,34 @@ def haar_inverse(
         new_s[1::2] = (s - d) * inv_sqrt2
         s = new_s
     return s
+
+
+def shell_energies(coeffs: np.ndarray, K: int) -> np.ndarray:
+    """Per-shell wavelet energy E_j = sum_a c_{j, a}^2.
+
+    Returns a length-K array, indexed by shell j in [0, K).
+    """
+    coeffs = np.asarray(coeffs, dtype=np.float64)
+    if coeffs.size != (1 << K) - 1:
+        raise ValueError(f"coeffs size {coeffs.size} != 2^K - 1 for K={K}")
+    out = np.empty(K, dtype=np.float64)
+    sq = coeffs * coeffs
+    for j in range(K):
+        out[j] = sq[(1 << j) - 1 : (1 << (j + 1)) - 1].sum()
+    return out
+
+
+def coefficient_grid(coeffs: np.ndarray, K: int) -> np.ndarray:
+    """Reshape coeffs into a (K, 2^(K-1)) triangle for spectrogram plotting.
+
+    Row j contains |c_{j, a}|^2 for a in [0, 2^j); remaining cells are NaN.
+    """
+    coeffs = np.asarray(coeffs, dtype=np.float64)
+    if coeffs.size != (1 << K) - 1:
+        raise ValueError(f"coeffs size {coeffs.size} != 2^K - 1 for K={K}")
+    width = 1 << (K - 1) if K > 0 else 1
+    grid = np.full((K, width), np.nan, dtype=np.float64)
+    for j in range(K):
+        row = coeffs[(1 << j) - 1 : (1 << (j + 1)) - 1] ** 2
+        grid[j, : row.size] = row
+    return grid

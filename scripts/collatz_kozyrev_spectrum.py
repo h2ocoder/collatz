@@ -155,7 +155,7 @@ def main() -> None:
 
     K = 11
     N = 1 << K
-    target_dropping_classes = [1, 2, 4, 5, 7, 8]
+    target_dropping_classes = [1, 3, 6, 8, 11, 13, 16]
     partial_recon_depths = [2, 4, 6, 8, K]
 
     print(f"K = {K}, N = {N}")

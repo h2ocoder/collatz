@@ -85,3 +85,47 @@ def haar_forward(f: np.ndarray) -> tuple[float, np.ndarray]:
         s = new_s
     c0 = float(s[0])
     return c0, coeffs
+
+
+def haar_inverse(
+    c0: float,
+    coeffs: np.ndarray,
+    depth_cutoff: int | None = None,
+) -> np.ndarray:
+    """Inverse fast Haar/Kozyrev transform.
+
+    Args:
+        c0:            constant-mode coefficient.
+        coeffs:        length-(N-1) wavelet coefficients in flat layout.
+        depth_cutoff:  if J is given, only shells j < J are used (partial
+                       reconstruction f_J). J = None or J = K is exact.
+
+    Returns:
+        length-N float64 array.
+
+    Example: haar_inverse(*haar_forward(f)) == f for any power-of-2 length f.
+    """
+    coeffs = np.asarray(coeffs, dtype=np.float64)
+    N = coeffs.size + 1
+    if N == 0 or (N & (N - 1)) != 0:
+        raise ValueError(f"coeffs length {coeffs.size} is not 2^K - 1")
+    K = int(round(np.log2(N)))
+    if depth_cutoff is None:
+        depth_cutoff = K
+    if not (0 <= depth_cutoff <= K):
+        raise ValueError(f"depth_cutoff={depth_cutoff} out of range [0, {K}]")
+
+    inv_sqrt2 = 1.0 / np.sqrt(2.0)
+    s = np.array([c0], dtype=np.float64)
+    # Inverse cascade from coarsest (j = 0) to finest (j = K - 1).
+    for j in range(0, K):
+        d_slice = coeffs[(1 << j) - 1 : (1 << (j + 1)) - 1]
+        if j >= depth_cutoff:
+            d = np.zeros_like(d_slice)
+        else:
+            d = d_slice
+        new_s = np.empty(s.size * 2, dtype=np.float64)
+        new_s[0::2] = (s + d) * inv_sqrt2
+        new_s[1::2] = (s - d) * inv_sqrt2
+        s = new_s
+    return s

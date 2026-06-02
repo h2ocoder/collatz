@@ -107,3 +107,67 @@ def test_haar_forward_parseval():
 def test_haar_forward_rejects_non_power_of_two():
     with pytest.raises(ValueError):
         haar_forward(np.zeros(7))
+
+
+from collatz.wavelets import haar_inverse
+
+
+def test_haar_inverse_round_trip_random():
+    """haar_inverse(*haar_forward(f)) ≈ f to float64 precision."""
+    rng = np.random.default_rng(7)
+    for K in (2, 4, 6, 9):
+        N = 1 << K
+        f = rng.standard_normal(N)
+        c0, coeffs = haar_forward(f)
+        g = haar_inverse(c0, coeffs)
+        np.testing.assert_allclose(g, f, atol=1e-12, rtol=1e-12)
+
+
+def test_haar_inverse_full_reconstruction_equals_input():
+    """With depth_cutoff = K (default), full reconstruction is exact."""
+    f = np.array([1.0, 2.0, 3.0, 4.0, -1.0, 0.5, 7.0, -2.0])
+    c0, coeffs = haar_forward(f)
+    g = haar_inverse(c0, coeffs, depth_cutoff=None)
+    np.testing.assert_allclose(g, f, atol=1e-12)
+
+
+def test_haar_inverse_partial_reconstruction_monotone():
+    """||f - f_J||^2 is non-increasing as J increases (Parseval projection)."""
+    rng = np.random.default_rng(11)
+    K = 8
+    N = 1 << K
+    f = rng.standard_normal(N)
+    c0, coeffs = haar_forward(f)
+    prev_err = np.inf
+    for J in range(K + 1):
+        f_J = haar_inverse(c0, coeffs, depth_cutoff=J)
+        err = float(np.sum((f - f_J) ** 2))
+        assert err <= prev_err + 1e-12, f"reconstruction error grew at J={J}"
+        prev_err = err
+    # At J = K, error must be ~0
+    assert prev_err < 1e-20
+
+
+def test_haar_inverse_J0_returns_mean():
+    """With depth_cutoff = 0, reconstruction is f's mean projected onto phi."""
+    f = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])
+    c0, coeffs = haar_forward(f)
+    f_0 = haar_inverse(c0, coeffs, depth_cutoff=0)
+    expected = np.full_like(f, f.mean())
+    np.testing.assert_allclose(f_0, expected, atol=1e-12)
+
+
+def test_haar_inverse_ball_indicator_concentrates_at_coarse_shells():
+    """Indicator of a 2-adic ball at level j0 has zero coefficients at shells j > j0."""
+    K = 5
+    N = 1 << K
+    j0 = 2  # ball of support size N / 2^j0 = 8
+    a0 = 1  # ball at indices [8, 16)
+    support = 1 << (K - j0)
+    f = np.zeros(N)
+    f[a0 * support : (a0 + 1) * support] = 1.0
+    c0, coeffs = haar_forward(f)
+    # All wavelet coefficients at shells j > j0 must be zero
+    for j in range(j0 + 1, K):
+        for a in range(1 << j):
+            assert abs(coeffs[idx(j, a)]) < 1e-12, f"nonzero at j={j}, a={a}"

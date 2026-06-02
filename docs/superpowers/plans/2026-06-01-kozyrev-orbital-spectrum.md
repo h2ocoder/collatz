@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add a discrete Kozyrev (= dyadic Haar) wavelet decomposition of Collatz dropping-set indicators, the Sturmian sign field $\chi$, and stopping time $T$, producing a single figure that shows their orbital-shell spectra and partial reconstructions.
+**Goal:** Add a discrete Kozyrev (= dyadic Haar) wavelet decomposition of Collatz dropping-set indicators, the Sturmian sign field $\chi$, and stopping time $T$, together with its dual Walsh–Hadamard (2-adic Fourier) decomposition, producing a single figure that shows orbital-shell spectra, weight-bucketed Walsh spectra, partial reconstructions, and the discrete wave–particle duality scatter.
 
-**Architecture:** A new standalone module `collatz/wavelets.py` implements the fast Haar transform with the heap-style flat index `idx(j, a) = 2^j - 1 + a` and the orthonormal Kozyrev/Haar basis. A new script `scripts/collatz_kozyrev_spectrum.py` consumes shared helpers from `collatz/utils.py` (lifted out of `collatz_2adic_potential.py`) and the stopping/dropping APIs, runs the decomposition, and writes one PNG.
+**Architecture:** Two new standalone modules. `collatz/wavelets.py` implements the fast Haar transform with the heap-style flat index `idx(j, a) = 2^j - 1 + a` and the orthonormal Kozyrev/Haar basis. `collatz/walsh.py` implements the orthonormal Walsh–Hadamard transform (natural Hadamard order) plus a `weight_energies` bucketing by Hamming weight and a `shannon_entropy` utility. A new script `scripts/collatz_kozyrev_spectrum.py` consumes shared helpers from `collatz/utils.py` (lifted out of `collatz_2adic_potential.py`) and the stopping/dropping APIs, runs both decompositions, and writes one PNG.
 
 **Tech Stack:** Python 3.12, NumPy, Matplotlib (Agg backend), pytest. No new dependencies.
 
@@ -35,12 +35,14 @@ Parseval: $\|f\|_2^2 = c_0^2 + \sum_{j, a} c_{j,a}^2$ where $c_0 = \langle f, \v
 ```
 collatz/
   wavelets.py                       # NEW: forward/inverse Haar + shell energies + basis vector
+  walsh.py                          # NEW: forward Walsh-Hadamard + weight energies + Shannon entropy
   utils.py                          # MODIFY: add sturmian_sign, beatty_to_o, bits_to_2d
 scripts/
   collatz_2adic_potential.py        # MODIFY: import lifted helpers from utils; use collatz.stopping.stopping_time
-  collatz_kozyrev_spectrum.py       # NEW: build inputs, run FHT, write PNG
+  collatz_kozyrev_spectrum.py       # NEW: build inputs, run FHT + FWHT, write PNG
 tests/
   test_wavelets.py                  # NEW: Parseval, round-trip, orthonormality, basis, partial recon
+  test_walsh.py                     # NEW: Parseval, self-inverse, delta/constant transforms, weight bucketing
   test_utils.py                     # NEW: known values for the lifted helpers
 docs/Explorations/
   Kozyrev Orbital Spectrum.md       # NEW: brief note linking spec, plan, output PNG
@@ -793,7 +795,243 @@ git commit -m "feat(wavelets): shell_energies and coefficient_grid"
 
 ---
 
-### Task 7: Build the input-field constructors used by the spectrum script
+### Task 7: Implement `collatz/walsh.py` — Walsh–Hadamard dual basis
+
+**Files:**
+- Create: `collatz/walsh.py`
+- Create: `tests/test_walsh.py`
+
+- [ ] **Step 1: Write the failing tests**
+
+```python
+# tests/test_walsh.py
+"""Tests for collatz.walsh — orthonormal Walsh-Hadamard transform."""
+
+import numpy as np
+import pytest
+
+from collatz.walsh import (
+    shannon_entropy,
+    walsh_forward,
+    weight_energies,
+)
+
+
+def test_walsh_parseval():
+    """sum |F[m]|^2 == sum |f[n]|^2."""
+    rng = np.random.default_rng(31)
+    for K in (2, 5, 8):
+        N = 1 << K
+        f = rng.standard_normal(N)
+        F = walsh_forward(f)
+        assert F.shape == (N,)
+        assert abs(float(F @ F) - float(f @ f)) / float(f @ f) < 1e-12
+
+
+def test_walsh_self_inverse():
+    """Orthonormal Walsh transform is its own inverse."""
+    rng = np.random.default_rng(32)
+    K = 6
+    N = 1 << K
+    f = rng.standard_normal(N)
+    g = walsh_forward(walsh_forward(f))
+    np.testing.assert_allclose(g, f, atol=1e-12)
+
+
+def test_walsh_of_constant():
+    """f ≡ c → F[0] = c * sqrt(N), F[m] = 0 for m > 0."""
+    K = 5
+    N = 1 << K
+    f = np.full(N, 3.5)
+    F = walsh_forward(f)
+    assert abs(F[0] - 3.5 * np.sqrt(N)) < 1e-12
+    np.testing.assert_allclose(F[1:], np.zeros(N - 1), atol=1e-12)
+
+
+def test_walsh_of_delta_uniform_magnitude():
+    """f = e_n → all |F[m]| == 1/sqrt(N) with signs (-1)^{<m,n>}."""
+    K = 4
+    N = 1 << K
+    n = 5  # 0b0101
+    f = np.zeros(N)
+    f[n] = 1.0
+    F = walsh_forward(f)
+    expected_mag = 1.0 / np.sqrt(N)
+    np.testing.assert_allclose(np.abs(F), np.full(N, expected_mag), atol=1e-12)
+    for m in range(N):
+        sign = -1.0 if bin(m & n).count("1") % 2 else 1.0
+        assert abs(F[m] - sign * expected_mag) < 1e-12, f"sign wrong at m={m}"
+
+
+def test_walsh_constant_mode_matches_haar():
+    """F[0] (walsh) == c0 (haar) for the same input."""
+    from collatz.wavelets import haar_forward
+
+    rng = np.random.default_rng(33)
+    K = 5
+    f = rng.standard_normal(1 << K)
+    F = walsh_forward(f)
+    c0, _ = haar_forward(f)
+    assert abs(F[0] - c0) < 1e-12
+
+
+def test_weight_energies_covers_parseval():
+    """F[0]^2 + sum_w W_w == ||f||^2."""
+    rng = np.random.default_rng(34)
+    K = 7
+    N = 1 << K
+    f = rng.standard_normal(N)
+    F = walsh_forward(f)
+    W = weight_energies(F, K)
+    assert W.shape == (K + 1,)
+    total = F[0] ** 2 + float(W.sum())
+    assert abs(total - float(f @ f)) / float(f @ f) < 1e-12
+
+
+def test_weight_energies_walsh_character():
+    """Walsh character with popcount(m0)=w0 has all its energy at weight w0."""
+    K = 5
+    N = 1 << K
+    m0 = 0b10110  # popcount = 3
+    # Build w_{m0}(n) = (1/sqrt(N)) * (-1)^{<m0,n>}
+    signs = np.array(
+        [(-1.0) ** (bin(m0 & n).count("1")) for n in range(N)]
+    )
+    f = signs / np.sqrt(N)
+    F = walsh_forward(f)
+    W = weight_energies(F, K)
+    expected = np.zeros(K + 1)
+    expected[bin(m0).count("1")] = 1.0
+    np.testing.assert_allclose(W, expected, atol=1e-12)
+
+
+def test_shannon_entropy_known_values():
+    """Entropy is 0 on a delta, log2(n) on uniform."""
+    assert abs(shannon_entropy(np.array([1.0, 0.0, 0.0, 0.0]))) < 1e-12
+    h = shannon_entropy(np.full(8, 1 / 8))
+    assert abs(h - 3.0) < 1e-12  # log2(8) = 3
+
+
+def test_shannon_entropy_handles_zero_safely():
+    """Zero entries contribute zero, not NaN."""
+    p = np.array([0.5, 0.0, 0.5, 0.0])
+    h = shannon_entropy(p)
+    assert abs(h - 1.0) < 1e-12
+
+
+def test_walsh_rejects_non_power_of_two():
+    with pytest.raises(ValueError):
+        walsh_forward(np.zeros(7))
+```
+
+- [ ] **Step 2: Run tests to verify they fail**
+
+```bash
+python -m pytest tests/test_walsh.py -v
+```
+Expected: `ModuleNotFoundError: No module named 'collatz.walsh'`.
+
+- [ ] **Step 3: Implement `collatz/walsh.py`**
+
+```python
+# collatz/walsh.py
+"""Walsh-Hadamard transform = 2-adic Fourier transform on Z / 2^K Z.
+
+The Walsh characters W_m(n) = (-1)^{<m, n>_2} (bitwise dot product) are
+exactly the additive characters of (Z / 2^K Z, +); they form an
+orthonormal basis dual to the position basis. This is the "wave-like"
+basis that pairs with the Kozyrev wavelets ("particle-like") under the
+discrete 2-adic uncertainty principle.
+
+Normalization: F[m] = (1/sqrt(N)) sum_n f[n] (-1)^{<m,n>_2}.
+The transform is its own inverse: walsh_forward(walsh_forward(f)) == f.
+Parseval: sum_m |F[m]|^2 = sum_n |f[n]|^2.
+"""
+from __future__ import annotations
+
+import numpy as np
+
+
+def walsh_forward(f: np.ndarray) -> np.ndarray:
+    """Fast orthonormal Walsh-Hadamard transform (natural Hadamard order).
+
+    Args:
+        f: length-N array, N a power of 2.
+
+    Returns:
+        F of length N, F[m] = (1/sqrt(N)) sum_n f[n] (-1)^{<m,n>_2}.
+
+    Implementation: in-place butterfly, O(N log N).
+    """
+    f = np.asarray(f, dtype=np.float64).copy()
+    N = f.size
+    if N == 0 or (N & (N - 1)) != 0:
+        raise ValueError(f"length {N} is not a positive power of 2")
+    h = 1
+    while h < N:
+        # Standard Hadamard butterfly on stride 2h.
+        for i in range(0, N, h * 2):
+            block = f[i : i + 2 * h]
+            x = block[:h].copy()
+            y = block[h:].copy()
+            block[:h] = x + y
+            block[h:] = x - y
+        h *= 2
+    return f / np.sqrt(N)
+
+
+def weight_energies(F: np.ndarray, K: int) -> np.ndarray:
+    """Bucket squared Walsh coefficients by Hamming weight of m.
+
+    Returns shape (K+1,) where out[w] = sum_{popcount(m) = w} |F[m]|^2.
+    The w = 0 entry is F[0]^2 (constant mode).
+    """
+    F = np.asarray(F, dtype=np.float64)
+    N = F.size
+    if N != (1 << K):
+        raise ValueError(f"F.size={N} != 2^K={1 << K}")
+    weights = np.array(
+        [bin(m).count("1") for m in range(N)], dtype=np.int64
+    )
+    sq = F * F
+    out = np.zeros(K + 1, dtype=np.float64)
+    for w in range(K + 1):
+        out[w] = sq[weights == w].sum()
+    return out
+
+
+def shannon_entropy(p: np.ndarray) -> float:
+    """Shannon entropy in bits.
+
+    Treats zero probabilities as contributing zero (0 * log 0 := 0).
+    Does NOT normalize p; pass a probability vector.
+
+    Example: shannon_entropy([0.5, 0.5]) == 1.0; shannon_entropy([1.0, 0.0]) == 0.0.
+    """
+    p = np.asarray(p, dtype=np.float64)
+    mask = p > 0
+    if not np.any(mask):
+        return 0.0
+    return float(-np.sum(p[mask] * np.log2(p[mask])))
+```
+
+- [ ] **Step 4: Run tests to verify they pass**
+
+```bash
+python -m pytest tests/test_walsh.py -v
+```
+Expected: 10 passed.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add collatz/walsh.py tests/test_walsh.py
+git commit -m "feat(walsh): orthonormal Walsh-Hadamard transform + Hamming-weight energies"
+```
+
+---
+
+### Task 8: Build the input-field constructors used by the spectrum script
 
 **Files:**
 - Create: `scripts/collatz_kozyrev_spectrum.py` (initial skeleton with input helpers only)
@@ -812,8 +1050,10 @@ Haar) wavelet basis:
   - 1_{D_k}(n)    indicator of dropping set k (selected k values)
   - T(n)          standard stopping time
 
-For each field we compute the shell-energy spectrum E_j, partial
-reconstructions f_J at increasing J, and a shuffle-based null band for chi.
+For each field we compute the Kozyrev shell-energy spectrum E_j and the
+dual Walsh-Hadamard weight-energy spectrum W_w, partial reconstructions
+f_J at increasing J, shuffle-based null bands for both bases, and the
+duality scatter (H_K vs H_W).
 
 Output: data/collatz_kozyrev_spectrum.png
 """
@@ -831,6 +1071,7 @@ import numpy as np
 from collatz.dropping import dropping_set
 from collatz.stopping import stopping_time
 from collatz.utils import beatty_to_o, bits_to_2d, sturmian_sign
+from collatz.walsh import shannon_entropy, walsh_forward, weight_energies
 from collatz.wavelets import (
     coefficient_grid,
     haar_forward,
@@ -886,7 +1127,7 @@ def build_stopping_time_field(N: int) -> np.ndarray:
 def shuffle_null_band(
     f: np.ndarray, K: int, n_shuffles: int = 100, seed: int = 0
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Estimate per-shell null mean and std under random permutations of f.
+    """Estimate per-Kozyrev-shell null mean and std under random permutations of f.
 
     Returns (mean[K], std[K]) of shell energies over `n_shuffles` random
     permutations.
@@ -898,6 +1139,41 @@ def shuffle_null_band(
         _, c = haar_forward(f[idx])
         samples[i] = shell_energies(c, K)
     return samples.mean(axis=0), samples.std(axis=0)
+
+
+def walsh_shuffle_null_band(
+    f: np.ndarray, K: int, n_shuffles: int = 100, seed: int = 1
+) -> tuple[np.ndarray, np.ndarray]:
+    """Estimate per-Walsh-weight null mean and std under random permutations of f.
+
+    Returns (mean[K+1], std[K+1]) of weight energies over `n_shuffles` random
+    permutations. The w = 0 entry is the constant-mode energy F[0]^2.
+    """
+    rng = np.random.default_rng(seed)
+    samples = np.empty((n_shuffles, K + 1), dtype=np.float64)
+    for i in range(n_shuffles):
+        idx = rng.permutation(f.size)
+        F = walsh_forward(f[idx])
+        samples[i] = weight_energies(F, K)
+    return samples.mean(axis=0), samples.std(axis=0)
+
+
+def duality_entropies(
+    coeffs_kozyrev: np.ndarray, F_walsh: np.ndarray, K: int
+) -> tuple[float, float]:
+    """Return (H_K, H_W) = Shannon entropies of normalized Kozyrev and Walsh spectra.
+
+    Kozyrev: distribution over K shells (constant mode excluded).
+    Walsh:   distribution over (K+1) Hamming-weight buckets, INCLUDING w=0.
+    Conventions match the spec's H4 sub-claims.
+    """
+    E = shell_energies(coeffs_kozyrev, K)
+    W = weight_energies(F_walsh, K)
+    E_total = E.sum()
+    W_total = W.sum()
+    H_K = shannon_entropy(E / E_total) if E_total > 0 else 0.0
+    H_W = shannon_entropy(W / W_total) if W_total > 0 else 0.0
+    return H_K, H_W
 
 
 def field_to_2d(field: np.ndarray, K: int) -> np.ndarray:
@@ -914,23 +1190,24 @@ def field_to_2d(field: np.ndarray, K: int) -> np.ndarray:
 
 
 def main() -> None:
-    raise SystemExit("Pipeline not yet implemented; see Task 8.")
+    raise SystemExit("Pipeline not yet implemented; see Task 9.")
 
 
 if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 2: Smoke-test the input builders interactively**
+- [ ] **Step 2: Smoke-test the input builders and duality helpers interactively**
 
 ```bash
 python -c "
 import numpy as np
 from scripts.collatz_kozyrev_spectrum import (
     build_chi, build_dropping_indicator, build_stopping_time_field,
-    shuffle_null_band, field_to_2d,
+    shuffle_null_band, walsh_shuffle_null_band, duality_entropies, field_to_2d,
 )
 from collatz.wavelets import haar_forward, shell_energies
+from collatz.walsh import walsh_forward, weight_energies
 
 K = 8
 N = 1 << K
@@ -941,10 +1218,15 @@ print('chi nonzero:', int(np.count_nonzero(chi)))
 print('D1 nonzero:', int(D1.sum()))
 print('T mean:', float(T.mean()))
 c0, c = haar_forward(chi)
-E = shell_energies(c, K)
-print('shell energies chi:', E)
+F = walsh_forward(chi)
+print('shell energies chi:', shell_energies(c, K))
+print('weight energies chi:', weight_energies(F, K))
+H_K, H_W = duality_entropies(c, F, K)
+print(f'H_K = {H_K:.3f}, H_W = {H_W:.3f}, sum = {H_K + H_W:.3f}')
 mean, std = shuffle_null_band(chi, K, n_shuffles=20, seed=1)
-print('null mean:', mean)
+print('kozyrev null mean:', mean)
+mean_w, std_w = walsh_shuffle_null_band(chi, K, n_shuffles=20, seed=2)
+print('walsh null mean:', mean_w)
 img = field_to_2d(chi, K)
 print('img shape:', img.shape)
 "
@@ -955,12 +1237,12 @@ Expected: prints non-trivial values; no exceptions. (Note: invoking a script as 
 
 ```bash
 git add scripts/collatz_kozyrev_spectrum.py
-git commit -m "feat(scripts): kozyrev_spectrum — input field builders + analysis helpers"
+git commit -m "feat(scripts): kozyrev_spectrum — input builders + Kozyrev/Walsh null bands + duality entropies"
 ```
 
 ---
 
-### Task 8: Implement the figure pipeline and produce `collatz_kozyrev_spectrum.png`
+### Task 9: Implement the figure pipeline (Kozyrev + Walsh + duality) and produce `collatz_kozyrev_spectrum.png`
 
 **Files:**
 - Modify: `scripts/collatz_kozyrev_spectrum.py`
@@ -992,7 +1274,7 @@ def main() -> None:
         print(f"  skipping empty dropping classes: {skipped}")
     target_dropping_classes = nonempty
 
-    print("Running Haar transforms...")
+    print("Running Haar (Kozyrev) transforms...")
     c0_chi, coeffs_chi = haar_forward(chi)
     c0_T, coeffs_T = haar_forward(T)
     coeffs_Dk = {k: haar_forward(indicators[k])[1] for k in target_dropping_classes}
@@ -1001,8 +1283,37 @@ def main() -> None:
     E_T = shell_energies(coeffs_T, K)
     E_Dk = {k: shell_energies(coeffs_Dk[k], K) for k in target_dropping_classes}
 
-    print("Estimating shuffle null band for chi (100 shuffles)...")
-    null_mean, null_std = shuffle_null_band(chi, K, n_shuffles=100, seed=0)
+    print("Running Walsh-Hadamard transforms...")
+    F_chi = walsh_forward(chi)
+    F_T = walsh_forward(T)
+    F_Dk = {k: walsh_forward(indicators[k]) for k in target_dropping_classes}
+
+    W_chi = weight_energies(F_chi, K)
+    W_T = weight_energies(F_T, K)
+    W_Dk = {k: weight_energies(F_Dk[k], K) for k in target_dropping_classes}
+
+    print("Estimating Kozyrev and Walsh shuffle null bands (100 shuffles each)...")
+    null_mean_K, null_std_K = shuffle_null_band(chi, K, n_shuffles=100, seed=0)
+    null_mean_W, null_std_W = walsh_shuffle_null_band(chi, K, n_shuffles=100, seed=1)
+
+    print("Computing duality entropies (H_K, H_W)...")
+    duality_points: list[tuple[str, float, float, str, str]] = []
+    H_K_chi, H_W_chi = duality_entropies(coeffs_chi, F_chi, K)
+    duality_points.append((r"$\chi$", H_K_chi, H_W_chi, "#2c3e50", "o"))
+    H_K_T, H_W_T = duality_entropies(coeffs_T, F_T, K)
+    duality_points.append(("T", H_K_T, H_W_T, "#c0392b", "s"))
+    cmap = plt.colormaps["viridis"]
+    for i, k in enumerate(target_dropping_classes):
+        color = cmap(i / max(1, len(target_dropping_classes) - 1))
+        H_K_k, H_W_k = duality_entropies(coeffs_Dk[k], F_Dk[k], K)
+        duality_points.append((rf"$D_{{{k}}}$", H_K_k, H_W_k, color, "^"))
+    # Shuffled-chi control point
+    rng = np.random.default_rng(99)
+    shuf = chi[rng.permutation(N)]
+    _, coeffs_shuf = haar_forward(shuf)
+    F_shuf = walsh_forward(shuf)
+    H_K_shuf, H_W_shuf = duality_entropies(coeffs_shuf, F_shuf, K)
+    duality_points.append(("shuf(χ)", H_K_shuf, H_W_shuf, "#95a5a6", "x"))
 
     print("Building partial reconstructions of chi...")
     chi_reconstructions = {
@@ -1011,55 +1322,97 @@ def main() -> None:
     }
 
     # ---------- Figure ----------
-    fig = plt.figure(figsize=(16, 13))
-    gs = fig.add_gridspec(3, 3, hspace=0.45, wspace=0.32)
+    fig = plt.figure(figsize=(16, 17))
+    gs = fig.add_gridspec(4, 3, hspace=0.55, wspace=0.32)
 
-    # Row 0: shell-energy curves
-    ax = fig.add_subplot(gs[0, 0])
+    # Row 0: Kozyrev shell-energy curves
     js = np.arange(K)
+    ax = fig.add_subplot(gs[0, 0])
     ax.plot(js, E_chi, marker="o", color="#2c3e50", label=r"$E_j(\chi)$")
     ax.fill_between(
         js,
-        null_mean - 2 * null_std,
-        null_mean + 2 * null_std,
+        null_mean_K - 2 * null_std_K,
+        null_mean_K + 2 * null_std_K,
         color="#bdc3c7",
         alpha=0.6,
         label=r"shuffle null $\pm 2\sigma$",
     )
-    ax.plot(js, null_mean, color="#7f8c8d", lw=0.8, linestyle="--", label="null mean")
-    ax.set_xlabel("shell j")
+    ax.plot(js, null_mean_K, color="#7f8c8d", lw=0.8, linestyle="--", label="null mean")
+    ax.set_xlabel("Kozyrev shell j")
     ax.set_ylabel(r"$E_j$")
-    ax.set_title(r"Sturmian field $\chi$: shell energies vs shuffle null")
+    ax.set_title(r"Kozyrev: $\chi$ shell energies vs null")
     ax.legend(fontsize=8)
     ax.grid(alpha=0.3)
 
     ax = fig.add_subplot(gs[0, 1])
-    cmap = plt.colormaps["viridis"]
     for i, k in enumerate(target_dropping_classes):
         color = cmap(i / max(1, len(target_dropping_classes) - 1))
         norm = E_Dk[k].sum()
         if norm > 0:
             ax.plot(js, E_Dk[k] / norm, marker="o", color=color, label=f"$D_{k}$")
-    ax.set_xlabel("shell j")
-    ax.set_ylabel(r"$\hat E_j$ (normalized)")
-    ax.set_title("Dropping-class fingerprints")
+    ax.set_xlabel("Kozyrev shell j")
+    ax.set_ylabel(r"$\hat E_j$")
+    ax.set_title("Kozyrev: dropping-class fingerprints")
     ax.legend(fontsize=8)
     ax.grid(alpha=0.3)
 
     ax = fig.add_subplot(gs[0, 2])
     ax.plot(js, E_T, marker="o", color="#c0392b", label=r"$E_j(T)$")
-    ax.set_xlabel("shell j")
+    ax.set_xlabel("Kozyrev shell j")
     ax.set_ylabel(r"$E_j$")
-    ax.set_title("Stopping time T(n) — control")
+    ax.set_title("Kozyrev: stopping time T(n)")
     ax.legend(fontsize=8)
     ax.grid(alpha=0.3)
 
-    # Row 1: bit-split images of partial reconstructions of chi
-    selected_recon = [partial_recon_depths[0], partial_recon_depths[len(partial_recon_depths) // 2], partial_recon_depths[-1]]
+    # Row 1: Walsh weight-energy curves (dual to Row 0)
+    ws = np.arange(K + 1)
+    ax = fig.add_subplot(gs[1, 0])
+    ax.plot(ws, W_chi, marker="o", color="#2c3e50", label=r"$W_w(\chi)$")
+    ax.fill_between(
+        ws,
+        null_mean_W - 2 * null_std_W,
+        null_mean_W + 2 * null_std_W,
+        color="#bdc3c7",
+        alpha=0.6,
+        label=r"shuffle null $\pm 2\sigma$",
+    )
+    ax.plot(ws, null_mean_W, color="#7f8c8d", lw=0.8, linestyle="--", label="null mean")
+    ax.set_xlabel("Walsh weight w")
+    ax.set_ylabel(r"$W_w$")
+    ax.set_title(r"Walsh: $\chi$ weight energies vs null")
+    ax.legend(fontsize=8)
+    ax.grid(alpha=0.3)
+
+    ax = fig.add_subplot(gs[1, 1])
+    for i, k in enumerate(target_dropping_classes):
+        color = cmap(i / max(1, len(target_dropping_classes) - 1))
+        norm = W_Dk[k].sum()
+        if norm > 0:
+            ax.plot(ws, W_Dk[k] / norm, marker="o", color=color, label=f"$D_{k}$")
+    ax.set_xlabel("Walsh weight w")
+    ax.set_ylabel(r"$\hat W_w$")
+    ax.set_title("Walsh: dropping-class fingerprints")
+    ax.legend(fontsize=8)
+    ax.grid(alpha=0.3)
+
+    ax = fig.add_subplot(gs[1, 2])
+    ax.plot(ws, W_T, marker="o", color="#c0392b", label=r"$W_w(T)$")
+    ax.set_xlabel("Walsh weight w")
+    ax.set_ylabel(r"$W_w$")
+    ax.set_title("Walsh: stopping time T(n)")
+    ax.legend(fontsize=8)
+    ax.grid(alpha=0.3)
+
+    # Row 2: bit-split images of partial reconstructions of chi
+    selected_recon = [
+        partial_recon_depths[0],
+        partial_recon_depths[len(partial_recon_depths) // 2],
+        partial_recon_depths[-1],
+    ]
     titles = [rf"$\chi_{{J={J}}}$" for J in selected_recon]
     for col, (J, title) in enumerate(zip(selected_recon, titles)):
         img = field_to_2d(chi_reconstructions[J], K)
-        ax = fig.add_subplot(gs[1, col])
+        ax = fig.add_subplot(gs[2, col])
         vmax = float(np.nanmax(np.abs(img))) or 1.0
         ax.imshow(
             img,
@@ -1074,18 +1427,28 @@ def main() -> None:
         ax.set_ylabel(f"high {K - K // 2} bits of n")
         ax.set_title(title)
 
-    # Row 2: dyadic spectrograms (triangle plots) of chi, D_1 (if present), T
-    spectro_targets: list[tuple[str, np.ndarray]] = [
-        (r"$\chi$", coeffs_chi),
-    ]
-    if target_dropping_classes:
-        k0 = target_dropping_classes[0]
-        spectro_targets.append((rf"$\mathbf{{1}}_{{D_{k0}}}$", coeffs_Dk[k0]))
-    spectro_targets.append(("T(n)", coeffs_T))
+    # Row 3 col 0: duality scatter (H_K vs H_W)
+    ax = fig.add_subplot(gs[3, 0])
+    H_K_max = float(np.log2(K))
+    H_W_max = float(np.log2(K + 1))
+    # Reference: max-entropy corner and diagonal lower bound proxy
+    ax.axhline(H_W_max, color="#bdc3c7", lw=0.6, linestyle=":")
+    ax.axvline(H_K_max, color="#bdc3c7", lw=0.6, linestyle=":")
+    for label, H_K_v, H_W_v, color, marker in duality_points:
+        ax.scatter([H_K_v], [H_W_v], s=80, c=[color], marker=marker,
+                   edgecolor="black", linewidth=0.5, label=label)
+    ax.set_xlim(-0.1, H_K_max + 0.2)
+    ax.set_ylim(-0.1, H_W_max + 0.2)
+    ax.set_xlabel(r"$H_K$ (Kozyrev shell entropy, bits)")
+    ax.set_ylabel(r"$H_W$ (Walsh weight entropy, bits)")
+    ax.set_title("Duality scatter: H_K vs H_W")
+    ax.legend(fontsize=7, loc="lower left", ncol=2)
+    ax.grid(alpha=0.3)
 
-    for col, (label, c) in enumerate(spectro_targets):
+    # Row 3 cols 1, 2: dyadic spectrograms of chi and T
+    for col, (label, c) in enumerate([(r"$\chi$", coeffs_chi), ("T(n)", coeffs_T)]):
         grid = coefficient_grid(c, K)
-        ax = fig.add_subplot(gs[2, col])
+        ax = fig.add_subplot(gs[3, col + 1])
         ax.imshow(
             np.log1p(grid),
             cmap="viridis",
@@ -1095,11 +1458,11 @@ def main() -> None:
         )
         ax.set_xlabel("offset a")
         ax.set_ylabel("shell j")
-        ax.set_title(f"dyadic spectrogram: {label} (log scale)")
+        ax.set_title(f"dyadic spectrogram: {label} (log)")
 
     fig.suptitle(
         "Kozyrev orbital spectrum of Collatz dropping classification\n"
-        rf"$N = 2^{{{K}}} = {N}$ — shell-energy fingerprints + chi partial reconstructions",
+        rf"$N = 2^{{{K}}} = {N}$ — Kozyrev (particle basis), Walsh (wave basis), duality scatter",
         fontsize=13,
         y=0.995,
     )
@@ -1114,7 +1477,7 @@ def main() -> None:
 ```bash
 python scripts/collatz_kozyrev_spectrum.py
 ```
-Expected: prints `Saved data/collatz_kozyrev_spectrum.png`, completes in under 60 s on a laptop. No exceptions.
+Expected: prints `Saved data/collatz_kozyrev_spectrum.png`, completes in under 90 s on a laptop. No exceptions.
 
 - [ ] **Step 3: Verify the PNG exists and has reasonable size**
 
@@ -1134,12 +1497,12 @@ Expected: all tests pass.
 
 ```bash
 git add scripts/collatz_kozyrev_spectrum.py data/collatz_kozyrev_spectrum.png
-git commit -m "feat(spectrum): Kozyrev orbital spectrum figure for chi, dropping classes, T"
+git commit -m "feat(spectrum): Kozyrev + Walsh spectrum figure with duality scatter"
 ```
 
 ---
 
-### Task 9: Write the Exploration note
+### Task 10: Write the Exploration note
 
 **Files:**
 - Create: `docs/Explorations/Kozyrev Orbital Spectrum.md`
@@ -1165,20 +1528,24 @@ Fields:
 
 For each field we plot:
 
-- **Shell-energy spectrum** $E_j = \sum_a |c_{j, a}|^2$ — interpretable as the "radial probability distribution" in the QM-orbital analogy ($j$ = principal quantum number).
-- **Partial reconstructions** $\chi_J$ — the field reconstructed using only shells $j < J$, plotted bit-split so that 2-adically nearby integers land in nearby pixels. These are the "orbital approximations".
-- **Dyadic spectrograms** — heatmap of $|c_{j, a}|^2$ on the $(j, a)$ triangle.
+- **Kozyrev shell-energy spectrum** $E_j = \sum_a |c_{j, a}|^2$ — the "radial probability distribution" in the QM-orbital analogy ($j$ = principal quantum number).
+- **Walsh weight-energy spectrum** $W_w = \sum_{\text{popcount}(m) = w} |F[m]|^2$ — the dual "momentum-like" basis (2-adic Fourier).
+- **Partial reconstructions** $\chi_J$ — bit-split images at increasing reconstruction depth.
+- **Dyadic spectrogram** — heatmap of $|c_{j, a}|^2$ on the $(j, a)$ triangle.
+- **Duality scatter** — each field as a point $(H_K, H_W)$ in Kozyrev-shell-entropy vs Walsh-weight-entropy space.
 
 ## Hypotheses (see spec for falsifiability)
 
 - **H1 — Sturmian shell concentration.** Does $E_j(\chi)$ depart from the shuffled-$\chi$ null band at shells related to the $\log_2 3$ Beatty rhythm?
-- **H2 — Dropping-class fingerprint.** Do different $\mathbf{1}_{D_k}$ have distinguishable normalized spectra?
+- **H2 — Dropping-class fingerprint.** Do different $\mathbf{1}_{D_k}$ have distinguishable normalized Kozyrev (and Walsh) spectra?
 - **H3 — $T$ is not Haar-sparse.** Stopping time should spread energy across many shells.
+- **H4 — Discrete wave–particle duality.** The probed fields sit *off* the maximum-entropy corner — they cannot be simultaneously sparse in both Kozyrev and Walsh bases. Dropping-set fields specifically should land in the "Kozyrev-localized" half-plane ($H_K < H_W$), making them "particle-like" in this discrete 2-adic phase space. A dropping set that saturates the lower bound on $H_K + H_W$ would be a "coherent state of Collatz".
 
 ## Notes on interpretation
 
-- Shell $j = 0$ is the coarsest wavelet (one wavelet, support of size $N$). Shell $j = K - 1$ is finest (support of size 2). The bit-split layout puts shell-$j$ structure as $2^j$-period stripes in either bit-half axis.
-- Off-Beatty values of $n$ get $\chi(n) = 0$. This adds energy to *no* specific shell — it broadens any spectral peak.
+- Kozyrev shell $j = 0$ is the coarsest wavelet (one wavelet, support of size $N$). Shell $j = K - 1$ is finest (support of size 2). The bit-split layout puts shell-$j$ structure as $2^j$-period stripes in either bit-half axis.
+- Walsh weight $w$ counts the set bits of $m$ — i.e., how many "binary frequencies" the character $W_m = (-1)^{\langle m, \cdot \rangle_2}$ engages. Weight 0 is the constant; weight $K$ is the fully-alternating character.
+- Off-Beatty values of $n$ get $\chi(n) = 0$. This adds energy to *no* specific shell or weight — it broadens any spectral peak in both bases.
 ```
 
 - [ ] **Step 2: Commit**
@@ -1193,19 +1560,29 @@ git commit -m "docs: Kozyrev Orbital Spectrum exploration note"
 ## Self-Review
 
 **1. Spec coverage:**
-- Operator + basis (Vladimirov / Kozyrev / Haar) → Tasks 3–6.
-- Input fields $\chi$, $\mathbf{1}_{D_k}$, $T$ → Task 7.
-- Shell-energy spectra → Task 6 + 8.
-- Partial reconstructions $f_J$ → Task 5 + 8.
-- Dyadic spectrogram → Task 6 + 8.
-- Shuffle null band → Task 7 helper + Task 8.
+- Operator + Kozyrev basis (Vladimirov / Haar) → Tasks 3–6.
+- Walsh–Hadamard dual basis + weight-bucketing + Shannon entropy → Task 7.
+- Input fields $\chi$, $\mathbf{1}_{D_k}$, $T$ → Task 8.
+- Kozyrev shell-energy spectra → Task 6 + 9.
+- Walsh weight-energy spectra → Task 7 + 9.
+- Partial reconstructions $f_J$ → Task 5 + 9.
+- Dyadic spectrogram → Task 6 + 9.
+- Kozyrev and Walsh shuffle null bands → Task 8 helpers + Task 9.
+- Duality entropies $H_K, H_W$ + scatter → Task 8 helper + Task 9.
 - Refactor: lift helpers to `utils.py` → Task 1; migrate consumer script → Task 2.
-- Tests (Parseval, round-trip, single-ball-style, orthonormality, partial-reconstruction monotonicity) → Tasks 3–6.
-- Exploration note → Task 9.
-- Output PNG `data/collatz_kozyrev_spectrum.png` → Task 8.
+- Kozyrev tests (Parseval, round-trip, ball-concentration, orthonormality, partial-reconstruction monotonicity) → Tasks 3–6.
+- Walsh tests (Parseval, self-inverse, delta, constant, weight-bucketing, constant-mode consistency, Walsh-character localization, Shannon-entropy known values) → Task 7.
+- Exploration note covering both bases and the duality picture → Task 10.
+- Output PNG `data/collatz_kozyrev_spectrum.png` (4×3 grid) → Task 9.
 
-All spec sections accounted for.
+All spec sections (including H4 wave–particle duality) accounted for.
 
 **2. Placeholder scan:** none — every code step shows the code; every test step shows the asserts; every commit step gives the command.
 
-**3. Type consistency:** `haar_forward` returns `(float, np.ndarray)` in Task 4 and is consumed that way in Tasks 5, 6, 7, 8. `coeffs` length is always $N - 1$. `shell_energies(coeffs, K)` shape is `(K,)`. `coefficient_grid(coeffs, K)` shape is `(K, 2^{K-1})`. `idx(j, a) = 2^j - 1 + a` is used consistently. `depth_cutoff` semantics match: shells `j < J` are kept; the test at `J = 0` returns the mean-projection (constant), and at `J = K` returns the exact original.
+**3. Type consistency:**
+- `haar_forward(f) -> (float, np.ndarray)` is consumed that way in Tasks 5, 6, 8, 9. `coeffs` length is always $N - 1$.
+- `walsh_forward(f) -> np.ndarray` of length $N$ (single array, no constant-mode split) is consumed that way in Tasks 8, 9; the constant mode is `F[0]`.
+- `shell_energies(coeffs, K)` shape `(K,)`; `weight_energies(F, K)` shape `(K+1,)` — these are intentionally different lengths because Walsh weight includes $w = 0$ (the constant mode lives in the same array as the wavelet coefficients in this basis, unlike Kozyrev where `c0` is separate).
+- `duality_entropies(coeffs_kozyrev, F_walsh, K) -> (float, float)` consistent between Task 8 and Task 9 call sites.
+- `idx(j, a) = 2^j - 1 + a` used consistently. `depth_cutoff` semantics: shells `j < J` kept; $J = 0$ returns constant projection, $J = K$ returns exact.
+- The constant-mode test in `test_walsh.py` (`walsh_forward(f)[0] == haar_forward(f)[0]`) confirms the two bases agree on the global mean — this is the seam between the two modules.

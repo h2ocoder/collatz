@@ -6,7 +6,7 @@ its residue p mod 2^k.  Compare counts to the Dirichlet null model
 
   1. Arithmetic-form table: which residues r mod 2^k populate D_k.
   2. Observed vs Dirichlet bar chart per D_k, with chi-squared annotation.
-  3. Per-residue heatmap inside D_k for k in {5, 7, 9, 11, 13}.
+  3. Per-residue heatmap inside D_k for k in {3, 6, 8, 11, 13}.
 
 Outputs:
     data/collatz_prime_dropping_residues_form.png
@@ -37,7 +37,7 @@ from collatz.residues import (
 
 N = 10_000_000  # prime ceiling
 K_MAX = 15  # maximum dropping set considered
-HEATMAP_KS = (5, 7, 9, 11, 13)  # k values that get a per-residue strip
+HEATMAP_KS = (3, 6, 8, 11, 13)  # populated dropping sets within K_MAX
 OUT_DIR = Path(__file__).resolve().parent.parent / "data"
 
 

@@ -83,3 +83,41 @@ def test_residue_density_consistent():
             assert abs(observed_density - predicted_density) / predicted_density < 0.30, (
                 f"k={k}: predicted {predicted_density:.4f}, observed {observed_density:.4f}"
             )
+
+
+from collatz.residues import (
+    coprime_residues,
+    dirichlet_prediction,
+    dropping_set_residue_table,
+)
+
+
+def test_residue_table_covers_range():
+    """Table returns frozensets for k in 1..k_max."""
+    table = dropping_set_residue_table(8)
+    assert set(table.keys()) == set(range(1, 9))
+    for k, R in table.items():
+        assert isinstance(R, frozenset)
+        assert R == dropping_set_residues(k)
+
+
+def test_coprime_residues_filters_odds():
+    """coprime_residues(k) = R_k intersect odd residues mod 2^k."""
+    # R_3 = {1, 5}; both odd, so coprime = R_3.
+    assert coprime_residues(3) == frozenset({1, 5})
+    # R_1 = {0}; 0 is even, so coprime = empty.
+    assert coprime_residues(1) == frozenset()
+
+
+def test_dirichlet_prediction_zero_when_no_coprime_residues():
+    """A set with no odd residues asymptotically contains no primes."""
+    # k=1: only even residue, so prediction = 0 regardless of pi(N).
+    assert dirichlet_prediction(1, prime_count=10_000) == 0.0
+
+
+def test_dirichlet_prediction_matches_formula():
+    """Prediction = |R_k ∩ odd| / 2^(k-1) * pi(N)."""
+    # k=3: 2 coprime residues out of 4 odd residues mod 8 -> ratio = 0.5
+    pi_N = 78_498  # pi(1e6)
+    expected = 2 / 4 * pi_N
+    assert dirichlet_prediction(3, prime_count=pi_N) == pytest.approx(expected)

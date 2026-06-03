@@ -60,3 +60,41 @@ def dropping_set_residues(k: int) -> frozenset[int]:
         if all(dropping_set(n) == k for n in reps):
             R.add(r)
     return frozenset(R)
+
+
+def dropping_set_residue_table(k_max: int) -> dict[int, frozenset[int]]:
+    """Map {k: R_k} for k in 1..k_max.
+
+    Each R_k is the output of `dropping_set_residues(k)`.
+
+    Example: dropping_set_residue_table(3) ==
+             {1: frozenset({0}), 2: frozenset(), 3: frozenset({1, 5})}
+    """
+    if k_max < 1:
+        raise ValueError("k_max must be >= 1")
+    return {k: dropping_set_residues(k) for k in range(1, k_max + 1)}
+
+
+@lru_cache(maxsize=None)
+def coprime_residues(k: int) -> frozenset[int]:
+    """Residues in R_k that are coprime to 2^k (equivalently, odd).
+
+    Primes p > 2 with dropping_set(p) = k must have p mod 2^k in this set.
+
+    Example: coprime_residues(3) == frozenset({1, 5})
+    """
+    return frozenset(r for r in dropping_set_residues(k) if r % 2 == 1)
+
+
+def dirichlet_prediction(k: int, prime_count: int) -> float:
+    """Expected number of primes <= N falling in Dropping Set k, under Dirichlet.
+
+    Formula: |R_k ∩ odd| / 2^(k-1) * pi(N), with pi(N) supplied as `prime_count`.
+
+    Example: dirichlet_prediction(3, prime_count=78498) == 39249.0
+    """
+    if k < 1:
+        raise ValueError("k must be >= 1")
+    coprime_count = len(coprime_residues(k))
+    odd_residues_total = 1 << (k - 1)
+    return coprime_count / odd_residues_total * prime_count

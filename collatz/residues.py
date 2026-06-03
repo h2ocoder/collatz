@@ -9,11 +9,7 @@ Eratosthenes (`prime_sieve`) is included for convenience.
 """
 from __future__ import annotations
 
-from functools import lru_cache
-
 import numpy as np
-
-from .dropping import dropping_set
 
 
 def prime_sieve(n: int) -> np.ndarray:

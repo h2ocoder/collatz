@@ -9,8 +9,9 @@ Eratosthenes (`prime_sieve`) is included for convenience.
 """
 from __future__ import annotations
 
-import numpy as np
 from functools import lru_cache
+
+import numpy as np
 
 from .dropping import dropping_set
 

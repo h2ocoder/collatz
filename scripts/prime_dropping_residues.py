@@ -44,7 +44,7 @@ OUT_DIR = Path(__file__).resolve().parent.parent / "data"
 # ----- Step 1: sieve and classify --------------------------------------
 
 
-def sieve_and_classify(n_max: int, k_max: int):
+def sieve_and_classify(n_max: int):
     """Sieve primes <= n_max, classify into (k, r) buckets.
 
     Returns:
@@ -175,7 +175,7 @@ def plot_observed_vs_dirichlet(counts_by_k, prime_count, k_max, out_path):
 # ----- Step 4: per-residue heatmap -------------------------------------
 
 
-def plot_residue_heatmap(counts_by_k_r, residue_table, prime_count, ks, out_path):
+def plot_residue_heatmap(counts_by_k_r, prime_count, ks, out_path):
     """One row per k in `ks`; cells = one per odd residue in R_k, colored by count.
 
     Color scale: counts normalized by (predicted per residue) so a value of
@@ -247,7 +247,7 @@ def main():
     print(f"Building residue table for k=1..{K_MAX}...")
     residue_table = dropping_set_residue_table(K_MAX)
     print(f"Sieving primes up to {N}...")
-    primes, counts_by_k, counts_by_k_r, small_primes = sieve_and_classify(N, K_MAX)
+    primes, counts_by_k, counts_by_k_r, small_primes = sieve_and_classify(N)
     prime_count = int(primes.size)
 
     print(f"Rendering arithmetic-form figure...")
@@ -264,7 +264,6 @@ def main():
     print(f"Rendering per-residue heatmap...")
     plot_residue_heatmap(
         counts_by_k_r,
-        residue_table,
         prime_count,
         HEATMAP_KS,
         OUT_DIR / "collatz_prime_dropping_residue_heatmap.png",

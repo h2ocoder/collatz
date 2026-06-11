@@ -95,11 +95,25 @@ The naive quantitative version of the sign mechanism — replace $\epsilon_m$ by
 
 The closure spectrum $\sigma(q) = \text{RMS}_k\,\text{wrap}(\theta_{k+q} - \theta_k)$ of orbit(670617279) has minima exactly at the convergent denominators, with the global minimum at $q = \mathbf{137}$ ($\sigma = 0.0092$); the top lags are $\{137, 106, 31, 168{=}137{+}31, 75\}$ (`collatz_log6_closure_spectrum.png`, with the polar render alongside). Note $\sigma(q)$ ranks by raw Diophantine quality (31 beats 44 here), while *Weyl visibility* ranks by wobble-corrected coherence (44 beats 31) — the two metrics answer different questions, and the polar-plot eye sees the latter.
 
+## Fourth-pass Findings (`scripts/collatz_log6_wobble_plateaus.py`)
+
+**10. The spectrum is controlled by the small-value cascade — concentrated, but not few.**
+
+Approximating the wobble staircase by its $P$ largest jumps and recomputing the Weyl amplitudes: median relative error stays at 30–48% for $P \le 16$, drops to 9.4% at $P = 32$ and to 0.1% at $P = \mathbf{64}$ (`collatz_log6_plateau_model.png`). Of the ~300 odd steps in a long orbit, the smallest ~240 wobble jumps are irrelevant, but no *handful* of big jumps suffices either: amplitude prediction requires the full cascade of the ~64 deepest small-value visits. The non-monotone error at small $P$ (worse at $P=8$ than $P=2$) shows the jumps interfere — partial staircases can dephase peaks that the complete staircase re-phases.
+
+**11. Gateway fibers are NOT residue-definable — they are transverse to the dropping framework.**
+
+Unlike [[Dropping Set]]s (exactly unions of residue classes mod $2^k$), the landmark fibers show *zero* residue structure: purity within classes mod $2^j$ sits on the shuffled null for every $j = 1..14$ (excess $\le 0.004$), and Cramér's V between landmark and dropping time is **0.049** (`collatz_log6_landmark_residues.png`). The two partitions of the integers carry independent information, and the duality says why: dropping time is determined by the *head* of the orbit, finitely 2-adically ($n \bmod 2^k$); the gateway is determined by the *tail*, archimedean and not finitely determined by any modulus. The wobble budget is a genuinely new invariant, orthogonal to the dropping classification.
+
+**12. The gateway hierarchy converges like $T^{-2}$.**
+
+Variance of $W_{\text{total}}$ explained by the first-odd-below-$T$ landmark: 41% ($T{=}8$), 61% (16), 86% (32), 95% (64), 99.0% (100), 99.78% (200), 99.99% (1000) — unexplained residual falling roughly like $T^{-2}$, consistent with $W_{\text{pre}}$ being a sum of $O(1)$ jumps of size $O(1/T)$... squared in the variance. The fiber count grows as $T/2$, refining toward the full merge tree.
+
 ## Open Threads
 
-- **Plateau-sum Weyl model**: write $A(m)$ exactly as $\frac{1}{N}|\sum_j e^{2\pi i m W_j} D_j(\epsilon_m)|$ over wobble plateaus $j$ — should predict the amplitudes the linear model can't, and explain the enhancement asymmetry from the plateau-length distribution.
-- **Landmark hierarchy**: vary the gateway threshold $T$ (here 100); as $T$ grows the fibers refine toward the full merge tree. Is the fiber partition expressible in residue arithmetic (connect to [[Dropping Set]] / [[Stopping Class]] structure)?
-- Cross-check the 44-vs-137 visibility claim directly against Paper 3's polar figures (point counts ~100 vs ~1000).
+- The $P{=}64$ threshold: which odd values do the necessary jumps correspond to (altitude cutoff?), and does 64 scale with orbit length or stay absolute?
+- Independence of gateway and dropping classifications (V = 0.05): if truly independent, the joint partition (dropping set × gateway) factorizes the orbit into head × tail invariants — test the product structure directly.
+- Cross-check the 44-vs-137 visibility claim against Paper 3's polar figures (point counts ~100 vs ~1000).
 
 ## Related
 

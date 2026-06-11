@@ -133,11 +133,30 @@ The local wobble rate cancels a $q$-closure with $\epsilon_q < 0$ when the windo
 
 A 145-digit seed gives a 3449-step orbit. Parastichy mode measured per radial band against the local selection rule $q^*(k) = \arg\min_q\, q^2 + (2\pi k \epsilon_q)^2$: **observed = predicted in all 12 bands** — 13 arms at $k \approx 143$, 31 arms from $k \approx 430$ through $2731$, **137 arms from $k \approx 3018$, with 106 skipped**, exactly as the rule requires (`collatz_log6_137_arms.png`). The polar render shows the arms chirping with radius in a single image. The selection rule is local in radius, not global in $N$ — pass five's "arms vs $N$" was this rule evaluated at the rim.
 
+## Seventh-pass Findings: the Hecke Strip (`scripts/collatz_log6_hecke_strip.py`)
+
+Hecke (1921) attached to the rotation the Dirichlet series $L_\alpha(s) = \sum_k (\{k\alpha\} - \tfrac12)k^{-s}$; through the Fourier expansion of $\{x\} - \tfrac12$, each harmonic $m$ contributes a polylogarithm whose near-pole amplitude scales as $|\epsilon_m|^{\sigma-1}$ — the strip's analytic structure is the continued fraction of $\alpha$. We measured what the wobble does to it, on the giant orbit ($N = 3450$).
+
+**18. The strip has a depth horizon at $\sigma \approx 0.5$ — and it is orientation-dependent.**
+
+Head-first pole-height ratios $P^{orb}_m(\sigma)/P^{rot}_m(\sigma)$ converge to exactly 1 for $\sigma \gtrsim 0.5$ at every harmonic: **the deep strip is wobble-proof** (crossover depths $\sigma^* = 0.05$–$0.45$). Dirichlet weights $k^{-\sigma}$ emphasize the early, high-altitude, wobble-free orbit — so "the wobble lives at the tail" becomes an analytic statement. Confirmed by reversal: with tail-first weights $(N{+}1{-}k)^{-\sigma}$ the ratios never return to 1 (still $\approx 0.8$ at $\sigma = 1.5$), with sign-selective suppression dips of the $\epsilon > 0$ harmonics (31, 137). Calibrated effective-miss at $\sigma = 0.5$: 44 and 75 sharpened by 10–14% ($\epsilon < 0$ lens), the rest at noise level (`collatz_log6_hecke_poleprofiles.png`).
+
+**19. The +1 is the least disordering noise in its budget class.**
+
+Surrogate comparison at each $\sigma$: for $m = 137$, the **true wobble leaves the pole essentially untouched (ratio $\approx 1$) while the same increments shuffled in time inflate it $\sim 25\times$ and a matched Gaussian walk $\sim 9\times$** (`collatz_log6_hecke_surrogates.png`). The genuine +1 spends ~92% of its budget in the orbit's final descent, where Dirichlet weighting (and Weyl averaging) can barely see it; any rearrangement of the same disorder budget through the orbit does far more analytic damage. The +1 is not just shot noise — it is the *most coherence-preserving* arrangement of its own disorder.
+
+**20. The half-strip architecture is real, and the wobble respects it.**
+
+For the complex twisted lines $\Lambda_m(\sigma + it) = \sum_k e^{2\pi i m\theta_k}k^{-s}$ (the real-coefficient $L$ is even in $t$ by reflection — a designed-out dead end), stationary phase predicts a ridge only for $0 < t/(2\pi\epsilon_m N) < 1$: the $\epsilon > 0$ and $\epsilon < 0$ pole families live in **opposite half-strips**. Confirmed sharply: half-strip energy asymmetry $+0.93$ for $m = 31$, $-0.79$ for $m = 44$, rectangular ridge support exactly on the predicted interval — and the orbit's ridges match the rotation's to three decimals at $\sigma = 0.5$ (`collatz_log6_hecke_lines.png`). The sign of the Diophantine miss, which the wobble-lens acts on dynamically, is also the coordinate that splits the strip in two.
+
 ## Open Threads
 
-- Reproduce Paper 3's literal figure recipe (PPR angle warp $P = (6^\theta - 1)/5$ and its actual radial coordinate) to identify which closure its specific rendering selects — the last unchecked box on the 2022 figures.
-- The resonance dip offset (~1 altitude unit above the point estimate): replace mean altitude with the harmonic-mean altitude of the window and check the offset closes.
-- The altitude shell $X^*$ (finding 13) should scale with $m_{\max}$ — testable by sweeping the harmonic range.
+- The true strip-width question (summability over *all* harmonics, i.e. the irrationality measure of $\log_6 3$) cannot be probed by one orbit's data — it needs analytic continuation of $L_{\log_6 3}$ proper. Our data constrains only individual-harmonic behavior.
+- Map the crossover depth $\sigma^*(m)$ across many orbits: does it scale with where the orbit's wobble mass sits relative to $N$?
+- The tail-first Dirichlet series (finding 18) never recovers the rotation — define it properly as a "Collatz-clock" L-series and study it as an object in its own right.
+- Reproduce Paper 3's literal figure recipe (PPR angle warp and radial coordinate) — the last unchecked box on the 2022 figures.
+- The resonance dip offset (~1 altitude unit): re-bin by harmonic-mean window altitude.
+- The altitude shell $X^*$ (finding 13) should scale with $m_{\max}$ — testable.
 
 ## Physics Dictionary
 

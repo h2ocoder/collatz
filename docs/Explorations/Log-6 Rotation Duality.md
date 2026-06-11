@@ -81,11 +81,25 @@ Exactly, $A(m) = |\sum_k e^{2\pi i(\epsilon_m k + mW_k)}|/N$ with $\epsilon_m = 
 
 Over all odd $n < 10^5$: $\overline{W_{\text{total}}} = 0.0852 \pm 0.030$, and per dropping-time-$k$ means are flat ($0.084$–$0.091$ across $k = 3$ to $75$, no trend). The budget is dominated by the universal tail through small values, which every orbit shares; the first drop (the head) leaves no imprint. **But** the distribution is strongly multimodal and the $(\log_6 n, W_{\text{total}})$ scatter shows discrete horizontal bands (`collatz_log6_wobble_budget.png`) — presumably orbit-tree merging: all $n$ funneling into a shared trajectory inherit nearly identical budgets, so $W_{\text{total}}$ quantizes on the merge tree.
 
+## Third-pass Findings (`scripts/collatz_log6_wobble_bands.py`)
+
+**7. The bands are landmark tails — 99.0% of the budget variance.**
+
+Define the landmark $s(n)$ = first odd orbit value $< 100$. Then $W_{\text{total}}(n) = W_{\text{pre}}(n) + W_{\text{total}}(s)$ with $W_{\text{pre}} \ge 0$ tiny: over all odd $n < 10^5$, the 50 landmark tail values $\{W_{\text{total}}(s) : s \text{ odd} < 100\}$ explain **99.0% of the variance**; the residual $W_{\text{pre}}$ has median $0.0028$ and 95th percentile $0.0094$ (`collatz_log6_wobble_bands.png`). So the wobble budget is, to 1%, just *which of 50 small gateways the orbit enters through* — the bands in the histogram sit exactly at the $W_{\text{total}}(s)$ values. This gives the clean equivalence relation: seeds are partitioned into landmark fibers, and within a fiber the budget varies only by the pre-gateway wobble. (The residual histogram is itself multimodal — the partition refines hierarchically, presumably tracking the merge tree above the gateway.)
+
+**8. The lens is directional, not linear.**
+
+The naive quantitative version of the sign mechanism — replace $\epsilon_m$ by the corrected miss $\epsilon_m + m\bar{w}$ (with $\bar{w} = W_{\text{total}}/N$) in a Dirichlet kernel — **fails**: corr$(A_{\text{obs}}, A_{\text{lin}}) = -0.09$ versus corr$(A_{\text{obs}}, A_{\text{rot}}) = 0.98$ for no correction at all (`collatz_log6_wobble_lens_test.png`). Yet the *ratio* cloud does re-center: enhanced peaks cluster near zero corrected miss. Reading: the sign selection is real, but $W_k$ is a step function, not a ramp — the orbit is a sequence of constant-phase plateaus, so the Weyl sum is a sum of per-plateau Dirichlet kernels with phase offsets $2\pi m W_{\text{plateau}}$, and no single effective rotation number captures it.
+
+**9. 137 confirmed as the dominant closure.**
+
+The closure spectrum $\sigma(q) = \text{RMS}_k\,\text{wrap}(\theta_{k+q} - \theta_k)$ of orbit(670617279) has minima exactly at the convergent denominators, with the global minimum at $q = \mathbf{137}$ ($\sigma = 0.0092$); the top lags are $\{137, 106, 31, 168{=}137{+}31, 75\}$ (`collatz_log6_closure_spectrum.png`, with the polar render alongside). Note $\sigma(q)$ ranks by raw Diophantine quality (31 beats 44 here), while *Weyl visibility* ranks by wobble-corrected coherence (44 beats 31) — the two metrics answer different questions, and the polar-plot eye sees the latter.
+
 ## Open Threads
 
-- The banding of $W_{\text{total}}$: characterize the bands (merge-tree cosets?). Within a band, $W_{\text{total}}(n) - W_{\text{total}}(n')$ should be a finite sum of $\delta$'s over the pre-merge segments — a *finite* wobble difference. Could give a clean equivalence relation on seeds.
-- The one-sided-lens asymmetry (enhancement 2.08× vs damping 0.94): why is the $\epsilon < 0$ effect so much stronger? Presumably because the wobble drift rate $\bar{\delta}$ can fully cancel a small negative $\epsilon$ but only ever *adds* to a positive one.
-- Polar-plot prediction: long orbits should show 137-fold closure dominating 44 — directly checkable against Paper 3's figures.
+- **Plateau-sum Weyl model**: write $A(m)$ exactly as $\frac{1}{N}|\sum_j e^{2\pi i m W_j} D_j(\epsilon_m)|$ over wobble plateaus $j$ — should predict the amplitudes the linear model can't, and explain the enhancement asymmetry from the plateau-length distribution.
+- **Landmark hierarchy**: vary the gateway threshold $T$ (here 100); as $T$ grows the fibers refine toward the full merge tree. Is the fiber partition expressible in residue arithmetic (connect to [[Dropping Set]] / [[Stopping Class]] structure)?
+- Cross-check the 44-vs-137 visibility claim directly against Paper 3's polar figures (point counts ~100 vs ~1000).
 
 ## Related
 

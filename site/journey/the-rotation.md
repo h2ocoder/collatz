@@ -24,7 +24,7 @@ This is the **conservation law**: $s \cdot \log_2 6 = T - \log_2 n + \varepsilon
 
 Watch an orbit with many points (set points to 200+). You'll notice a subtle pattern: the orbit almost returns to its starting position after **44 steps**. This is because $27/44 = 0.6136 \approx \log_6 3 = 0.6131$ — after 44 rotations by $\log_6 3$, you've gone around the circle almost exactly 27 times.
 
-$27/44$ is a **convergent** of $\log_6 3$ in its continued fraction expansion. The quasi-period 44 is a fingerprint of the irrational rotation structure.
+$27/44$ is a **semiconvergent** of $\log_6 3$ in its continued fraction expansion ($31$ and $106$ are the neighboring true convergents — and $31$ is actually the *better* rational approximation). So why does the eye see 44 and not 31? Because the "+1" perturbation is always positive, it can only tighten near-returns that miss from below ($\epsilon < 0$, like 44) and always worsens those that miss from above ($\epsilon > 0$, like 31) — and the cancellation becomes *exact* in the small-value band every orbit's tail passes through. The quasi-period 44 is a fingerprint of the rotation *and* the perturbation together: it's the closure the wobble selects. The full dissection lives in [The Wobble](../explore/log6-wobble).
 
 ## The destruction landscape
 

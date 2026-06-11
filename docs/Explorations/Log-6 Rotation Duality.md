@@ -139,6 +139,24 @@ A 145-digit seed gives a 3449-step orbit. Parastichy mode measured per radial ba
 - The resonance dip offset (~1 altitude unit above the point estimate): replace mean altitude with the harmonic-mean altitude of the window and check the offset closes.
 - The altitude shell $X^*$ (finding 13) should scale with $m_{\max}$ — testable by sweeping the harmonic range.
 
+## Physics Dictionary
+
+The orbit in log-6 coordinates is a **one-dimensional quasicrystal in log-time, with the +1 as its disorder field**. Each finding has a named physics counterpart — these are structural correspondences (same mathematics, different substrate), not claims of physical mechanism.
+
+| Collatz object | Physics counterpart | Findings |
+|---|---|---|
+| Rigid rotation by $\alpha = \log_6 3$ | Integrable system / circle rotation; the KAM "unperturbed" flow (cf. [[The +1 Perturbation]]) | rotation section |
+| Weyl spectrum peaks at 31, 44, 106, 137 | **Bragg diffraction of a 1D quasicrystal** (Fibonacci-chain family; peaks at continued-fraction denominators of the rotation number) | 3, 4 |
+| Wobble $W_k$ | Disorder field / phase noise on the lattice | 2 |
+| Coherence $D(m) = \|\langle e^{2\pi i m W_k}\rangle\|$ | **Debye–Waller factor**; survival to $m = 150$ where Gaussian disorder dies at $m \approx 60$ is the shot-noise analogue of the **Mössbauer recoil-free fraction** — coherence preserved because the disorder is discrete kicks, not thermal jitter | 2 |
+| Carrier (odd-step train) × envelope ($\delta$ vs altitude) | AM signal: renewal/shot-noise timing modulating a deterministic envelope | 1, 5 |
+| Timing 2-adic, amplitude archimedean; head × tail MI = 0 | **Adelic factorization** — the Freund–Witten lesson from p-adic string theory: the object only closes when all completions of $\mathbb{Q}$ are included, and the places are independent factors | 5, 14 |
+| One-sided lens; resonance at $r = \Delta W / \|\epsilon_q\| = 1$ | **Phase-locking of a driven oscillator**; the descent is a swept-frequency chirp ringing each $\epsilon < 0$ mode at its own altitude; 44-over-31 selection is laser **mode pulling** (the locked mode beats the higher-bare-Q mode) | 4, 8, 16 |
+| Visible arm counts 13 → 31 → 137 | **Phyllotaxis / parastichy** (sunflower spirals): arm count = convergent denominator selected by local point geometry | 15, 17 |
+| Altitude shell $X^* \approx 3{\times}10^3$ | Boundary-dominated response: the spectrum is set by the dynamics near the attractor, the bulk is spectrally silent | 10, 13 |
+
+**Scope note:** the adelic correspondence is the only string-theory-adjacent statement that survives scrutiny, and it is a statement about *structure*, not physics. No mechanism connects any of this to vacuum selection in the string landscape; the resemblance there is poetic, not technical. The respectable far shore for "arithmetic spectra as physical spectra" is the spectral program around the Riemann zeros (Montgomery–Dyson, Berry–Keating, Connes) — the same spirit as Paper 1's Riemann lens.
+
 ## Related
 
 - [[The +1 Perturbation]] — the $x$-space view of the same obstruction

@@ -109,11 +109,25 @@ Unlike [[Dropping Set]]s (exactly unions of residue classes mod $2^k$), the land
 
 Variance of $W_{\text{total}}$ explained by the first-odd-below-$T$ landmark: 41% ($T{=}8$), 61% (16), 86% (32), 95% (64), 99.0% (100), 99.78% (200), 99.99% (1000) — unexplained residual falling roughly like $T^{-2}$, consistent with $W_{\text{pre}}$ being a sum of $O(1)$ jumps of size $O(1/T)$... squared in the variance. The fiber count grows as $T/2$, refining toward the full merge tree.
 
+## Fifth-pass Findings (`scripts/collatz_log6_wobble_cutoff.py`)
+
+**13. The spectral control is an altitude shell: $X^* \approx 3 \times 10^3$.**
+
+Re-running the staircase truncation with an altitude cutoff (keep jumps from visits $x < X$) instead of a count: the error curves of all 8 orbits (lengths 500–990) **collapse onto a common curve**, crossing 5% at $X^* \approx 3{\times}10^3$ and 1% by $10^5$, independent of orbit length (`collatz_log6_cutoff.png`). The $P = 64$ of pass four was just this shell in disguise. The Weyl spectrum of an orbit is determined by the rigid rotation plus *what the orbit does below altitude $\sim 6^{4.5}$* — everything above is spectrally invisible.
+
+**14. Head × tail factorizes — the joint partition is a product.**
+
+Mutual information between dropping time (head) and gateway landmark (tail) is statistically zero: MI excess over the shuffled null = 0.0009 bits (1.2$\sigma$) for all odd $n < 10^5$, and 0.0004 bits (0.6$\sigma$) excluding $n \le 1000$; the standardized-residual heatmaps are featureless (`collatz_log6_head_tail.png`). So (dropping set, gateway) is a genuine product coordinate system: the head invariant is 2-adic and finitely residue-determined, the tail invariant is archimedean and residue-free, and they carry no information about each other.
+
+**15. What the eye sees is parastichy — and it can never be 44.**
+
+Raw Weyl amplitude is the wrong visibility metric at small $N$ ($|\epsilon_m| N \ll 1$ scores $\approx 1$ trivially). The correct one is the **parastichy count** (sunflower-spiral logic): the visible arm count of a dot spiral is the modal index gap between spatial nearest neighbors. For the radius-$\propto k$ render of the long orbit: **13 arms** for $N \le 250$, **31 arms** for $N \ge 300$ (`collatz_log6_visibility.png`), matching the geometric selection rule $q^* = \arg\min_q\, q^2 + (2\pi N \epsilon_q)^2$, which also predicts a jump to **137 arms near $N \approx 3000$, skipping 106 entirely**. Crucially, parastichy selection only ever picks *convergent* denominators — and 44 = 31+13 is a semiconvergent, so no dot-spiral render at any $N$ shows 44 arms. The article's 44 must therefore come from its specific plot recipe (most plausibly the *connected path* closing into a 44-gon, where the wobble-corrected Weyl coherence — which *does* favor 44 over 31, finding 4 — sets visibility, or a different radial coordinate).
+
 ## Open Threads
 
-- The $P{=}64$ threshold: which odd values do the necessary jumps correspond to (altitude cutoff?), and does 64 scale with orbit length or stay absolute?
-- Independence of gateway and dropping classifications (V = 0.05): if truly independent, the joint partition (dropping set × gateway) factorizes the orbit into head × tail invariants — test the product structure directly.
-- Cross-check the 44-vs-137 visibility claim against Paper 3's polar figures (point counts ~100 vs ~1000).
+- **The 44 reconciliation**: reproduce Paper 3's exact plot recipe (connected polygon? radial coordinate?) and verify that path-closure visibility selects 44 where dot-parastichy selects 31. The contrast "path sees the semiconvergent the wobble favors; dots see the convergent" would close the original 2022 question completely.
+- **The 137-arm prediction**: an orbit with $\ge 3200$ points (seed $\sim 10^{125}$, findable by sampling random 125-digit odd integers) rendered radius-$\propto k$ should show 137 arms with 106 skipped. A falsifiable prediction of the selection rule.
+- The altitude shell $X^*$ should scale with the harmonic range probed ($m_{\max}$), since the neglected phase is $m \cdot \sum_{x > X} \delta$ — testable by sweeping $m_{\max}$.
 
 ## Related
 

@@ -123,11 +123,21 @@ Mutual information between dropping time (head) and gateway landmark (tail) is s
 
 Raw Weyl amplitude is the wrong visibility metric at small $N$ ($|\epsilon_m| N \ll 1$ scores $\approx 1$ trivially). The correct one is the **parastichy count** (sunflower-spiral logic): the visible arm count of a dot spiral is the modal index gap between spatial nearest neighbors. For the radius-$\propto k$ render of the long orbit: **13 arms** for $N \le 250$, **31 arms** for $N \ge 300$ (`collatz_log6_visibility.png`), matching the geometric selection rule $q^* = \arg\min_q\, q^2 + (2\pi N \epsilon_q)^2$, which also predicts a jump to **137 arms near $N \approx 3000$, skipping 106 entirely**. Crucially, parastichy selection only ever picks *convergent* denominators — and 44 = 31+13 is a semiconvergent, so no dot-spiral render at any $N$ shows 44 arms. The article's 44 must therefore come from its specific plot recipe (most plausibly the *connected path* closing into a 44-gon, where the wobble-corrected Weyl coherence — which *does* favor 44 over 31, finding 4 — sets visibility, or a different radial coordinate).
 
+## Sixth-pass Findings (`scripts/collatz_log6_wobble_resonance.py`)
+
+**16. Closure resonances: the descent chirps, and the cancellation is exact at $r = 1$.**
+
+The local wobble rate cancels a $q$-closure with $\epsilon_q < 0$ when the window wobble equals the miss. Binning the $q$-step closure miss by $r = \Delta W_{\text{window}} / |\epsilon_q|$ over 500 orbits: **every $\epsilon < 0$ harmonic (13, 44, 75, 106) dips sharply at exactly $r = 1$**, while the $\epsilon > 0$ harmonics (31, 137) climb monotonically — the one-sided lens (finding 4) caught in the act, with no free parameters (`collatz_log6_resonance.png`). In altitude coordinates the resonances ring in strict descending order — 106 ($\bar{a} \approx 6.1$) → 75 (4.6) → 44 (3.6) → 13 (2.4) — the orbit *chirps* through them as it falls. (Dips sit ~1 unit above the naive $x^*_q = q/(9 \ln 6 |\epsilon_q|)$ point estimate because window wobble is dominated by the window's smallest values, not its mean.) This is the final reconciliation of the article's 44: **31 never closes anywhere on a real orbit — the wobble only pushes it open. 44 rings, resonantly, in the few-hundreds altitude band that every orbit's visible tail occupies.**
+
+**17. The 137-arm prediction confirmed, 12 bands for 12.**
+
+A 145-digit seed gives a 3449-step orbit. Parastichy mode measured per radial band against the local selection rule $q^*(k) = \arg\min_q\, q^2 + (2\pi k \epsilon_q)^2$: **observed = predicted in all 12 bands** — 13 arms at $k \approx 143$, 31 arms from $k \approx 430$ through $2731$, **137 arms from $k \approx 3018$, with 106 skipped**, exactly as the rule requires (`collatz_log6_137_arms.png`). The polar render shows the arms chirping with radius in a single image. The selection rule is local in radius, not global in $N$ — pass five's "arms vs $N$" was this rule evaluated at the rim.
+
 ## Open Threads
 
-- **The 44 reconciliation**: reproduce Paper 3's exact plot recipe (connected polygon? radial coordinate?) and verify that path-closure visibility selects 44 where dot-parastichy selects 31. The contrast "path sees the semiconvergent the wobble favors; dots see the convergent" would close the original 2022 question completely.
-- **The 137-arm prediction**: an orbit with $\ge 3200$ points (seed $\sim 10^{125}$, findable by sampling random 125-digit odd integers) rendered radius-$\propto k$ should show 137 arms with 106 skipped. A falsifiable prediction of the selection rule.
-- The altitude shell $X^*$ should scale with the harmonic range probed ($m_{\max}$), since the neglected phase is $m \cdot \sum_{x > X} \delta$ — testable by sweeping $m_{\max}$.
+- Reproduce Paper 3's literal figure recipe (PPR angle warp $P = (6^\theta - 1)/5$ and its actual radial coordinate) to identify which closure its specific rendering selects — the last unchecked box on the 2022 figures.
+- The resonance dip offset (~1 altitude unit above the point estimate): replace mean altitude with the harmonic-mean altitude of the window and check the offset closes.
+- The altitude shell $X^*$ (finding 13) should scale with $m_{\max}$ — testable by sweeping the harmonic range.
 
 ## Related
 

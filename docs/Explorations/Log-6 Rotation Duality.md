@@ -67,13 +67,25 @@ Treating $W_k$ as phase disorder on the rotation, the coherence factor $D(m) = |
 
 **3. A candidate answer to "why 44 beats 31".**
 
-In the Weyl spectrum of the real orbit, the wobble damps the $m = 31$ peak by roughly half (0.043 → 0.021) while $m = 44$ survives nearly intact (0.040 → 0.033) — so although 31 is the better Diophantine near-return, **44 is the most coherent visible near-return in the presence of the +1**. Also: both spectra are dominated by $m = 137$ ($84/137$, the next semiconvergent, $137\alpha \approx 84.001$) — a sharper closure that should be visible in polar plots of long orbits.
+In the Weyl spectrum of the real orbit, the wobble damps the $m = 31$ peak by roughly half (0.043 → 0.021) while $m = 44$ survives nearly intact (0.040 → 0.033) — so although 31 is the better Diophantine near-return, **44 is the most coherent visible near-return in the presence of the +1**. Also: both spectra are dominated by $m = 137$ ($137\alpha \approx 84.001$). Note $\alpha = [0; 1,1,1,1,2,2,3,1,5,\dots]$, so $84/137$ is a full *convergent*, and with the next partial quotient being 5, no better rational approximation exists until $q = 791$ — the 137-closure is the undisputed best over $138 \le q \le 790$, which is why it towers over the spectrum and should be visible in polar plots of long orbits. (Coincidence with the fine-structure constant $1/137$: cosmetic only — this 137 is a property of $\ln 3 / \ln 6$ and vanishes in any other base.)
+
+## Follow-up Findings (`scripts/collatz_log6_wobble_followup.py`)
+
+**4. The 31-vs-44 selection is sign-interference, and the wobble *sharpens* some peaks.**
+
+Exactly, $A(m) = |\sum_k e^{2\pi i(\epsilon_m k + mW_k)}|/N$ with $\epsilon_m = m\alpha - \text{round}(m\alpha)$: a planar walk whose drift is the Diophantine miss plus $m$ times the wobble. Since the wobble is *always positive*, it partially cancels the drift of near-returns that close from below ($\epsilon < 0$: 13, 44, 75, 106) and worsens those that close from above ($\epsilon > 0$: 31, 137). Over 8 long orbits and 37 near-return peaks (`collatz_log6_wobble_sign_test.png`): $\epsilon < 0$ peaks *enhanced* 75% of the time with **median ratio 2.08** — the +1 doesn't just preserve those harmonics, it actively focuses them — while $\epsilon > 0$ peaks are damped 62% (median 0.94). The partial-sum walks (`collatz_log6_wobble_interference.png`) show the mechanism directly. So 44 beats 31 because $\epsilon_{44} < 0 < \epsilon_{31}$: the wobble is a one-sided lens.
+
+**5. The carrier is renewal. Full stop.** The apparent $\chi^2$ excess dissolved under scrutiny: (a) at seeds $\sim 2^{33}$, requiring orbits to survive the window selects climbing orbits (odd density 0.339, count-variance ratio 0.76 — *under*-dispersed); at seeds $\sim 2^{59}$ (no selection) density = 0.3325, variance ratio 1.02–1.06, lag-1 gap correlation $+0.006 \pm 0.016$. (b) The original $\chi^2$ divided by the null's SE only, ignoring the orbit ensemble's equal sampling error — doubling the statistic under the null. Corrected: $\chi^2 = 65.3$ on 64 bins. No harmonic fingerprint of the rotation exists in the timing at this resolution.
+
+**6. The wobble budget is independent of dropping time — but it is *banded*.**
+
+Over all odd $n < 10^5$: $\overline{W_{\text{total}}} = 0.0852 \pm 0.030$, and per dropping-time-$k$ means are flat ($0.084$–$0.091$ across $k = 3$ to $75$, no trend). The budget is dominated by the universal tail through small values, which every orbit shares; the first drop (the head) leaves no imprint. **But** the distribution is strongly multimodal and the $(\log_6 n, W_{\text{total}})$ scatter shows discrete horizontal bands (`collatz_log6_wobble_budget.png`) — presumably orbit-tree merging: all $n$ funneling into a shared trajectory inherit nearly identical budgets, so $W_{\text{total}}$ quantizes on the merge tree.
 
 ## Open Threads
 
-- Explain *which* near-return harmonics the wobble damps and why (the 31-vs-44 selection). The damping is not monotone in $m$, so it must interact with where on the orbit the wobble jumps occur.
-- The mild carrier-spectrum excess ($\chi^2 = 119/64$) — selection artifact or weak real correlation in $v_2$ along orbits?
-- $W_{\text{total}}$ as a per-orbit invariant: its distribution over $n$, and whether [[Dropping Set]] membership is visible in wobble statistics.
+- The banding of $W_{\text{total}}$: characterize the bands (merge-tree cosets?). Within a band, $W_{\text{total}}(n) - W_{\text{total}}(n')$ should be a finite sum of $\delta$'s over the pre-merge segments — a *finite* wobble difference. Could give a clean equivalence relation on seeds.
+- The one-sided-lens asymmetry (enhancement 2.08× vs damping 0.94): why is the $\epsilon < 0$ effect so much stronger? Presumably because the wobble drift rate $\bar{\delta}$ can fully cancel a small negative $\epsilon$ but only ever *adds* to a positive one.
+- Polar-plot prediction: long orbits should show 137-fold closure dominating 44 — directly checkable against Paper 3's figures.
 
 ## Related
 

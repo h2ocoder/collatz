@@ -39,7 +39,7 @@ This script renders four views of the wobble:
      pooled gap distribution and gap autocorrelation.  Tests whether the
      rotation leaves any harmonic fingerprint in the timing, or whether
      the timing is pure 2-adic renewal noise.  Windows are taken from
-     step 32 onward of orbits seeded at random odd n in [2^33, 2^34) to
+     step 32 onward of orbits seeded at random odd n in [2^59, 2^60) to
      avoid both the common anchored start (all seeds odd) and the
      selection bias toward climbing orbits that small seeds would give.
 
@@ -220,11 +220,11 @@ def plot_carrier_spectrum(path: str, window: int = 128, skip: int = 32,
     rng = np.random.default_rng(seed)
 
     # ensemble of real orbit windows: odd-step indicator over `window` steps
-    # starting at step `skip`, seeds random odd n in [2^33, 2^34)
+    # starting at step `skip`, seeds random odd n in [2^59, 2^60)
     spectra, acfs, gaps = [], [], []
     collected = 0
     while collected < n_orbits:
-        n = int(rng.integers(1 << 32, 1 << 33)) * 2 + 1
+        n = int(rng.integers(1 << 58, 1 << 59)) * 2 + 1
         seq = orbit(n)
         if len(seq) < skip + window:
             continue
@@ -238,6 +238,7 @@ def plot_carrier_spectrum(path: str, window: int = 128, skip: int = 32,
         acfs.append(ac / ac[0])
         collected += 1
     spec_orbit = np.mean(spectra, axis=0)
+    orbit_sd = np.std(spectra, axis=0) / math.sqrt(n_orbits)
     acf_orbit = np.mean(acfs, axis=0)
     gaps = np.array(gaps)
 
@@ -301,7 +302,8 @@ def plot_carrier_spectrum(path: str, window: int = 128, skip: int = 32,
     fig.savefig(path, dpi=150)
     plt.close(fig)
 
-    chi2 = float(np.sum(((spec_orbit[1:] - spec_null[1:]) / null_sd[1:]) ** 2))
+    comb_sd = np.sqrt(null_sd ** 2 + orbit_sd ** 2)
+    chi2 = float(np.sum(((spec_orbit[1:] - spec_null[1:]) / comb_sd[1:]) ** 2))
     g1, g2 = gaps[:-1], gaps[1:]
     lag1_r = float(np.corrcoef(g1, g2)[0, 1])
     return {"chi2": chi2, "dof": len(spec_orbit) - 1,

@@ -149,6 +149,19 @@ Surrogate comparison at each $\sigma$: for $m = 137$, the **true wobble leaves t
 
 For the complex twisted lines $\Lambda_m(\sigma + it) = \sum_k e^{2\pi i m\theta_k}k^{-s}$ (the real-coefficient $L$ is even in $t$ by reflection — a designed-out dead end), stationary phase predicts a ridge only for $0 < t/(2\pi\epsilon_m N) < 1$: the $\epsilon > 0$ and $\epsilon < 0$ pole families live in **opposite half-strips**. Confirmed sharply: half-strip energy asymmetry $+0.93$ for $m = 31$, $-0.79$ for $m = 44$, rectangular ridge support exactly on the predicted interval — and the orbit's ridges match the rotation's to three decimals at $\sigma = 0.5$ (`collatz_log6_hecke_lines.png`). The sign of the Diophantine miss, which the wobble-lens acts on dynamically, is also the coordinate that splits the strip in two.
 
+## Eighth-pass Finding: Rotation Phase Transport (`scripts/prime_comma_independence.py`)
+
+**21. The tail remembers the archimedean head — completing the place-diagonal picture.**
+
+Finding 14 showed the gateway (tail) forgets the 2-adic head. Testing it against the *archimedean* head coordinate $\theta_n = \{\log_6 n\}$: a small but decisive dependence (MI excess $z = +11.5$ for odd composites in $[10^4, 10^6]$, $z = +3.7$ for primes). Mechanism verified exactly: $\theta(\text{gateway}) \equiv \theta_n + k\alpha + W \pmod 1$ with circular coherence **1.000** — the rigid rotation transports phase from seed to gateway, and the step-count spread (SD $\approx 44$) is too small for $k\alpha$ to fully decohere the circle. The full 2×2:
+
+| | 2-adic head (residues) | archimedean head ($\theta_n$) |
+|---|---|---|
+| dropping time (2-adic head invariant) | determined | independent (MI below null) |
+| gateway (archimedean tail invariant) | independent (finding 14) | **weakly coupled (rotation transport)** |
+
+Each invariant communicates only within its own completion of $\mathbb{Q}$. Bonus (in [[Prime Dropping Residues]]): primes are generic in all four cells — their comma coordinate is pure PNT/Benford ($\chi^2 = 5.7/39$ against a zero-parameter model), and their couplings match composites'.
+
 ## Open Threads
 
 - The true strip-width question (summability over *all* harmonics, i.e. the irrationality measure of $\log_6 3$) cannot be probed by one orbit's data — it needs analytic continuation of $L_{\log_6 3}$ proper. Our data constrains only individual-harmonic behavior.

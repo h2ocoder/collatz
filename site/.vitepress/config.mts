@@ -87,7 +87,9 @@ export default defineConfig({
           { text: 'Alpha Sequence', link: '/explore/alpha-sequence' },
           { text: 'Binary Shortcut', link: '/explore/binary-shortcut' },
           { text: 'Sturmian Bridge', link: '/explore/sturmian-bridge' },
-          { text: 'Sturmian Fractals', link: '/explore/sturmian-fractals' }
+          { text: 'Sturmian Fractals', link: '/explore/sturmian-fractals' },
+          { text: 'The Wobble', link: '/explore/log6-wobble' },
+          { text: 'The Dropping Dictionary', link: '/explore/dropping-dictionary' }
         ]
       }
     ],

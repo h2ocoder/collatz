@@ -59,6 +59,16 @@ If a follow-up matters, Phase D (3-adic refinement) is the natural first move �
 - ![Observed vs Dirichlet](../../data/collatz_prime_dropping_observed_vs_dirichlet.png)
 - ![Per-residue heatmap](../../data/collatz_prime_dropping_residue_heatmap.png)
 
+## The Archimedean Twin (`scripts/prime_comma_independence.py`)
+
+The result above covers one of the two choice-free ways 2 and 3 can see a prime: residues. The other is *size* — the comma coordinate $\theta_p = \{\log_6 p\}$, the choice-free content of any Ryan-style 2-3 comma assignment (a generalized leading-digit). Tested at $N = 10^7$:
+
+- **$\theta_p$ carries no prime structure**: the histogram is explained by a zero-free-parameter PNT model (integrate $1/\ln x$ over each bin's bands; $\chi^2 = 5.7$ on 39 dof). Primes are Benford-generic in base 6.
+- **$\theta_p \perp$ dropping time**: MI sits *below* the shuffled null ($z = -5.7$) — the same hyper-uniformity as the $\chi^2 \approx 0.4$ above; within a $\theta$-bin (a contiguous range), primes fill residue classes more exactly than multinomial sampling would.
+- **$\theta_p \leftrightarrow$ gateway is real but not about primes**: MI excess $z = +3.7$ for primes in $[10^4, 10^6]$ — and $z = +11.5$ for matched odd composites. Mechanism verified: rigid rotation transport, $\theta(\text{gateway}) \equiv \theta_n + k\alpha + W \pmod 1$ with coherence 1.000; the step-count spread (~44) is too small to fully decohere the circle, so the tail faintly remembers the archimedean head (see [[Log-6 Rotation Duality]], finding 21).
+
+**Combined picture**: primes are exactly as generic as possible in *both* of the only two ways 2 and 3 can see them — residues are pure Dirichlet (above), scale is pure PNT/Benford, and neither couples to the Collatz classification beyond what all integers do.
+
 ## Related explorations
 
-[[Collatz Embeddings]], [[Kozyrev Orbital Spectrum]], [[Dropping Zeta Spectrum]], [[Machine Learning]].
+[[Collatz Embeddings]], [[Kozyrev Orbital Spectrum]], [[Dropping Zeta Spectrum]], [[Machine Learning]], [[Log-6 Rotation Duality]].

@@ -48,3 +48,37 @@ def test_prime_pairs_rejects_bad_gap():
     for bad_gap in (0, 1, -2):
         with pytest.raises(ValueError):
             prime_pairs(30, bad_gap)
+
+
+from collatz.constellations import pair_signature, joint_signature_counts
+from collatz.dropping import dropping_set
+
+
+def test_pair_signature_twin_3_5():
+    """(3,5): dropping_set(3)=6, dropping_set(5)=3 -> capped unchanged."""
+    assert pair_signature(3, 2) == (dropping_set(3), dropping_set(5))
+
+
+def test_pair_signature_caps_large_k():
+    """A k above the cap folds to K_CAP; small k passes through."""
+    from collatz.constellations import K_CAP
+    kp, kq = pair_signature(3, 2, k_cap=2)
+    assert kp == 2 and kq == 2  # both real k>2, capped to 2
+
+
+def test_joint_counts_total_equals_pair_count():
+    """Sum of the joint histogram equals the number of pairs."""
+    from collatz.constellations import prime_pairs
+    pairs = prime_pairs(10_000, 2)
+    counts = joint_signature_counts(pairs, 2)
+    assert sum(counts.values()) == len(pairs)
+
+
+def test_joint_counts_twin_fast_slow_forced():
+    """Every twin pair has exactly one member in dropping set 3 (the 1-mod-4 one)."""
+    from collatz.constellations import prime_pairs
+    pairs = prime_pairs(100_000, 2)
+    counts = joint_signature_counts(pairs, 2)
+    # In every (kp, kq) key, exactly one coordinate is 3.
+    for (kp, kq), c in counts.items():
+        assert (kp == 3) ^ (kq == 3), f"twin signature {(kp, kq)} not fast/slow"

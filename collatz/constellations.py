@@ -41,3 +41,28 @@ def prime_pairs(n_max: int, gap: int) -> np.ndarray:
     base = primes[primes <= n_max]
     keep = is_prime[base + gap]
     return base[keep].astype(np.int64)
+
+
+def _capped_set(n: int, k_cap: int) -> int:
+    """dropping_set(n) clipped to k_cap."""
+    return min(dropping_set(n), k_cap)
+
+
+def pair_signature(p: int, gap: int, k_cap: int = K_CAP) -> tuple[int, int]:
+    """Joint dropping signature (k_p, k_{p+gap}), each capped at k_cap.
+
+    Example: pair_signature(3, 2) == (6, 3)
+    """
+    return (_capped_set(p, k_cap), _capped_set(p + gap, k_cap))
+
+
+def joint_signature_counts(pairs, gap: int, k_cap: int = K_CAP) -> dict:
+    """Counter over capped (k_p, k_{p+gap}) for every p in `pairs`.
+
+    `pairs` is any iterable of ints (e.g. the output of prime_pairs).
+    Returns a plain dict keyed by (int, int).
+    """
+    counts = Counter()
+    for p in np.asarray(pairs).tolist():
+        counts[pair_signature(p, gap, k_cap)] += 1
+    return dict(counts)

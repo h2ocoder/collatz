@@ -3,15 +3,17 @@
 
 For gaps g in {2, 4, 6} (twins, cousins, sexy primes) and primes p <= N:
 classify each pair (p, p+g) by its joint Collatz dropping signature, and
-compare to (a) the generic single-prime marginal and (b) the admissible-
-integer coupling null.  Render five figures and print a per-gap summary.
+compare the observed pairs to the admissible-integer coupling null -- both
+the joint distribution and the slow-member marginal (the honest Hardy-
+Littlewood prediction).  Render four figures and print a per-gap summary.
 
 Outputs (data/):
     collatz_constellation_coupling.png   forced-coupling skeleton (all gaps)
     collatz_constellation_joint.png      joint k_p x k_{p+g} heatmaps
-    collatz_constellation_marginal.png   headline: marginal bars + joint ratio
+    collatz_constellation_marginal.png   headline: slow marginal + joint ratio
     collatz_constellation_genus.png      3-adic odd-step (s) refinement
-    collatz_constellation_phase.png      optional internal-space phase scatter
+
+(The optional internal-space phase figure is deferred to a Phase-D follow-up.)
 """
 from __future__ import annotations
 

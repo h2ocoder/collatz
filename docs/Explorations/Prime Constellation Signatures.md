@@ -62,6 +62,15 @@ series predicts, and no more** — a clean negative result. The forced 2-adic
 coupling (fast/slow for twins and sexy, same-class for cousins) is the only
 structure, and it is a theorem, not an empirical surprise.
 
+**Caveats.** Two simplifications, neither affecting the conclusion: (1) unlike
+the sibling [[Prime Dropping Residues]] sweep, this study does *not* separate
+out small members $p < 2^{k(p)}$ — observed pairs and the null bin all integers
+identically, so the comparison stays apples-to-apples and the few hundred such
+pairs below $10^7$ cannot manufacture signal. (2) For cousins ($g=4$) a pair can
+be *both*-slow, so "slow member" is taken as the larger $k$ coordinate; the
+$g=4$ $\chi^2$ therefore measures a slightly different object than the
+unambiguous fast/slow split of twins and sexy primes.
+
 **Open (Phase D, if revisited):** lift the null to the combined $2^{k-2s}6^s$
 modulus and re-test for residual 3-adic signal; run the spectral/diffraction
 layer on the ordered pair-fingerprint sequence (looking for constellation-

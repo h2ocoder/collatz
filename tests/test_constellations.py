@@ -82,3 +82,36 @@ def test_joint_counts_twin_fast_slow_forced():
     # In every (kp, kq) key, exactly one coordinate is 3.
     for (kp, kq), c in counts.items():
         assert (kp == 3) ^ (kq == 3), f"twin signature {(kp, kq)} not fast/slow"
+
+
+from collatz.constellations import coupling_null_counts
+
+
+def test_null_keys_are_signature_pairs():
+    """Null histogram keys are (int, int) dropping-set signatures."""
+    null = coupling_null_counts(10_000, 2, stride=1)
+    assert null
+    for key in null:
+        assert isinstance(key, tuple) and len(key) == 2
+
+
+def test_null_is_deterministic():
+    """Same arguments -> identical histogram (no RNG)."""
+    a = coupling_null_counts(50_000, 2, stride=5)
+    b = coupling_null_counts(50_000, 2, stride=5)
+    assert a == b
+
+
+def test_null_fast_slow_forced_for_twins():
+    """The g=2 integer null also forces exactly one dropping-set-3 coordinate."""
+    null = coupling_null_counts(20_000, 2, stride=1)
+    for (kp, kq) in null:
+        assert (kp == 3) ^ (kq == 3)
+
+
+def test_null_stride_subsamples():
+    """A larger stride yields no more sampled integers than a smaller one."""
+    fine = sum(coupling_null_counts(50_000, 2, stride=1).values())
+    coarse = sum(coupling_null_counts(50_000, 2, stride=10).values())
+    assert coarse <= fine
+    assert coarse > 0

@@ -66,3 +66,35 @@ def joint_signature_counts(pairs, gap: int, k_cap: int = K_CAP) -> dict:
     for p in np.asarray(pairs).tolist():
         counts[pair_signature(p, gap, k_cap)] += 1
     return dict(counts)
+
+
+def coupling_null_counts(
+    n_max: int, gap: int, k_cap: int = K_CAP, stride: int = 1
+) -> dict:
+    """Joint dropping-signature histogram over admissible integers (the null).
+
+    Iterates odd n in [3, n_max - gap], taking every `stride`-th odd value,
+    and counts the capped signature (dropping_set(n), dropping_set(n+gap)).
+    Because every odd n with even gap has n+gap odd, these are exactly the
+    integers admissible for the constellation at the prime 2 -- so by
+    Hardy-Littlewood the prime pairs inherit this 2-adic distribution, and
+    any deviation of observed pairs from it is genuine correlation.
+
+    Deterministic: no randomness, fixed systematic stride.
+
+    Example: sum(coupling_null_counts(31, 2, stride=1).values()) == 14
+             (odd n = 3,5,...,29; n+2 <= 31)
+    """
+    if gap <= 0 or gap % 2 != 0:
+        raise ValueError("gap must be a positive even integer")
+    if stride < 1:
+        raise ValueError("stride must be >= 1")
+    counts = Counter()
+    step = 2 * stride  # stay on odd integers
+    n = 3
+    upper = n_max - gap
+    while n <= upper:
+        sig = (_capped_set(n, k_cap), _capped_set(n + gap, k_cap))
+        counts[sig] += 1
+        n += step
+    return dict(counts)

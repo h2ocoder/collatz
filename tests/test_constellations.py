@@ -41,3 +41,10 @@ def test_prime_pairs_returns_int_array():
     ps = prime_pairs(30, 2)
     assert isinstance(ps, np.ndarray)
     assert ps.dtype.kind == "i"
+
+
+def test_prime_pairs_rejects_bad_gap():
+    """gap=0, gap=1, and gap=-2 must all raise ValueError."""
+    for bad_gap in (0, 1, -2):
+        with pytest.raises(ValueError):
+            prime_pairs(30, bad_gap)

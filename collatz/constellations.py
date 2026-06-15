@@ -26,6 +26,11 @@ K_CAP = 15  # dropping sets at or beyond this fold into a single k>=K_CAP bin
 def prime_pairs(n_max: int, gap: int) -> np.ndarray:
     """Primes p <= n_max such that p + gap is also prime, as an int64 array.
 
+    gap must be a positive even integer.  For p > 2, an odd gap would force
+    one of p, p+gap to be even (hence composite), so only the degenerate pair
+    (2, 2+gap) could ever occur; even gaps enumerate the non-trivial
+    constellations: twins (g=2), cousins (g=4), sexy primes (g=6), etc.
+
     Example: prime_pairs(30, 2) -> array([ 3,  5, 11, 17, 29])
     """
     if gap <= 0 or gap % 2 != 0:

@@ -31,7 +31,7 @@ from collatz.constellations import (  # noqa: E402
     joint_signature_counts,
     prime_pairs,
 )
-from collatz.dropping import dropping_set, orbital_oddity  # noqa: E402
+from collatz.dropping import orbital_oddity  # noqa: E402
 from collatz.residues import prime_sieve  # noqa: E402
 
 # ----- Configuration ---------------------------------------------------
@@ -43,14 +43,6 @@ GAP_NAME = {2: "twins", 4: "cousins", 6: "sexy"}
 
 
 # ----- Data pipeline ---------------------------------------------------
-def generic_prime_marginal(primes: np.ndarray, k_cap: int = K_CAP) -> dict:
-    """Dropping-set distribution over all single primes (the HL marginal)."""
-    counts = Counter()
-    for p in primes.tolist():
-        counts[min(dropping_set(p), k_cap)] += 1
-    return dict(counts)
-
-
 def slow_member_marginal(joint: dict) -> dict:
     """Marginal over the SLOW member (the coordinate that is not dropping set 3).
 
@@ -107,14 +99,14 @@ def density(hist: dict) -> dict:
     return {k: v / total for k, v in hist.items()}
 
 
-def print_summary(gap, pairs, joint, null, generic):
+def print_summary(gap, pairs, joint, null):
     name = GAP_NAME[gap]
-    slow = slow_member_marginal(joint)
-    gen_density = density(generic)
-    chi = chi_squared(slow, gen_density, sum(slow.values()))
+    slow_obs = slow_member_marginal(joint)
+    slow_null = slow_member_marginal(null)
+    chi = chi_squared(slow_obs, density(slow_null), sum(slow_obs.values()))
     tv = total_variation(joint, null)
     print(f"\n=== g={gap} ({name}) — {len(pairs)} pairs ===")
-    print(f"  chi^2 (slow marginal vs generic primes): {chi:.1f}")
+    print(f"  chi^2 (slow marginal vs coupling-null slow): {chi:.1f}")
     print(f"  total-variation (joint vs coupling null): {tv:.4f}")
     obs_d, null_d = density(joint), density(null)
     devs = sorted(
@@ -147,7 +139,6 @@ def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     print(f"Sieving primes up to {N}...")
     primes = prime_sieve(N)
-    generic = generic_prime_marginal(primes)
     print(f"pi({N}) = {primes.size}")
 
     bundles = []
@@ -155,14 +146,136 @@ def main():
         print(f"Computing g={gap} ({GAP_NAME[gap]})...")
         b = compute(gap)
         bundles.append(b)
-        print_summary(gap, b["pairs"], b["joint"], b["null"], generic)
+        print_summary(gap, b["pairs"], b["joint"], b["null"])
 
-    # Figures (defined in Task 6)
-    render_all(bundles, generic)
+    render_all(bundles)
 
 
-def render_all(bundles, generic):  # noqa: F811  (replaced in Task 6)
-    print("[render_all stub — figures added in Task 6]")
+def _joint_grid(hist, k_cap=K_CAP):
+    """Dense (k_cap+1) x (k_cap+1) array from a sparse joint histogram."""
+    g = np.zeros((k_cap + 1, k_cap + 1), dtype=float)
+    for (kp, kq), c in hist.items():
+        g[min(kp, k_cap), min(kq, k_cap)] = c
+    return g
+
+
+def fig_coupling(out_path):
+    """Forced-coupling skeleton: mod-8 residue map per gap, fast/slow tagged."""
+    fig, axes = plt.subplots(1, len(GAPS), figsize=(15, 4))
+    for ax, gap in zip(axes, GAPS):
+        rows = forced_coupling_table(gap, 8)
+        grid = np.zeros((len(rows), 2))
+        labels = []
+        for i, (a, b, fa, fb) in enumerate(rows):
+            grid[i] = [1.0 if fa else 0.2, 1.0 if fb else 0.2]
+            labels.append(f"{a}|{b}")
+        ax.imshow(grid, aspect="auto", cmap="coolwarm", vmin=0, vmax=1)
+        ax.set_yticks(range(len(rows)))
+        ax.set_yticklabels(labels, fontsize=8)
+        ax.set_xticks([0, 1])
+        ax.set_xticklabels(["p", f"p+{gap}"])
+        ax.set_title(f"g={gap} ({GAP_NAME[gap]})\nred=fast (D3), blue=slow")
+        ax.set_ylabel("odd residue a | (a+g) mod 8")
+    fig.suptitle("Gap-forced 2-adic coupling (theorem, not data)")
+    plt.tight_layout()
+    fig.savefig(out_path, dpi=140)
+    plt.close(fig)
+
+
+def fig_joint(bundles, out_path):
+    """Observed joint k_p x k_{p+g} heatmap per gap (log counts)."""
+    fig, axes = plt.subplots(1, len(bundles), figsize=(16, 5))
+    for ax, b in zip(axes, bundles):
+        grid = _joint_grid(b["joint"])
+        im = ax.imshow(
+            np.log10(grid + 1), origin="lower", cmap="viridis", aspect="auto"
+        )
+        ax.set_xlabel("$k_{p+g}$")
+        ax.set_ylabel("$k_p$")
+        ax.set_title(f"g={b['gap']} ({GAP_NAME[b['gap']]}) — log10(count+1)")
+        fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    fig.suptitle("Observed joint dropping signatures of prime pairs")
+    plt.tight_layout()
+    fig.savefig(out_path, dpi=140)
+    plt.close(fig)
+
+
+def fig_marginal(bundles, out_path):
+    """Headline: slow-member marginal (observed vs coupling-null slow) + joint ratio."""
+    fig, axes = plt.subplots(2, len(bundles), figsize=(16, 9))
+    for j, b in enumerate(bundles):
+        slow_obs = density(slow_member_marginal(b["joint"]))
+        slow_null = density(slow_member_marginal(b["null"]))
+        ks = sorted(set(slow_obs) | set(slow_null))
+        ax = axes[0, j]
+        x = np.arange(len(ks))
+        w = 0.4
+        ax.bar(x - w / 2, [slow_null.get(k, 0) for k in ks], w,
+               label="coupling null (HL)", color="0.7")
+        ax.bar(x + w / 2, [slow_obs.get(k, 0) for k in ks], w,
+               label="observed slow", color="mediumseagreen")
+        ax.set_xticks(x)
+        ax.set_xticklabels(ks, fontsize=7)
+        ax.set_xlabel("dropping set k (slow member)")
+        ax.set_title(f"g={b['gap']} ({GAP_NAME[b['gap']]}) — slow marginal vs null")
+        ax.legend(fontsize=8)
+
+        obs_d = _joint_grid(density(b["joint"]))
+        null_d = _joint_grid(density(b["null"]))
+        with np.errstate(divide="ignore", invalid="ignore"):
+            ratio = np.where(null_d > 0, obs_d / null_d, np.nan)
+        ax2 = axes[1, j]
+        im = ax2.imshow(ratio, origin="lower", cmap="RdBu_r", vmin=0, vmax=2,
+                        aspect="auto")
+        ax2.set_xlabel("$k_{p+g}$")
+        ax2.set_ylabel("$k_p$")
+        ax2.set_title("observed / coupling-null (joint)")
+        fig.colorbar(im, ax=ax2, fraction=0.046, pad=0.04)
+    fig.suptitle("Constellation signatures: slow marginal HL test (top) + joint correlation (bottom)")
+    plt.tight_layout()
+    fig.savefig(out_path, dpi=140)
+    plt.close(fig)
+
+
+def fig_genus(bundles, out_path):
+    """3-adic odd-step (s) refinement: observed/null ratio per gap, g=6 cross-check."""
+    fig, axes = plt.subplots(1, len(bundles), figsize=(16, 5))
+    smax = 0
+    for b in bundles:
+        for (sp, sq) in list(b["s_joint"]) + list(b["s_null"]):
+            smax = max(smax, sp, sq)
+    smax = min(smax, 20)
+    for ax, b in zip(axes, bundles):
+        obs = np.zeros((smax + 1, smax + 1))
+        nul = np.zeros((smax + 1, smax + 1))
+        for (sp, sq), c in b["s_joint"].items():
+            if sp <= smax and sq <= smax:
+                obs[sp, sq] = c
+        for (sp, sq), c in b["s_null"].items():
+            if sp <= smax and sq <= smax:
+                nul[sp, sq] = c
+        od, nd = obs / (obs.sum() or 1), nul / (nul.sum() or 1)
+        with np.errstate(divide="ignore", invalid="ignore"):
+            ratio = np.where(nd > 0, od / nd, np.nan)
+        im = ax.imshow(ratio, origin="lower", cmap="PuOr_r", vmin=0, vmax=2,
+                       aspect="auto")
+        tag = " (3-adic coupled)" if b["gap"] % 3 == 0 else ""
+        ax.set_xlabel("$s_{p+g}$ (odd steps)")
+        ax.set_ylabel("$s_p$")
+        ax.set_title(f"g={b['gap']} ({GAP_NAME[b['gap']]}){tag}")
+        fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    fig.suptitle("Odd-step (3-adic) signature: observed / null — watch g=6 vs g=2,4")
+    plt.tight_layout()
+    fig.savefig(out_path, dpi=140)
+    plt.close(fig)
+
+
+def render_all(bundles):
+    fig_coupling(OUT_DIR / "collatz_constellation_coupling.png")
+    fig_joint(bundles, OUT_DIR / "collatz_constellation_joint.png")
+    fig_marginal(bundles, OUT_DIR / "collatz_constellation_marginal.png")
+    fig_genus(bundles, OUT_DIR / "collatz_constellation_genus.png")
+    print("Figures written to", OUT_DIR)
 
 
 if __name__ == "__main__":

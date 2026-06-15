@@ -115,3 +115,28 @@ def test_null_stride_subsamples():
     coarse = sum(coupling_null_counts(50_000, 2, stride=10).values())
     assert coarse <= fine
     assert coarse > 0
+
+
+from collatz.constellations import forced_coupling_table
+
+
+def test_coupling_table_twin_one_of_each_mod4():
+    """g=2: in every odd residue row, exactly one member is 1 mod 4 (fast)."""
+    rows = forced_coupling_table(2, 8)
+    for a, b, fast_a, fast_b in rows:
+        assert fast_a == (a % 4 == 1)
+        assert fast_b == (b % 4 == 1)
+        assert fast_a ^ fast_b  # exactly one fast member
+
+
+def test_coupling_table_cousin_same_mod4():
+    """g=4: both members share their mod-4 class (both fast or both slow)."""
+    rows = forced_coupling_table(4, 8)
+    for a, b, fast_a, fast_b in rows:
+        assert fast_a == fast_b
+
+
+def test_coupling_table_covers_odd_residues():
+    """Rows are exactly the odd residues mod the modulus."""
+    rows = forced_coupling_table(2, 8)
+    assert [r[0] for r in rows] == [1, 3, 5, 7]

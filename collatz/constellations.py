@@ -98,3 +98,22 @@ def coupling_null_counts(
         counts[sig] += 1
         n += step
     return dict(counts)
+
+
+def forced_coupling_table(gap: int, modulus: int) -> list[tuple[int, int, bool, bool]]:
+    """The gap-forced residue coupling, one row per odd residue mod `modulus`.
+
+    Each row is (a, (a+gap) mod modulus, fast_a, fast_b) where `fast_x` marks
+    a member in dropping set 3 (equivalently x ≡ 1 mod 4, the fast dropper).
+    This is a pure-arithmetic theorem -- no primes involved -- and anchors the
+    empirical figures.
+
+    Example: forced_coupling_table(2, 8)[0] == (1, 3, True, False)
+    """
+    if gap <= 0 or gap % 2 != 0:
+        raise ValueError("gap must be a positive even integer")
+    rows = []
+    for a in range(1, modulus, 2):
+        b = (a + gap) % modulus
+        rows.append((a, b, a % 4 == 1, b % 4 == 1))
+    return rows

@@ -24,6 +24,7 @@ Output:
 """
 from __future__ import annotations
 
+import itertools
 from pathlib import Path
 
 import matplotlib
@@ -52,10 +53,33 @@ def periodogram_on_grid(signal: np.ndarray) -> np.ndarray:
     return np.interp(GRID, freq, power)
 
 
+def renewal_shuffle(s: np.ndarray, rng) -> np.ndarray:
+    """Run-preserving (renewal) null: keep each run's width, shuffle run order.
+
+    Preserves the burst-width and gap-width multisets and the alternating
+    pattern exactly; destroys any serial correlation between runs. If the
+    observed low-frequency excess survives above this null, the long-memory is
+    real clustering -- not merely the burst/gap marginal shape.
+    """
+    runs = [(int(v), sum(1 for _ in g)) for v, g in itertools.groupby(s)]
+    ones = [L for v, L in runs if v == 1]
+    zeros = [L for v, L in runs if v == 0]
+    rng.shuffle(ones)
+    rng.shuffle(zeros)
+    out, oi, zi = [], 0, 0
+    for v, _ in runs:
+        if v == 1:
+            out.extend([1.0] * ones[oi]); oi += 1
+        else:
+            out.extend([0.0] * zeros[zi]); zi += 1
+    return np.array(out)
+
+
 def ensemble_spectra(q: int):
-    """Average observed and shuffled-null periodograms of [q | x_k] over seeds."""
+    """Average observed, white-null, and renewal-null periodograms over seeds."""
     obs_acc = np.zeros_like(GRID)
-    null_acc = np.zeros_like(GRID)
+    white_acc = np.zeros_like(GRID)
+    renew_acc = np.zeros_like(GRID)
     count = 0
     for seed in range(SEED_LO, SEED_HI, 2):
         seq = orbit(seed)
@@ -65,22 +89,25 @@ def ensemble_spectra(q: int):
         if not np.any(s):
             continue
         obs_acc += periodogram_on_grid(s)
-        null_acc += periodogram_on_grid(RNG.permutation(s))
+        white_acc += periodogram_on_grid(RNG.permutation(s))
+        renew_acc += periodogram_on_grid(renewal_shuffle(s, RNG))
         count += 1
-    return obs_acc / count, null_acc / count, count
+    return obs_acc / count, white_acc / count, renew_acc / count, count
 
 
 def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     fig, axes = plt.subplots(2, 2, figsize=(13, 8), sharex=True)
     for ax, q in zip(axes.ravel(), PRIMES):
-        obs, null, count = ensemble_spectra(q)
-        ax.plot(GRID, obs, color="crimson", lw=1.6, label="observed [q | x_k]")
-        ax.plot(GRID, null, color="0.5", lw=1.4, ls="--",
-                label="shuffled null (white)")
-        ax.fill_between(GRID, null * 0.85, null * 1.15, color="0.5", alpha=0.18)
-        ratio = obs.max() / null.mean() if null.mean() > 0 else float("nan")
-        ax.set_title(f"q = {q}   (peak/null = {ratio:.2f},  N={count} orbits)")
+        obs, white, renew, count = ensemble_spectra(q)
+        ax.plot(GRID, obs, color="crimson", lw=1.8, label="observed [q | x_k]")
+        ax.plot(GRID, renew, color="darkorange", lw=1.6, ls="-.",
+                label="renewal null (run-preserving)")
+        ax.plot(GRID, white, color="0.5", lw=1.4, ls="--", label="white null (sample-shuffle)")
+        # excess of observed over the renewal null at the lowest frequencies
+        lo = GRID < 0.05
+        excess = obs[lo].mean() / renew[lo].mean() if renew[lo].mean() > 0 else float("nan")
+        ax.set_title(f"q = {q}   (obs/renewal at f<0.05 = {excess:.2f},  N={count})")
         ax.set_ylabel("avg power")
         ax.legend(fontsize=8, loc="upper right")
         ax.set_xlim(0, 0.5)

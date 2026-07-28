@@ -80,3 +80,29 @@ def test_bicoherence_gaussian_noise_floor():
     rng = np.random.default_rng(45)
     b2 = bicoherence(rng.standard_normal((500, 32)))
     assert np.nanmax(b2) < 0.15
+
+
+def test_phase_randomize_preserves_power_spectrum():
+    from collatz.bispectrum import phase_randomize
+    rng = np.random.default_rng(46)
+    win = rng.standard_normal((20, 32))
+    surr = phase_randomize(win, rng)
+    assert surr.shape == win.shape
+    np.testing.assert_allclose(
+        np.abs(np.fft.rfft(surr, axis=1)),
+        np.abs(np.fft.rfft(win, axis=1)),
+        rtol=1e-9,
+        atol=1e-9,
+    )
+    # and it actually changed the signal
+    assert not np.allclose(surr, win)
+
+
+def test_phase_randomize_destroys_qpc():
+    """Surrogates of the coupled ensemble drop to the noise floor at (f0, f0)."""
+    from collatz.bispectrum import phase_randomize, bicoherence, qpc_ensemble
+    rng = np.random.default_rng(47)
+    win = qpc_ensemble(n_windows=200, length=64, f0_bin=8, coupled=True, rng=rng)
+    assert bicoherence(win)[8, 8] > 0.8
+    surr = phase_randomize(win, rng)
+    assert bicoherence(surr)[8, 8] < 0.2

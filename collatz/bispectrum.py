@@ -108,3 +108,21 @@ def qpc_ensemble(
         + 0.3 * rng.standard_normal((n_windows, length))
     )
     return win
+
+
+def phase_randomize(windows: np.ndarray, rng: np.random.Generator) -> np.ndarray:
+    """Phase-randomized surrogate of each row: same rFFT magnitudes, fresh
+    uniform phases on the interior bins (DC and Nyquist stay real).
+
+    This preserves each window's power spectrum exactly while destroying all
+    bispectral phase relations -- the null of "everything the power spectrum
+    already knows."
+    """
+    w = np.asarray(windows, dtype=np.float64)
+    M, L = w.shape
+    X = np.fft.rfft(w, axis=1)
+    theta = rng.uniform(0.0, 2.0 * np.pi, size=X.shape)
+    theta[:, 0] = 0.0
+    if L % 2 == 0:
+        theta[:, -1] = 0.0
+    return np.fft.irfft(np.abs(X) * np.exp(1j * theta), n=L, axis=1)

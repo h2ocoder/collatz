@@ -39,3 +39,44 @@ def test_standardize_windows_rejects_constant_row():
     win = np.ones((2, 8))
     with pytest.raises(ValueError):
         standardize_windows(win)
+
+
+def test_bicoherence_shape_and_triangle():
+    from collatz.bispectrum import bicoherence
+    rng = np.random.default_rng(42)
+    b2 = bicoherence(rng.standard_normal((50, 32)))
+    assert b2.shape == (17, 17)
+    assert np.isnan(b2[0, 0])          # DC excluded
+    assert np.isnan(b2[3, 5])          # f2 > f1 excluded
+    assert np.isnan(b2[16, 1])         # f1 + f2 > 16 excluded
+    tri = ~np.isnan(b2)
+    assert np.all(b2[tri] >= 0.0) and np.all(b2[tri] <= 1.0 + 1e-9)
+
+
+def test_bicoherence_qpc_positive_control():
+    """Phase-locked f0 + 2*f0 lights up the diagonal at (f0, f0)."""
+    from collatz.bispectrum import bicoherence, qpc_ensemble
+    rng = np.random.default_rng(43)
+    win = qpc_ensemble(n_windows=200, length=64, f0_bin=8, coupled=True, rng=rng)
+    b2 = bicoherence(win)
+    assert b2[8, 8] > 0.8
+    tri = ~np.isnan(b2)
+    background = np.nanmedian(b2[tri])
+    assert background < 0.2
+
+
+def test_bicoherence_qpc_negative_control():
+    """Same spectrum, unlocked 2*f0 phase: the diagonal stays at the floor."""
+    from collatz.bispectrum import bicoherence, qpc_ensemble
+    rng = np.random.default_rng(44)
+    win = qpc_ensemble(n_windows=200, length=64, f0_bin=8, coupled=False, rng=rng)
+    b2 = bicoherence(win)
+    assert b2[8, 8] < 0.2
+
+
+def test_bicoherence_gaussian_noise_floor():
+    """Pure Gaussian noise: bicoherence ~ O(1/M) everywhere on the triangle."""
+    from collatz.bispectrum import bicoherence
+    rng = np.random.default_rng(45)
+    b2 = bicoherence(rng.standard_normal((500, 32)))
+    assert np.nanmax(b2) < 0.15

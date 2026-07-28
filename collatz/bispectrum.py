@@ -53,3 +53,58 @@ def standardize_windows(windows: np.ndarray) -> np.ndarray:
     if np.any(sd == 0.0):
         raise ValueError("constant window: cannot standardize")
     return (w - mu) / sd
+
+
+def bicoherence(windows: np.ndarray) -> np.ndarray:
+    """Ensemble bicoherence b^2(f1, f2) of real windows, shape (M, L).
+
+    b^2 = |<X(f1) X(f2) X*(f1+f2)>|^2 / (<|X(f1) X(f2)|^2> <|X(f1+f2)|^2>)
+
+    with the ensemble average over the M windows. Filled on the principal
+    triangle 1 <= f2 <= f1, f1 + f2 <= L//2 (DC excluded); NaN elsewhere.
+    b^2 = 1 iff the phase of X(f1+f2) is perfectly locked to the sum of the
+    phases at f1 and f2 across the whole ensemble -- the chi^(2) signature.
+    """
+    w = np.asarray(windows, dtype=np.float64)
+    M, L = w.shape
+    if L % 2 != 0:
+        raise ValueError("window length must be even")
+    K = L // 2
+    X = np.fft.rfft(w, axis=1)  # (M, K+1)
+    b2 = np.full((K + 1, K + 1), np.nan)
+    for f1 in range(1, K + 1):
+        for f2 in range(1, f1 + 1):
+            f3 = f1 + f2
+            if f3 > K:
+                continue
+            prod = X[:, f1] * X[:, f2]
+            num = np.abs(np.mean(prod * np.conj(X[:, f3]))) ** 2
+            den = np.mean(np.abs(prod) ** 2) * np.mean(np.abs(X[:, f3]) ** 2)
+            b2[f1, f2] = num / den if den > 0 else 0.0
+    return b2
+
+
+def qpc_ensemble(
+    n_windows: int,
+    length: int,
+    f0_bin: int,
+    coupled: bool,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    """Synthetic quadratic-phase-coupling control ensemble.
+
+    Each window: cos at bin f0 with random phase phi, plus 0.5 cos at bin
+    2*f0 whose phase is 2*phi (coupled=True: the SHG-locked case) or an
+    independent draw (coupled=False: same power spectrum, no coupling),
+    plus Gaussian noise. The estimator must separate the two.
+    """
+    t = np.arange(length)
+    phi = rng.uniform(0.0, 2.0 * np.pi, size=(n_windows, 1))
+    psi = 2.0 * phi if coupled else rng.uniform(0.0, 2.0 * np.pi, size=(n_windows, 1))
+    f0 = f0_bin / length
+    win = (
+        np.cos(2.0 * np.pi * f0 * t + phi)
+        + 0.5 * np.cos(2.0 * np.pi * 2.0 * f0 * t + psi)
+        + 0.3 * rng.standard_normal((n_windows, length))
+    )
+    return win

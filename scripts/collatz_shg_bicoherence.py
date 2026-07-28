@@ -75,18 +75,38 @@ def self_check() -> None:
 
 
 def build_ensemble() -> np.ndarray:
-    """Standardized (M, L) wobble windows; logs the skipped-seed fraction."""
-    windows, skipped, total = [], 0, 0
+    """Standardized, tail-deduplicated, mean-subtracted (M, L) wobble windows.
+
+    Collatz orbits merge: a window whose final 16 odd steps duplicate an
+    already-accepted window carries no new tail information, and keeping it
+    would let the observed statistic average duplicated data while the nulls
+    draw fresh randomness per row -- so such windows are dropped (logged).
+    The ensemble-mean waveform is then subtracted so bicoherence measures
+    fluctuation coupling, not the common deterministic ramp of the wobble;
+    every null downstream operates on this same mean-subtracted ensemble.
+    """
+    windows, skipped, dup, total = [], 0, 0, 0
+    seen: set[bytes] = set()
     for seed in range(SEED_LO, SEED_HI, 2):
         total += 1
         w = wobble_increments(seed)
         if w.size < L:
             skipped += 1
             continue
+        tail = w[L - 16 : L].tobytes()
+        if tail in seen:
+            dup += 1
+            continue
+        seen.add(tail)
         windows.append(w[:L])
     print(f"ensemble: {len(windows)} windows of L={L} odd steps "
-          f"({skipped}/{total} seeds skipped = {skipped / total:.1%})")
-    return standardize_windows(np.array(windows))
+          f"({skipped}/{total} seeds skipped = {skipped / total:.1%}, "
+          f"{dup}/{total} merged-tail duplicates dropped = {dup / total:.1%})")
+    win = standardize_windows(np.array(windows))
+    mean_wave = win.mean(axis=0)
+    frac = float(win.shape[0] * np.sum(mean_wave**2) / np.sum(win**2))
+    print(f"ensemble-mean waveform removed (variance fraction = {frac:.3%})")
+    return win - mean_wave
 
 
 def null_band(estimates: np.ndarray) -> np.ndarray:

@@ -106,3 +106,35 @@ def test_phase_randomize_destroys_qpc():
     assert bicoherence(win)[8, 8] > 0.8
     surr = phase_randomize(win, rng)
     assert bicoherence(surr)[8, 8] < 0.2
+
+
+def test_fit_ar_recovers_known_ar2():
+    """Round-trip: simulate AR(2) with known phi, refit, recover within 0.05."""
+    from collatz.bispectrum import fit_ar, simulate_ar
+
+    rng = np.random.default_rng(48)
+    phi_true = np.array([0.5, -0.3])
+    win = simulate_ar(phi_true, sigma=1.0, n_windows=400, length=256, rng=rng)
+    phi_hat, sigma_hat = fit_ar(win, order=2)
+    np.testing.assert_allclose(phi_hat, phi_true, atol=0.05)
+    assert 0.9 < sigma_hat < 1.1
+
+
+def test_simulate_ar_shape_and_stationarity():
+    from collatz.bispectrum import simulate_ar
+
+    rng = np.random.default_rng(49)
+    win = simulate_ar(np.array([0.5, -0.3]), sigma=1.0, n_windows=10, length=64, rng=rng)
+    assert win.shape == (10, 64)
+    # burned-in AR(2) with these coefficients has sd near
+    # sqrt((1-phi2)/((1+phi2)((1-phi2)^2-phi1^2))) ~ 1.06; loose check
+    assert 0.7 < win.std() < 1.5
+
+
+def test_ar_null_of_gaussian_ar_process_has_flat_bicoherence():
+    """A linear AR process must NOT trigger the detector (that is the point)."""
+    from collatz.bispectrum import simulate_ar, bicoherence
+
+    rng = np.random.default_rng(50)
+    win = simulate_ar(np.array([0.6]), sigma=1.0, n_windows=500, length=32, rng=rng)
+    assert np.nanmax(bicoherence(win)) < 0.15

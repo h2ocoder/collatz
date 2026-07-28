@@ -126,3 +126,46 @@ def phase_randomize(windows: np.ndarray, rng: np.random.Generator) -> np.ndarray
     if L % 2 == 0:
         theta[:, -1] = 0.0
     return np.fft.irfft(np.abs(X) * np.exp(1j * theta), n=L, axis=1)
+
+
+def fit_ar(windows: np.ndarray, order: int) -> tuple[np.ndarray, float]:
+    """Yule-Walker AR(order) fit to a window ensemble.
+
+    Biased per-window autocovariances up to `order` lags, averaged over
+    windows, then the Toeplitz normal equations. Returns (phi, sigma):
+    x_t = sum_i phi[i] x_{t-1-i} + sigma eps_t.
+    """
+    w = np.asarray(windows, dtype=np.float64)
+    w = w - w.mean(axis=1, keepdims=True)
+    M, L = w.shape
+    if order >= L:
+        raise ValueError("order must be < window length")
+    acov = np.zeros(order + 1)
+    for lag in range(order + 1):
+        acov[lag] = np.mean(np.sum(w[:, : L - lag] * w[:, lag:], axis=1) / L)
+    # Toeplitz normal equations, solved with plain numpy (scipy not in venv).
+    T = acov[np.abs(np.subtract.outer(np.arange(order), np.arange(order)))]
+    phi = np.linalg.solve(T, acov[1 : order + 1])
+    sigma2 = acov[0] - phi @ acov[1 : order + 1]
+    return phi, float(np.sqrt(max(sigma2, 1e-15)))
+
+
+def simulate_ar(
+    phi: np.ndarray,
+    sigma: float,
+    n_windows: int,
+    length: int,
+    rng: np.random.Generator,
+    burnin: int = 200,
+) -> np.ndarray:
+    """Simulate Gaussian-innovation AR windows: shape (n_windows, length)."""
+    p = len(phi)
+    total = length + burnin
+    x = np.zeros((n_windows, total))
+    eps = sigma * rng.standard_normal((n_windows, total))
+    for t in range(total):
+        for i in range(p):
+            if t - 1 - i >= 0:
+                x[:, t] += phi[i] * x[:, t - 1 - i]
+        x[:, t] += eps[:, t]
+    return x[:, burnin:]

@@ -116,6 +116,22 @@ percentile against the surrogate distribution.
 - Mod-q gear indicator fields as the input signal.
 - Symbolic parity-word variant (ties to the Sturmian work).
 
+## Amendment (2026-07-27, after first run)
+
+The first run's "positive" verdict was confounded: Collatz orbits merge, so
+~49% of ensemble windows shared an identical 16-odd-step tail while both
+nulls drew fresh randomness per row — the observed statistic had far fewer
+effective independent samples than its null bands assumed. Two hardenings,
+human-approved:
+
+1. **Merge dedup:** windows whose final 16 odd steps duplicate an
+   already-accepted window are dropped (fraction logged).
+2. **Ensemble-mean subtraction:** after standardization, the ensemble-mean
+   waveform is subtracted (variance fraction logged), so bicoherence
+   measures fluctuation coupling rather than the trivial common
+   deterministic ramp of the wobble. All nulls operate on the same
+   mean-subtracted ensemble.
+
 ## Conventions
 
 - Python 3.12, existing `.venv`, matplotlib Agg backend, outputs to

@@ -14,7 +14,9 @@
 
 - Field under test: per-step wobble increment `w_k = log_6(1 + 1/(3 x_k))` at each odd orbit value `x_k` (increments, NOT the accumulated walk).
 - Ensemble: odd seeds in `[50001, 150001)`; first `L = 32` odd steps per surviving seed; skipped fraction must be logged.
+- **Merge dedup (amended 2026-07-27, human-approved):** Collatz orbits merge, so windows whose final 16 odd steps duplicate an already-accepted window are dropped (fraction logged) — otherwise the observed statistic averages duplicated data while the nulls draw fresh randomness per row, invalidating the null bands.
 - Windows demeaned and standardized to unit variance before any spectral step.
+- **Ensemble-mean subtraction (amended 2026-07-27, human-approved):** after standardization, the ensemble-mean waveform is subtracted (variance fraction logged) so bicoherence measures fluctuation coupling, not the trivial common deterministic ramp of the wobble; all nulls operate on the same mean-subtracted ensemble.
 - Bicoherence normalization: `b^2 = |<X1 X2 X3*>|^2 / (<|X1 X2|^2> <|X3|^2>)`, principal triangle `1 <= f2 <= f1`, `f1 + f2 <= L/2` (DC excluded).
 - Two nulls, both 95% bands: phase-randomized surrogates and matched AR(5) simulation.
 - Startup self-validation (QPC positive + negative control) must print pass/fail and abort on fail.
@@ -592,18 +594,38 @@ def self_check() -> None:
 
 
 def build_ensemble() -> np.ndarray:
-    """Standardized (M, L) wobble windows; logs the skipped-seed fraction."""
-    windows, skipped, total = [], 0, 0
+    """Standardized, tail-deduplicated, mean-subtracted (M, L) wobble windows.
+
+    Collatz orbits merge: a window whose final 16 odd steps duplicate an
+    already-accepted window carries no new tail information, and keeping it
+    would let the observed statistic average duplicated data while the nulls
+    draw fresh randomness per row -- so such windows are dropped (logged).
+    The ensemble-mean waveform is then subtracted so bicoherence measures
+    fluctuation coupling, not the common deterministic ramp of the wobble;
+    every null downstream operates on this same mean-subtracted ensemble.
+    """
+    windows, skipped, dup, total = [], 0, 0, 0
+    seen: set[bytes] = set()
     for seed in range(SEED_LO, SEED_HI, 2):
         total += 1
         w = wobble_increments(seed)
         if w.size < L:
             skipped += 1
             continue
+        tail = w[L - 16 : L].tobytes()
+        if tail in seen:
+            dup += 1
+            continue
+        seen.add(tail)
         windows.append(w[:L])
     print(f"ensemble: {len(windows)} windows of L={L} odd steps "
-          f"({skipped}/{total} seeds skipped = {skipped / total:.1%})")
-    return standardize_windows(np.array(windows))
+          f"({skipped}/{total} seeds skipped = {skipped / total:.1%}, "
+          f"{dup}/{total} merged-tail duplicates dropped = {dup / total:.1%})")
+    win = standardize_windows(np.array(windows))
+    mean_wave = win.mean(axis=0)
+    frac = float(win.shape[0] * np.sum(mean_wave**2) / np.sum(win**2))
+    print(f"ensemble-mean waveform removed (variance fraction = {frac:.3%})")
+    return win - mean_wave
 
 
 def null_band(estimates: np.ndarray) -> np.ndarray:
@@ -699,7 +721,8 @@ Expected: all PASS (13 bispectrum + existing suite)
 Run: `.venv/bin/python scripts/collatz_shg_bicoherence.py`
 Expected console output, in order:
 - `self-check: ... -> PASS` (abort here means Task 2's estimator regressed)
-- ensemble line with a skipped fraction well under 50% (if most seeds are skipped, the L=32 cut is too aggressive for this seed range — flag it, do not silently proceed)
+- ensemble line with a skipped fraction well under 50% (if most seeds are skipped, the L=32 cut is too aggressive for this seed range — flag it, do not silently proceed), including the merged-tail duplicate fraction
+- ensemble-mean waveform line with its variance fraction
 - AR fit line, peak line, percentile line, `wrote .../collatz_shg_bicoherence.png`
 
 Runtime expectation: a few minutes (50k orbits + 200 null bicoherence passes). If it exceeds ~15 minutes, stop and profile rather than waiting.

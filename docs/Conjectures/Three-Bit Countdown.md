@@ -107,10 +107,14 @@ The refill of the medium tank is itself a $3x+1$ valuation of an auxiliary odd v
 
 The two-tank machine (§2b) plus the mod-3 gates (§2) is a finite-state over-approximation of all avoidance words once fuel is capped (high fuel acts uniformly) and the 3-adic state is truncated to $m \bmod 3^j$. Its minimum mean value-growth per encounter, over all cycles (Karp's algorithm), is a **rigorous lower bound** on $\liminf A(n)^{1/n}$: an over-approximation admits more words, so its minimum can only be smaller. The program:
 
-1. Measure/derive the growth-phase exit rule (the $(V,W)$ distribution when a growth phase ends) — the last unmodelled transition.
-2. Build the product graph (mode, capped fuel, $m \bmod 3^j$); edge weights $\log_2(\text{backward factor}) \in \{\log_2\frac43, \log_2\frac83, \log_2\frac23\}$.
-3. Compute min-mean-cycle. If $> 0$: exponential lower bound on $A(n)$ **proved** modulo the (bounded-ratio telescoping) value-tracking lemma, which handles the $\pm1$ corrections via each step's exact linearity in its own coordinate.
-4. If $\le 0$ at every truncation $j$: the obstruction is genuinely 3-adic-deep, and the offending cycles name it precisely.
+**Executed 2026-07-28 (`scripts/three_bit_machine.py`), with a decisive outcome:**
+
+* The value-weighted min-mean-cycle is **negative**: the unique value-shrinking cycle (among 79 enumerated, period $\le 5$) is the word $(d{=}2, g{=}1)$ repeating — weak drop, one growth step — with $\beta = -0.170$ bits/encounter and 2-adic fixed point $x^* = -7$. So **value-telescoping alone cannot prove the countdown**; the tail-flattening of $A(n)$ was pointing at exactly this.
+* **Fixed-point trichotomy (proved + machine-verified on all cycles).** A periodic word acts as $x \mapsto (3^S x + C)/2^E$ with $C > 0$ always, so $\beta < 0 \iff 3^S > 2^E \iff x^* < 0$. Every value-shrinking word has a *negative* fixed point — the same $C>0$ positivity that eliminated ascending cycles in Front 1.
+* **No positive-integer fixed points exist** (theorem, conditional on Front 1): an integer fixed point would be a Collatz cycle avoiding strong drops; only the trivial cycle qualifies and it lives at $V = v_2(m-1) = \infty$, outside the finite-fuel machine. The machine also derives fuel-drain (no pure-weak cycles: $V \mapsto V-2$).
+* **Structure theorem for periodic words.** Hence every eventually-periodic avoidance word has truncation representatives growing at its full bits rate $\varepsilon = \overline{d+g} \ge 2$ bits/encounter ($\ge 4^n$; machine floor $2.25$): negative $x^*$ gives reps $\approx 2^{\varepsilon n} - |x^*|$; positive non-integer rational $x^*$ has eventually-periodic, infinitely-often-nonzero 2-adic digits, so reps are $\Theta(2^{\varepsilon n})$.
+
+**Consequence.** Structured (eventually-periodic) families cost $\gtrsim 4^n$ — consistent with the trivial-cycle shadow and pure-weak bounds — while $A(n)$ itself grows like the Haar density rate $(4/3)^n$ (avoidance survives each encounter with probability exactly $3/4$; Borel–Cantelli makes $A(n)^{1/n} \to 4/3$ the natural conjecture, and the $n \le 59$ data brackets it: overall fit $1.38$, tail dip $1.14$ = fluctuation of a thin extremal set). **The minimal avoiders are generic transients, not structured families.** The deterministic gap is therefore an anti-concentration bound over *aperiodic* words — and the designated tool is Front 1's second-moment / Parseval method, applied to the residues of avoidance classes instead of cycle constants. The two fronts now share both their positivity mechanism ($C>0$) and their counting method.
 
 ## 6. Status
 
@@ -126,5 +130,9 @@ The two-tank machine (§2b) plus the mod-3 gates (§2) is a finite-state over-ap
 | Two-tank refill rules + hatch structure | **PROVED** (from identity; exhaustive to $2\times10^6$) |
 | $A(n)$ exact to $n=59$; tail growth $\approx 1.14 <$ overall fit $1.38$ | **COMPUTED** (rate unresolved; $(4/3)^{3/2}$ retracted) |
 | $A(n) \ge c\,\gamma^n$, some $\gamma>1$ (⟹ strong drop within $O(\log m)$ encounters) | **OPEN** — the Three-Bit Countdown |
-| Min-mean-cycle of gated machine $> 0$ | **OPEN** — finite computation, §5b |
+| Value min-mean-cycle $= -0.17 < 0$; obstruction word $(2,g1)$, $x^*=-7$ | **COMPUTED** — value-telescoping insufficient |
+| Trichotomy: $\beta<0 \iff 3^S>2^E \iff x^*<0$ (via $C>0$) | **PROVED** (+ verified on all 79 cycles) |
+| Periodic avoidance words have rep growth $\ge 2$ bits/enc | **PROVED** (conditional on Front 1) |
+| $A(n)^{1/n} \to 4/3$ (density rate; minimizers are generic transients) | **CONJECTURED** (data brackets it) |
+| Anti-concentration for aperiodic-word reps (second-moment method) | **OPEN** — the remaining gap |
 | Ansatz $v_2(m-a)$ monotone along streaks | **REFUTED** ($v_2(m-1)$ double-increases 2954× once medium drops interleave) |

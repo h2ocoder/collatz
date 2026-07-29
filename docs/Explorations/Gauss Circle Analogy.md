@@ -173,14 +173,52 @@ Three results:
    [[Collatz as a Quasicrystal]]. The s = 12 level is an outlier
    (S(1–4) = 1.35, least rigid) worth its own look.
 
+## Experiment 4: scaling and anatomy of the hyperuniformity
+
+`scripts/collatz_hyperuniformity_scaling.py` (figure
+`data/collatz_hyperuniformity_scaling.png`), extending to s = 16
+(N = 108,950 subgroups).
+
+- **The suppression persists at scale but is not a digital net.** Star
+  discrepancy N·D*_N runs a factor 1.4–2.5 below the random √N line at every
+  level, but grows like ~N^0.57 — sub-random with a smaller constant, not
+  the polylog of a true low-discrepancy net.
+- **The cancellation is recursive: within-group sums are sub-Rayleigh by up
+  to 60×.** Grouping subgroups by trailing alpha (which sets the top bits of
+  the residue), the biggest group's phase sum |Σe(2πiφ)|/√n_g is 0.01–0.37
+  at most levels against the Rayleigh expectation 0.89 for random phases
+  (s = 13: 0.01; s = 12: 0.08; s = 14: 0.07). The cancellation is not a
+  global accident — it happens *inside* each branch of the alpha-prefix
+  tree, level by level. Exceptions again exist (s = 11: 0.71, s = 15: 0.88,
+  s = 16: 0.69).
+- **Anomalies are isolated Fourier modes, not broadband noise.** The
+  per-harmonic fingerprint shows the anomalous levels concentrate their
+  excess in one or two harmonics: s = 12 is *rigid* at h = 1 (S = 0.10) but
+  hot at h = 2 (3.2) and h = 5 (4.8); s = 16 is hot at h = 2 (5.4) and h = 4
+  (2.0) with h = 5, 7 crushed (0.15, 0.01). Both anomalous levels share the
+  hot h = 2 mode — the top residue bit, set by the final halving constraint.
+- **A resonance suspect for s = 12**: frac(12·log₂3) = 0.020, and 19/12 is a
+  continued-fraction convergent of log₂3 — the Beatty line nearly passes
+  through a lattice point at i = 12, squeezing the trailing-alpha
+  distribution. s = 16 (frac = 0.359) does not fit this story; its anomaly
+  penetrates within-group sums and is genuinely open. The next convergent
+  denominator is s = 41 — a concrete prediction: expect an anomalous level
+  there.
+
 ## Where signal could still hide
 
 - ~~The rigidity factor (1.7–2.7 below null) is unexplained.~~ Resolved by
-  Experiment 3: it is low-harmonic hyperuniformity of the residue phases.
-  The remaining theorem-shaped question is *why* the lattice-path prefix
-  tree produces hyperuniform residues — a closed form for S(h) at small h
-  from the alpha-tuple recursion would turn θ ≈ 0.16 into a conjecture with
-  a mechanism, and explain the s = 12 anomaly.
+  Experiments 3–4: low-harmonic hyperuniformity of the residue phases,
+  produced recursively — within-branch cancellation of the alpha-prefix
+  tree (sub-Rayleigh by up to 60×). The theorem-shaped remainder: derive
+  the within-branch cancellation from the bit-lifting recursion (each
+  halving step maps phase φ → φ/2 or (φ+1)/2 across siblings — a
+  Walsh/Kozyrev-flavored self-similarity, cf. [[Kozyrev Orbital Spectrum]]).
+- The s = 16 anomaly (hot h = 2, 4; within-group sums near-random) has no
+  resonance explanation; s = 41 (next convergent denominator of log₂3)
+  should be anomalous if the s = 12 resonance story is right — testable
+  once N(41)-scale enumeration (~10¹⁰ paths) is replaced by a DP for S(h)
+  directly.
 - Number-variance check: σ²(L)/(NL) falls monotonically with window size
   (s = 14: 0.77 at L = 0.0005 → 0.33 at L = 0.128; Poisson = 1) —
   confirming hyperuniform decay, at a rate suggesting the weaker classes

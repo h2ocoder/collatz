@@ -125,12 +125,67 @@ the countdown-hierarchy plan) must respect this: densities equidistribute
 with sub-random error, but expectations of orbit functionals are
 record-dominated and divergent.
 
+## Experiment 3: the rigidity mechanism — hyperuniform residue phases
+
+`scripts/collatz_residue_rigidity.py` (figures
+`data/collatz_residue_rigidity.png`, `data/collatz_residue_form_factor.png`).
+
+New machinery: `residue_from_alphas` in `collatz/affine.py` reconstructs each
+subgroup's residue r mod 2^{k−s} from its alpha-tuple by 2-adic bit-lifting
+(cross-checked against `collatz/residues.py` for s ≤ 5). A subtlety surfaced:
+the tuple's final alpha_s is a *minimum* — the class fixes only the first k
+parities, and trajectories may keep halving past the drop.
+
+Three results:
+
+1. **The sawtooth model is exact.** Rebuilding C(r) from the 30,086 classes
+   (residue, modulus, slope, intercept — no sieve) reproduces the sieved
+   count with **max |diff| = 0** across all 7,680 grid points up to 10⁷.
+   E(r) is fully explained: it *is* the sum of 30,086 deterministic
+   sawtooths, one per subgroup.
+2. **The rigidity lives in the phases.** Each class sits at phase
+   φ = {(r₀ + λC/(1+λ²))/m} on its sawtooth wheel. Re-running the exact
+   model with phases drawn uniformly at random restores the independent
+   null: the data/model curve sits below the entire 6-realization shuffled
+   band at every window. Per-level pair-correlation energy
+   V_s/(N_s/12) = Σ_h |F_s(h)|²/(2π²h²) / (N_s/12) runs 0.12–0.86
+   (s = 10 is the most rigid at 0.117; s = 12 the least at 0.860).
+3. **The phase sets are disordered hyperuniform, not quasicrystalline.**
+   Structure factor S(h) = |F(h)|²/N by harmonic band:
+
+   | s | N | h=1–4 | 5–16 | 17–64 | 65–256 | 257–1024 | 1025–4096 |
+   |---|---|---|---|---|---|---|---|
+   | 8 | 85 | 0.18 | 0.46 | 0.75 | 0.97 | 1.00 | 1.01 |
+   | 10 | 476 | **0.06** | 0.40 | 0.47 | 0.94 | 0.94 | 1.02 |
+   | 13 | 8045 | 0.11 | 1.41 | 1.42 | 0.54 | 0.81 | 0.90 |
+   | 14 | 17637 | 0.15 | 0.43 | 0.72 | 0.80 | 0.73 | 0.91 |
+
+   Long-wavelength fluctuations are suppressed by up to 17× while high
+   harmonics sit at the Poisson level — and since V_s weights harmonics by
+   1/h², the low-h suppression is exactly what produces the rigidity. But
+   the gap spectrum rules out a Kronecker/cut-and-project set: gap CV ≈ 0.93
+   (locally Poisson-like), with hundreds of distinct gaps — quantized on a
+   fine 2-adic sublattice (multiples of ≈16/m at s = 13, 14), not the ≤ 3
+   gaps of a three-distance set. Locally random, globally rigid: the
+   residues of D_k form a **disordered hyperuniform point set on the
+   circle**, the same class as maximally-jammed packings — a different
+   beast from the Bragg-peaked orbit phases of
+   [[Collatz as a Quasicrystal]]. The s = 12 level is an outlier
+   (S(1–4) = 1.35, least rigid) worth its own look.
+
 ## Where signal could still hide
 
-- The rigidity factor (1.7–2.7 below null) is unexplained. Candidate: within
-  a level, the N(s)·2^s residues mod 2^k are not independent — they form the
-  2-adic tree of [[Lattice Path Formula]] prefixes. A closed form for the
-  phase correlations would turn θ ≈ 0.16 into a theorem-shaped conjecture.
+- ~~The rigidity factor (1.7–2.7 below null) is unexplained.~~ Resolved by
+  Experiment 3: it is low-harmonic hyperuniformity of the residue phases.
+  The remaining theorem-shaped question is *why* the lattice-path prefix
+  tree produces hyperuniform residues — a closed form for S(h) at small h
+  from the alpha-tuple recursion would turn θ ≈ 0.16 into a conjecture with
+  a mechanism, and explain the s = 12 anomaly.
+- Number-variance check: σ²(L)/(NL) falls monotonically with window size
+  (s = 14: 0.77 at L = 0.0005 → 0.33 at L = 0.128; Poisson = 1) —
+  confirming hyperuniform decay, at a rate suggesting the weaker classes
+  (II/III) rather than crystal-like class I. A wider L-range (larger s,
+  more subgroups) would pin the class.
 - The all-ones path saturates the peak bound at *every* s. Its members
   (n ≡ 2^{s+1} − 1 patterns) are the record-breakers; the mass measure is
   essentially a sum over all-ones-like paths. A Meyer-set / cut-and-project

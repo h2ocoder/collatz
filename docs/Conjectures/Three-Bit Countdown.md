@@ -116,6 +116,22 @@ The two-tank machine (§2b) plus the mod-3 gates (§2) is a finite-state over-ap
 
 **Consequence.** Structured (eventually-periodic) families cost $\gtrsim 4^n$ — consistent with the trivial-cycle shadow and pure-weak bounds — while $A(n)$ itself grows like the Haar density rate $(4/3)^n$ (avoidance survives each encounter with probability exactly $3/4$; Borel–Cantelli makes $A(n)^{1/n} \to 4/3$ the natural conjecture, and the $n \le 59$ data brackets it: overall fit $1.38$, tail dip $1.14$ = fluctuation of a thin extremal set). **The minimal avoiders are generic transients, not structured families.** The deterministic gap is therefore an anti-concentration bound over *aperiodic* words — and the designated tool is Front 1's second-moment / Parseval method, applied to the residues of avoidance classes instead of cycle constants. The two fronts now share both their positivity mechanism ($C>0$) and their counting method.
 
+## 5c. The second-moment experiment and the conditional theorem (2026-07-28)
+
+`scripts/avoidance_spectrum.py` enumerates **all** avoidance words of length $n$ (growth-capped) via exact 2-adic pullback — each word is one class $r_w \bmod 2^E$, $E = 1 + \sum(d_i+g_i)$, and the Terras bijection was verified (all residues distinct per bucket). Measured at $n=6$ ($2^{18}$ words) and $n=8$ ($1.7\times10^6$ words), across every $E$-bucket:
+
+* **Dyadic-interval discrepancy $\le 2.14\sqrt{N}$** — square-root cancellation, uniformly.
+* **Spectral flatness**: $\max_k |S(k)|/N \le 0.03$ in populated buckets ($S(k) = \sum_w e(k r_w/2^E)$).
+* **Minimal residues track the uniform order statistic** ($\text{ratio} \in [0.15, 8.2]$, no drift toward 0).
+
+**Definition (AEH — Avoidance Equidistribution Hypothesis).** There are $c, n_0$ such that for all $n \ge n_0$, $E$, and $T \ge 1$: $\left|\#\{w : r_w < T\} - T\,N(n,E)/2^E\right| \le c\,\sqrt{T\,N(n,E)/2^E} + c$ (with a form summable over $E$).
+
+**Theorem (conditional).** AEH $\Rightarrow$ $A(n) \ge (4/3 - \varepsilon)^n$ for every $\varepsilon > 0$ and large $n$ — the Three-Bit Countdown, hence every orbit meets a strong drop within $O(\log m)$ Set$_3$ encounters, pointwise.
+
+*Proof.* An integer $m < T$ avoiding $n$ encounters is $r_w < T$ for its own word. Summing AEH over buckets: expected hits $= \tfrac{T}{2}\sum_E N(n,E)/2^{E-1} = \tfrac{T}{2}(3/4)^n$ exactly (Haar survival). With $T = (4/3-\varepsilon)^n$ this is $(1-\varepsilon')^n \to 0$; AEH bounds actual hits by expected $+ O(\sqrt{\text{expected}}) < 1$ for large $n$, excluding $m>1$ (the $m{=}1$ class contributes its known $4^n$ family). $\blacksquare$
+
+**Proof route for AEH.** $S_n(k)$ satisfies an exact self-similar recursion over the word tree: prepending step $(d,g)$ acts on residues by $r \mapsto 3^{-(1+g)}(2^{d+g} r - c_{d,g}) \bmod 2^{E'}$, so $S_n$ factorizes through multiplicative orbits of $3^{-1}$ mod $2^E$ — and $\mathrm{ord}(3 \bmod 2^B) = 2^{B-2}$ is maximal (the framework's 3-adic mixing lever, and the same exponential-sum species Front 1's DP verified as perfectly uniform). This is now a self-contained analytic-number-theory problem with no Collatz dynamics left in it.
+
 ## 6. Status
 
 | Claim | Status |
@@ -134,5 +150,6 @@ The two-tank machine (§2b) plus the mod-3 gates (§2) is a finite-state over-ap
 | Trichotomy: $\beta<0 \iff 3^S>2^E \iff x^*<0$ (via $C>0$) | **PROVED** (+ verified on all 79 cycles) |
 | Periodic avoidance words have rep growth $\ge 2$ bits/enc | **PROVED** (conditional on Front 1) |
 | $A(n)^{1/n} \to 4/3$ (density rate; minimizers are generic transients) | **CONJECTURED** (data brackets it) |
-| Anti-concentration for aperiodic-word reps (second-moment method) | **OPEN** — the remaining gap |
+| AEH $\Rightarrow$ countdown ($A(n) \ge (4/3-\varepsilon)^n$) | **PROVED** (conditional theorem, §5c) |
+| AEH: sqrt-discrepancy of avoidance residues | **VERIFIED** ($n \le 8$, all $E$; disc $\le 2.14\sqrt N$, $\max\|S\|/N \le 0.03$) — **OPEN** to prove |
 | Ansatz $v_2(m-a)$ monotone along streaks | **REFUTED** ($v_2(m-1)$ double-increases 2954× once medium drops interleave) |

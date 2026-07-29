@@ -36,7 +36,8 @@ inside the disk of radius r.
 Per residue class c (modulus m_c = 2^{k−s}, slope λ, intercept C_c), the
 constraint n² + (λn + C_c)² ≤ r² gives n ≤ X_c(r) ≈ r/√(1+λ²) − λC_c/(1+λ²),
 so each class contributes X_c(r)/m_c + O(1). Truncating at oddity s ≤ S
-(dropping times k ≤ k(S), ≈97% of integers at S=11):
+(dropping times k ≤ k(S), ≈98% of integers at S=14; amended from S=11 —
+subgroup enumeration to s=14 proved cheap):
 
     C_S(r) = κ_S·r + β_S + E_S(r)
 
@@ -107,7 +108,7 @@ N^{2+δ} (heavy-tail dominated) — the "area term" of the analogy.
 | Decision | Value |
 |---|---|
 | N_max for sieve | 10⁷ |
-| Oddity truncation S | 11 (k ≤ 29, ≈97.1% coverage) |
+| Oddity truncation S | 14 (k ≤ 37, ≈98.0% coverage; amended from 11) |
 | Subgroup enumeration range | s = 1..14 (N(14) = 17637) |
 | Arithmetic | `Fraction` for coefficients; int64 numpy for sieve with overflow guard |
 | Python | `.venv/bin/python` (darwin; CLAUDE.md's Scripts/ path is the Windows form) |

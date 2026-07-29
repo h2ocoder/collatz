@@ -12,8 +12,9 @@ from collatz.affine import (
     profile_from_alphas,
     subgroup_summary,
 )
-from collatz.affine import sieve_dropping
+from collatz.affine import residue_from_alphas, sieve_dropping
 from collatz.core import alpha_sequence, stopping_destination, stopping_time
+from collatz.residues import dropping_set_residues
 from collatz.dropping import dropping_orbit
 from collatz.lfunctions.lattice_paths import enumerate_subgroups, k_of
 
@@ -73,6 +74,37 @@ def test_profile_from_alphas_matches_member_profile(s):
             if stopping_time(n) == k and tuple(alpha_sequence(n)[:s]) == alphas
         )
         assert profile == affine_orbit_profile(member)
+
+
+def test_residue_from_alphas_known_values():
+    assert residue_from_alphas((2,)) == 1        # n ≡ 1 mod 4
+    assert residue_from_alphas((1, 3)) == 3      # n ≡ 3 mod 16
+
+
+@pytest.mark.parametrize("s", [1, 2, 3, 4, 5])
+def test_residue_from_alphas_members_have_right_orbit(s):
+    for alphas in enumerate_subgroups(s):
+        k = k_of(s)
+        m = 1 << (k - s)
+        r = residue_from_alphas(alphas)
+        assert 0 < r < m
+        for n in (r + m, r + 5 * m):
+            assert stopping_time(n) == k
+            seq = alpha_sequence(n)[:s]
+            # the class fixes the first k parities only: alpha_s is a minimum
+            # (the trajectory may keep halving after the drop at step k)
+            assert tuple(seq[: s - 1]) == alphas[: s - 1]
+            assert seq[s - 1] >= alphas[s - 1]
+
+
+@pytest.mark.parametrize("s", [1, 2, 3, 4, 5])
+def test_residues_collapse_matches_residues_module(s):
+    # R_k mod 2^k collapsed to mod 2^(k-s) must equal the subgroup residues
+    k = k_of(s)
+    m = 1 << (k - s)
+    collapsed = {r % m for r in dropping_set_residues(k)}
+    from_alphas = {residue_from_alphas(a) for a in enumerate_subgroups(s)}
+    assert collapsed == from_alphas
 
 
 def test_sieve_dropping_matches_scalar_functions():

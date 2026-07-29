@@ -143,6 +143,50 @@ def profile_from_alphas(alphas: tuple[int, ...]) -> list[tuple[Fraction, Fractio
     return profile
 
 
+def residue_from_alphas(alphas: tuple[int, ...]) -> int:
+    """The residue r mod 2^(k-s) of the subgroup with alpha-tuple (alpha_1..alpha_s).
+
+    Every large n ≡ r (mod 2^(k-s)) follows the parity word
+    [odd, alpha_1 evens, odd, alpha_2 evens, ...] and so has dropping time
+    k = s + sum(alphas).  Computed by 2-adic bit-lifting: each step whose
+    parity is not yet determined by the known bits of r fixes one more bit.
+
+    Example: residue_from_alphas((2,)) == 1      (n ≡ 1 mod 4)
+    Example: residue_from_alphas((1, 3)) == 3    (n ≡ 3 mod 16)
+    """
+    if not alphas or any(a < 1 for a in alphas):
+        raise ValueError("alphas must be a non-empty tuple of positive ints")
+    word: list[int] = []
+    for a in alphas:
+        word += [1] + [0] * a
+    k = len(word)
+    s = len(alphas)
+    r, t = 1, 1          # bit 0 fixed: members are odd
+    x = 1                # trajectory of the representative r
+    halvings, odd_steps = 0, 0
+    for w in word:
+        if halvings + 1 > t:
+            # parity of the current value needs bit t of r; adding 2^t
+            # shifts the current value by 3^odd_steps (odd), flipping parity
+            if (x & 1) != w:
+                r += 1 << t
+                x += 3**odd_steps
+            t += 1
+        if w:
+            if x & 1 == 0:
+                raise AssertionError("parity word inconsistent (odd step)")
+            x = 3 * x + 1
+            odd_steps += 1
+        else:
+            if x & 1:
+                raise AssertionError("parity word inconsistent (even step)")
+            x >>= 1
+            halvings += 1
+    if t != k - s:
+        raise AssertionError(f"expected {k - s} bits, fixed {t}")
+    return r
+
+
 def sieve_dropping(n_max: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Vectorized dropping-time / destination / orbit-sum sieve for n = 2..n_max.
 

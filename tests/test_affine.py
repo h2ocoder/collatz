@@ -12,6 +12,7 @@ from collatz.affine import (
     profile_from_alphas,
     subgroup_summary,
 )
+from collatz.affine import sieve_dropping
 from collatz.core import alpha_sequence, stopping_destination, stopping_time
 from collatz.dropping import dropping_orbit
 from collatz.lfunctions.lattice_paths import enumerate_subgroups, k_of
@@ -72,6 +73,14 @@ def test_profile_from_alphas_matches_member_profile(s):
             if stopping_time(n) == k and tuple(alpha_sequence(n)[:s]) == alphas
         )
         assert profile == affine_orbit_profile(member)
+
+
+def test_sieve_dropping_matches_scalar_functions():
+    ktime, dest, osum = sieve_dropping(500)
+    for n in range(2, 501):
+        assert ktime[n] == stopping_time(n)
+        assert dest[n] == stopping_destination(n)
+        assert osum[n] == orbit_sum(n)
 
 
 @pytest.mark.parametrize("s", [1, 2, 3, 4])

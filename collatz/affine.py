@@ -23,6 +23,8 @@ from __future__ import annotations
 
 from fractions import Fraction
 
+import numpy as np
+
 from .core import collatz_step
 
 
@@ -139,6 +141,39 @@ def profile_from_alphas(alphas: tuple[int, ...]) -> list[tuple[Fraction, Fractio
                 return profile
             profile.append((a, b))
     return profile
+
+
+def sieve_dropping(n_max: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Vectorized dropping-time / destination / orbit-sum sieve for n = 2..n_max.
+
+    Returns (ktime, dest, osum), each of length n_max + 1 (indices 0 and 1
+    unused, set to 0).  osum is the dropping-orbit sum (destination excluded),
+    matching `orbit_sum`.  All arrays int64; raises on int64 overflow risk.
+    """
+    if n_max < 2:
+        raise ValueError("n_max must be >= 2")
+    cur = np.arange(n_max + 1, dtype=np.int64)
+    osum = cur.copy()
+    dest = np.zeros(n_max + 1, dtype=np.int64)
+    ktime = np.zeros(n_max + 1, dtype=np.int32)
+    osum[:2] = 0
+    idx = np.arange(2, n_max + 1, dtype=np.int64)
+    step = 0
+    while idx.size:
+        step += 1
+        c = cur[idx]
+        if c.max() > (1 << 61):
+            raise OverflowError("orbit value approaching int64 limit")
+        odd = c & 1 == 1
+        c = np.where(odd, 3 * c + 1, c >> 1)
+        cur[idx] = c
+        dropped = c < idx
+        d_idx = idx[dropped]
+        dest[d_idx] = c[dropped]
+        ktime[d_idx] = step
+        idx = idx[~dropped]
+        osum[idx] += cur[idx]
+    return ktime, dest, osum
 
 
 def subgroup_summary(alphas: tuple[int, ...]) -> dict:

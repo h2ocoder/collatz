@@ -43,6 +43,7 @@ Findings from notebook investigations:
 - **First Convergent Eliminated**: No 13-step cycle exists. All 91 parity words checked; none have 13 | C. Gap=13 ruled out.
 - **Divisibility Obstruction Conjecture**: For gap g = 2^E - 3^S > 1, g never divides 2^E * C. Would prove no non-trivial cycles.
 - **[[Gauss Circle Analogy]]**: Counting (n, dest) in a disk gives C(r) = κr + E(r) with κ exact from lattice paths and E ~ r^0.36 — below square-root cancellation and 2-3x more rigid than the independent-phase null. The mass measure inverts this: 88% of orbit mass lives in classes wider than the observation window.
+- **[[Collatz as a Quantum Quench]]**: DQPT probe of dropping-set L-functions via exact Hurwitz continuation (L₁ = 2⁻ˢζ(s) recovers Riemann zeros to 5e-7). Zeros scatter in a Davenport–Heilbronn band centred at Re(s) ≈ 0.24 for every k ≥ 3 — no critical line, and log₂(3/2) was a partial-sum artifact. Spacings super-GUE rigid (⟨r⟩ 0.69–0.85); Dset₈ anomalous in both this and the Hecke probe.
 
 ## Research Plans
 - [[path-to-proof]] — structured roadmap toward proving the Collatz conjecture

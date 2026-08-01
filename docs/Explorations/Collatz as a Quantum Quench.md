@@ -89,3 +89,47 @@ The DQPT lens does real work here: it forced the honest analytic continuation (H
 - [[Hecke L-Function on Collatz Orbits]] — the χ₆ machinery reused in Finding 4.
 - [[Gauss Circle Analogy]] — the rigidity that makes the truncated sums converge so fast.
 - [[Collatz as a Quasicrystal]] — the additive-Fourier counterpart of this Mellin-side probe.
+
+---
+
+# Part 2: Zeros of the χ₆-twisted Collatz zeta
+
+Code: `scripts/collatz_chi6_zeta_zeros.py`. Data: `data/collatz_chi6_zeta_zeros.npz`.
+
+Open question 4 of Part 1, executed. The orbit-pair Hecke sum obeys the proven law A(N) = cN + E(N) with c = −i·0.356035929815179/(2√3). By Abel summation, the detrended series
+
+$$G_N(s) = \sum_{n \le N} \chi_6(\iota_2(n))\,n^{-s} - c\,\frac{N^{1-s}}{1-s} \;\longrightarrow\; \frac{cs}{s-1} + s\int_1^\infty E(x)\,x^{-s-1}dx$$
+
+converges for σ > θ, where θ is the growth exponent of E — so the twisted zeta continues to the half-plane σ > θ with a simple pole at s = 1 (residue c), no functional equation needed. Zeros are claimed only where G is N-stable (|G_N − G_{N/2}| < 0.05 on grid *and* at the Newton-refined point), at N = 2×10⁶.
+
+## Finding 5 — square-root cancellation beyond the proven linear term: θ ≈ 0.46
+
+The measured constant matches the theorem to 5.8×10⁻⁵, and the residual fluctuation grows as |E(N)| ~ N^0.46 over three decades — **at (slightly below) the square-root benchmark**. This sharpens the Phase-1 story considerably: the *only* obstruction to GRH-style behavior of the χ₆ probe is the single proven structural constant c. Once c is subtracted, the orbit-pair character sum empirically recovers random-like cancellation. The "L-function sees Collatz" signal is entirely first-order; at second order (up to 2×10⁶) Collatz looks GRH-compatible. Whether θ < 1/2 genuinely (echoing the sub-random θ ≈ 0.36 of [[Gauss Circle Analogy]]) needs a longer range.
+
+## Finding 6 — the twisted zeta has zeros, and they are *not* rigid: ⟨r⟩ ≈ 0.58 (GOE–GUE)
+
+![chi6 zeta zeros](../../data/collatz_chi6_zeta_zeros.png)
+
+22 N-stable zeros in the visible half-plane σ ∈ (0.46, 1.3], t ≤ 60: Re(s) mean 0.69 ± 0.14, range [0.46, 0.98]. All seven candidate dips from the Part-1 β-scan refine to genuine zeros (t = 4.21, 12.12, 18.34, 23.15, 27.43, 35.19, 39.12, …). Two structural contrasts with the dropping-set spectra:
+
+1. **Spacing class flips.** Dropping-set L-functions: ⟨r⟩ = 0.69–0.85 (super-GUE, almost-periodic, near-clock ladders). The χ₆-twisted zeta: **⟨r⟩ = 0.575, between GOE (0.536) and GUE (0.603)**, with no periodic-fit structure at all (residual/period ≈ 1.0). The kinematic objects (unions of residue classes — data mod 2^k) are integrable; the object twisted by *dynamical* data (dest(n)) is random-matrix-like. In DQPT language: quenching with the residue structure is an integrable quench; quenching with the orbit-pair lift is a chaotic one. **The Collatz dynamics is what injects the spectral chaos** — this is the closest thing yet in the repo to a Riemann-like spectrum arising from Collatz data.
+2. **The visible zeros sit *right* of 1/2** (they must — the window is σ > θ ≈ 0.46), with no accumulation on any line yet. What happens on and left of σ = 1/2 is invisible to this method; a functional equation (or much larger N pushing θ's confidence down) would be needed.
+
+Caveats: 22 zeros is a small sample for spacing statistics; the convergence boundary truncates the picture at σ ≈ 0.46; θ is a 3-decade fit.
+
+## Revised verdict
+
+Part 1 showed the dropping-set L-functions are Davenport–Heilbronn objects — structured, integrable, no RH. Part 2 shows the **orbit-pair-twisted zeta is a different animal**: square-root error term once the proven main term is removed, and GOE/GUE-class zero spacings. The hierarchy is now explicit:
+
+| object | data used | zero spectrum | class |
+|---|---|---|---|
+| g(z) = Σ\|R_k\|z^k | marginal counts | boundary artifact | (none) |
+| L_k(s), Hurwitz | residues mod 2^k | band at Re ≈ 0.24, ⟨r⟩ 0.69–0.85 | integrable |
+| Σχ₆(ι₂(n))n^{−s} | orbit destinations | Re ∈ [0.46, 0.98] visible, ⟨r⟩ ≈ 0.58 | chaotic (RMT-like) |
+
+## New open questions
+
+1. **Is θ = 1/2 exactly, or sub-random?** Extend E(N) to 10⁸ with a sieved dest computation. If θ < 1/2 persists, the hyperuniformity of dropping residues has a 3-adic shadow.
+2. **Spacing class with a real sample.** T = 200–400 would give ~100+ zeros; does ⟨r⟩ settle at GUE (0.603) like ζ itself?
+3. **A functional equation for the twisted zeta?** The multiplication-symmetry structure (×3 measure-preservation per Dset) is the only symmetry candidate; if it yields one, the region σ ≤ 1/2 opens up and an actual critical-line question can be asked.
+4. **Zeros vs the Sturmian phase.** The zero ordinates show a loose ~2.7 mean spacing; test whether the deviations correlate with the gap-2/gap-3 Sturmian word of log₂3 that governs the sign pattern.

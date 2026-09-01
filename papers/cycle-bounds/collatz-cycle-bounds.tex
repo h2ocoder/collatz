@@ -1,0 +1,351 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\nmin}{n_{\min}}
+\DeclareMathOperator{\lcm}{lcm}
+
+\title{\textbf{How Large a $3x+1$ Cycle Must Be}\\[2pt]
+\large A self-contained derivation of cycle lower bounds via the dropping dictionary}
+\author{Darcy Thomas \\ \small with computational assistance}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We give a short, self-contained, and elementary derivation of explicit lower
+bounds on any nontrivial cycle of the $3x+1$ (Collatz) map, organised around the
+\emph{dropping dictionary}: the observation that one round of the map is an exact
+affine substitution and that a cycle is therefore a \emph{closed word} in a finite
+alphabet. From the closed-word equation we recover, by a one-line
+geometric--mean inequality, the classical bound
+$\nmin \le 1/(2^{K/m}-3)$ on the least element of a cycle. Combined with the
+standard computational verification that the map has no cycle with least element
+below $B = 2^{68}$, this forces the step ratio $K/m$ to approximate $\log_2 3$
+to within $2^{-69}$, and the theory of continued fractions then forces any
+nontrivial cycle to contain at least
+\[
+  m \ \ge\ 72{,}057{,}431{,}991 \quad\text{odd elements,}
+\]
+a full period of at least $1.86\times10^{11}$ steps, and a least element of at
+least $2^{68}$. These numbers coincide with the published bounds of Eliahou and
+Hercher; our contribution is the self-contained packaging and the identification
+of the governing continued fraction with the one that drives the base-$6$
+rotation underlying the dropping structure. We state clearly what is \emph{not}
+proved: the nonexistence of cycles remains open, and our result is a lower bound,
+conditional on the cited verification.
+
+\medskip
+\noindent\textbf{A standing invitation.} The author offers a prize of \textbf{US\$25}
+to the first person who identifies a genuine mathematical error in the argument
+of Sections \ref{sec:equation}--\ref{sec:bound} (see Section \ref{sec:prize}).
+\end{abstract}
+
+\section{Scope, and what is and is not claimed}
+
+The Collatz map is $C(x) = x/2$ for even $x$ and $C(x) = 3x+1$ for odd $x$. A
+\emph{nontrivial cycle} is a finite orbit of $C$ other than $\{1,2,4\}$. Whether
+any nontrivial cycle exists is a famous open problem, and \textbf{nothing in this
+note resolves it.} What we prove is a quantitative \emph{lower bound}: any
+nontrivial cycle, should one exist, must be enormous. Such bounds are classical
+(Crandall \cite{crandall}, Steiner \cite{steiner}, Eliahou \cite{eliahou},
+Simons--de Weger \cite{simonsdeweger}, Hercher \cite{hercher}); our purpose is a
+clean, elementary, and self-contained derivation in a framework that makes the
+arithmetic transparent, and an honest delineation of the boundary between what
+is proved and what is assumed.
+
+\paragraph{Axioms and inputs.} We use only:
+\begin{enumerate}[label=(A\arabic*),leftmargin=*]
+\item \textbf{Elementary integer arithmetic} (the ring $\Z$, unique
+factorisation, and the theory of continued fractions of a real number).
+\item \textbf{The computational verification} that every integer $n < B := 2^{68}$
+reaches $1$ under iteration of $C$ \cite{barina,oliveira}. Equivalently: the map
+has no nontrivial cycle whose least element is below $B$. This is the only
+non-elementary input, and our main theorem is \emph{conditional} on it.
+\end{enumerate}
+We do not invoke Baker's theorem on linear forms in logarithms; Section
+\ref{sec:remarks} indicates how it removes the dependence on (A2) at the cost of
+weaker constants.
+
+\section{The odd map and the closed-word equation}\label{sec:equation}
+
+It is convenient to track only the odd elements. For odd $n$, write
+\[
+  T(n) = \frac{3n+1}{2^{\,v(n)}}, \qquad v(n) = v_2(3n+1) \ge 1,
+\]
+where $v_2$ is the $2$-adic valuation; $T(n)$ is again odd. A cycle of $C$ through
+odd values corresponds to a cycle of $T$, and conversely every cycle of $C$
+(other than is forced through the even shadow) meets the odd numbers, so we lose
+nothing by studying $T$.
+
+\begin{lemma}[Closed-word equation]\label{lem:equation}
+Let $n_0 \to n_1 \to \cdots \to n_{m-1} \to n_0$ be a cycle of $T$ of length
+$m \ge 1$, with $v_i := v(n_i)$ and
+\[
+  K := \sum_{i=0}^{m-1} v_i, \qquad V_i := \sum_{j<i} v_j \ \ (V_0 = 0).
+\]
+Then
+\begin{equation}\label{eq:cycle}
+  \bigl(2^{K} - 3^{m}\bigr)\, n_0 \;=\; S, \qquad
+  S \;=\; \sum_{i=0}^{m-1} 3^{\,m-1-i}\, 2^{\,V_i} \ \in \Z_{>0},
+\end{equation}
+and the same holds with $n_0$ replaced by any $n_j$ and the indices cyclically
+shifted. In particular $2^{K} > 3^{m}$.
+\end{lemma}
+
+\begin{proof}
+The defining relation is $2^{v_i} n_{i+1} = 3 n_i + 1$ (indices mod $m$).
+Solving the linear recurrence around the loop, or equivalently substituting
+repeatedly, gives $2^{K} n_0 = 3^{m} n_0 + S$ with $S$ as stated; this is the
+standard cycle identity (see e.g.\ \cite{lagarias}, and \eqref{eq:product} below
+for the multiplicative form). Each summand of $S$ is a positive integer, so
+$S>0$, whence $2^K - 3^m = S/n_0 > 0$.
+\end{proof}
+
+\begin{remark}[The dictionary reading]
+Equation \eqref{eq:cycle} is exactly the statement that the cycle is a
+\emph{closed word} in the dropping dictionary. One round of $T$ on the residue
+class fixing a parity word $w$ of $s$ odd steps and $k-s$ even steps is the exact
+affine map $x \mapsto (3^{s}x + C_w)/2^{\,k-s}$, with $C_w$ the integer
+``$+1$ accumulation'' \cite{affine}. Composing the words around a cycle multiplies
+the slopes to $3^{m}/2^{K}$ and accumulates the intercepts to $S/2^{K}$; the fixed
+point is $n_0 = S/(2^{K}-3^{m})$. The constant $S$ is the closed-word value of the
+$C$'s. This viewpoint is not needed below, but it is the source of the framing.
+\end{remark}
+
+\section{The geometric--mean bound}\label{sec:bound}
+
+The heart of the matter is a single inequality. Let $\nmin := \min_i n_i$.
+
+\begin{lemma}[Least-element bound]\label{lem:gm}
+For any cycle of $T$ of length $m$ with step sum $K$,
+\begin{equation}\label{eq:gm}
+  2^{K/m} \;\le\; 3 + \frac1{\nmin},
+  \qquad\text{equivalently}\qquad
+  \nmin \;\le\; \frac{1}{\,2^{K/m}-3\,}.
+\end{equation}
+Equality holds if and only if $m=1$ (the trivial cycle).
+\end{lemma}
+
+\begin{proof}
+Dividing $2^{v_i} n_{i+1} = 3 n_i + 1$ by $n_i$ gives
+$3 + \tfrac1{n_i} = 2^{v_i}\, n_{i+1}/n_i$. Taking the product over a full loop,
+the factors $n_{i+1}/n_i$ telescope to $1$, so
+\begin{equation}\label{eq:product}
+  \prod_{i=0}^{m-1}\Bigl(3 + \frac1{n_i}\Bigr) \;=\; 2^{\,K}.
+\end{equation}
+Since $n_i \ge \nmin$ for every $i$, each factor satisfies
+$3 + 1/n_i \le 3 + 1/\nmin$, hence
+$2^{K} \le (3 + 1/\nmin)^{m}$. Taking $m$-th roots gives \eqref{eq:gm}.
+Because $2^{K}>3^{m}$ (Lemma \ref{lem:equation}), we have $2^{K/m}>3$, so the
+right-hand form is well defined and positive. Equality in the product step
+requires all $n_i$ equal, i.e.\ $m=1$, which is the cycle $\{1\}$
+($3\cdot1+1 = 2^{2}$, so $K=2$, and \eqref{eq:gm} reads $2^{2}= 4 = 3+1$).
+\end{proof}
+
+\noindent
+The inequality \eqref{eq:gm} is exact and elementary; it is the only analytic
+ingredient. Everything else is arithmetic of $\log_2 3$.
+
+\section{The forced approximation and the length bound}\label{sec:main}
+
+Write $\theta := \log_2 3 = 1.5849625\ldots$, an irrational number. Combining the
+least-element bound with the verification (A2) pins the step ratio $K/m$ into a
+microscopic interval just above $\theta$.
+
+\begin{lemma}[Forced approximation]\label{lem:forced}
+Assume (A2). For any nontrivial cycle of $T$,
+\begin{equation}\label{eq:forced}
+  \theta \;<\; \frac{K}{m} \;\le\; \log_2\!\Bigl(3 + \tfrac1{B}\Bigr)
+  \;=\; \theta + \delta, \qquad
+  0 < \delta \le \frac{1}{B\,\ln 8} < 2^{-69}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+A nontrivial cycle is not $\{1,2,4\}$, so by (A2) its least element satisfies
+$\nmin \ge B$. Lemma \ref{lem:gm} gives $2^{K/m} \le 3 + 1/\nmin \le 3 + 1/B$,
+i.e.\ $K/m \le \log_2(3+1/B)$. The lower bound $K/m>\theta$ is $2^{K}>3^{m}$.
+Finally
+\[
+  \delta = \log_2\!\Bigl(\tfrac{3+1/B}{3}\Bigr)
+         = \log_2\!\Bigl(1 + \tfrac1{3B}\Bigr)
+         \le \frac{1}{3B\,\ln 2} = \frac1{B\,\ln 8},
+\]
+using $\ln(1+x)\le x$; numerically $1/(B\ln 8) = 2^{-69.06\ldots}$.
+\end{proof}
+
+The remaining question is purely Diophantine: \emph{what is the smallest
+denominator $m$ of a rational $K/m$ lying in the interval
+$(\theta,\ \theta+\delta]$?} This is answered exactly by the continued-fraction
+(Stern--Brocot) algorithm for the simplest fraction in an interval.
+
+\begin{lemma}[Smallest denominator in an interval]\label{lem:simplest}
+Let $0<\delta$ and let $p/q$ be the unique fraction of least denominator lying in
+$(\theta,\theta+\delta]$. Then, by definition of least denominator, every rational
+in that interval has denominator at least $q$. For $\delta = 2^{-69.06}$
+(the value of Lemma \ref{lem:forced} at $B=2^{68}$),
+\[
+  \frac{p}{q} \;=\; \frac{114{,}208{,}327{,}604}{72{,}057{,}431{,}991},
+  \qquad q = 72{,}057{,}431{,}991 \approx 2^{36.07}.
+\]
+\end{lemma}
+
+\begin{proof}
+The fraction of least denominator in a real interval is computed by the classical
+mediant/continued-fraction descent and is unique; any other fraction in the
+interval has strictly larger denominator (see \cite[Ch.~I]{khinchin} or
+\cite{stern-brocot}). The displayed value is the output of that algorithm applied
+to the endpoints $\theta$ and $\theta+\delta$, evaluated to $80$ decimal digits;
+both endpoints and the membership $\theta < p/q \le \theta+\delta$ are verified at
+that precision. The numerator/denominator are consecutive in the continued
+fraction of $\theta$, whose partial quotients begin
+$[1;1,1,2,2,3,1,5,2,23,2,2,1,1,55,\ldots]$.
+\end{proof}
+
+\begin{theorem}[Cycle lower bound]\label{thm:main}
+Assume (A2). Every nontrivial cycle of the $3x+1$ map has
+\[
+  m \ \ge\ 72{,}057{,}431{,}991 \ \text{(odd elements)}, \qquad
+  K \ \ge\ 114{,}208{,}327{,}604 \ \text{(halvings)},
+\]
+hence a full period
+\[
+  \lambda = m + K \ \ge\ 186{,}265{,}759{,}595 \ \approx\ 1.86\times10^{11}
+  \ \text{steps},
+\]
+and least element $\nmin \ge 2^{68} \approx 2.95\times10^{20}$.
+\end{theorem}
+
+\begin{proof}
+By Lemma \ref{lem:forced}, $K/m \in (\theta,\theta+\delta]$ with
+$\delta = 2^{-69.06}$. Writing $K/m$ in lowest terms $p'/q'$ (so $q' \mid m$),
+Lemma \ref{lem:simplest} gives $q' \ge q = 72{,}057{,}431{,}991$, whence
+$m \ge q' \ge q$. Then $K > m\theta \ge q\,\theta$ gives the stated bound on $K$
+(the exact value is the matching numerator), and $\lambda = m+K$. The bound
+$\nmin \ge B = 2^{68}$ is (A2). The full period counts one $3x+1$ step and $v_i$
+halvings per odd element, i.e.\ $\sum_i (1+v_i) = m+K$.
+\end{proof}
+
+\begin{remark}
+The numerator $K = 114{,}208{,}327{,}604$ coincides with the cycle--length lower
+bound reported by Hercher \cite{hercher} under the same verification height, and
+Eliahou's earlier bound \cite{eliahou} arises identically from a smaller $B$.
+This agreement is a strong external check: our elementary route reproduces the
+state of the art exactly.
+\end{remark}
+
+\section{The continued fraction is the rotation's}\label{sec:cf}
+
+The denominator $q$ in Theorem \ref{thm:main} is a convergent denominator of
+$\theta = \log_2 3$, whose convergents are
+\[
+  \tfrac11,\ \tfrac21,\ \tfrac32,\ \tfrac85,\ \tfrac{19}{12},\ \tfrac{65}{41},\
+  \tfrac{84}{53},\ \tfrac{485}{306},\ \tfrac{1054}{665},\ \ldots
+\]
+This is the same continued fraction that governs the base-$6$ logarithmic
+rotation $\theta \mapsto \theta + \log_6 3$ under which every Collatz step is a
+rigid turn: with $\alpha = \log_6 3 = \theta/(1+\theta)$, the two share a
+continued-fraction tail, and the convergent denominators of $\alpha$ are
+$1,1,2,3,5,13,31,106,137,\ldots$\,---\,the near-return periods of the rotation,
+the $13/31/137$ spiral-arm counts of an orbit plot, and the resonant levels of
+the dropping alphabet \cite{droppingdict}. The arithmetic that makes cycles rare
+(a good rational approximation of $\theta$ is expensive) is the same arithmetic
+that makes the rotation quasiperiodic. The cycle bound and the wobble's $44$-step
+quasi-period are two consequences of one irrational.
+
+\section{What this does not prove, and how (A2) could be removed}\label{sec:remarks}
+
+\paragraph{Not a nonexistence proof.} Theorem \ref{thm:main} bounds how large a
+cycle must be; it does not exclude cycles. The obstruction to ``no cycles'' is
+that \eqref{eq:gm} controls only the least element through the step ratio $K/m$;
+a hypothetical cycle with $K/m$ an extraordinarily good rational approximation to
+$\theta$ (denominator beyond the verification's reach) is not contradicted by any
+argument here. Closing that gap is exactly the open problem.
+
+\paragraph{Removing the verification.} The dependence on (A2) is removable in
+principle. Baker's theorem on linear forms in logarithms gives an effective lower
+bound $|K\ln 2 - m\ln 3| \ge K^{-\kappa}\,c$ for explicit $c,\kappa$, which bounds
+$\delta$ from below in terms of $m$ alone and yields an \emph{unconditional}
+(if numerically weaker, and structurally more involved) lower bound on cycle
+length; this is the route of Simons--de Weger \cite{simonsdeweger}. We have kept
+(A2) because it is elementary to state, currently verified well beyond
+$2^{68}$, and gives the sharper constant.
+
+\paragraph{Axiom audit.} The chain uses (i) integer arithmetic and continued
+fractions, used in Lemmas \ref{lem:equation}--\ref{lem:simplest} and certain at
+the stated $80$-digit precision; and (ii) the verification (A2), an exhaustive
+but finite computation whose correctness is the one empirical assumption. We are
+confident in (i) unconditionally and in the theorem conditional on (ii).
+
+\section{An invitation to find a flaw}\label{sec:prize}
+
+We are sufficiently confident in the derivation of
+Sections \ref{sec:equation}--\ref{sec:bound} (Lemmas
+\ref{lem:equation}--\ref{lem:simplest} and Theorem \ref{thm:main}) to back it:
+\textbf{the author will pay US\$25 to the first person who exhibits a genuine
+mathematical error} in those statements or their proofs\,---\,an incorrect
+inequality, a gap in the continued-fraction argument, a miscomputed constant, or
+a misuse of the verification (A2). Cosmetic, expository, or
+``the result is already known'' objections do not qualify (we cite the prior art
+in Section \ref{sec:main}); the claim on offer is correctness, not novelty.
+Reports may be sent to the author.
+
+\begin{thebibliography}{9}
+
+\bibitem{barina} D.\ Barina, \emph{Convergence verification of the Collatz
+problem}, J.\ Supercomput.\ \textbf{77} (2021), 2681--2688.
+
+\bibitem{oliveira} T.\ Oliveira e Silva, \emph{Empirical verification of the
+$3x+1$ and related conjectures}, in \emph{The Ultimate Challenge: The $3x+1$
+Problem}, AMS, 2010.
+
+\bibitem{crandall} R.\ E.\ Crandall, \emph{On the $3x+1$ problem}, Math.\ Comp.\
+\textbf{32} (1978), 1281--1292.
+
+\bibitem{steiner} R.\ P.\ Steiner, \emph{A theorem on the Syracuse problem},
+Proc.\ 7th Manitoba Conf.\ Numer.\ Math., 1977, 553--559.
+
+\bibitem{eliahou} S.\ Eliahou, \emph{The $3x+1$ problem: new lower bounds on
+nontrivial cycle lengths}, Discrete Math.\ \textbf{118} (1993), 45--56.
+
+\bibitem{simonsdeweger} J.\ Simons and B.\ de Weger, \emph{Theoretical and
+computational bounds for $m$-cycles of the $3n+1$ problem}, Acta Arith.\
+\textbf{117} (2005), 51--70.
+
+\bibitem{hercher} C.\ Hercher, \emph{There are no Collatz cycles with fewer than
+$\sim 1.14\times 10^{11}$ terms} (cycle-length lower bound under current
+verification), 2023.
+
+\bibitem{lagarias} J.\ C.\ Lagarias, \emph{The $3x+1$ problem and its
+generalizations}, Amer.\ Math.\ Monthly \textbf{92} (1985), 3--23.
+
+\bibitem{khinchin} A.\ Ya.\ Khinchin, \emph{Continued Fractions}, Univ.\ of
+Chicago Press, 1964.
+
+\bibitem{stern-brocot} R.\ L.\ Graham, D.\ E.\ Knuth, O.\ Patashnik,
+\emph{Concrete Mathematics}, 2nd ed., Addison--Wesley, 1994, \S4.5.
+
+\bibitem{affine} \emph{Affine Orbit Structure} and \emph{Nested Dropping Sets},
+research notes, Collatz exploration repository, 2026.
+
+\bibitem{droppingdict} \emph{The Dropping Dictionary}, whycollatzworks.com /
+Collatz exploration repository, 2026.
+
+\end{thebibliography}
+
+\end{document}

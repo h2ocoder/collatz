@@ -34,9 +34,35 @@
               "icon": "lucide-file",
               "title": "Machine Learning"
             }
+          },
+          {
+            "id": "419f9e61c10d4781",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Explorations/Dropping Zeta Spectrum.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Dropping Zeta Spectrum"
+            }
+          },
+          {
+            "id": "f0160ba1fda1a123",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.12.7"
+              },
+              "icon": "lucide-book-up",
+              "title": "Release Notes 1.12.7"
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -68,7 +94,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "Palindrom",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -89,7 +115,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -195,8 +222,21 @@
       "bases:Create new base": false
     }
   },
-  "active": "708c4326765e243b",
+  "active": "f0160ba1fda1a123",
   "lastOpenFiles": [
+    "Explorations/Nested Dropping Sets.md",
+    "Explorations/Log-6 Rotation Duality.md",
+    "Explorations/Prime Dropping Residues.md",
+    "superpowers/plans/2026-06-02-prime-dropping-residues.md",
+    "superpowers/specs/2026-06-02-prime-dropping-residues-design.md",
+    "Explorations/Kozyrev Orbital Spectrum.md",
+    "superpowers/plans/2026-06-01-kozyrev-orbital-spectrum.md",
+    "superpowers/specs/2026-06-01-kozyrev-orbital-spectrum-design.md",
+    "Conjectures/The +1 Perturbation.md",
+    "Explorations/Hecke L-Function on Collatz Orbits.md",
+    "Explorations/Machine Learning.md",
+    "Explorations/Dropping Zeta Spectrum.md",
+    "Explorations/Collatz Embeddings.md",
     "Explorations/Collatz Embeddings.md.tmp.45504.1777606258036",
     "Explorations/Collatz Embeddings.md.tmp.45504.1777606245144",
     "Explorations/Collatz Embeddings.md.tmp.45504.1777606231534",
@@ -207,12 +247,9 @@
     "Explorations/Collatz Embeddings.md.tmp.45504.1777602367463",
     "Explorations/Collatz Embeddings.md.tmp.45504.1777602202754",
     "Explorations/Collatz Embeddings.md.tmp.45504.1777601962422",
-    "Explorations/Collatz Embeddings.md.tmp.45504.1777601687428",
-    "Explorations/Collatz Embeddings.md",
     "superpowers/plans/2026-04-30-collatz-embeddings.md",
     "superpowers/specs/2026-04-30-collatz-embeddings-design.md",
     "00-Index.md",
-    "Explorations/Machine Learning.md",
     "Definitions/Syracuse Map.md",
     "Conjectures/Affine Orbit Structure.md",
     "Definitions/Orbital Oddity.md",
@@ -222,9 +259,6 @@
     "Conjectures/Bit Destruction Bound.md",
     "Conjectures/Odd Stopping Time Spectrum.md",
     "Untitled.md",
-    "plans/2026-04-02-vitepress-implementation.md",
-    "plans/2026-04-02-vitepress-site-design.md",
-    "plans/path-to-proof.md",
-    "Conjectures/Logarithmic Escape Theorem.md"
+    "plans/2026-04-02-vitepress-implementation.md"
   ]
 }

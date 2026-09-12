@@ -166,3 +166,15 @@ Equivalently: a single bit of a quasi-periodic orbit on the base-6 circle cannot
 2. ~~Prove spectral gap for all M~~ → **Subsumed** by One-Bit Mixing Lemma
 3. ~~Can the two fronts be unified?~~ → **YES**: both reduce to the base-6 rotation structure. Front 1 = no rational rotation numbers. Front 2 = irrational rotation is mixing.
 4. ~~Does the spectral gap have a closed-form proof?~~ → **Reframed**: $\lambda_2 \to 1/6$ from $\text{rad} = 6$; the spectral gap is the finite-level manifestation of the irrational rotation's unique ergodicity.
+
+---
+
+## Audit (2026-09-10)
+
+See [[2026-09-10-proof-direction-assessment]] (`docs/plans/2026-09-10-proof-direction-assessment.md`). Headlines:
+
+- **Front 1 is not complete.** The "second moment / Parseval" step for $S \ge 306$ is the random-model standard deviation, not a theorem; non-convergent $(S,E)$ are unhandled. Rigorous frontier: Hercher 2023 ($m \le 91$) + Barina $2^{71}$.
+- **The One-Bit Lemma does not suffice** (a drop is relative to the current value, not the start). The honest reduction is the Summary doc's: bounce termination $\equiv$ Collatz.
+- **Sector Monotonicity is a tautology or false** ($n = 27$ violates at $s = 12$ under the cumulative reading). The Adelic Bridge's dimension-0 step is invalid.
+- **Recommended direction:** Krasikov–Lagarias difference inequalities in the dropping-set $(k, s, C)$ basis, targeting a density exponent $> 0.84$. See the assessment for milestones.
+- **Prime factorization question closed:** [[Prime Factorization and Dropping Rate]].

@@ -39,3 +39,6 @@ site/.vitepress/dist/
 # .NET build artifacts
 emanon/src/**/bin/
 emanon/src/**/obj/
+
+# Large regenerable eigenvector dumps (up to 1.4 GB; exceed GitHub limits)
+data/kl_eigvec_k*.npy

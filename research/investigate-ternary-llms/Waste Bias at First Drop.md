@@ -51,6 +51,8 @@ Detrending log₂(N(s)/3^s) by a ±6 local mean and regressing the residual on w
 
 The bump at w ∈ [0.8, 1) and the dip at [0, 0.2) say that the *count* of lattice paths under the line y = x·log₂3 depends on the whole Sturmian prefix ({i log₂3} for i ≤ s), not just on the endpoint gap w(s). This is the same object as the Three Distance / Sturmian structure in `docs/Explorations/Dropping Zeta Spectrum.md`, and it is where the "irrational-slope lattice path asymptotics" question ([[Collatz Bridge - Trits and Stopping Times]] §7) lives. **Conjecture:** N(s)/3^s = C·s^(−γ)·F({i log₂3}_{i≤s}) with F a bounded Sturmian functional; the −0.25 slope is F's first-order dependence on the endpoint.
 
+**Update (L3):** F is now pinned down numerically — see [[Winkler Tail Bound]] §3–4. N(s)/(C(m,s−1)/s) is a step function of w(s) with breakpoints at w(1) = 0.415, w(3) = 0.245, w(2) = 0.830, equal to 1 exactly at the record packings s = 1, 3, 5, 17, 29, 41, 94, …; the non-monotone histogram above is 2^(−w) × that step function.
+
 ## What this means for the Collatz work
 
 - The repo's "mean contraction per drop ≈ 0.605" and E[bits shed] ≈ 0.45 are now exact and explained to first order: E[2^(−w)] and E[w] under a 2^(−w)-tilted Sturmian measure.

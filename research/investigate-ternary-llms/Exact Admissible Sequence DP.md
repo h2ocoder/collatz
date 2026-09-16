@@ -41,7 +41,7 @@ Here b(s) = bitlen(3^s) = ⌈s log₂3⌉ and k(s) = s + b(s) is the stopping ti
 | 30 | 0.9762 | 0.0238 |
 | 40 | 0.9884 | 0.0117 |
 
-The p = 12 row is the repo's empirical "89% of odd numbers classified by mod 4096" (`docs/Conjectures/Odd Stopping Time Spectrum.md`), now exact: 0.88964844 = 911/1024. The decay is slow — roughly p^(−1.2) over this range, not exponential — which is what item L3 (Winkler's tail bound) will quantify.
+The p = 12 row is the repo's empirical "89% of odd numbers classified by mod 4096" (`docs/Conjectures/Odd Stopping Time Spectrum.md`), now exact: 0.88964844 = 911/1024. The decay is exponential but slow to settle: −log₂U(p)/p falls from 0.26 at p = 12 to 0.059 at p = 1200, approaching the sharp rate 1 − H(1/log₂3) = 0.0500 bits per bit derived in [[Winkler Tail Bound]] (item L3).
 
 ## Growth of N(s)
 

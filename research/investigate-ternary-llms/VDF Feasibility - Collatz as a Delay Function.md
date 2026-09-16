@@ -61,7 +61,7 @@ A tempting design: prover reports the sequence of dropping-set residues (r, k, s
 
 Any sequential function plus incrementally verifiable computation is a VDF; the cost metric is then *constraints per step* in the proof system. Two observations:
 
-- **The closed-form inverse makes the statement to be proved k-fold smaller.** Proving "v is the parity vector of n" as k Terras steps costs O(k) big-integer operations ≈ O(k²) bit constraints; proving the congruence −r(v)·3^{−s} ≡ n (mod 2^k) costs O(k) big-integer operations *once*, i.e. the same order of work but as one algebraic statement rather than a chain — friendlier to a SNARK. This is the "proof in the structure" the user asked about, made precise: **the structure is Terras's affine formula, and the proof is the congruence.**
+- **The closed-form inverse does *not* make the statement smaller — it makes it parallel.** (Corrected by L14, below.) Proving "v is the parity vector of n" step by step costs k steps × O(k) bits; proving the congruence −r(v)·3^{−s} ≡ n (mod 2^k) costs k running products mod 2^k × O(k) bits — the same order. With fast multiplication both are Õ(k). The difference is that r(v) splits as 3^{s_high}·r_low + 2^{k/2}·r_high, so the verifier's work is a parallel divide-and-conquer of depth O(log² k), while the evaluator's divide-and-conquer (v_high from (3^{s_low}n + r_low)/2^{k/2}) still waits for v_low and has depth Θ(k). "Proof in the structure" made precise: **the structure is Terras's affine formula, and what it buys is parallel verification, not a shorter proof.**
 - **Per step, Collatz is worse than MinRoot.** MinRoot iterates a degree-5 map in a prime field: one constraint per step. A Terras step needs a parity extraction (a bit decomposition of the running value, O(log M) constraints) plus an affine map. The ternary-ness of the gate is irrelevant to arithmetic proof systems (constraints live in a prime field, not in {−1, 0, +1}). So a Collatz-based STARK VDF would pay a log factor per step for no known hardness benefit. Label: **Dead end** as a competitor to MinRoot-style designs unless the parity-vector hardness conjecture turns out to be stronger than algebraic-degree hardness (MinRoot's assumption was attacked in 2023; see the literature note).
 
 ## 7. The puzzle idea — not a delay function
@@ -75,6 +75,17 @@ Any sequential function plus incrementally verifiable computation is a VDF; the 
 - **The genuinely new observation:** the verification statement for k Collatz steps is a single congruence n ≡ −r(v)·3^{−s} (mod 2^k). Whether or not it becomes a primitive, it is the right way to *certify* long Collatz computations (e.g. distributed verification of orbit records), and it is cheap.
 
 What would change the verdict: a proof or strong evidence that computing Φ: n mod 2^k ↦ v has depth Ω(k) (would upgrade "plausible" to "candidate"); or a parallel algorithm for Φ (would kill it — and would be a nice Collatz result in its own right).
+
+### Verdict after the literature survey ([[VDF Literature - Sequential Functions]])
+
+Four facts from the survey sharpen the verdict, mostly downward:
+
+1. **No Collatz VDF, PoSW or serious Collatz cryptographic primitive exists.** What exists is an abandoned Apple Collatz-hash patent (2011), a heuristic one-way-function candidate, two proof-of-work variants and a 2025 "Collatz Hash" ePrint — none with a security definition, reduction or cryptanalysis, and every PoW variant is a parallelisable search puzzle. So the parity-vector congruence of §3 would be new as a *certification* idea; nobody has proposed it as a primitive either.
+2. **The adversary model that shelved MinRoot is exactly the one Collatz fails.** The Ethereum Foundation stopped recommending VDFs on 18 Sept 2023 after Leurent–Mennink–Pietrzak–Rijmen's report; at CRYPTO 2024 Biryukov et al. cut MinRoot's per-step latency from 256 nominal squarings to 6 using 2^54.5 processors (42×), with precomputed tables in the picture. The 2-adic table jump of §4 gives Collatz a **p× latency reduction with 2^p processors (or memory)** — 54× at 2^54 — the same order as the attack that ended MinRoot, and it is built into the map by Terras's theorem, not discovered by cryptanalysis. On the VDF community's current bar, that alone disqualifies raw Collatz iteration.
+3. **Partial parallelism is already proved.** Stérin–Woods (RP 2020, arXiv:2007.06979) show that about half the bits of T^i(x), for i = O(log x), are in NC¹ (fast in parallel); the other half are only known to be in P. No P-completeness result exists. So the sequentiality conjecture of §3 is not merely unstudied — for short runs (k ≲ log n) it is partly false, and the honest form of the conjecture is restricted to k ≫ log n, where the parity word depends on bits produced by earlier steps.
+4. **The polynomial analogue gives what integers cannot, and loses what they have.** Over F₂[x] (Hicks–Mullen–Yucas–Zavislak 2008; Alon–Behajaina–Paran 2024) every polynomial reaches 1 in a *provable* O(deg^1.5) steps — a predictable delay T — but with no carries the k-step map is linear, so there is nothing sequential to protect.
+
+**Final label: Dead end as a VDF; the parity-vector congruence survives as a cheap certification method for long Collatz computations (Verified), and the sequentiality question for k ≫ log n survives as an open complexity problem (Conjecture) that is interesting independently of cryptography.**
 
 ## L13 result: attacking the sequentiality conjecture — no attack found, and the natural tests cannot see one
 
@@ -94,6 +105,28 @@ The forward map's rank grows like ~0.4·2^h — exponential, no low-rank decompo
 **Speculative execution.** With P processors, guess the next log₂P parities in parallel and keep the consistent branch: verified equivalent to the 2^p-table jump, speedup exactly log₂P. No larger speedup was found.
 
 **Status of the conjecture:** open, with no attack and no supporting evidence beyond "nobody knows a shortcut". Two structural measures that might have exposed a parallel algorithm are blind to the one parallel algorithm we know exists (the inverse), so a genuine attack would have to come from the arithmetic — e.g. a way to compose two half-length parity computations using only (s, r) of the first half without its full residue. Label: **Conjecture, untested by any decisive method**.
+
+## L14 result: SNARK cost model — Collatz steps cost 2–86× MinRoot's, for a different kind of hardness
+
+Script: `scripts/snark_cost_model.py`; results: `results/snark_cost_model.json`.
+
+**Verified identities (0 mismatches, k ≤ 4096):** evaluator divide-and-conquer v_high = Φ((3^{s_low}n + r_low)/2^{k/2} mod 2^{k/2}) and verifier divide-and-conquer r(v) = 3^{s_high}r_low + 2^{k/2}r_high, s = s_low + s_high. Consequence: evaluator and verifier have the same *work* (Õ(k) with fast multiplication, Θ(k²/16) with 16-bit limbs); the evaluator's recursion is sequential across halves (depth Θ(k)), the verifier's is not (depth O(log² k)). §6 above has been corrected accordingly: no k-fold smaller statement, only a parallel one.
+
+**Per-step cost of a fixed-width delay step** x → (x + b(2x+1))/2 with b = x mod 2, in an arithmetic circuit over a prime field. The parity bit must be proved consistent with x, which means a bit decomposition (w + 2 constraints) or w/16 lookups into a 2^16 table (+2):
+
+| state width w | bit-decompose | 16-bit lookups | MinRoot | lookups ÷ MinRoot |
+|---|---|---|---|---|
+| 64 | 66 | 6 | 3 | 2.0× |
+| 128 | 130 | 10 | 3 | 3.3× |
+| 256 | 258 | 18 | 3 | 6.0× |
+| 1024 | 1026 | 66 | 3 | 22× |
+| 4096 | 4098 | 258 | 3 | 86× |
+
+MinRoot verifies x_{i+1}⁵ = x_i + y_i in 3 multiplications with no bit operations. Collatz pays for the parity extraction every step; the ternary nature of the gate is irrelevant here (constraints live in a prime field).
+
+**Whole statement, k steps of the k-bit parity vector:** step-by-step k(k/16 + 2) vs congruence ≈ 2k(k/16) + inverse: ratio 0.5 at every k from 2¹⁰ to 2¹⁶ — same order, the congruence slightly *more* constraints, because r(v) is a k-term sum of k-bit numbers.
+
+**Reading.** As a STARK-proved VDF, Collatz-mod-2^w is 2–6× more expensive per step than MinRoot at practical widths (64–256 bits), with the one compensating property that its hardness — if it exists — is *bit-level*, not algebraic: the parity branch is exactly what makes the map non-algebraic over the field, so the algebraic attacks that hit MinRoot's assumption do not transfer. That is a real design difference, not a demonstrated advantage. Label: **Conjecture-grade design note; not a dead end, not a recommendation.** It would become interesting only with (a) a sequentiality argument for the parity-vector map and (b) a proof system with cheap bit operations (binary-field STARKs such as Binius change this table; the literature note should say whether they do).
 
 ## Follow-ups (added to the loop)
 

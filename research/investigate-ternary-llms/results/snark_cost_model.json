@@ -1,0 +1,66 @@
+{
+ "per_step": [
+  {
+   "w": 64,
+   "decompose": 66,
+   "lookup": 6,
+   "minroot": 3,
+   "ratio": 2.0
+  },
+  {
+   "w": 128,
+   "decompose": 130,
+   "lookup": 10,
+   "minroot": 3,
+   "ratio": 3.3333333333333335
+  },
+  {
+   "w": 256,
+   "decompose": 258,
+   "lookup": 18,
+   "minroot": 3,
+   "ratio": 6.0
+  },
+  {
+   "w": 1024,
+   "decompose": 1026,
+   "lookup": 66,
+   "minroot": 3,
+   "ratio": 22.0
+  },
+  {
+   "w": 4096,
+   "decompose": 4098,
+   "lookup": 258,
+   "minroot": 3,
+   "ratio": 86.0
+  }
+ ],
+ "whole": [
+  {
+   "k": 1024,
+   "step": 67584,
+   "congruence": 133888,
+   "ratio": 0.5047801147227533
+  },
+  {
+   "k": 4096,
+   "step": 1056768,
+   "congruence": 2110464,
+   "ratio": 0.5007278020378457
+  },
+  {
+   "k": 16384,
+   "step": 16809984,
+   "congruence": 33615872,
+   "ratio": 0.5000609236018033
+  },
+  {
+   "k": 65536,
+   "step": 268566528,
+   "congruence": 537149440,
+   "ratio": 0.49998474912307456
+  }
+ ],
+ "dc_mismatches": 0
+}

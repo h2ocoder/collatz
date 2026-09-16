@@ -1,0 +1,50 @@
+---
+tags: [index, ternary, llm, collatz]
+status: complete
+created: 2026-09-16
+jira: SCRUM-28
+task: task-1789596416215-h1u4rh
+---
+
+# Investigate Ternary LLMs — Index
+
+**Ticket:** [SCRUM-28](https://alpha36.atlassian.net/browse/SCRUM-28) · **Trigger paper:** Georganas, Heinecke, Dubey, *Breaking the 1.58-bit Barrier for Ternary LLMs*, arXiv:2609.16338 (Sept 2026).
+
+Two questions were asked:
+
+1. The paper lives at log₂ 3 ≈ 1.585 — is there anything in it, or in the trit-to-bit packing it rests on, that the Collatz research can use?
+2. Ternary LLMs are new to us — is there a meaningful way to model a neural network with Collatz computations?
+
+Start with [[Summary - Findings and Open Questions]].
+
+## Notes
+
+### The paper and its mathematics
+- [[Paper - Breaking the 1.58-bit Barrier]] — what the paper does (five-trit packing, BITCOS = 2 − z bits/weight, kernels, results) and the entropy analysis it leaves implicit.
+- [[Trit Packing and log2(3)]] — how many bits t trits need, why 5-in-8 and 41-in-65 are the records, and the continued fraction of log₂ 3 behind them.
+
+### The Collatz bridge
+- [[Collatz Bridge - Trits and Stopping Times]] — **Verified:** odd stopping time = s + (minimum bits to store s trits). Plus the other candidate connections, each labelled Verified / Conjecture / Analogy.
+- [[Ternary Syracuse Circuit]] — **Verified:** an 11-unit network with weights in {−1, 0, +1} that computes the Terras map and stopping times exactly, and shows 2-adic determinism as a receptive-field property.
+
+### Ternary neural networks
+- [[Ternary LLMs - State of the Art]] — what they are, lineage (TWN → BitNet → b1.58 → 2026), training, kernels, hardware, open problems; glossary for non-specialists.
+- [[Neural Networks and Collatz - Prior Work]] — transformers learning Collatz, arithmetic in transformers, undecidability, Collatz cellular automata.
+- [[Research Directions - Ternary Nets x Collatz]] — proposed experiments, ranked.
+
+### Wrap-up
+- [[Summary - Findings and Open Questions]]
+
+## Scripts
+`research/investigate-ternary-llms/scripts/`
+- `stopping_time_trit_bits.py` — exact integer check of T = s + bitlen(3^s) and halvings = bitlen(3^s).
+- `ternary_syracuse_circuit.py` — the ternary threshold network and its test suite.
+- `collatz_packing_check.py` — N(s) = A100982 (three definitions agree), Winkler bounds, prefix-code / Kraft check.
+- `packing_records.py` — record trit packings = upper semiconvergents of log₂3; slope = 2^(−waste); Wagon-constant partial sums.
+- `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.
+
+## Related repo docs (other vault)
+- `docs/Conjectures/Odd Stopping Time Spectrum.md`
+- `docs/Conjectures/Lattice Path Formula.md`
+- `docs/Explorations/Dropping Zeta Spectrum.md` (Sturmian sign rule, Three Distance, CF tower)
+- `docs/Explorations/Collatz Embeddings.md`

@@ -46,7 +46,11 @@ Each stopping class $k(s)$ corresponds to a union of residue classes mod $2^{p(s
 | 6   | 16                            | $2^{10}$          | 12 classes mod 1024 |
 | 7   | 19                            | $2^{12}$          | 30 classes mod 4096 |
 
-The fraction resolved converges to 1: by $2^{12}$, **89%** of odd numbers are classified.
+The fraction resolved converges to 1: by $2^{12}$, **89%** of odd numbers are classified (exactly $911/1024$). The undecided fraction after $p$ low bits decays as $2^{-(1 - H(1/\log_2 3))\,p + o(p)} = 2^{-0.0500\,p}$, so each further bit resolves only about 3.4% of what remains (see `research/investigate-ternary-llms/Winkler Tail Bound.md`).
+
+## Prior Art (added 2026-09-16)
+
+The allowable stopping times $3, 6, 8, 11, 13, 16, 19, 21, \ldots$ are **OEIS A122437** (T. D. Noe, 2006), with the formula $a(n+1) = \lfloor 1 + n + n \log_2 3 \rfloor$ and the comment that $a(n)$ is the number of binary digits of $6^{\,n-1}$ — i.e. $k(s) = \operatorname{bitlen}(6^s) = s + \operatorname{bitlen}(3^s)$, the stopping time is the number of bits needed to store $s$ base-6 digits. The underlying fact goes back to Terras (1976); Wagon (1985) tabulates it. This note's contribution is the derivation and the 2-adic table, not the spectrum itself. Sources: https://oeis.org/A122437 , https://oeis.org/A020914 (the halving count $\lceil s \log_2 3 \rceil$), https://oeis.org/A060445 (dropping time of $2n+1$).
 
 ## Related
 

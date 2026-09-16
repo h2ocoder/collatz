@@ -32,6 +32,9 @@ Start with [[Summary - Findings and Open Questions]].
 - [[Neural Networks and Collatz - Prior Work]] — transformers learning Collatz, arithmetic in transformers, undecidability, Collatz cellular automata.
 - [[Research Directions - Ternary Nets x Collatz]] — proposed experiments, ranked.
 
+### Loop results (see [[LOOP]] for the agenda and progress log)
+- [[Exact Admissible Sequence DP]] — L1: N(s) = A100982 exact to s = 1000; Kraft → 1; Wagon's constant to 12 digits; exact undecided-fraction table.
+
 ### Wrap-up
 - [[Summary - Findings and Open Questions]]
 
@@ -41,6 +44,7 @@ Start with [[Summary - Findings and Open Questions]].
 - `ternary_syracuse_circuit.py` — the ternary threshold network and its test suite.
 - `collatz_packing_check.py` — N(s) = A100982 (three definitions agree), Winkler bounds, prefix-code / Kraft check.
 - `packing_records.py` — record trit packings = upper semiconvergents of log₂3; slope = 2^(−waste); Wagon-constant partial sums.
+- `admissible_dp.py` — L1: exact N(s) DP, Kraft sum, Wagon's constant, undecided fraction by bits.
 - `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.
 
 ## Related repo docs (other vault)

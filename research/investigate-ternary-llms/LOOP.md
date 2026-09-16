@@ -13,7 +13,7 @@ Environment: `C:\repos\collatz\.venv\Scripts\python.exe`, RTX 4080 via CUDA torc
 ## Agenda (ordered by value ÷ cost)
 
 ### Tier 1 — exact number theory, no ML (each < 1 hour)
-- [ ] **L1. Exact N(s) to s = 300 by dynamic programming.** DP over (i, partial sum) with the constraint Σ < i·log₂3 (exact via 3^i > 2^Σ). Reproduce OEIS A100982 to the b-file, compute the Kraft sum Σ N(s)/2^(b(s)−1) → 1, and Wagon's constant Σ k(s)N(s)/2^(b(s)−1) to ≥ 10 digits (target 9.4779555565…). Note: `Exact Admissible Sequence DP.md`.
+- [x] **L1. Exact N(s) to s = 300 by dynamic programming.** DP over (i, partial sum) with the constraint Σ < i·log₂3 (exact via 3^i > 2^Σ). Reproduce OEIS A100982 to the b-file, compute the Kraft sum Σ N(s)/2^(b(s)−1) → 1, and Wagon's constant Σ k(s)N(s)/2^(b(s)−1) to ≥ 10 digits (target 9.4779555565…). Note: `Exact Admissible Sequence DP.md`.
 - [ ] **L2. Is E[w(s)] = 1/2?** With L1's exact densities, compute E[w(s)] = E[bits shed at first drop] to convergence (partial sums gave 0.447). Compare with 1/2 (equidistribution) and with the Sturmian mean of {s log₂3} under the dropping-set measure. Bias ⇒ drops are systematically tighter packings than random. Label the answer.
 - [ ] **L3. Winkler tail bound.** Does (1/s)·C(⌊s log₂3⌋, s−1)·2^(−(b(s)−1)) sum to a finite tail, and how fast? Compute the fraction of odd n undecided by mod 2^p from the bound vs the exact DP vs the repo's empirical 89% at mod 4096. Turn into an explicit "fraction undecided ≤ f(p)" statement.
 - [ ] **L4. Apply OEIS citations to the repo docs.** Add A100982 / A122437 / A122790 / A020914 and Winkler's bounds to `docs/Conjectures/Lattice Path Formula.md` and `Odd Stopping Time Spectrum.md` (a "Prior art" section each, minimal edits). This is the SCRUM-28 follow-up.
@@ -34,3 +34,4 @@ Environment: `C:\repos\collatz\.venv\Scripts\python.exe`, RTX 4080 via CUDA torc
 
 ## Progress log
 <!-- newest first; one entry per iteration: date/time, item, result in one or two lines, files touched -->
+- **2026-09-16 (L1)** — DP for N(s) exact to s = 1000 in 0.5 s; matches OEIS A100982 b-file at n = 20, 30, 50, 100, 200 (all digits). Kraft sum → 1 (1 − 4×10⁻²⁸ at s = 1000). Wagon's constant = 9.477955556559 (12 digits, matches A122790). E[s] = 3.4927, E[halvings] = 5.9853, E[waste] = 0.4496. Repo's "89% by mod 4096" is exactly 911/1024. Files: `scripts/admissible_dp.py`, `results/admissible_dp.json`, `Exact Admissible Sequence DP.md`. Label: Verified.

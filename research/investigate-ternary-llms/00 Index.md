@@ -39,6 +39,10 @@ Start with [[Summary - Findings and Open Questions]].
 - [[Waste Bias at First Drop]] — L2: E[bits shed at first drop] = 0.4496 < 1/2; the dropping-set measure is 2^(−w)-tilted (Gibbs at ln 2 per wasted bit); residual Sturmian dependence of N(s) is open.
 - [[Exact Admissible Sequence DP]] — L1: N(s) = A100982 exact to s = 1000; Kraft → 1; Wagon's constant to 12 digits; exact undecided-fraction table.
 
+### Verifiable delay (user question, 2026-09-16)
+- [[VDF Feasibility - Collatz as a Delay Function]] — the affine/2-adic structure is a two-sided shortcut; the only one-sided asymmetry is the closed-form inverse of the parity-vector map (verifier: one congruence). Sloth-class at best.
+- [[VDF Literature - Sequential Functions]] — definitions, constructions (Wesolowski, Pietrzak, Sloth, MinRoot), attacks, Collatz-in-cryptography search, F₂[x] analogue.
+
 ### Wrap-up
 - [[Summary - Findings and Open Questions]]
 
@@ -53,6 +57,7 @@ Start with [[Summary - Findings and Open Questions]].
 - `winkler_tail.py` — L3: Winkler bounds to s = 1000, U(p) exact and bounded, N/upper vs waste.
 - `ternary_classifier.py` — L5/L6: BitNet-style ternary MLP on low bits → dropping set; interpretability and learning-order analysis (GPU).
 - `minimal_circuit.py`, `verify_minimal_circuit.py` — L10: exhaustive search for the minimal ternary Terras transducer and its end-to-end check.
+- `parity_vector_vdf.py` — VDF: closed-form inverse of the parity-vector map, table tradeoff, ANF degrees, evaluator/verifier timing.
 - `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.
 
 ## Related repo docs (other vault)

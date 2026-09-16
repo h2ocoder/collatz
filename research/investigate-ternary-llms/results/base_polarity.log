@@ -5,3 +5,4 @@ device=cuda; steps=20000; bases=[2, 3, 6, 16, 24]; tasks=['one', 'long']
 == task one, base 2
     one base  2 step  1000 loss 0.0881 test exact-match 0.6768 (56s)
     one base  2 step  2000 loss 0.0187 test exact-match 0.9407 (130s)
+    one base  2 step  3000 loss 0.0037 test exact-match 0.9746 (208s)

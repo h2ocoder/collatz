@@ -76,6 +76,25 @@ Any sequential function plus incrementally verifiable computation is a VDF; the 
 
 What would change the verdict: a proof or strong evidence that computing Φ: n mod 2^k ↦ v has depth Ω(k) (would upgrade "plausible" to "candidate"); or a parallel algorithm for Φ (would kill it — and would be a nice Collatz result in its own right).
 
+## L13 result: attacking the sequentiality conjecture — no attack found, and the natural tests cannot see one
+
+Script: `scripts/parity_vector_rank.py`; results: `results/parity_vector_rank.json`.
+
+**Communication rank.** Split the input bits 0…j of vⱼ into a low half A and a high half B and take the GF(2) rank of M[A][B] = vⱼ(A + 2^h B). A small rank would mean vⱼ = ⊕ᵢ fᵢ(A)gᵢ(B) with few terms — a divide-and-conquer evaluation from the two halves in parallel.
+
+| j | h | forward rank | inverse rank (control) | full (2^h) |
+|---|---|---|---|---|
+| 9 | 5 | 17 | 17 | 32 |
+| 13 | 7 | 65 | 57 | 128 |
+| 17 | 9 | 234 | 194 | 512 |
+| 21 | 11 | 814 | 665 | 2048 |
+
+The forward map's rank grows like ~0.4·2^h — exponential, no low-rank decomposition. **But the closed-form inverse, which is a log-depth computation, has the same growth** (665 vs 814 at j = 21; identical ranks over GF(2) and over ℚ). So communication rank, like algebraic degree (§3), is *not* a witness of depth for this pair of maps. A split with a tiny low part (A = bits 0…2) has rank 7 of 8 for all j tested: vⱼ does not factor through a small summary of the low bits either.
+
+**Speculative execution.** With P processors, guess the next log₂P parities in parallel and keep the consistent branch: verified equivalent to the 2^p-table jump, speedup exactly log₂P. No larger speedup was found.
+
+**Status of the conjecture:** open, with no attack and no supporting evidence beyond "nobody knows a shortcut". Two structural measures that might have exposed a parallel algorithm are blind to the one parallel algorithm we know exists (the inverse), so a genuine attack would have to come from the arithmetic — e.g. a way to compose two half-length parity computations using only (s, r) of the first half without its full residue. Label: **Conjecture, untested by any decisive method**.
+
 ## Follow-ups (added to the loop)
 
 - **L13.** Try to *break* the sequentiality conjecture: search for a divide-and-conquer or NC algorithm for the parity vector (e.g. via the mixed-radix form −n·3^s ≡ Σ 2^i 3^{ones after i}); test whether v for the top half of a block can be computed from partial information about the bottom half. A negative result is evidence; a positive one is a theorem.

@@ -57,6 +57,7 @@ Start with [[Summary - Findings and Open Questions]].
 - `winkler_tail.py` — L3: Winkler bounds to s = 1000, U(p) exact and bounded, N/upper vs waste.
 - `ternary_classifier.py` — L5/L6: BitNet-style ternary MLP on low bits → dropping set; interpretability and learning-order analysis (GPU).
 - `minimal_circuit.py`, `verify_minimal_circuit.py` — L10: exhaustive search for the minimal ternary Terras transducer and its end-to-end check.
+- `parity_vector_rank.py` — L13: communication-rank test of the parity-vector map vs its inverse; speculative-execution bound.
 - `parity_vector_vdf.py` — VDF: closed-form inverse of the parity-vector map, table tradeoff, ANF degrees, evaluator/verifier timing.
 - `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.
 

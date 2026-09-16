@@ -33,6 +33,7 @@ Start with [[Summary - Findings and Open Questions]].
 - [[Research Directions - Ternary Nets x Collatz]] — proposed experiments, ranked.
 
 ### Loop results (see [[LOOP]] for the agenda and progress log)
+- [[Experiment A - Ternary Dropping-Set Classifier]] — L5/L6: ternary MLP reaches the Bayes ceiling but its weights are NOT residue tests; quantisation kills the deepest classes first (needs 4× width); learning order = bits needed.
 - [[Winkler Tail Bound]] — L3: undecided fraction after p bits is 2^(−0.05 p) (rate 1 − H(1/log₂3), sharp); N(s) equals the cycle-lemma count C(m,s−1)/s exactly at the record trit packings.
 - [[Waste Bias at First Drop]] — L2: E[bits shed at first drop] = 0.4496 < 1/2; the dropping-set measure is 2^(−w)-tilted (Gibbs at ln 2 per wasted bit); residual Sturmian dependence of N(s) is open.
 - [[Exact Admissible Sequence DP]] — L1: N(s) = A100982 exact to s = 1000; Kraft → 1; Wagon's constant to 12 digits; exact undecided-fraction table.
@@ -49,6 +50,7 @@ Start with [[Summary - Findings and Open Questions]].
 - `admissible_dp.py` — L1: exact N(s) DP, Kraft sum, Wagon's constant, undecided fraction by bits.
 - `waste_bias.py` — L2: conditional mean waste by s-window, 2^(−w) prediction, smoothness of N(s)/3^s.
 - `winkler_tail.py` — L3: Winkler bounds to s = 1000, U(p) exact and bounded, N/upper vs waste.
+- `ternary_classifier.py` — L5/L6: BitNet-style ternary MLP on low bits → dropping set; interpretability and learning-order analysis (GPU).
 - `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.
 
 ## Related repo docs (other vault)

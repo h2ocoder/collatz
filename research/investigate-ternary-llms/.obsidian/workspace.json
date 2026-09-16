@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Summary - Findings and Open Questions.md",
+                "file": "LOOP.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Summary - Findings and Open Questions"
+              "title": "LOOP"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Summary - Findings and Open Questions.md",
+                "file": "LOOP.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Summary - Findings and Open Questions.md",
+                "file": "LOOP.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Summary - Findings and Open Questions.md",
+                "file": "LOOP.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,28 +190,30 @@
   },
   "active": "62f06a8bdaced07d",
   "lastOpenFiles": [
+    "Experiment A - Ternary Dropping-Set Classifier.md",
+    "Experiment A - Ternary Dropping-Set Classifier.md.tmp.7324.d4534887152d",
+    "Trit Packing and log2(3).md",
+    "scripts/__pycache__/ternary_classifier.cpython-312.pyc",
+    "scripts/__pycache__",
+    "results/ternary_classifier.json",
+    "Ternary Syracuse Circuit.md",
+    "Ternary LLMs - State of the Art.md",
+    "Summary - Findings and Open Questions.md",
+    "Research Directions - Ternary Nets x Collatz.md",
+    "Paper - Breaking the 1.58-bit Barrier.md",
+    "scripts/ternary_classifier.py",
+    "scripts/ternary_classifier.py.tmp.7324.fd46d98e41f7",
+    "Exact Admissible Sequence DP.md",
+    "Collatz Bridge - Trits and Stopping Times.md",
+    "LOOP.md",
     "Waste Bias at First Drop.md.tmp.7324.9c46b592efde",
     "Winkler Tail Bound.md",
     "Winkler Tail Bound.md.tmp.7324.7042d4a33ae4",
     "Exact Admissible Sequence DP.md.tmp.7324.fd6ec229c461",
     "scripts/winkler_tail.py.tmp.7324.d94e741e471b",
-    "results/winkler_tail.json",
-    "scripts/winkler_tail.py",
-    "scripts/winkler_tail.py.tmp.7324.136923b98e29",
     "Waste Bias at First Drop.md",
-    "Waste Bias at First Drop.md.tmp.7324.2a05bca5fb56",
-    "results/waste_bias.json",
-    "scripts/waste_bias.py",
-    "scripts/waste_bias.py.tmp.7324.a61da71c8587",
-    "Exact Admissible Sequence DP.md",
-    "LOOP.md",
-    "Collatz Bridge - Trits and Stopping Times.md",
     "Neural Networks and Collatz - Prior Work.md",
-    "Research Directions - Ternary Nets x Collatz.md",
-    "Ternary Syracuse Circuit.md",
     "00 Index.md",
-    "Ternary LLMs - State of the Art.md",
-    "Summary - Findings and Open Questions.md",
     "_draft_bridge_agentA.md"
   ]
 }

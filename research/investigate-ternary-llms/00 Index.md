@@ -33,6 +33,7 @@ Start with [[Summary - Findings and Open Questions]].
 - [[Research Directions - Ternary Nets x Collatz]] — proposed experiments, ranked.
 
 ### Loop results (see [[LOOP]] for the agenda and progress log)
+- [[Waste Bias at First Drop]] — L2: E[bits shed at first drop] = 0.4496 < 1/2; the dropping-set measure is 2^(−w)-tilted (Gibbs at ln 2 per wasted bit); residual Sturmian dependence of N(s) is open.
 - [[Exact Admissible Sequence DP]] — L1: N(s) = A100982 exact to s = 1000; Kraft → 1; Wagon's constant to 12 digits; exact undecided-fraction table.
 
 ### Wrap-up
@@ -45,6 +46,7 @@ Start with [[Summary - Findings and Open Questions]].
 - `collatz_packing_check.py` — N(s) = A100982 (three definitions agree), Winkler bounds, prefix-code / Kraft check.
 - `packing_records.py` — record trit packings = upper semiconvergents of log₂3; slope = 2^(−waste); Wagon-constant partial sums.
 - `admissible_dp.py` — L1: exact N(s) DP, Kraft sum, Wagon's constant, undecided fraction by bits.
+- `waste_bias.py` — L2: conditional mean waste by s-window, 2^(−w) prediction, smoothness of N(s)/3^s.
 - `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.
 
 ## Related repo docs (other vault)

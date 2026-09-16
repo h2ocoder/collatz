@@ -39,7 +39,7 @@ as a carry transducer (a finite-state machine reading bits). Per time step the l
 
 The output bit stream is delayed by one position — that single delay *is* the division by 2 (the low bit of n + p(2n+1) is always 0). Stacking K copies of this layer computes T^K(n). A three-unit LSB-first comparator (`b_gt_a`, `a_gt_b`, `lt_update`, weights (∓1, ±1) and (1, −1, 1)) reports the first K with T^K(n) < n. Converting Terras steps to Collatz steps: each odd step counts twice, so stopping time = K + (number of odd steps).
 
-Eleven distinct units, 27 stored weights, all in {−1, +1}, none zero. (BITCOS from [[Paper - Breaking the 1.58-bit Barrier]] would gain nothing here: zero density z = 0.)
+Eleven distinct units, 27 *wired* weights, all in {−1, +1}. Read as a dense weight matrix over every available input, the 8-unit layer has 48 zeros in 68 weights (zero density 0.71). **Update (L10):** exhaustive search shows the Terras layer can be done in **5 units** and not fewer — see [[Minimal Ternary Circuit]].
 
 ## What was verified
 

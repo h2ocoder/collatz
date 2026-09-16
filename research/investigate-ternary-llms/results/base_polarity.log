@@ -1,0 +1,7 @@
+C:\repos\collatz.worktrees\research\SCRUM-28_InvestigateTernaryLLMs-2ud6\research\investigate-ternary-llms\scripts\base_polarity.py:169: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:837.)
+  curve.append((step, float(loss), acc))
+device=cuda; steps=20000; bases=[2, 3, 6, 16, 24]; tasks=['one', 'long']
+== task one, base 2
+    one base  2 step  1000 loss 0.0881 test exact-match 0.6768 (56s)
+    one base  2 step  2000 loss 0.0187 test exact-match 0.9407 (130s)

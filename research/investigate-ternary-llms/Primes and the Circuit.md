@@ -64,6 +64,36 @@ For p | n, dest(n) = (3^s n + C_r)/2^b ≡ C_r·2^{−b} (mod p): **the destinat
 
 **Q6 (speculative).** *Is there any factorisation-shaped input the circuit favours?* The only known ones are 2-adic (§2, §3). A candidate family with mixed structure: n = 2^k·m − 1 for odd m (k trailing ones *and* an odd cofactor); n = (4^j − 1)/3 (alternating bits, the repo's r_k = (4^⌈k/2⌉ − 1)/3 "drop depth" numbers). Enumerate the classes of such families exactly as functions of (k, m) or j; anything that is not explained by n mod 2^b alone would contradict §1 and is therefore a bug-check as much as a question.
 
+## 8. Q1 and Q2 answered (2026-09-17)
+
+Script `scripts/primes_q1_q2.py`; results `results/primes_q1_q2.json`.
+
+### Q2 is a theorem — Verified at mod 2¹⁶, proof in three lines
+
+**Theorem (class multiplication).** Let U = {n ≡ 1 mod 4} ⊂ (Z/2^b Z)^*, the index-2 subgroup. Set₃ *is* U. Hence: (i) class 3 × class 3 = class 3; (ii) any two classes > 3 multiply to class 3 (since (3 mod 4)² ≡ 1); (iii) for q of class 3 and any n, q·n ranges uniformly over the coset n·U = {m ≡ n mod 4}, so class(q·n) is distributed as a **uniform 3-mod-4 residue, independent of n's class**. Checked at b = 16 over all 11 decidable classes: 3×3 → 3 exactly; all 100 higher×higher cells → 3 exactly; every 3×higher row matches the unconditional 3-mod-4 distribution to within 0.0022 (sampling noise ≈ 0.002). *The dropping class of a product depends on the factors' classes only through their mod-4 bits.* This is the general Multiplication Symmetry Theorem; the repo's ×3 case is the row q ≡ 3 mod 4.
+
+### Q1: p-survival at the first drop is an explicit constant, not 1/p — Verified
+
+For p | n, p | dest(n) ⟺ p | r(v), where r(v) = Σ_{vᵢ=1} 2^i 3^(ones after i) is the parity-vector intercept of n's residue class. So the probability that a multiple of p is still a multiple of p after its first drop is Σ{density of classes with p | r(v)} — a fixed number per p, and the heavy classes have small, specific intercepts:
+
+| class | residue | parity word | r(v) | density | factors |
+|---|---|---|---|---|---|
+| Set₃ | 1 mod 4 | 10 | **1** | 1/2 | — |
+| Set₆ | 3 mod 16 | 1100 | **5** | 1/8 | 5 |
+| Set₈ | 11 mod 32 | 11010 | **23** | 1/16 | 23 |
+| Set₈ | 23 mod 32 | 11100 | **19** | 1/16 | 19 |
+| Set₁₁ | 7, 15, 59 mod 128 | | 73, 65, 85 | 1/64 each | 73; 5·13; 5·17 |
+| Set₁₃ | 7 classes mod 256 | | 251, 259, 211, 319, 227, 283, 287 | 1/128 each | 251; 7·37; 211; 11·29; 227; 283; 7·41 |
+
+Resulting survival fractions (density-weighted over the 790 classes decidable at 16 bits) vs the naive 1/p:
+
+| p | 3 | 5 | 7 | 11 | 13 | 17 | 19 | 23 | 29 | 31 | 47 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| survival | **0** | **0.190** | 0.030 | 0.014 | 0.022 | 0.022 | **0.075** | **0.071** | 0.011 | 0.004 | 0.002 |
+| 1/p | 0.333 | 0.200 | 0.143 | 0.091 | 0.077 | 0.059 | 0.053 | 0.043 | 0.034 | 0.032 | 0.021 |
+
+Reading: 5 survives its first drop 19% of the time because 5 is the intercept of Set₆; 19 and 23 survive 7% because they *are* the two Set₈ intercepts; 7 survives 3% because it first divides an intercept in Set₁₃; 3 never (the 3-adic lock is the p = 3 row of this table). Unweighted, the counts sit near 1/p (e.g. 115/790 for p = 7) — the intercepts are "random" mod p across classes, but the density weighting concentrates everything on a dozen small numbers. **So there is a p-adic lock landscape, and it is explicit: a prime's survival probability at the first drop is the density of the residue classes whose intercept it divides.** The sequence of intercepts 1, 5, 19, 23, 65, 73, 85, 211, 227, 251, 259, 283, 287, … is not in OEIS (searched 2026-09-17); the r(v) formula is Terras's, the sequence as an object appears unlisted.
+
 ## 7. What this says
 
 The circuit is a 2-adic instrument, and factorisation is an odd-prime notion; by CRT they do not talk, and by gcd(3n+1, n) = 1 the map erases factorisation every odd step. Everything factorisation-shaped that *does* reach the circuit is a statement about n mod 2^b in disguise — trailing ones (2^k | n+1), squares (≡ 1 mod 8), the mod-4 wall in products. Those are exact, small, and already provable. The one place odd primes genuinely re-enter is the intercept C_r deciding whether p survives the first drop (Q1), which is the same hidden variable the repo already found carrying all mod-p correlations. So the honest recommendation: do Q1–Q3 (a day, all exact, likely a short note generalising the Multiplication Symmetry Theorem); treat Q5 as a control experiment; do not expect factorisation to constrain orbits.

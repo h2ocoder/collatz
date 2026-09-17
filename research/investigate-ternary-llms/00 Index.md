@@ -64,6 +64,7 @@ Start with [[Summary - Findings and Open Questions]].
 - `snark_cost_model.py` — L14: divide-and-conquer identities for evaluator/verifier; constraints per step vs MinRoot.
 - `parity_vector_rank.py` — L13: communication-rank test of the parity-vector map vs its inverse; speculative-execution bound.
 - `parity_vector_vdf.py` — VDF: closed-form inverse of the parity-vector map, table tradeoff, ANF degrees, evaluator/verifier timing.
+- `probe_kkp.py` — L8: per-layer linear probes for (k,k′) at the SEP token.
 - `base_polarity.py`, `stratify_by_valuation.py` — L7: transformer base sweep (GPU) and stratification by v₂(3n+1) / (k,k′).
 - `tag_system.py` — Collatz 2-tag system simulation: round lengths, tag time vs orbit sum, affine check, read words.
 - `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.

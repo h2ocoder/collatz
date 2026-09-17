@@ -80,6 +80,26 @@ Base 6, same data and steps, 2 / 4 / 8 layers (`results/base_polarity_layers.jso
 
 Depth moves the cutoff at the low end (2 → 4 layers doubles v_max and adds a subgroup) and keeps unlocking subgroups on the long step (8 layers adds (2,1) and half of (1,3)/(3,1)). But the one-step cutoff at v = 4 does **not** move from 4 to 8 layers, with v ≥ 5 being 4.4% of the data — the same shares base 2 learned perfectly. So the pure "passes = layers" reading is wrong; depth is necessary but something else (plausibly optimisation on rare compositions of base-6 carries — a curriculum question) caps the one-step model. Label: **depth-limited at small depth (Verified); v = 4 ceiling unexplained (open).**
 
+## L8 — the models represent (k, k′) before they compute anything — Verified
+
+Linear probes (multinomial logistic regression, L-BFGS, standardized features) on the residual stream at the SEP token — every input digit read, no output emitted — for k (trailing 1-bits, capped at 6), k′, and the joint class (k, k′). Since the long step is affine within each (k, k′) class with intercept C = (3^k − 2^k)/2^(k+k′), decoding (k, k′) is decoding the affine map. Train 16,384 fresh n, test the usual 4,096. Script `scripts/probe_kkp.py`, results `results/probe_kkp.json`.
+
+| model | task exact-match | k, by layer (emb, L1, L2, …) | k′ at last layer | (k,k′) at last layer | majority / shuffled control |
+|---|---|---|---|---|---|
+| base 16, 4 layers | 93.1% | 0.50, **1.00**, 1.00, 1.00, 1.00 | 0.998 | **0.998** | 0.25 / 0.25 |
+| base 2, 4 layers | 87.7% | 0.50, 0.96, **1.00**, 1.00, 1.00 | 0.987 | 0.994 | 0.25 / 0.25 |
+| base 6, 8 layers | 56.8% | 0.50, 0.51, 0.75, 0.86, 0.92, 0.97, 0.98, 1.00, 1.00 | 0.932 | **0.936** | 0.25 / 0.25 |
+| base 6, 2 layers | 22.9% | 0.50, 0.88, 0.92 | 0.836 | **0.812** | 0.25 / 0.26 |
+
+(The 4-layer base-6 long-step checkpoint was overwritten by the layer test; the 8- and 2-layer models are probed instead — and they are the more informative cases.)
+
+Three readings:
+1. **The affine class is computed first, in the encoder half of the computation.** In base 16 it is linearly present after one layer; in base 2 after two. Charton–Narayanan's "models classify inputs by residues mod 2^p" is here made concrete: the residue class (k, k′) is a linear direction in the residual stream at the SEP position.
+2. **"Knows more than it can tell", quantified.** The 2-layer base-6 model outputs the right answer for 23% of inputs but linearly encodes the right (k, k′) for 81%; the 8-layer one, 57% vs 94%. The bottleneck is executing the affine map on the digits, not identifying which map to execute. This is the mechanism behind their observation that failures are correct arithmetic with the wrong loop length.
+3. **Base 6 counts trailing digits one layer at a time.** k-decodability rises 0.51 → 0.75 → 0.86 → 0.92 → 0.97 → … across the eight layers — the "one pass per digit" picture from the layer test, now visible inside the network rather than inferred from accuracy cutoffs. In base 16, k needs one layer because a hex digit holds four trailing bits at once.
+
+Label: **Verified** (probes with chance-level controls). It also settles the design question for L9: the right stratification for ternary-vs-full-precision is by (k, k′), and the right *probe* is at SEP — quantisation damage can be located as "class still decodable but map not executed" vs "class lost".
+
 ## What it means for the repo
 
 1. **A learner's ceiling on a Collatz task is P(v ≤ v_max(base)):** how many low bits the representation exposes cheaply. This is 2-adic determinism (`docs/Conjectures/Odd Stopping Time Spectrum.md`) seen from inside a network — the same fact that made the ternary MLP of [[Experiment A - Ternary Dropping-Set Classifier]] learn classes in order of bits needed.

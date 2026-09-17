@@ -33,6 +33,7 @@ Start with [[Summary - Findings and Open Questions]].
 - [[Research Directions - Ternary Nets x Collatz]] — proposed experiments, ranked.
 
 ### Loop results (see [[LOOP]] for the agenda and progress log)
+- [[Experiment B - Base Polarity]] — L7: transformer accuracy by base on one-step and long-step tasks = cutoffs on the 2-adic ladder (base 3 learns only the Terras map); Charton's polarity reproduced; base 6 not special.
 - [[Minimal Ternary Circuit]] — L10: the Terras layer needs exactly 5 ternary threshold units (exhaustive, verified end-to-end); optimal circuit uses zeros and is not human-readable.
 - [[Experiment A - Ternary Dropping-Set Classifier]] — L5/L6: ternary MLP reaches the Bayes ceiling but its weights are NOT residue tests; quantisation kills the deepest classes first (needs 4× width); learning order = bits needed.
 - [[Winkler Tail Bound]] — L3: undecided fraction after p bits is 2^(−0.05 p) (rate 1 − H(1/log₂3), sharp); N(s) equals the cycle-lemma count C(m,s−1)/s exactly at the record trit packings.
@@ -60,6 +61,7 @@ Start with [[Summary - Findings and Open Questions]].
 - `snark_cost_model.py` — L14: divide-and-conquer identities for evaluator/verifier; constraints per step vs MinRoot.
 - `parity_vector_rank.py` — L13: communication-rank test of the parity-vector map vs its inverse; speculative-execution bound.
 - `parity_vector_vdf.py` — VDF: closed-form inverse of the parity-vector map, table tradeoff, ANF degrees, evaluator/verifier timing.
+- `base_polarity.py`, `stratify_by_valuation.py` — L7: transformer base sweep (GPU) and stratification by v₂(3n+1) / (k,k′).
 - `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.
 
 ## Related repo docs (other vault)

@@ -56,16 +56,16 @@ $$\operatorname{dest}(n) = \frac{3^s}{2^{b(s)}}\,n + C, \qquad \frac{3^s}{2^{b(s
 
 **The asymptotic contraction of a first drop is 2^(−waste): the orbit sheds exactly the bits the packing wastes.**
 
-| s | b(s) | k | w(s) | slope 3^s/2^b | note |
-|---|---|---|---|---|---|
-| 1 | 2 | 3 | 0.4150 | 0.7500 | the naive 2-bit format |
-| 3 | 5 | 8 | 0.2451 | 0.84375 | bitnet.cpp TL2-style 3-in-5 |
-| 5 | 8 | 13 | **0.0752** | **0.94921875 = 243/256** | **five trits per byte** (llama.cpp TQ1_0) |
-| 12 | 20 | 32 | 0.9805 | 0.5068 | Pythagorean comma: 12 trits *overflow* 19 bits |
-| 17 | 27 | 44 | 0.0556 | 0.9622 | next record after the byte |
-| 41 | 65 | 106 | 0.0165 | 0.9886 | record |
-| 53 | 85 | 138 | 0.9970 | 0.5011 | 53-EDO overflow |
-| 306 | 485 | 791 | 0.0015 | 0.9990 | best record under 400 trits |
+| s   | b(s) | k   | w(s)       | slope 3^s/2^b            | note                                           |
+| --- | ---- | --- | ---------- | ------------------------ | ---------------------------------------------- |
+| 1   | 2    | 3   | 0.4150     | 0.7500                   | the naive 2-bit format                         |
+| 3   | 5    | 8   | 0.2451     | 0.84375                  | bitnet.cpp TL2-style 3-in-5                    |
+| 5   | 8    | 13  | **0.0752** | **0.94921875 = 243/256** | **five trits per byte** (llama.cpp TQ1_0)      |
+| 12  | 20   | 32  | 0.9805     | 0.5068                   | Pythagorean comma: 12 trits *overflow* 19 bits |
+| 17  | 27   | 44  | 0.0556     | 0.9622                   | next record after the byte                     |
+| 41  | 65   | 106 | 0.0165     | 0.9886                   | record                                         |
+| 53  | 85   | 138 | 0.9970     | 0.5011                   | 53-EDO overflow                                |
+| 306 | 485  | 791 | 0.0015     | 0.9990                   | best record under 400 trits                    |
 
 Record lows of w (s = 1, 3, 5, 17, 29, 41, 94, 147, 200, 253, 306, …) are the *upper* semiconvergents of log₂3 = the record trit packings; near-maxima (s = 2, 7, 12, 53, 665) are the *lower* convergents, where 3^s just fails to fit. So the repo's two families of "special s" — the packing records and the musical commas — are the two sides of one continued fraction: **lower convergents = orbits that barely fail to drop one halving earlier; upper = orbits that barely drop.** Set₁₃'s slope 243/256 (checked: 7 residue classes mod 256, 0 slope violations for n < 200,000) *is* the five-trit byte, and 3¹²/2¹⁹ *is* "12 trits do not fit in 19 bits" — which is why Set₃₂ contracts by ~0.507 rather than ~1.
 

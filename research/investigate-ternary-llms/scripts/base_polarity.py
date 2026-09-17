@@ -188,16 +188,24 @@ if __name__ == "__main__":
     ap.add_argument("--steps", type=int, default=8000)
     ap.add_argument("--bases", default="2,3,6,16,24")
     ap.add_argument("--tasks", default="one,long")
+    ap.add_argument("--layers", default="4", help="comma list of layer counts")
+    ap.add_argument("--tag", default="", help="suffix for the results/checkpoint names")
     a = ap.parse_args()
     bases = [int(b) for b in a.bases.split(",")]
     tasks = a.tasks.split(",")
-    print(f"device={DEV}; steps={a.steps}; bases={bases}; tasks={tasks}")
+    layers = [int(x) for x in a.layers.split(",")]
+    print(f"device={DEV}; steps={a.steps}; bases={bases}; tasks={tasks}; layers={layers}")
     out = []
-    for task in tasks:
-        for base in bases:
-            print(f"== task {task}, base {base}")
-            out.append(run(task, base, a.steps))
-            json.dump(out, open(RESULTS / "base_polarity.json", "w"), indent=1)
+    for L in layers:
+        for task in tasks:
+            for base in bases:
+                print(f"== task {task}, base {base}, layers {L}")
+                r = run(task, base, a.steps, L=L)
+                r["layers"] = L
+                if a.tag:  # keep the main sweep's checkpoints intact
+                    (CKPT / f"{task}_b{base}.pt").rename(CKPT / f"{task}_b{base}_L{L}{a.tag}.pt")
+                out.append(r)
+                json.dump(out, open(RESULTS / f"base_polarity{a.tag}.json", "w"), indent=1)
     print("\nSUMMARY exact-match on 4096 held-out odd n < 2^24")
     print("  base   one-step   long-step")
     for base in bases:

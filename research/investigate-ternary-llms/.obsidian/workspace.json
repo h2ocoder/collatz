@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Ternary LLMs - State of the Art.md",
+                "file": "Research Directions - Ternary Nets x Collatz.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Ternary LLMs - State of the Art"
+              "title": "Research Directions - Ternary Nets x Collatz"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Ternary LLMs - State of the Art.md",
+                "file": "Research Directions - Ternary Nets x Collatz.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Ternary LLMs - State of the Art.md",
+                "file": "Research Directions - Ternary Nets x Collatz.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Ternary LLMs - State of the Art.md",
+                "file": "Research Directions - Ternary Nets x Collatz.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,32 +190,32 @@
   },
   "active": "62f06a8bdaced07d",
   "lastOpenFiles": [
+    "Experiment B - Base Polarity.md",
+    "Experiment B - Base Polarity.md.tmp.7324.66dd8b91fb34",
+    "results/base_polarity_layers.log",
+    "scripts/base_polarity.py.tmp.7324.e4510df9249f",
+    "Experiment A - Ternary Dropping-Set Classifier.md",
+    "Collatz Bridge - Trits and Stopping Times.md",
+    "results/checkpoints/long_b24.pt",
+    "Ternary LLMs - State of the Art.md",
+    "Summary - Findings and Open Questions.md",
+    "Research Directions - Ternary Nets x Collatz.md",
+    "Waste Bias at First Drop.md",
+    "Winkler Tail Bound.md",
+    "Minimal Ternary Circuit.md",
+    "results/checkpoints/long_b16.pt",
+    "results/checkpoints/long_b3.pt",
+    "Ternary Syracuse Circuit.md",
+    "results/checkpoints/long_b2.pt",
     "results/stratify_by_valuation.json",
     "scripts/stratify_by_valuation.py",
     "scripts/stratify_by_valuation.py.tmp.7324.d23f37b27118",
-    "scripts/__pycache__/base_polarity.cpython-312.pyc",
-    "results/checkpoints/one_b24.pt",
-    "results/checkpoints/one_b16.pt",
-    "results/checkpoints/one_b6.pt",
-    "results/checkpoints/one_b3.pt",
-    "VDF Feasibility - Collatz as a Delay Function.md.tmp.7324.0328e13141fc",
-    "VDF Feasibility - Collatz as a Delay Function.md.tmp.7324.22e2462ce338",
-    "VDF Feasibility - Collatz as a Delay Function.md.tmp.7324.29de8da4244c",
     "VDF Literature - Sequential Functions.md",
     "VDF Feasibility - Collatz as a Delay Function.md",
-    "Minimal Ternary Circuit.md",
-    "Summary - Findings and Open Questions.md",
     "LOOP.md",
-    "Experiment A - Ternary Dropping-Set Classifier.md",
     "Exact Admissible Sequence DP.md",
-    "Collatz Bridge - Trits and Stopping Times.md",
     "Trit Packing and log2(3).md",
-    "Ternary Syracuse Circuit.md",
-    "Ternary LLMs - State of the Art.md",
-    "Research Directions - Ternary Nets x Collatz.md",
     "Paper - Breaking the 1.58-bit Barrier.md",
-    "Winkler Tail Bound.md",
-    "Waste Bias at First Drop.md",
     "Neural Networks and Collatz - Prior Work.md",
     "00 Index.md",
     "_draft_bridge_agentA.md"

@@ -190,6 +190,7 @@
   },
   "active": "62f06a8bdaced07d",
   "lastOpenFiles": [
+    "Summary - Findings and Open Questions.md.tmp.7324.4d1e83d8d7bc",
     "Summary - Findings and Open Questions.md.tmp.7324.39df2fe5d989",
     "Experiment E - Ternary RNN Rediscovers the Transducer.md",
     "Experiment E - Ternary RNN Rediscovers the Transducer.md.tmp.7324.8c3993298966",
@@ -201,7 +202,6 @@
     "scripts/rnn_state_match.py",
     "scripts/rnn_state_match.py.tmp.7324.12ee1d79d810",
     "results/ternary_rnn_seed2.log",
-    "results/checkpoints/ternary_rnn_H64_H64_s0.pt",
     "Experiment B - Base Polarity.md",
     "Experiment D - Quantization by Subgroup.md",
     "Minimal Ternary Circuit.md",

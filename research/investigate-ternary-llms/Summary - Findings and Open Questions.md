@@ -18,8 +18,8 @@ The Lattice Path Formula sequence N(s) = 1, 1, 2, 3, 7, 12, 30, 85, … is **A10
 ### 2. N(s) equals the cycle-lemma count exactly at the record trit packings — Verified to s = 1000, iff Conjecture
 Winkler's upper bound C(⌊s log₂3⌋, s−1)/s is attained exactly at s = 1, 3, 5, 17, 29, 41, 94, 147, 200, 253, 306, 971 — the upper semiconvergents of log₂3 — and at no other s ≤ 1000. Elsewhere N/upper is a step function of the waste w(s) with breakpoints at w(1) = 2 − log₂3, w(3), w(2) ([[Winkler Tail Bound]]). Corollary: the dropping-set measure is Gibbs-tilted at ln 2 per wasted bit, E[w] = 0.4496 ([[Waste Bias at First Drop]]). **The best candidate for a theorem** — pending a read of Winkler's preprints.
 
-### 3. The 2-adic hierarchy has a rate — Verified
-Fraction of odd n undecided by p low bits: U(p) = 2^(−(1 − H(1/log₂3))p + o(p)) = 2^(−0.0500p); explicit U(p) ≤ 0.756·2^(−0.05004p). The repo's "89% by mod 4096" is exactly 911/1024 ([[Exact Admissible Sequence DP]], [[Winkler Tail Bound]]). Rate constant probably classical in substance (Terras/Everett/Lagarias bounds).
+### 3. The 2-adic hierarchy has a rate — Verified, and KNOWN (Lagarias 1985, Theorem D)
+Fraction of odd n undecided by p low bits: U(p) = 2^(−(1 − H(1/log₂3))p + o(p)) = 2^(−0.0500p); explicit U(p) ≤ 0.756·2^(−0.05004p). The repo's "89% by mod 4096" is exactly 911/1024 ([[Exact Admissible Sequence DP]], [[Winkler Tail Bound]]). **Checked against the source after the loop closed: this is Theorem D of Lagarias's 1985 survey, 1 − F(k) ≤ 2^(−ηk) with η = 1 − H(θ) ≈ .05004, stated there as sharp.** A rediscovery with the same constant; what remains ours is the exact table and the explicit 0.756. Not a write-up candidate.
 
 ### 4. Stopping time = trits + bits; contraction = packing waste — Verified
 k(s) = s + bitlen(3^s) = bitlen(6^s); first-drop slope 2^(−w(s)); the five-trit byte *is* Set₁₃ (243/256), the Pythagorean comma *is* 12 trits overflowing 19 bits ([[Collatz Bridge - Trits and Stopping Times]]). A dictionary, and the one that produced finding 2.

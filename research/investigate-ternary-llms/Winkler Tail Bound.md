@@ -38,7 +38,11 @@ with T(p)/U(p) → 1.6 and the constant A_p = T(p)·2^(cp) *decreasing* in p (0.
 
 Sanity anchors: U(2) = 1/2 (n ≡ 3 mod 4), U(4) = 3/8, U(12) = 113/1024 = 0.1104 (the repo's 89%).
 
-**Is this known?** The exponential decay of the fraction with large stopping time goes back to Terras (1976) and Everett (1977); Lagarias's survey quotes density bounds of this type and Krasikov–Lagarias improved the *lower* bound side [3]. The specific rate constant 1 − H(1/log₂3) through Winkler's binomial is the cleanest form I have seen, but I have not located it stated as such. Label: rate **Verified (numerically sharp)**, priority **not established**.
+**Is this known? Yes — it is Theorem D of Lagarias's 1985 survey, with the same constant.** Checked against the source (2026-09-16): Lagarias, "The 3x+1 problem and its generalizations", Amer. Math. Monthly 92 (1985), Theorem D, eq. (2.17)–(2.18):
+
+> 1 − F(k) = lim_{x→∞} (1/x)·#{n ≤ x : σ(n) > k} ≤ 2^{−ηk}, where η = 1 − H(θ) ≈ .05004…, H(x) = −x log₂x − (1−x) log₂(1−x),
+
+followed by "Theorem D cannot be substantially improved; it can be proved that for any ε > 0, |C₂| ≥ 2^{(H(θ)−ε)k} for all sufficiently large k" — i.e. the rate is sharp. The methods are Terras's (1976) and Everett's (1977). So §1 above is a rediscovery of a 40-year-old theorem, constant and all; what this note adds is only (a) the exact U(p) table from the DP, (b) the explicit constant 0.756 in U(p) ≤ 0.756·2^{−ηp} for p ≤ 1200, and (c) the observation that Winkler's binomial bounds reproduce Lagarias's η immediately. Label: rate **Known (Lagarias 1985, Thm D)**; explicit constant and table **Verified, minor**.
 
 ## 3. Surprise: N(s) hits the upper bound exactly at the record packings — Verified to s = 1000
 

@@ -1,2 +1,4 @@
 minimal Terras Mealy machine: 5 states (from the circuit's reachable (p,prev,carry) states)
   seed 2 step 5000 loss 0.0076 (241s)
+  seed 2 step 10000 loss 0.0018 (446s)
+  seed 2 step 15000 loss 0.0003 (648s)

@@ -42,7 +42,11 @@ class TernaryLinear(nn.Module):
         g = self.w.abs().mean().clamp(min=1e-8)
         return torch.round(self.w / g).clamp(-1, 1), g
 
+    full_precision = False  # class-level switch for the control run
+
     def forward(self, x):
+        if TernaryLinear.full_precision:
+            return F.linear(x, self.w, self.b)
         wq, g = self.quant()
         return F.linear(x, self.w + (wq * g - self.w).detach(), self.b)
 
@@ -70,16 +74,18 @@ def terras(n):
 
 
 def make_batch(rng, B, L):
-    ns = [rng.getrandbits(L - 4) for _ in range(B)]
-    u = torch.zeros(B, L, 2)
-    y = torch.zeros(B, L)
-    for i, n in enumerate(ns):
-        t = terras(n)
-        for j in range(L):
-            u[i, j, 0] = float(j == 0)
-            u[i, j, 1] = (n >> j) & 1
-            y[i, j] = ((t >> (j - 1)) & 1) if j >= 1 else 0.0
-    return u.to(DEV), y.to(DEV), ns
+    """Vectorised: bits of n and of T(n) via numpy shifts (L <= 60 keeps int64 safe)."""
+    ns = np.array([rng.getrandbits(L - 4) for _ in range(B)], dtype=np.int64)
+    ts = np.where(ns % 2 == 0, ns // 2, (3 * ns + 1) // 2)
+    j = np.arange(L)
+    xb = (ns[:, None] >> j[None, :]) & 1
+    tb = (ts[:, None] >> j[None, :]) & 1
+    u = np.zeros((B, L, 2), dtype=np.float32)
+    u[:, 0, 0] = 1.0
+    u[:, :, 1] = xb
+    y = np.zeros((B, L), dtype=np.float32)
+    y[:, 1:] = tb[:, :-1]  # target at time t is bit t-1 of T(n)
+    return torch.from_numpy(u).to(DEV), torch.from_numpy(y).to(DEV), ns.tolist()
 
 
 def minimal_terras_machine():
@@ -145,6 +151,37 @@ def extract_machine(model, L=40, N=3000, seed=1):
     return n_states, deterministic, trans, st
 
 
+def behavioural_states(model, horizon=8, N=400, L=32, seed=5):
+    """Count Nerode-style equivalence classes of reachable hidden states: two hidden states are
+    equivalent if the RNN produces identical output sequences for every input continuation of
+    the given horizon (2^horizon continuations, start flag off).  An exact implementation of the
+    Terras transducer shows exactly as many classes as the minimal Mealy machine (5)."""
+    rng = random.Random(seed)
+    u, _, _ = make_batch(rng, N, L)
+    with torch.no_grad():
+        _, hs = model(u, return_h=True)
+        H = hs.reshape(-1, hs.shape[-1])  # all reachable hidden states along the sequences
+        H = torch.unique(torch.round(H * 1e4) / 1e4, dim=0)
+        # all continuations of length `horizon`
+        conts = torch.tensor([[(c >> j) & 1 for j in range(horizon)] for c in range(1 << horizon)], dtype=torch.float32, device=DEV)
+        C = conts.shape[0]
+        sigs = []
+        for i in range(0, H.shape[0], 256):
+            h0 = H[i:i + 256]
+            B = h0.shape[0]
+            h = h0.repeat_interleave(C, 0)  # [B*C, H]
+            x = conts.repeat(B, 1)  # [B*C, horizon]
+            outs = []
+            for t in range(horizon):
+                ut = torch.stack([torch.zeros_like(x[:, t]), x[:, t]], 1)
+                h = F.relu(model.inp(ut) + model.rec(h))
+                outs.append((model.out(h).squeeze(-1) > 0).int())
+            sig = torch.stack(outs, 1).view(B, C * horizon)
+            sigs.append(sig.cpu())
+    sigs = torch.cat(sigs).numpy()
+    return len({row.tobytes() for row in sigs}), H.shape[0]
+
+
 def minimise_extracted(trans):
     """Minimise the extracted machine if deterministic; inputs are (x, start)."""
     tab = defaultdict(dict)
@@ -168,15 +205,19 @@ if __name__ == "__main__":
     ap.add_argument("--H", type=int, default=16)
     ap.add_argument("--steps", type=int, default=20000)
     ap.add_argument("--seeds", type=int, default=3)
+    ap.add_argument("--lr", type=float, default=3e-3)
+    ap.add_argument("--fp", action="store_true", help="full-precision control (no quantisation)")
+    ap.add_argument("--tag", default="")
     a = ap.parse_args()
+    TernaryLinear.full_precision = a.fp
     m0 = minimal_terras_machine()
     print(f"minimal Terras Mealy machine: {m0} states (from the circuit's reachable (p,prev,carry) states)")
-    out = dict(H=a.H, minimal_terras_states=m0, runs=[])
+    out = dict(H=a.H, lr=a.lr, full_precision=a.fp, minimal_terras_states=m0, runs=[])
     for seed in range(a.seeds):
         torch.manual_seed(seed)
         rng = random.Random(seed)
         model = TRNN(a.H).to(DEV)
-        opt = torch.optim.Adam(model.parameters(), lr=3e-3)
+        opt = torch.optim.Adam(model.parameters(), lr=a.lr)
         sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, a.steps)
         t0 = time.time()
         for step in range(1, a.steps + 1):
@@ -198,6 +239,9 @@ if __name__ == "__main__":
         bitacc = float((yp == y).float().mean())
         n_states, det, trans, _ = extract_machine(model)
         mini = minimise_extracted(trans) if det else None
+        beh, n_hidden = behavioural_states(model)
+        print(f"  seed {seed}: behavioural (horizon-8) state classes = {beh} over {n_hidden} distinct reachable hidden states  (minimal machine: {m0})")
+        torch.save(model.state_dict(), RESULTS / "checkpoints" / f"ternary_rnn{a.tag}_H{a.H}_s{seed}.pt")
         zs = []
         for m in model.modules():
             if isinstance(m, TernaryLinear):
@@ -205,5 +249,6 @@ if __name__ == "__main__":
                 zs.append(float((wq == 0).float().mean()))
         print(f"seed {seed}: exact-match on 40-bit n = {exact:.4f} (bit acc {bitacc:.4f}); binarised hidden states visited = {n_states}, "
               f"deterministic = {det}, minimised = {mini}; zero density per matrix = {[round(z, 2) for z in zs]}")
-        out["runs"].append(dict(seed=seed, exact=exact, bitacc=bitacc, states=n_states, deterministic=det, minimised=mini, zero_density=zs))
-    json.dump(out, open(RESULTS / "ternary_rnn.json", "w"), indent=1)
+        out["runs"].append(dict(seed=seed, exact=exact, bitacc=bitacc, states=n_states, deterministic=det, minimised=mini,
+                                behavioural_states=beh, distinct_hidden=n_hidden, zero_density=zs))
+    json.dump(out, open(RESULTS / f"ternary_rnn{a.tag}.json", "w"), indent=1)

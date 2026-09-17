@@ -1,0 +1,7 @@
+minimal Terras Mealy machine: 5 states (from the circuit's reachable (p,prev,carry) states)
+  seed 0 step 5000 loss 0.0005 (234s)
+  seed 0: behavioural (horizon-8) state classes = 4 over 9761 distinct reachable hidden states  (minimal machine: 5)
+seed 0: exact-match on 40-bit n = 1.0000 (bit acc 1.0000); binarised hidden states visited = 421, deterministic = False, minimised = None; zero density per matrix = [0.41, 0.4, 0.44]
+  seed 1 step 5000 loss 0.0003 (241s)
+  seed 1: behavioural (horizon-8) state classes = 4 over 9761 distinct reachable hidden states  (minimal machine: 5)
+seed 1: exact-match on 40-bit n = 1.0000 (bit acc 1.0000); binarised hidden states visited = 692, deterministic = False, minimised = None; zero density per matrix = [0.35, 0.41, 0.38]

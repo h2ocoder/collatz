@@ -1,0 +1,16 @@
+minimal Terras Mealy machine: 5 states (from the circuit's reachable (p,prev,carry) states)
+  seed 0 step 5000 loss 0.0379 (211s)
+  seed 0 step 10000 loss 0.1611 (414s)
+  seed 0 step 15000 loss 0.1779 (615s)
+  seed 0 step 20000 loss 0.2077 (816s)
+seed 0: exact-match on 40-bit n = 0.0025 (bit acc 0.8523); binarised hidden states visited = 65, deterministic = False, minimised = None; zero density per matrix = [0.47, 0.47, 0.31]
+  seed 1 step 5000 loss 0.1731 (201s)
+  seed 1 step 10000 loss 0.2024 (397s)
+  seed 1 step 15000 loss 0.1392 (625s)
+  seed 1 step 20000 loss 0.1919 (867s)
+seed 1: exact-match on 40-bit n = 0.3545 (bit acc 0.8678); binarised hidden states visited = 37, deterministic = False, minimised = None; zero density per matrix = [0.38, 0.46, 0.31]
+  seed 2 step 5000 loss 0.0076 (242s)
+  seed 2 step 10000 loss 0.0018 (477s)
+  seed 2 step 15000 loss 0.0003 (662s)
+  seed 2 step 20000 loss 0.0002 (899s)
+seed 2: exact-match on 40-bit n = 1.0000 (bit acc 1.0000); binarised hidden states visited = 45, deterministic = False, minimised = None; zero density per matrix = [0.34, 0.41, 0.31]

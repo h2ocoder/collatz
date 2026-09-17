@@ -1,6 +1,6 @@
 ---
 tags: [loop, agenda, ternary, collatz]
-status: running
+status: complete
 created: 2026-09-16
 ---
 
@@ -35,10 +35,11 @@ Environment: `C:\repos\collatz\.venv\Scripts\python.exe`, RTX 4080 via CUDA torc
 - [x] **L15. Unary round-outcome task (from [[Tag Systems and the Ternary Circuit]] Q2).** Train the L7 transformer on α^n → α^{T(n)} in unary for n ≤ 200 (and on single tag steps as a control). Prediction: the local rule is learned instantly; the round outcome stalls at P(v = 1) unless exact counting emerges. Stratify by v. GPU, ~15 min.
 
 ### Tier 4 — write-up
-- [ ] **L12. Update `Summary - Findings and Open Questions.md` and [[00 Index]]** with everything above; refresh SCRUM-28 and close the ACE task log with a final outcome.
+- [x] **L12. Update `Summary - Findings and Open Questions.md` and [[00 Index]]** with everything above; refresh SCRUM-28 and close the ACE task log with a final outcome.
 
 ## Progress log
 <!-- newest first; one entry per iteration: date/time, item, result in one or two lines, files touched -->
+- **2026-09-16 (L12)** — Summary rewritten with all loop findings (ranked 1–10), index finalised, SCRUM-28 and the ACE task closed. Loop complete: L1–L15 all ticked. 15 notes, 20 scripts.
 - **2026-09-16 (L11)** — Minimal Mealy machine of the Terras transducer = 5 states (start + 4). Ternary Elman RNN (absmean STE) on LSB-first bit streams: H=16 succeeds 1/3 seeds (STE instability), H=64 succeeds 2/2 and implements EXACTLY the 4 working states — behavioural equivalence over all 256 length-8 continuations from all 9,761 reachable hidden states, 0 glitches — cleaner than the full-precision H=16 control (100% test accuracy but 24 behavioural classes, 0.6% glitch states). Files: `scripts/ternary_rnn.py`, `scripts/rnn_state_match.py`, `results/rnn_state_match.txt`, `Experiment E - Ternary RNN Rediscovers the Transducer.md`. Label: Verified.
 - **2026-09-16 (L15)** — Unary vs binary input for n → T(n), n ≤ 1024, 20% of n held out: binary 100% train / 100% held-out; unary 10% train / 1.5% held-out, 0% on odd n. Unary is the worst base — parity of a length is the global count attention does not deliver. Files: `scripts/unary_task.py`, `results/unary_task.json`, Q2 in `Tag Systems and the Ternary Circuit.md`. Label: Verified. L11 (ternary RNN) still running.
 - **2026-09-16 (L9)** — Ternary-weight transformer (BitNet absmean in every linear map) on the base-16 long step: d=256 90.3% vs full-precision 93.1%; d=512 93.9%. By depth k+k′: shallow classes (≤5) untouched, loss concentrated at 6–8 ((5,1) 0.97→0.03, (4,2) 1.00→0.65, (4,3) 0.63→0.11); (k,k′) still 99.9% decodable at SEP → execution lost, not identification; 2× width recovers and beats FP at every depth. Zero density 0.313 (inside the LLM range). Files: `scripts/ternary_transformer.py`, `results/ternary_transformer.json`, `Experiment D - Quantization by Subgroup.md`. Label: Verified.

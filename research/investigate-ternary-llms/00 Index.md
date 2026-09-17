@@ -15,7 +15,7 @@ Two questions were asked:
 1. The paper lives at log₂ 3 ≈ 1.585 — is there anything in it, or in the trit-to-bit packing it rests on, that the Collatz research can use?
 2. Ternary LLMs are new to us — is there a meaningful way to model a neural network with Collatz computations?
 
-Start with [[Summary - Findings and Open Questions]].
+Start with [[Summary - Findings and Open Questions]] (ten ranked findings, recommendations, open questions). The exploration loop that produced the later notes is logged in [[LOOP]].
 
 ## Notes
 

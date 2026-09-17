@@ -68,6 +68,7 @@ Start with [[Summary - Findings and Open Questions]].
 - `ternary_transformer.py` — L9: BitNet-style ternary transformer on the long step, stratified by (k,k′), probed at SEP.
 - `probe_kkp.py` — L8: per-layer linear probes for (k,k′) at the SEP token.
 - `base_polarity.py`, `stratify_by_valuation.py` — L7: transformer base sweep (GPU) and stratification by v₂(3n+1) / (k,k′).
+- `unary_task.py` — L15: unary vs binary input for the Terras step with held-out n (GPU).
 - `tag_system.py` — Collatz 2-tag system simulation: round lengths, tag time vs orbit sum, affine check, read words.
 - `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.
 

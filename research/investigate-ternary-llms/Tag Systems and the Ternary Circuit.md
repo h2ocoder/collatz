@@ -53,7 +53,16 @@ So the two threes are not the same object. **Dead end as an equivalence; alive a
 
 **Q1 (answered here, Verified).** Does the tag system's running time have closed form? Yes — orbit sum + odd count; affine per residue class (§2.2–2.3). Corollary: E[tag time to first drop]/n over a residue class is the class's affine slope; Wagon's constant counts *rounds*, orbit sums count *tag steps*.
 
-**Q2 (open, concrete).** *Unary as the worst base.* [[Experiment B - Base Polarity]] showed a learner's ceiling is P(v ≤ v_max(base)), with base 3 hiding the 2-adic structure. Unary is the limit: the tag rewriting rule is trivially local (a transformer would learn one tag *step* instantly), but a "round" α^n → α^{T(n)} requires counting. Experiment: train the same transformer on unary round-outcomes for n ≤ 200. Prediction: it learns nothing beyond P(v=1) unless it can count exactly — the base-3 result in its purest form. Cheap; proposed as loop item L15.
+**Q2 — answered (loop item L15), Verified.** *Unary is the worst base.* Same 4-layer transformer, task n → T(n) with the output in binary, n ≤ 1024, **20% of n held out** so memorisation cannot pass (`scripts/unary_task.py`, `results/unary_task.json`):
+
+| input representation | train exact | held-out exact | held-out odd n | held-out even n |
+|---|---|---|---|---|
+| binary (10 digits) | 1.000 | **1.000** | 1.00 | 1.00 |
+| unary (α^n, up to 1024 tokens) | 0.104 | **0.015** | **0.00** | 0.03–0.05 |
+
+From binary the rule is learned perfectly and generalises to every unseen n. From unary the model cannot even fit the training set (10%), generalises to 1.5% of unseen n, and gets **zero** odd inputs right — parity of a length is exactly the global count that attention does not deliver, and the ×3 on a count is hopeless without it. Base 3 hid the 2-adic structure behind a weighted digit sum; unary hides it behind counting, and the ceiling drops from P(v ≤ 1) to nothing. (Original question follows.)
+
+*Original Q2.* [[Experiment B - Base Polarity]] showed a learner's ceiling is P(v ≤ v_max(base)), with base 3 hiding the 2-adic structure. Unary is the limit: the tag rewriting rule is trivially local (a transformer would learn one tag *step* instantly), but a "round" α^n → α^{T(n)} requires counting. Experiment: train the same transformer on unary round-outcomes for n ≤ 200. Prediction: it learns nothing beyond P(v=1) unless it can count exactly — the base-3 result in its purest form. Cheap; proposed as loop item L15.
 
 **Q3 (open, harder).** *A "3n+1 line" for ternary threshold circuits.* De Mol places Collatz one symbol above the solvable tag systems and far below the universal ones. In the circuit model: 4 units impossible, 5 units = the Terras step ([[Minimal Ternary Circuit]]). What is the smallest ternary recurrent threshold layer that simulates a universal tag system (via Cocke–Minsky) or a small universal Turing machine? A descriptive-complexity ladder — solvable / Collatz / universal — measured in ternary threshold units, matching De Mol's Fig. 2 measured in (μ, v). Nobody has done this; it is well-defined and finite.
 

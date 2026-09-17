@@ -107,6 +107,8 @@ Three consequences:
 2. **The p-survival landscape (§8) reads: p survives the first drop iff p divides the minimum of one of these cycles.** 5 survives because 5 is the 3x+7 cycle minimum; 19 and 23 because they are 3x+5 cycle minima.
 3. The intercept sequence I called "not in OEIS" is A226607 read along the rows k = 2^b − 3^s. Corrected.
 
+**A276378 (squarefree numbers coprime to 6) — Dead end.** The user asked whether the dropping-set k = 2^b − 3^s live there. They are always coprime to 6, and squarefree for s ≤ 25, but k(26) has factor 5², k(30) 7², and s = 37, 60, 65, 74, 85, 94, 112 also carry squares: 9 of 120 (7.5%), against 8.8% expected for random numbers coprime to 6 (and 44/497 = 8.9% for arbitrary 2^b − 3^s). Generic rate, no structure.
+
 Prior art: Lagarias (1990) for the correspondence; A226607 and its companions A226608–A226613 (Morley) for the data. What is ours is only the identification with the *dropping-set* intercepts and the two readings above. Label: **Verified; identification new-looking, correspondence known.**
 
 ## 7. What this says

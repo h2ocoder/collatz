@@ -107,7 +107,9 @@ if __name__ == "__main__":
         ins = lines + [c[0] for c in circ[:i]]
         print(f"  {nm:4s} = [ " + " ".join(f"{'+' if wj > 0 else '-'}{n}" for wj, n in zip(w, ins) if wj) + f" >= {th} ]")
         allw += w
-    print(f"  zero density {allw.count(0)/len(allw):.3f}")
+    print(f"  zero density {allw.count(0)/len(allw):.3f}", flush=True)
+    json.dump(dict(tracker_units=K, tracker_circuit=[(nm, w, th) for nm, (w, th) in circ], combined_units=None),
+              open(RESULTS / "mod3_tracker_circuit.json", "w"), indent=1)
 
     # combined machine: Terras (5 units incl. y) feeding the tracker.  Lower bound: tracker alone
     # needs K units even given y; Terras needs 5 to produce y, p', carry'.  Can they share?  Search the

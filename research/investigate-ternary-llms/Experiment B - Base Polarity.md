@@ -68,8 +68,17 @@ In base 6 both operations of a Terras step are *one-neighbour local*: multiplyin
 
 The clean test is to vary the number of layers: if the cutoff moves with depth, it is a pass budget. Base 6 with 2 and 8 layers, both tasks, is running (`results/base_polarity_layers.log`); result to be added below.
 
-### Layer test
-_(pending)_
+### Layer test — Verified, conjecture weakened
+
+Base 6, same data and steps, 2 / 4 / 8 layers (`results/base_polarity_layers.json`, checkpoints `*_L2_layers.pt`, `*_L8_layers.pt`):
+
+| layers | one-step overall | exact through v = | long step overall | (k,k′) perfect | partial |
+|---|---|---|---|---|---|
+| 2 | 79.7% | 2 (v=3: 27%) | 22.9% | — ((1,1) 85%) | — |
+| 4 | 94.6% | 4 (v=5: 11%) | 41.0% | (1,1), (1,2) | — |
+| 8 | 94.6% | 4 (v=5: 12%) | 56.8% | (1,1), (1,2), (2,1) | (1,3) 46%, (3,1) 26% |
+
+Depth moves the cutoff at the low end (2 → 4 layers doubles v_max and adds a subgroup) and keeps unlocking subgroups on the long step (8 layers adds (2,1) and half of (1,3)/(3,1)). But the one-step cutoff at v = 4 does **not** move from 4 to 8 layers, with v ≥ 5 being 4.4% of the data — the same shares base 2 learned perfectly. So the pure "passes = layers" reading is wrong; depth is necessary but something else (plausibly optimisation on rare compositions of base-6 carries — a curriculum question) caps the one-step model. Label: **depth-limited at small depth (Verified); v = 4 ceiling unexplained (open).**
 
 ## What it means for the repo
 

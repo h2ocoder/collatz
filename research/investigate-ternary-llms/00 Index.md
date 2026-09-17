@@ -44,6 +44,9 @@ Start with [[Summary - Findings and Open Questions]].
 - [[VDF Feasibility - Collatz as a Delay Function]] — the affine/2-adic structure is a two-sided shortcut; the only one-sided asymmetry is the closed-form inverse of the parity-vector map (verifier: one congruence). Sloth-class at best.
 - [[VDF Literature - Sequential Functions]] — definitions, constructions (Wesolowski, Pietrzak, Sloth, MinRoot), attacks, Collatz-in-cryptography search, F₂[x] analogue.
 
+### Tag systems (user question, 2026-09-16)
+- [[Tag Systems and the Ternary Circuit]] — De Mol's TS(3,2) next to the 5-unit circuit: same function by opposite means (phase-counting in unary vs reading bits); tag time = orbit sum + odd rounds, affine per residue class; the length walk is {−1,0,+1} = Maslov's condition; six research questions.
+
 ### Wrap-up
 - [[Summary - Findings and Open Questions]]
 
@@ -62,6 +65,7 @@ Start with [[Summary - Findings and Open Questions]].
 - `parity_vector_rank.py` — L13: communication-rank test of the parity-vector map vs its inverse; speculative-execution bound.
 - `parity_vector_vdf.py` — VDF: closed-form inverse of the parity-vector map, table tradeoff, ANF degrees, evaluator/verifier timing.
 - `base_polarity.py`, `stratify_by_valuation.py` — L7: transformer base sweep (GPU) and stratification by v₂(3n+1) / (k,k′).
+- `tag_system.py` — Collatz 2-tag system simulation: round lengths, tag time vs orbit sum, affine check, read words.
 - `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.
 
 ## Related repo docs (other vault)

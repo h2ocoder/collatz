@@ -67,8 +67,16 @@ The last row is the network-level form of the repo's **2-adic determinism** (`do
 
 See [[Collatz Bridge - Trits and Stopping Times]] for the information-theoretic side (stopping time = trits + bits) and [[Summary - Findings and Open Questions]].
 
+## Prior art (checked 2026-09-16)
+
+The underlying object — a finite-state transducer that computes 3x+1 on binary digits read least-significant first — is classical. Any affine map ax+b is an FST in any base, and Shallit & Wilson wrote down the 3x+1 binary transducer in 1992 [4]; Bruschi (2005) gave two cellular automata for the map [5]; Stérin & Woods (2020) built a quasi-cellular automaton running base 2 horizontally and base 3 vertically [6]; and the 2026 grokking paper on one-step Collatz (arXiv:2604.13082) uses "the LSB-first transducer implementing the odd branch" as an analysis tool, defining *carry depth* as its number of nonzero propagation steps [7] — none of them builds a neural or threshold implementation. What is not in the literature, as far as searching finds: the encoding of that transducer as **threshold neurons with weights in {−1, 0, +1}** (a routine translation — every FST is a small threshold circuit), and the **exhaustive minimality result** of [[Minimal Ternary Circuit]] (5 units, no 4-unit circuit). Both are new but minor; they belong as a paragraph in a larger write-up, citing Shallit–Wilson, not as a standalone note.
+
 ## Sources
 
 1. R. Terras, "A stopping time problem on the positive integers", *Acta Arithmetica* 30 (1976), 241–252. https://eudml.org/doc/205476
 2. J. H. Conway, "Unpredictable iterations", *Proc. 1972 Number Theory Conference*, Univ. of Colorado, 49–52 (1972). Summarised in J. C. Lagarias, "The 3x+1 problem and its generalizations", *Amer. Math. Monthly* 92 (1985) — https://www.jstor.org/stable/2322189
 3. Script: `research/investigate-ternary-llms/scripts/ternary_syracuse_circuit.py` (this repo).
+4. J. Shallit, D. Wilson, "The '3x+1' problem and finite automata", *Bulletin of the EATCS* 46 (1992) 182–185. https://cs.uwaterloo.ca/~shallit/Papers/wilson.pdf
+5. D. Bruschi, "Two cellular automata for the 3x+1 map", arXiv:nlin/0502061 (2005). https://arxiv.org/abs/nlin/0502061
+6. T. Stérin, D. Woods, "The Collatz process embeds a base conversion algorithm", RP 2020, arXiv:2007.06979. https://arxiv.org/abs/2007.06979
+7. L. Gomezjurado Gonzalez, "The Long Delay to Arithmetic Generalization", arXiv:2604.13082 (2026) — "carry depth" of the LSB-first odd-branch transducer. https://arxiv.org/abs/2604.13082

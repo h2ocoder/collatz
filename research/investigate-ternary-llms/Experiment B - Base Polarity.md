@@ -20,7 +20,9 @@ Script: `scripts/base_polarity.py` (4-layer, d = 256 decoder-only transformer, L
 | 16 | 100% | 93.1% |
 | 24 | 98.4% | 87.9% |
 
-Same ordering on both tasks: 16 > 24 ≈ 2 > 6 > 3. **Charton–Narayanan's polarity is reproduced on the one-step task; the "opposite polarity" claim is not reproduced in this setup.** Base 6 is not special — it sits between base 3 and base 2 on both tasks, and on the long step it is clearly worse than binary.
+Same ordering on both tasks: 16 > 24 ≈ 2 > 6 > 3. **Charton–Narayanan's polarity holds on the one-step task in this setup.** Base 6 is not special — it sits between base 3 and base 2 on both tasks, and on the long step it is clearly worse than binary.
+
+**Correction on the "opposite polarity" paper (arXiv:2604.13082).** On reading it: its task is the *full Collatz step* T(n) = n/2 or 3n+1 (not the Syracuse step), its digits are **most-significant first**, and it reports binary "collapsing" while bases divisible by 6 (24: 99.8%) do best. Our setup is LSB-first Syracuse. So the two results are not in conflict — they differ in digit order, and digit order is exactly the variable the mechanism below predicts matters: with MSB-first output, an autoregressive decoder must emit the high digits of 3n+1 before it has read the carries from the low ones, whereas LSB-first makes every carry local. Reproducing their MSB-first result and flipping it to LSB-first would be the clean test; it is not done here. Their "carry depth" statistic is the LSB-first transducer's carry chain — the same object as the [[Ternary Syracuse Circuit]].
 
 ## The numbers are cutoffs on the 2-adic ladder, not degrees of skill — Verified
 

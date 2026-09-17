@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Experiment D - Quantization by Subgroup.md",
+                "file": "Summary - Findings and Open Questions.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Experiment D - Quantization by Subgroup"
+              "title": "Summary - Findings and Open Questions"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Experiment D - Quantization by Subgroup.md",
+                "file": "Summary - Findings and Open Questions.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Experiment D - Quantization by Subgroup.md",
+                "file": "Summary - Findings and Open Questions.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Experiment D - Quantization by Subgroup.md",
+                "file": "Summary - Findings and Open Questions.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,20 +190,20 @@
   },
   "active": "62f06a8bdaced07d",
   "lastOpenFiles": [
+    "Primes and the Circuit.md",
+    "Primes and the Circuit.md.tmp.7324.a83eb031d768",
+    "results/primes_and_circuit.json",
+    "scripts/primes_and_circuit.py.tmp.7324.4cacbce33215",
+    "scripts/primes_and_circuit.py",
+    "scripts/primes_and_circuit.py.tmp.7324.4b1baf893a7b",
+    "Experiment E - Ternary RNN Rediscovers the Transducer.md",
+    "Experiment D - Quantization by Subgroup.md",
     "Experiment E - Ternary RNN Rediscovers the Transducer.md.tmp.7324.e3a986b30178",
     "Experiment B - Base Polarity.md.tmp.7324.f02a2376ff56",
     "results/ternary_rnn_s2.json",
     "results/checkpoints/ternary_rnn_s2_H16_s2.pt",
     "Summary - Findings and Open Questions.md.tmp.7324.4d1e83d8d7bc",
-    "Summary - Findings and Open Questions.md.tmp.7324.39df2fe5d989",
-    "Experiment E - Ternary RNN Rediscovers the Transducer.md",
-    "Experiment E - Ternary RNN Rediscovers the Transducer.md.tmp.7324.8c3993298966",
-    "results/rnn_state_match.txt",
-    "results/ternary_rnn_H64.json",
-    "results/checkpoints/ternary_rnn_H64_H64_s1.pt",
-    "scripts/rnn_state_match.py.tmp.7324.433319e17ae5",
     "Experiment B - Base Polarity.md",
-    "Experiment D - Quantization by Subgroup.md",
     "Minimal Ternary Circuit.md",
     "Tag Systems and the Ternary Circuit.md",
     "Trit Packing and log2(3).md",

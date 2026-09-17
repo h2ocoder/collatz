@@ -190,6 +190,7 @@
   },
   "active": "62f06a8bdaced07d",
   "lastOpenFiles": [
+    "Primes and the Circuit.md.tmp.7324.d4e689a2cc2b",
     "Summary - Findings and Open Questions.md.tmp.7324.2a20973726b4",
     "Why 3x+1 is Special.md.tmp.7324.3584954a545e",
     "Literature - 3x+k Cycles and Divergence.md.tmp.7324.c3c96e7ce8ea",
@@ -203,7 +204,6 @@
     "results/cycle_count_mechanism.json",
     "scripts/cycle_count_mechanism.py",
     "scripts/cycle_count_mechanism.py.tmp.7324.b502c83e3601",
-    "scripts/__pycache__/cycles_3xk_census.cpython-312.pyc",
     "Summary - Findings and Open Questions.md",
     "Experiment E - Ternary RNN Rediscovers the Transducer.md",
     "Experiment D - Quantization by Subgroup.md",

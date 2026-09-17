@@ -111,6 +111,10 @@ Three consequences:
 
 Prior art: Lagarias (1990) for the correspondence; A226607 and its companions A226608–A226613 (Morley) for the data. What is ours is only the identification with the *dropping-set* intercepts and the two readings above. Label: **Verified; identification new-looking, correspondence known.**
 
+## 10. Q4, partial: the cost of one prime is at least 6 units
+
+`scripts/mod3_tracker_circuit.py`, log `results/mod3_tracker_circuit.log`. A tracker that reads the Terras output bits LSB-first and maintains T(n) mod 3 needs state (phase, R) — 6 states on 3 lines, since 2^i ≡ (−1)^i (mod 3) — and outputs (phase′, r1′, r0′). Exhaustive search over ternary threshold circuits: **no circuit with ≤ 5 units** (K = 5 alone took 19 minutes; K = 6 did not finish within the 40-minute cap). So certifying divisibility by 3 alongside the Terras step costs at least 6 further units — *more than the 5-unit step itself* — unless the combined machine shares units, which the search could not reach. Upper bound not established. Label: **partial (lower bound Verified, minimum open)**. The search method (exhaustive DFS over single-unit functions) does not scale past K ≈ 5–6 on 8 lines; a SAT/ILP formulation would be the way to finish it.
+
 ## 7. What this says
 
 The circuit is a 2-adic instrument, and factorisation is an odd-prime notion; by CRT they do not talk, and by gcd(3n+1, n) = 1 the map erases factorisation every odd step. Everything factorisation-shaped that *does* reach the circuit is a statement about n mod 2^b in disguise — trailing ones (2^k | n+1), squares (≡ 1 mod 8), the mod-4 wall in products. Those are exact, small, and already provable. The one place odd primes genuinely re-enter is the intercept C_r deciding whether p survives the first drop (Q1), which is the same hidden variable the repo already found carrying all mod-p correlations. So the honest recommendation: do Q1–Q3 (a day, all exact, likely a short note generalising the Multiplication Symmetry Theorem); treat Q5 as a control experiment; do not expect factorisation to constrain orbits.

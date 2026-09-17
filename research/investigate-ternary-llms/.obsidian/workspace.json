@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Primes and the Circuit.md",
+                "file": "Why 3x+1 is Special.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Primes and the Circuit"
+              "title": "Why 3x+1 is Special"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Primes and the Circuit.md",
+                "file": "Why 3x+1 is Special.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Primes and the Circuit.md",
+                "file": "Why 3x+1 is Special.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Primes and the Circuit.md",
+                "file": "Why 3x+1 is Special.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,19 +190,21 @@
   },
   "active": "62f06a8bdaced07d",
   "lastOpenFiles": [
+    "Summary - Findings and Open Questions.md.tmp.7324.2a20973726b4",
+    "Why 3x+1 is Special.md.tmp.7324.3584954a545e",
+    "Literature - 3x+k Cycles and Divergence.md.tmp.7324.c3c96e7ce8ea",
+    "Literature - 3x+k Cycles and Divergence.md.tmp.7324.7a285d8afa48",
+    "Literature - 3x+k Cycles and Divergence.md.tmp.7324.dbb4f3db208e",
+    "Literature - 3x+k Cycles and Divergence.md",
+    "Literature - 3x+k Cycles and Divergence.md.tmp.7324.66a0a0b74017",
+    "Primes and the Circuit.md",
     "Why 3x+1 is Special.md",
     "Why 3x+1 is Special.md.tmp.7324.caf4e30b9f94",
     "results/cycle_count_mechanism.json",
     "scripts/cycle_count_mechanism.py",
     "scripts/cycle_count_mechanism.py.tmp.7324.b502c83e3601",
     "scripts/__pycache__/cycles_3xk_census.cpython-312.pyc",
-    "results/cycles_3xk_census.json",
-    "results/cycle_diophantine_k1.json",
-    "scripts/cycle_diophantine_k1.py",
-    "scripts/cycle_diophantine_k1.py.tmp.7324.4cad26dd795a",
-    "scripts/cycles_3xk_census.py",
     "Summary - Findings and Open Questions.md",
-    "Primes and the Circuit.md",
     "Experiment E - Ternary RNN Rediscovers the Transducer.md",
     "Experiment D - Quantization by Subgroup.md",
     "Experiment B - Base Polarity.md",

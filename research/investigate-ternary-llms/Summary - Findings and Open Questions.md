@@ -42,6 +42,9 @@ De Mol's TS(3,2) computes the same map by phase-counting in unary; its running t
 ### 10. The paper itself — Dead end, recorded
 BITCOS transfers nothing; every structural bridge failed cleanly ([[Paper - Breaking the 1.58-bit Barrier]]).
 
+### 11. Why 3x+1 is special (post-close goal, 2026-09-17) — Verified legs + one heuristic
+Following the intercept → A226607 crumb: the dropping-set intercepts are cycle minima of 3x+k with k = 2^b − 3^s; every k > 1 coprime to 6 divides some 2^b − 3^s and inherits whole necklace families as cycles (exact on 269, 295, 13, 5, 7; 3x+499's (16,10)-cycles = necklaces with 13 | r(v)); k = 1 alone has no slack, and the inequality x_min ≤ k·s/(3·w·ln 2) plus the 2⁷¹ verification forces any nontrivial 3x+1 cycle onto a record trit packing with length ≥ 1.14·10¹¹ (the Hercher–Puchert bound, reproduced), with expected survivors 2^(−5.7·10⁹) at Lagarias's rate 1 − H(1/log₂3). Divergence is the sign of ½log₂p − 1: all 3x+k contract, 5x+1/7x+1 escape. Known pieces attributed (Böhm–Sontacchi, Lagarias 1990, Belaga–Mignotte, Eliahou, Hercher, Kontorovich–Lagarias). [[Why 3x+1 is Special]], [[Literature - 3x+k Cycles and Divergence]], [[Primes and the Circuit]] §8–9.
+
 ## Recommendations
 
 1. **Papers:** apply the OEIS citations to any manuscript that presents N(s) or the stopping-time spectrum as new.

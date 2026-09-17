@@ -33,6 +33,7 @@ Start with [[Summary - Findings and Open Questions]].
 - [[Research Directions - Ternary Nets x Collatz]] — proposed experiments, ranked.
 
 ### Loop results (see [[LOOP]] for the agenda and progress log)
+- [[Experiment D - Quantization by Subgroup]] — L9: ternary weights remove the depth-6–8 (k,k′) classes first while the class stays decodable; 2× width recovers.
 - [[Experiment B - Base Polarity]] — L7: transformer accuracy by base on one-step and long-step tasks = cutoffs on the 2-adic ladder (base 3 learns only the Terras map); Charton's polarity reproduced; base 6 not special.
 - [[Minimal Ternary Circuit]] — L10: the Terras layer needs exactly 5 ternary threshold units (exhaustive, verified end-to-end); optimal circuit uses zeros and is not human-readable.
 - [[Experiment A - Ternary Dropping-Set Classifier]] — L5/L6: ternary MLP reaches the Bayes ceiling but its weights are NOT residue tests; quantisation kills the deepest classes first (needs 4× width); learning order = bits needed.
@@ -64,6 +65,7 @@ Start with [[Summary - Findings and Open Questions]].
 - `snark_cost_model.py` — L14: divide-and-conquer identities for evaluator/verifier; constraints per step vs MinRoot.
 - `parity_vector_rank.py` — L13: communication-rank test of the parity-vector map vs its inverse; speculative-execution bound.
 - `parity_vector_vdf.py` — VDF: closed-form inverse of the parity-vector map, table tradeoff, ANF degrees, evaluator/verifier timing.
+- `ternary_transformer.py` — L9: BitNet-style ternary transformer on the long step, stratified by (k,k′), probed at SEP.
 - `probe_kkp.py` — L8: per-layer linear probes for (k,k′) at the SEP token.
 - `base_polarity.py`, `stratify_by_valuation.py` — L7: transformer base sweep (GPU) and stratification by v₂(3n+1) / (k,k′).
 - `tag_system.py` — Collatz 2-tag system simulation: round lengths, tag time vs orbit sum, affine check, read words.

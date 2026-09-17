@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Minimal Ternary Circuit.md",
+                "file": "Experiment D - Quantization by Subgroup.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Minimal Ternary Circuit"
+              "title": "Experiment D - Quantization by Subgroup"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Minimal Ternary Circuit.md",
+                "file": "Experiment D - Quantization by Subgroup.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Minimal Ternary Circuit.md",
+                "file": "Experiment D - Quantization by Subgroup.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Minimal Ternary Circuit.md",
+                "file": "Experiment D - Quantization by Subgroup.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,26 +190,26 @@
   },
   "active": "62f06a8bdaced07d",
   "lastOpenFiles": [
+    "Experiment B - Base Polarity.md",
+    "Experiment D - Quantization by Subgroup.md",
+    "Experiment D - Quantization by Subgroup.md.tmp.7324.6a96680a6f9d",
+    "results/checkpoints/long_b16_ternary_d512.pt",
+    "results/ternary_transformer.json",
+    "results/checkpoints/long_b16_ternary_d256.pt",
+    "Minimal Ternary Circuit.md",
+    "scripts/__pycache__/probe_kkp.cpython-312.pyc",
+    "scripts/ternary_transformer.py",
+    "scripts/ternary_transformer.py.tmp.7324.afd38befdfd7",
     "Experiment B - Base Polarity.md.tmp.7324.529e0a0a2e79",
     "results/probe_kkp.json",
     "scripts/probe_kkp.py.tmp.7324.6d260a834e7e",
-    "scripts/probe_kkp.py.tmp.7324.c6efc1f17d53",
-    "scripts/probe_kkp.py.tmp.7324.12409b5e2798",
-    "scripts/probe_kkp.py",
-    "scripts/probe_kkp.py.tmp.7324.3429fc542832",
     "Tag Systems and the Ternary Circuit.md",
-    "Tag Systems and the Ternary Circuit.md.tmp.7324.d67ec1e4cb7a",
-    "Experiment B - Base Polarity.md.tmp.7324.67edfc927804",
-    "scripts/__pycache__/stratify_by_valuation.cpython-312.pyc",
-    "results/tag_system.json",
     "Trit Packing and log2(3).md",
     "Ternary Syracuse Circuit.md",
     "Ternary LLMs - State of the Art.md",
     "Collatz Bridge - Trits and Stopping Times.md",
     "Exact Admissible Sequence DP.md",
     "Experiment A - Ternary Dropping-Set Classifier.md",
-    "Minimal Ternary Circuit.md",
-    "Experiment B - Base Polarity.md",
     "LOOP.md",
     "Research Directions - Ternary Nets x Collatz.md",
     "Summary - Findings and Open Questions.md",

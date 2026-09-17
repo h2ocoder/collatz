@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Summary - Findings and Open Questions.md",
+                "file": "Primes and the Circuit.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Summary - Findings and Open Questions"
+              "title": "Primes and the Circuit"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Summary - Findings and Open Questions.md",
+                "file": "Primes and the Circuit.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Summary - Findings and Open Questions.md",
+                "file": "Primes and the Circuit.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Summary - Findings and Open Questions.md",
+                "file": "Primes and the Circuit.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,17 +190,18 @@
   },
   "active": "62f06a8bdaced07d",
   "lastOpenFiles": [
-    "Primes and the Circuit.md.tmp.7324.3f560c0e1053",
-    "results/mod3_tracker_circuit.log",
-    "scripts/mod3_tracker_circuit.py.tmp.7324.6b56539c385e",
-    "Primes and the Circuit.md.tmp.7324.007bd52a3071",
-    "Primes and the Circuit.md.tmp.7324.58711d079920",
-    "scripts/__pycache__/minimal_circuit.cpython-312.pyc",
-    "scripts/mod3_tracker_circuit.py",
-    "scripts/mod3_tracker_circuit.py.tmp.7324.7fdba391b97b",
-    "scripts/__pycache__/primes_q1_q2.cpython-312.pyc",
-    "results/primes_q1_q2.json",
-    "scripts/primes_q1_q2.py",
+    "Why 3x+1 is Special.md",
+    "Why 3x+1 is Special.md.tmp.7324.caf4e30b9f94",
+    "results/cycle_count_mechanism.json",
+    "scripts/cycle_count_mechanism.py",
+    "scripts/cycle_count_mechanism.py.tmp.7324.b502c83e3601",
+    "scripts/__pycache__/cycles_3xk_census.cpython-312.pyc",
+    "results/cycles_3xk_census.json",
+    "results/cycle_diophantine_k1.json",
+    "scripts/cycle_diophantine_k1.py",
+    "scripts/cycle_diophantine_k1.py.tmp.7324.4cad26dd795a",
+    "scripts/cycles_3xk_census.py",
+    "Summary - Findings and Open Questions.md",
     "Primes and the Circuit.md",
     "Experiment E - Ternary RNN Rediscovers the Transducer.md",
     "Experiment D - Quantization by Subgroup.md",
@@ -215,7 +216,6 @@
     "Experiment A - Ternary Dropping-Set Classifier.md",
     "LOOP.md",
     "Research Directions - Ternary Nets x Collatz.md",
-    "Summary - Findings and Open Questions.md",
     "Waste Bias at First Drop.md",
     "Winkler Tail Bound.md",
     "VDF Literature - Sequential Functions.md",

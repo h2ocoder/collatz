@@ -52,6 +52,10 @@ Start with [[Summary - Findings and Open Questions]] (ten ranked findings, recom
 ### Primes and the circuit (user question, 2026-09-16)
 - [[Primes and the Circuit]] — odd prime factors are invisible to the dropping class (CRT) and erased at every odd step; the only factorisation-shaped inputs are 2-adic (trailing ones, squares ≡ 1 mod 8, the mod-4 wall in products); six research questions.
 
+### Why 3x+1 is special (goal, 2026-09-17)
+- [[Why 3x+1 is Special]] — the cycle equation x_min(2^b − 3^s) = k·r(v); every k > 1 absorbs a denominator and inherits necklace families as cycles; k = 1 has no slack, the slack inequality x_min ≤ k s/(3 w ln 2) forces any nontrivial cycle to a record trit packing with length ≥ 1.14·10¹¹ (matches Hercher–Puchert), expected survivors 2^(−5.7·10⁹); divergence is the sign of ½log₂p − 1, never k.
+- [[Literature - 3x+k Cycles and Divergence]] — Lagarias 1990, Belaga–Mignotte, Steiner/Simons–de Weger/Hercher, Kontorovich–Lagarias, Morley.
+
 ### Wrap-up
 - [[Summary - Findings and Open Questions]]
 
@@ -75,6 +79,7 @@ Start with [[Summary - Findings and Open Questions]] (ten ranked findings, recom
 - `base_polarity.py`, `stratify_by_valuation.py` — L7: transformer base sweep (GPU) and stratification by v₂(3n+1) / (k,k′).
 - `unary_task.py` — L15: unary vs binary input for the Terras step with held-out n (GPU).
 - `primes_and_circuit.py` — prime factorisation vs dropping classes: CRT independence, prime-power class sequences, the multiplication table, dest mod p per class.
+- `cycles_3xk_census.py`, `cycle_count_mechanism.py`, `cycle_diophantine_k1.py` — 3x+k cycle census, the divisibility mechanism, and the k = 1 record-packing bound.
 - `tag_system.py` — Collatz 2-tag system simulation: round lengths, tag time vs orbit sum, affine check, read words.
 - `entropy_bitcos.py` — H(z), BITCOS overhead 1 − h(z), arithmetic-coding savings over the 29 models.
 

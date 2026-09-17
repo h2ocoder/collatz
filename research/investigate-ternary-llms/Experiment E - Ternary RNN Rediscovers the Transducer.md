@@ -26,6 +26,8 @@ Scripts: `scripts/ternary_rnn.py` (training, extraction), `scripts/rnn_state_mat
 | ternary, H = 16, 6k steps, lr 1e-3 | 0/2 | 0.05, 0.02 | — | — | — |
 | **ternary, H = 64, 6k steps** | **2/2 succeed** | **1.000, 1.000** | **4** | **9761 / 9761 = 100%**, 0 glitch states | 0.35–0.44 |
 
+The successful H = 16 seed, re-run with checkpoint saving (`ternary_rnn_s2_H16_s2.pt`): 100% exact match and **exactly 4 behavioural classes over 1,752 distinct reachable hidden states** — the same exact machine as at H = 64, on a state space five times smaller. So when ternary training at H = 16 converges, it converges to the transducer; the failures are optimisation, not capacity.
+
 Training curves for the failing ternary H = 16 seeds show the STE pathology: loss falls to 0.04 by step 5,000 and then *rises* to 0.2 as quantised weights flip; the successful seed's loss goes 0.0076 → 0.0002 monotonically.
 
 ## Reading

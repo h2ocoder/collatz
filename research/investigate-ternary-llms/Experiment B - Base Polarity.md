@@ -61,7 +61,7 @@ Bases 2, 16, 24 are perfect on every subgroup shown; their 7–13% overall loss 
 
 ## Why base 6 stops where it does — Conjecture, test running
 
-In base 6 both operations of a Terras step are *one-neighbour local*: multiplying by 3 has carry ⌊3d_{i−1}/6⌋ independent of the incoming carry (3d + c < next multiple of 6 for c ≤ 2), and halving gives digit (6·(d_{i+1} mod 2) + d_i)/2. So a Terras step is one local pass, and each extra halving one more. Pass counts:
+(Prior art for the locality: Korec 1992 built a 7-state nearest-neighbour cellular automaton for the Collatz function in base 6 precisely because "the map x → 3x+1 in base 6 does not have carries propagate" — Lagarias's annotated bibliography, entry 82.) In base 6 both operations of a Terras step are *one-neighbour local*: multiplying by 3 has carry ⌊3d_{i−1}/6⌋ independent of the incoming carry (3d + c < next multiple of 6 for c ≤ 2), and halving gives digit (6·(d_{i+1} mod 2) + d_i)/2. So a Terras step is one local pass, and each extra halving one more. Pass counts:
 
 - one-step, valuation v: 1 + (v − 1) = **v passes** → exact through v = 4, fails at 5 — matches a 4-pass budget;
 - long step (k, k′): k Terras passes + k′ halvings — (1,1) = 2 ✓, (1,2) = 3 ✓, (2,1) = 3 ✗, (1,3) = 4 ✗. The (2,1) failure does *not* fit a pure pass count; the extra cost may be deciding k (reading trailing 1-bits of n through base-6 digits).

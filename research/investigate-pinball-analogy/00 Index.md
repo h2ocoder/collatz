@@ -19,6 +19,8 @@ Follow-up question — can composition rules guarantee no machine runs forever? 
 
 Second follow-up — replace halving with n → n − |n/2|? **Positives unchanged; negatives become an injective, always-escaping map that converts 2s into 3s. Its "age classes" are the 3-adic mirror of stopping classes, with P(age ≥ t) = F(t+3)/(2·3^t) exactly. It does not weaken the barrier.** See [[The Mirror Table]] and [[Mirror Experiments]] (ten experiments, a proof that the law is F(t+3)/(2·q^t) for every odd q, and a literature check: closest prior art is Reyes Jiménez arXiv:2606.02621, which E10 shows is the forward dual. Its Open Question 1 — every n > 1 eventually halves twice in a row — is verified here for all n < 2⁴⁰).
 
+Third follow-up — signed prime factorizations? **The sign choices are the unit group: invisible to any map on n. The real structures are units and Galois conjugation in ℤ[ω] (3n+1 = π·π̄·n + 1 is invariant under π ↔ π̄). In factor language the mirror step exchanges a 2 for a 3 and conserves Ω. An exchange family joining Collatz to the mirror has a phase transition at p_c = 0.1309 (every 7th halving escapes, every 8th drains).** See [[Signed Primes and the Exchange Family]].
+
 Also: [[Jev and System One Models]] — what Jev is, and why it is never used as a teacher (its customer agreement prohibits distillation and benchmarking).
 
 ## Headline numbers
@@ -34,6 +36,8 @@ Also: [[Jev and System One Models]] — what Jev is, and why it is never used as
 - `tests/test_pinball.py` — 35 tests
 - `scripts/mirror_experiments.py` — E1–E10 on the mirror table (≈ 2 min)
 - `scripts/double_halving_search.py [B]` — exhaustive Fibonacci-tree search (B = 40 in ≈ 4 min)
+- `scripts/signed_prime_experiments.py` — E15 exchange family, E16 Liouville signs
+- `scripts/banerji_backward_search.py`, `scripts/double_halving_rs/` — tree searches (Python, Rust)
 - `scripts/pinball_experiments.py` — `python -X utf8 scripts/pinball_experiments.py [A] [B] [C]` (A and B together ≈ 2 min; C a few minutes more)
 - `results/pinball_experiments.json` — raw numbers
 

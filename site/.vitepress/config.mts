@@ -3,10 +3,10 @@ import { katex } from '@mdit/plugin-katex'
 
 export default defineConfig({
   title: 'Why Collatz Works',
-  description: 'An interactive proof that every Collatz orbit converges to 1',
+  description: 'An amateur mathematician\'s interactive field notes on the Collatz conjecture. No proof is claimed.',
   head: [
     ['meta', { property: 'og:title', content: 'Why Collatz Works' }],
-    ['meta', { property: 'og:description', content: 'An interactive journey through the proof that every positive integer reaches 1 under the 3n+1 map.' }],
+    ['meta', { property: 'og:description', content: 'Interactive explorations of the 3n+1 problem: explainers, a few new results, and honest notes on what did not work. No proof is claimed.' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
   markdown: {
@@ -18,11 +18,11 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Proof Journey', link: '/journey/the-puzzle' },
+      { text: 'Start Here', link: '/about/how-to-read' },
+      { text: 'The Tour', link: '/journey/the-puzzle' },
       { text: 'Foundations', link: '/foundations/definitions' },
-      { text: 'Proofs', link: '/proofs/affine-orbit' },
+      { text: 'Structure', link: '/proofs/affine-orbit' },
       { text: 'Cycles', link: '/cycles/convergent-elimination' },
-      { text: 'Roadmap', link: '/roadmap/path-to-proof' },
       { text: 'Connections', link: '/connections/' },
       { text: 'Prior Work', link: '/publications' },
       { text: 'Explore', link: '/explore/alpha-sequence' }
@@ -30,7 +30,13 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: 'Proof Journey',
+        text: 'Start Here',
+        items: [
+          { text: 'How to read this site', link: '/about/how-to-read' }
+        ]
+      },
+      {
+        text: 'The Tour',
         items: [
           { text: '1. The Puzzle', link: '/journey/the-puzzle' },
           { text: '2. The Binary Engine', link: '/journey/binary-engine' },
@@ -49,10 +55,10 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Proved Results',
+        text: 'Structure (mostly known mathematics)',
         items: [
           { text: 'Affine Orbit Structure', link: '/proofs/affine-orbit' },
-          { text: 'Logarithmic Escape', link: '/proofs/logarithmic-escape' },
+          { text: 'Logarithmic Escape (retracted)', link: '/proofs/logarithmic-escape' },
           { text: 'Bit Destruction Bound', link: '/proofs/bit-destruction' },
           { text: '3-Adic Mixing', link: '/proofs/mixing' }
         ]
@@ -65,9 +71,9 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Roadmap',
+        text: 'Archive',
         items: [
-          { text: 'Path to Proof', link: '/roadmap/path-to-proof' }
+          { text: 'Old "Path to Proof" (superseded)', link: '/roadmap/path-to-proof' }
         ]
       },
       {

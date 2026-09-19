@@ -3,17 +3,17 @@ layout: home
 hero:
   name: Why Collatz Works
   text: Exploring the 3n+1 Problem
-  tagline: Interactive explorations of the Collatz conjecture — uncovering structural patterns, deep connections, and a possible path to proof.
+  tagline: One amateur's field notes on the 3n+1 problem — playgrounds, explainers, a few new results, and honest notes on what didn't work. No proof is claimed.
   actions:
     - theme: brand
-      text: Start the Journey
+      text: Take the Tour
       link: /journey/the-puzzle
     - theme: alt
       text: Connections
       link: /connections/
     - theme: alt
-      text: Research Roadmap
-      link: /roadmap/path-to-proof
+      text: How to read this site
+      link: /about/how-to-read
 
 features:
   - title: "1. The Puzzle"
@@ -23,40 +23,41 @@ features:
     details: Watch bits get destroyed step by step. Every drop eats information.
     link: /journey/binary-engine
   - title: "3. No Loops"
-    details: The irrationality of log₂3 prevents any orbit from cycling. Every candidate fails.
+    details: Why a loop would need 2^E to sit absurdly close to 3^S, what is actually known about cycles, and a playground for hunting them.
     link: /journey/no-loops
   - title: "4. The Hidden Rotation"
-    details: In log₆ coordinates, Collatz is an irrational rotation on a circle. Chaos becomes order.
+    details: In log₆ coordinates, Collatz looks like an irrational rotation with a small wobble. An analogy worth playing with.
     link: /journey/the-rotation
   - title: "5. The Countdown"
-    details: The +1 carry propagation is a deterministic timer. Not random. Not statistical. Algebraic.
+    details: The +1 carry acts like a countdown on the trailing bits. An elementary lemma you can watch run.
     link: /journey/the-countdown
   - title: "6. Finite Fuel"
-    details: Natural numbers have finite bits. The carry reads faster than the orbit generates. The fuel runs out.
+    details: A heuristic picture — finite bits as fuel. Not a theorem, and the page says where it breaks.
     link: /journey/finite-fuel
 ---
 
-::: warning Status
-This is an **exploration**, not a completed proof. The results here include proved theorems, verified computations, and structural conjectures. Some arguments have gaps — notably the finite propagation bound needs full algebraic verification, and the asymptotic cycle elimination needs a rigorous uniformity bound. We describe both what we've proved and what remains open. Peer review and collaboration are welcome.
+::: warning No proof is claimed
+The Collatz conjecture is open. Earlier versions of this site were framed as a "proof journey" and marked things as proved that are not; an audit in September 2026 found real errors. They are listed, with counterexamples, on [How to read this site](/about/how-to-read). Pages that still overclaim carry a warning until they are rewritten.
 :::
 
 ## What This Site Is
 
-An amateur mathematician's multi-year exploration of the Collatz conjecture, presented as interactive visualizations you can play with. The goal is not to claim a proof, but to share genuinely interesting structural discoveries:
+I am not a professional mathematician. I have been circling the 3n+1 problem for years because it is the most approachable hard problem I know: you can explain it to a child, and nobody can solve it. This site is where I keep what I find — and what I get wrong.
 
-- **The Collatz map is a thermodynamic system** — with a conservation law, a dissipation rate, and a critical threshold. Among all $nx+c$, $x/y$ systems, $3x+1$ is the *only* nontrivial convergent one, because 3 is the only odd prime less than $2^2 = 4$. [Read more →](/connections/universal-dynamics)
+It has four kinds of page, and each one says which kind it is:
 
-- **The transfer operator has exactly 4 non-zero eigenvalues** — the cube roots of $4/3$, spaced at $120°$ intervals. This connects to the Hilbert-Polya conjecture and Eisenstein integers. [Read more →](/connections/hilbert-polya)
+- **Explainers of known mathematics** — dropping sets, why log₂3 keeps appearing, Terras's parity vectors. None of it is mine; all of it is worth understanding.
+- **A few results of my own** — small, fully proved or exhaustively computed, and checked against the literature as far as I can.
+- **Explorations and analogies** — Eisenstein lattices, transfer operators, thermodynamics, pinball. Ideas thrown at the wall to see what sticks.
+- **Retractions** — things I believed that turned out false or empty, kept on purpose.
 
-- **Orbits trace walks on the Eisenstein lattice** — and convergence becomes a geometric question: does a biased random walk on $\mathbb{Z}[\omega]$ always end above a geodesic? [Read more →](/connections/eisenstein)
+## Where to Start
 
-- **Carry propagation is a countdown timer** — the $+1$ in $3n+1$ reads bits of $n$ at a rate that exceeds the orbit's ability to generate new ones. This is verified computationally but not yet fully proved for all integers. [Read more →](/journey/the-countdown)
+**Just curious?** [Take the tour](/journey/the-puzzle) — seven interactive chapters — or go straight to the playgrounds: [Sturmian Bridge](/explore/sturmian-bridge), [Binary Shortcut](/explore/binary-shortcut), [Alpha Sequence](/explore/alpha-sequence).
 
-## Two Paths Through This Site
+**A mathematician?** Read [How to read this site](/about/how-to-read) first. It states exactly what is and is not claimed, in one page.
 
-**The Proof Journey** — 7 interactive chapters. For anyone who knows basic math and binary. Explore WHY the conjecture should be true by playing with the dynamics yourself. [Start here →](/journey/the-puzzle)
-
-**The Research** — Proved results, structural connections, and the roadmap of what's done and what remains. For mathematicians. [Proved results →](/proofs/affine-orbit) | [Connections →](/connections/) | [Roadmap →](/roadmap/path-to-proof)
+**Working on Collatz yourself?** Start with the retractions on that same page. They are the mistakes I made so that you need not. The one test every idea must pass: *it has to fail for −1*, because −1 → −2 → −1 loops forever under the same rule.
 
 ## Prior Work
 

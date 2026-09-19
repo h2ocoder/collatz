@@ -1,5 +1,11 @@
 # The Complete Picture
 
+<!-- audit-banner -->
+::: danger Not a complete picture
+This page assembles the earlier chapters into a statement that every orbit converges. That statement is **not proved**: several of the ingredients are heuristic or wrong. See [How to read this site](/about/how-to-read) for the list.
+:::
+
+
 Let's see the whole proof at once.
 
 ## The proof map

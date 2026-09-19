@@ -1,5 +1,11 @@
 # No Loops
 
+<!-- audit-banner -->
+::: danger Not a proof
+This chapter was written as if cycles had been ruled out. They have not. The argument below counts *expected* cycles (a heuristic) and assumes a cycle's step counts must be a convergent of log₂3, which is false. What is known is due to Steiner, Simons–de Weger, Eliahou and Hercher. The playgrounds are still fun; the word "theorem" below is wrong. See [How to read this site](/about/how-to-read).
+:::
+
+
 Before we prove orbits must descend, let's prove they can't go **in circles**.
 
 A Collatz cycle would be an orbit that returns to its starting value: $n \to \cdots \to n$. If such a cycle has $S$ odd steps and $E$ even steps (total $K = S + E$), then the starting value must satisfy:

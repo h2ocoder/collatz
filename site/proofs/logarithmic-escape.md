@@ -1,5 +1,11 @@
 # Logarithmic Escape Theorem
 
+<!-- audit-banner -->
+::: danger Retracted — this theorem is false as stated
+Counterexample: 294583 → 248555 → 209719 → 176951 → 149303 → 125975 makes **six** consecutive drops in Set₈, where the bound below allows fewer than three (log₃₂ 294583 − 1 = 2.63). The proof assumes the chain stays in one residue subgroup; this chain alternates between residues 23 and 11 mod 32. A corrected statement holds only for chains confined to a single subgroup. Kept here as a record. See [How to read this site](/about/how-to-read).
+:::
+
+
 ## Statement
 
 <div class="theorem">

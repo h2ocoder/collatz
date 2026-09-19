@@ -1,5 +1,11 @@
 # Path to Proof
 
+<!-- audit-banner -->
+::: danger Superseded
+This roadmap is kept as an archive. It marks several things "Proved" that are not (Logarithmic Escape is false; Finite Propagation and the no-cycles argument are heuristic) and it is internally inconsistent. See [How to read this site](/about/how-to-read).
+:::
+
+
 The Collatz conjecture reduces to two independent claims: **no nontrivial cycles** and **no divergent orbits**. Both must be eliminated for the conjecture to hold.
 
 ## The Architecture

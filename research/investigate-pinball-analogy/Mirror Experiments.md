@@ -29,7 +29,7 @@ Labels: **Proved**, **Verified** (computed), **Negative** (the experiment showed
 | E11 | How long can a positive integer avoid two consecutive halvings? | Records sit at 2.5–3.8 × log₂n for odd n < 4·10⁶ (random model predicts 3.27). No n > 1 reaches 1 inside the family. 2^B − 1 survives exactly B steps. |
 | E12 | Does (*) hold exhaustively? | **Yes for every n < 2⁶⁰** (Fibonacci-tree search; Rust, 32 threads, 59 min). Longest survival 200 steps = 3.33 × log₂n; random model 3.27. Per-step survival past the integer's own bits: 0.809017 against φ/2 = 0.809017. |
 | E13 | Do single rays follow the Markov model? | Yes: χ² z-scores +0.75, +0.31, −1.24 on 200,000 steps each. |
-| E14 | Does Banerji's backward conjecture (the dual of (*)) hold exhaustively? | **Yes for every odd n < 2·3³² ≈ 2^51.7** (Rust, 50 s). Longest survival 83 steps = 1.78 × log₂n; random model 1.71. Survival rate per step 0.66667, 0.66665, 0.66663 against 2/3. |
+| E14 | Does Banerji's backward conjecture (the dual of (*)) hold exhaustively? | **Yes for every odd n < 2·3³⁶ ≈ 2^58.1** (Rust, 146 s, 6.9·10¹⁰ leaves). Longest survival 95 steps = 1.74 × log₂n; random model 1.71. Survival rate per step 0.666667, 0.666668, 0.666666 against 2/3. |
 | E15 | Exchange family joining Collatz to the mirror | Phase transition at p_c = 0.1309: exchanging every 7th halving escapes, every 8th drains. See [[Signed Primes and the Exchange Family]]. |
 | E16 | Liouville sign along orbits | No correlation with the dynamics (all within noise). |
 | E9 | Relation to the Collatz inverse tree? | The +1 mirror's B step is exactly the odd branch of the Collatz inverse tree (at m ≡ 4 mod 6); its A step replaces 2m by 2m/3. The two never both apply, so the tree collapses to a line. |
@@ -123,9 +123,9 @@ n = 1 is fixed. This is (*) with time reversed and the primes swapped, and the s
 | survivors | F(B+1) of 2^(B−1) residues | 2^t of 3^t residues |
 | dimension of the exceptional set | log₂φ ≈ 0.694 (2-adic) | log₃2 ≈ 0.631 (3-adic) |
 | typical behaviour inside | grows | shrinks (mean log factor ½·log(8/9) < 0) |
-| survival per step, measured | 0.80902 (φ/2 = 0.80902) | 0.66667 (2/3) |
+| survival per step, measured | 0.809017 (φ/2 = 0.809017) | 0.666667 (2/3) |
 | records, measured / model | 3.24–3.44 / 3.27 × log₂n | 1.67–1.78 / 1.71 × log₂n |
-| exhaustive range | see E12 | odd n < 2·3³² ≈ 2^51.7 |
+| exhaustive range | n < 2⁶⁰ | odd n < 2·3³⁶ ≈ 2^58.1 |
 | fixed point excluded | n = 1 | n = 1 |
 
 No odd n > 1 in range reaches the fixed point 1 from outside, and none survives. Both directions behave exactly like free digits. The pair is the cleanest statement of the 2-adic/3-adic duality this investigation has found: **one question read forward in base 2, the same question read backward in base 3.**

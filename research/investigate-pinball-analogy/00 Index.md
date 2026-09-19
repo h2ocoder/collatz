@@ -21,6 +21,8 @@ Second follow-up — replace halving with n → n − |n/2|? **Positives unchang
 
 Third follow-up — signed prime factorizations? **The sign choices are the unit group: invisible to any map on n. The real structures are units and Galois conjugation in ℤ[ω] (3n+1 = π·π̄·n + 1 is invariant under π ↔ π̄). In factor language the mirror step exchanges a 2 for a 3 and conserves Ω. An exchange family joining Collatz to the mirror has a phase transition at p_c = 0.1309 (every 7th halving escapes, every 8th drains).** See [[Signed Primes and the Exchange Family]].
 
+Fourth follow-up — is this like analytic continuation, and is there a zeta function? **The age-word zeta is 1/(1 − z − z²), the textbook zeta of the golden-mean shift: rational, two poles, on the lines Re(s) = ±log₃φ. Not new, fully understood. Its value is as the solved control beside the repo's dropping zeta, which is not finite-state and has no critical line. Three testable hypotheses listed.** See [[Zeta Functions - Age Words versus Dropping Sets]].
+
 Also: [[Jev and System One Models]] — what Jev is, and why it is never used as a teacher (its customer agreement prohibits distillation and benchmarking).
 
 ## Write-up

@@ -49,7 +49,11 @@ fn children(n: Node, fam: &Family, out: &mut Vec<Node>) {
     }
 }
 
-struct Tally { leaves: u64, absorbed: u64, overflow: u64, hist: Vec<u64>, best: Vec<(u64, u32)> }
+struct Tally { leaves: u64, absorbed: u64, overflow: u64, hist: Vec<u64>, best: Vec<(u64, u32)>,
+               big_trials: u64, big_succ: u64, small_trials: u64, small_succ: u64 }
+
+/// A step counts as 'large' while the current value is at least 2^BIG_BITS.
+const BIG_BITS: u32 = 24;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -71,15 +75,22 @@ fn main() {
         for n in &frontier { children(*n, &fam, &mut next); }
         frontier = next;
     }
+    // optional sharding via env FAMILY_SHARD="k/K": keep work items with index % K == k
+    let (shard, shards): (usize, usize) = std::env::var("FAMILY_SHARD").ok().map(|s| {
+        let mut it = s.split('/');
+        (it.next().unwrap().parse().unwrap(), it.next().unwrap().parse().unwrap())
+    }).unwrap_or((0, 1));
+    let frontier: Vec<Node> = frontier.into_iter().enumerate()
+        .filter(|(i, _)| i % shards == shard).map(|(_, n)| n).collect();
     let work = Arc::new(frontier);
     let cursor = Arc::new(AtomicUsize::new(0));
-    let total = Arc::new(Mutex::new(Tally { leaves: 0, absorbed: 0, overflow: 0, hist: vec![0; HIST], best: vec![] }));
+    let total = Arc::new(Mutex::new(Tally { leaves: 0, absorbed: 0, overflow: 0, hist: vec![0; HIST], best: vec![], big_trials: 0, big_succ: 0, small_trials: 0, small_succ: 0 }));
     let start = std::time::Instant::now();
 
     let handles: Vec<_> = (0..threads).map(|_| {
         let (work, cursor, total, fam) = (work.clone(), cursor.clone(), total.clone(), fam.clone());
         thread::spawn(move || {
-            let mut t = Tally { leaves: 0, absorbed: 0, overflow: 0, hist: vec![0; HIST], best: vec![] };
+            let mut t = Tally { leaves: 0, absorbed: 0, overflow: 0, hist: vec![0; HIST], best: vec![], big_trials: 0, big_succ: 0, small_trials: 0, small_succ: 0 };
             let mut stack: Vec<Node> = Vec::with_capacity(256);
             loop {
                 let i = cursor.fetch_add(1, Ordering::Relaxed);
@@ -96,7 +107,13 @@ fn main() {
                         if since_one > 0 { since_one += 1; if since_one > 40 { outcome = 1; break; } }
                         let odd = (y & 1) as u32;
                         hist = (hist << 1) | odd;
-                        if fam.dead(hist, steps + 1) { break; }
+                        let dead = fam.dead(hist, steps + 1);
+                        // trials at levels B+2 .. B+14, split by the size of the current value
+                        if steps >= bits + 2 && steps < bits + 15 {
+                            if y >> BIG_BITS != 0 { t.big_trials += 1; if !dead { t.big_succ += 1; } }
+                            else { t.small_trials += 1; if !dead { t.small_succ += 1; } }
+                        }
+                        if dead { break; }
                         if odd == 1 {
                             if y > LIMIT { outcome = 2; break; }
                             y = (3 * y + 1) >> 1;
@@ -119,6 +136,8 @@ fn main() {
             }
             let mut g = total.lock().unwrap();
             g.leaves += t.leaves; g.absorbed += t.absorbed; g.overflow += t.overflow;
+            g.big_trials += t.big_trials; g.big_succ += t.big_succ;
+            g.small_trials += t.small_trials; g.small_succ += t.small_succ;
             for (a, b) in g.hist.iter_mut().zip(t.hist.iter()) { *a += b; }
             g.best.extend(t.best);
             g.best.sort_by(|a, b| b.1.cmp(&a.1));
@@ -130,6 +149,6 @@ fn main() {
     let g = total.lock().unwrap();
     let hist: Vec<String> = g.hist.iter().enumerate().filter(|(_, c)| **c > 0).map(|(k, c)| format!("[{},{}]", k, c)).collect();
     let best: Vec<String> = g.best.iter().map(|(n, s)| format!("[{},{}]", n, s)).collect();
-    println!("{{\"bits\":{},\"factors\":{:?},\"seconds\":{:.1},\"leaves\":{},\"absorbed\":{},\"overflow\":{},\"best\":[{}],\"histogram\":[{}]}}",
-        bits, &args[3..], start.elapsed().as_secs_f64(), g.leaves, g.absorbed, g.overflow, best.join(","), hist.join(","));
+    println!("{{\"bits\":{},\"factors\":{:?},\"seconds\":{:.1},\"leaves\":{},\"absorbed\":{},\"overflow\":{},\"big\":[{},{}],\"small\":[{},{}],\"best\":[{}],\"histogram\":[{}]}}",
+        bits, &args[3..], start.elapsed().as_secs_f64(), g.leaves, g.absorbed, g.overflow, g.big_succ, g.big_trials, g.small_succ, g.small_trials, best.join(","), hist.join(","));
 }

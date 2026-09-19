@@ -222,7 +222,7 @@
           {{ gapFor(focusO) === Math.floor(slope) + 2 ? '+1' : '−1' }} predicted by the
           gap is exactly the sign of the χ<sub>6</sub> L-function partial
           sum on <em>this</em> dropping class — by the
-          <a href="/connections/sturmian-l-probe">closed-form theorem</a>.
+          <a href="/connections/sturmian-l-probe">closed form</a>.
           The dropping class itself contains
           {{ knownRkSize(kFor(focusO), qSystem) ? knownRkSize(kFor(focusO), qSystem)!.toLocaleString() : 'many' }}
           residues, every one of which traces a Collatz orbit that first

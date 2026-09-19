@@ -44,7 +44,7 @@ export default defineConfig({
           { text: '4. The Hidden Rotation', link: '/journey/the-rotation' },
           { text: '5. The Countdown', link: '/journey/the-countdown' },
           { text: '6. Finite Fuel', link: '/journey/finite-fuel' },
-          { text: '7. The Complete Picture', link: '/journey/the-picture' }
+          { text: '7. The Big Picture', link: '/journey/the-picture' }
         ]
       },
       {
@@ -55,11 +55,10 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Structure (mostly known mathematics)',
+        text: 'Structure',
         items: [
           { text: 'Affine Orbit Structure', link: '/proofs/affine-orbit' },
-          { text: 'Logarithmic Escape (retracted)', link: '/proofs/logarithmic-escape' },
-          { text: 'Bit Destruction Bound', link: '/proofs/bit-destruction' },
+          { text: 'Bit Destruction', link: '/proofs/bit-destruction' },
           { text: '3-Adic Mixing', link: '/proofs/mixing' }
         ]
       },
@@ -68,12 +67,6 @@ export default defineConfig({
         items: [
           { text: 'Convergent Elimination', link: '/cycles/convergent-elimination' },
           { text: 'Divisibility Obstruction', link: '/cycles/divisibility-obstruction' }
-        ]
-      },
-      {
-        text: 'Archive',
-        items: [
-          { text: 'Old "Path to Proof" (superseded)', link: '/roadmap/path-to-proof' }
         ]
       },
       {

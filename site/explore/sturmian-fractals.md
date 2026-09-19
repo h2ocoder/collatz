@@ -19,9 +19,9 @@ Two turtle recipes are available:
 
 | Sequence | What each symbol means | Where it comes from |
 |---|---|---|
-| **log₂3 Sturmian** | Sign of $(c_2 - c_1)$ for the $o$-th Collatz dropping class | Proved closed form in Parts 4–7 |
+| **log₂3 Sturmian** | Sign of $(c_2 - c_1)$ for the $o$-th Collatz dropping class | Closed form in Parts 4–7 (see [the L-probe page](/connections/sturmian-l-probe)) |
 | **Fibonacci word** | Letter $i$ of the standard Fibonacci word $0100101001001\ldots$ | Reference Sturmian — slope $1/\varphi$ |
-| **Stopping-Class parity** | $P_o \bmod 2$ where $P_o$ = parity-class count of class $R_{k_o}$ | The full-entropy result of Part 8 |
+| **Stopping-Class parity** | $P_o \bmod 2$ where $P_o$ = parity-class count of class $R_{k_o}$ | The full-entropy observation of Part 8 |
 | **Custom rational $p/q$** | Sturmian cutting sequence of slope $p/q$ | Eventually $q$-automatic; visible for small $q$, transient for deep CF convergents |
 
 Note that *none* of these are individual Collatz orbits — they are **meta-sequences** indexed by class number, one symbol per equivalence class. The "Collatz orbit of $n=27$" panel from the static gallery image lives elsewhere.
@@ -30,7 +30,7 @@ Note that *none* of these are individual Collatz orbits — they are **meta-sequ
 
 - **Angle 120°** on the Sturmian sequences gives beautiful triangular tilings.
 - **Angle 90°** on log₂3 collapses to the regular rectangular tiling — that's the original "boring" panel.
-- **Stopping-Class parity at any angle**, dragon recipe: looks like Brownian motion / DLA. That visual *is* the Part 8 "full-entropy" result.
+- **Stopping-Class parity at any angle**, dragon recipe: looks like Brownian motion / DLA. That visual *is* the Part 8 "full-entropy" observation.
 - **Custom rational at small q** (e.g. $3/2$, $8/5$): periodic-ish shapes. At deep convergents like $19/12$ or $84/53$, the rational sequence is visually identical to log₂3 for short lengths.
 - **3D mode**: drag to rotate, scroll to zoom. The 3D Wikipedia recipe alternates yaw / pitch on 0-symbols by index mod 4 — turning the planar fractal into a Hilbert-3D-curve-like structure.
 

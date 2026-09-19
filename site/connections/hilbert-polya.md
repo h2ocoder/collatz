@@ -26,7 +26,7 @@ Computing the eigenvalues of $\mathcal{L}$ on $\mathbb{Z}/M\mathbb{Z}$ for any m
 
 where $\omega = e^{2\pi i/3}$ is a primitive cube root of unity.
 
-The operator has **rank 4**. All remaining eigenvalues are exactly zero. The entire dynamics of the Collatz map, at the operator level, is captured by four modes.
+The operator has **rank 4**. All remaining eigenvalues are exactly zero. At this level of description, the operator has just four modes.
 
 ## Why Cube Roots of 4/3?
 
@@ -40,7 +40,7 @@ This arises because:
 
 2. The **ratio $4/3$** is the energy balance: each halving contributes weight $y = 2$ (two inverse images), while each odd step contributes weight $1/n = 1/3$. Over one full cycle through all three sectors: $y^2/n = 4/3$.
 
-For a general $(n, y)$ system, the eigenvalue equation becomes $\lambda^n = y^2/n$, and convergence requires $|y^2/n| > 1$, i.e., $y^2 > n$.
+For a general $(n, y)$ system, the eigenvalue equation becomes $\lambda^n = y^2/n$, and the radius exceeds 1 exactly when $y^2 > n$.
 
 ## The Critical Circle
 
@@ -48,7 +48,7 @@ The non-trivial eigenvalues lie on a **circle** in the complex plane:
 
 $$|\lambda| = \left(\frac{4}{3}\right)^{1/3} \approx 1.1006$$
 
-This is the **critical circle** — the Collatz analogue of the critical line $\text{Re}(s) = 1/2$ in the theory of the Riemann zeta function.
+I call this the **critical circle**, by loose analogy with the critical line $\text{Re}(s) = 1/2$ in the theory of the Riemann zeta function.
 
 The Hilbert-Polya conjecture proposes that the zeros of $\zeta(s)$ are eigenvalues of a self-adjoint operator, which would force them onto the critical line. Here, the eigenvalues of the Collatz transfer operator are forced onto the critical circle by the **3-fold rotational symmetry** of the map.
 
@@ -59,23 +59,21 @@ The Hilbert-Polya conjecture proposes that the zeros of $\zeta(s)$ are eigenvalu
 | Line position forced by self-adjointness | Circle position forced by rotational symmetry |
 | $1/2$ from the balance of $\Gamma$ factors | $(4/3)^{1/3}$ from the balance of weights $y^2/n$ |
 
-## The Convergence Criterion
+## What 4 > 3 does and doesn't say
 
 The trivial eigenvalue $\lambda_1 = 2$ controls the gross scaling (it comes from the halving map's weight). The **dynamically relevant** eigenvalues are $\lambda_2, \lambda_3, \lambda_4$ on the critical circle.
 
-Convergence of all orbits requires:
+The radius of the critical circle exceeds 1 exactly because
 
 $$\left(\frac{4}{3}\right)^{1/3} > 1 \quad \iff \quad \frac{4}{3} > 1 \quad \iff \quad 4 > 3$$
 
-The entire Collatz conjecture, at the spectral level, reduces to the statement that **4 is greater than 3**.
+This is the spectral face of the classical average-drift heuristic: on average, halving beats tripling. It does **not** reduce the Collatz conjecture to $4 > 3$. The operator describes distributions over residue classes, and the same residue-class picture holds for the negative integers, where the rule has cycles at $-1$, $-5$ and $-17$.
 
 For $5x+1$: the eigenvalue equation gives $\lambda^5 = 4/5$, so the critical circle has radius $(4/5)^{1/5} \approx 0.955 < 1$. This means the transfer operator's non-trivial modes decay — the system *mixes* efficiently. But mixing alone doesn't imply convergence: the trivial eigenvalue $\lambda_1 = 2$ still dominates, and the energy input per kick ($\log_2 5 \approx 2.32$ bits) exceeds the average drain (2 bits). The spectral gap measures how fast the system forgets its initial distribution; the criticality $\mu$ measures whether the average orbit contracts. For $5x+1$, the system mixes well but grows on average — uniform divergence.
 
 ## Self-Adjointness
 
-The transfer operator $\mathcal{L}$ is **not** symmetric (it has asymmetry ratio $\approx 1.41$). However, its non-trivial spectrum is entirely real or comes in conjugate pairs with equal magnitude — exactly the behavior of a **normal** operator (one that commutes with its adjoint).
-
-The 3-fold symmetry $\lambda \mapsto \omega\lambda$ is a stronger constraint than self-adjointness. It forces the eigenvalues onto a circle rather than a line, and the radius of that circle is determined by a single number: $y^2/n$.
+The transfer operator $\mathcal{L}$ is **not** symmetric (it has asymmetry ratio $\approx 1.41$), so the Hilbert-Pólya mechanism does not apply. What places its non-trivial eigenvalues on a circle is instead the 3-fold symmetry $\lambda \mapsto \omega\lambda$, and the radius of that circle is determined by a single number: $y^2/n$.
 
 ## The Berry-Keating Connection
 
@@ -87,17 +85,17 @@ This is the product of "position" (the bit-length $\log_2 x$) and "momentum" (th
 
 $$s \cdot \log_2(6) = T - \log_2(n) + \varepsilon$$
 
-is the Collatz analogue of $E = H(x, p)$ — the total energy expressed in terms of position and momentum.
+plays, loosely, the role of $E = H(x, p)$ — the total energy expressed in terms of position and momentum.
 
 ## Across the Zoo
 
 The spectral structure changes predictably across the [Collatz Zoo](/connections/universal-dynamics):
 
-| System | Critical circle radius | Eigenvalue equation | Convergent? |
+| System | Critical circle radius | Eigenvalue equation | Average drift |
 |--------|----------------------|---------------------|-------------|
-| $3x+1, \; x/2$ | $(4/3)^{1/3} \approx 1.10$ | $\lambda^3 = 4/3$ | Yes |
-| $5x+1, \; x/2$ | $(4/5)^{1/5} \approx 0.96$ | $\lambda^5 = 4/5$ | No |
-| $7x+1, \; x/2$ | $(4/7)^{1/7} \approx 0.92$ | $\lambda^7 = 4/7$ | No |
+| $3x+1, \; x/2$ | $(4/3)^{1/3} \approx 1.10$ | $\lambda^3 = 4/3$ | Down |
+| $5x+1, \; x/2$ | $(4/5)^{1/5} \approx 0.96$ | $\lambda^5 = 4/5$ | Up |
+| $7x+1, \; x/2$ | $(4/7)^{1/7} \approx 0.92$ | $\lambda^7 = 4/7$ | Up |
 
 The critical circle shrinks below 1 as $n$ exceeds $y^2 = 4$. Only $n = 3$ keeps the radius above 1.
 

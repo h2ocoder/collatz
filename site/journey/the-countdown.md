@@ -14,7 +14,7 @@ Watch it in action:
 
 Step through the orbit and watch the $v_2(m+1)$ counter. When $m \equiv 3 \pmod{4}$ (non-dropping step), the counter ticks down: $v_2 \to v_2 - 1$. When it reaches 1, the orbit is forced into $m \equiv 1 \pmod{4}$ — **Set₃** — and drops.
 
-This is **deterministic**. Not statistical. Not "on average." The countdown WILL reach zero, and the orbit WILL drop.
+This is **deterministic**. Not statistical. Not "on average." The countdown will reach 1, and the orbit will drop.
 
 ## Why does the countdown work?
 
@@ -34,7 +34,7 @@ The second countdown forces the orbit from weak drops to deep drops. It decrease
 
 ## Drop depth = 2-adic distance from $-1/3$
 
-Here's the deepest insight: the drop depth $v_2(3m+1)$ counts how many **leading binary digits of $m$ match the pattern $\ldots 010101$**.
+Here's a lovely way to see it: the drop depth $v_2(3m+1)$ counts how many **leading binary digits of $m$ match the pattern $\ldots 010101$**.
 
 That pattern is $-1/3$ in the 2-adic integers. The number $-1/3 = \ldots 01010101_2$ (the alternating binary pattern).
 
@@ -56,15 +56,15 @@ Deep drops happen when $m$ "accidentally" agrees with $-1/3$ in many binary digi
 
 Each depth level has **exactly one** residue class. The deeper levels give more powerful contraction but occur less frequently (density $1/2^k$).
 
-## What we've proved
+## What the countdowns give, and what they don't
 
 The countdown hierarchy:
 
-1. **One-Bit Countdown** (proved): $v_2(m+1)$ decreases by 1 per step → forces Set₃
-2. **Two-Bit Countdown** (proved): $v_2(m-1)$ decreases by 2 per immediate weak drop → forces deep drops
-3. **Bounce regime**: at $v_2(m-1) = 3$, the orbit can oscillate before exiting → bounded by the **Finite Propagation Theorem**
+1. **One-Bit Countdown** (elementary, proved above): $v_2(m+1)$ decreases by 1 per step → forces Set₃
+2. **Two-Bit Countdown**: $v_2(m-1)$ decreases by 2 per immediate weak drop → forces deep drops
+3. **Bounce regime**: at $v_2(m-1) = 3$, the orbit can oscillate before exiting. How long it can keep bouncing is not proved; the next chapter gives a heuristic picture.
 
-The countdowns are deterministic — they work for EVERY orbit, not just typical ones. But they don't yet prove convergence: each deep drop contracts, but the orbit grows between drops. We need one more insight: the orbit's **fuel runs out**.
+The countdowns are deterministic — they work for every orbit, not just typical ones. But they do not show convergence: each drop contracts, and the orbit grows between drops. Whether the drops always win is the open question. The next chapter is one way of thinking about it.
 
 <div style="text-align: center; margin-top: 24px;">
   <a href="./the-rotation" class="vp-button medium">← The Hidden Rotation</a>

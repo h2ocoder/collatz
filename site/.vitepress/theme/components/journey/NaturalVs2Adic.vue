@@ -48,7 +48,7 @@ const twoadicCycle = computed(() => {
           <span v-if="naturalOrbit[naturalOrbit.length-1] === 1" class="converged">✓ Converged!</span>
         </div>
         <div class="verdict good">
-          <strong>Finite fuel → bounces terminate → converges to 1</strong>
+          <strong>Finite fuel → in every case tested, the bounces stop and it reaches 1</strong>
         </div>
       </div>
 
@@ -67,7 +67,7 @@ const twoadicCycle = computed(() => {
           <span class="cycle-indicator">↺ cycles forever</span>
         </div>
         <div class="verdict bad">
-          <strong>Infinite fuel → bounces never terminate → cycles forever</strong>
+          <strong>Infinite fuel → cycles forever</strong>
         </div>
       </div>
     </div>

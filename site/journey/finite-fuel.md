@@ -1,60 +1,48 @@
 # Finite Fuel
 
-<!-- audit-banner -->
-::: danger A heuristic picture, not a proof
-"The fuel always runs out" is not proved. The argument applies an average to every number and rests on a computer check up to 5 million. Read this as an analogy. See [How to read this site](/about/how-to-read).
-:::
+This chapter is a **heuristic picture**, not a proof. It is my favourite way of thinking about why positive integers might behave differently from other number systems where the same rule has loops.
 
-
-Here's the key insight that separates natural numbers from everything else: **they end.**
+Here's the idea: **natural numbers end.**
 
 A natural number like 76,827 has 17 bits: `10010110000011011`. After bit 17, every digit is 0. Forever. This is what "finite" means in binary.
 
-A 2-adic integer like $-1/3 = \ldots 01010101$ has **infinitely many** bits. It never ends. It has unlimited fuel.
-
-This difference — finite vs infinite — is the entire proof.
+A 2-adic integer like $-1 = \ldots 11111$ has **infinitely many** nonzero bits. It never ends. And under the very same rule, $-1 \to -2 \to -1$ loops forever. So whatever makes positive integers fall to 1, it has to use the fact that their bits run out. That is the intuition behind this chapter.
 
 ## The fuel gauge
 
-The bounce mechanism (from the countdown chapter) reads bits from the number's binary representation. At each bounce:
-- The **carry propagation** shifts the reading window by **~1.92 bit positions** (from the $3^{L+1}/8$ factor with $L \geq 3$)
-- The **orbit growth** generates only **~0.51 new bits** per bounce (from the 9/8 growth factor)
-- **Net consumption: ~1.4 bits per bounce**
+The bounce mechanism (from the countdown chapter) reads bits from the number's binary representation. In the numbers I have tested, at each bounce:
+- The **carry propagation** shifts the reading window by about **1.92 bit positions** on average
+- The **orbit growth** adds only about **0.51 new bits** per bounce on average (from the 9/8 growth factor)
+- **Net consumption: about 1.4 bits per bounce**
+
+These are averages. Nothing here shows that every individual orbit behaves like the average.
 
 Watch the fuel drain:
 
 <BounceSimulator />
 
 Try these:
-- **76,827** (17 bits) — 4 bounces, then fuel runs out → deep drop → convergence
-- **1,227,079** (21 bits) — 5 bounces, more fuel but same outcome
-- **27** (5 bits) — very little fuel, converges quickly
-- Any number you like — the fuel ALWAYS runs out
+- **76,827** (17 bits) — 4 bounces, then the bounces stop and a deep drop follows
+- **1,227,079** (21 bits) — 5 bounces, more fuel, same outcome
+- **27** (5 bits) — very little fuel, drops quickly
+- Any number you like
 
 ## The event horizon
 
-A natural number with $B$ bits has an **event horizon** at position $B$: beyond this, all bits are zero. The bounce mechanism reads bits at progressively higher positions. When the reading window crosses the event horizon:
+A natural number with $B$ bits has an **event horizon** at position $B$: beyond this, all bits are zero. The bounce mechanism reads bits at progressively higher positions. When the reading window crosses the event horizon, the bits it reads are zero, and zero bits rarely satisfy the bounce condition, so the bounce sequence tends to stop.
 
-1. The bits are **zero** (the number has ended)
-2. Zero bits satisfy the bounce condition with probability **1/4** (algebraically proved: only 2 of 8 eligible patterns continue)
-3. After at most ~2 more attempts: the pattern fails
-4. The bounce sequence **terminates**
+**By computer:** the number of bounces is at most $(B+3)/4$ for every $m \leq 5 \times 10^6$, with no exceptions. That is evidence, not a proof — the orbit's growth also moves the event horizon, and nobody has shown the reading window always wins the race.
 
-**Maximum bounces ≤ $B/1.92$** — verified for all numbers up to $5 \times 10^6$ with zero exceptions.
-
-## The speed of light
-
-The analogy to physics is precise:
+## The speed-of-light analogy
 
 | Physics | Collatz |
 |---------|---------|
-| Speed of light $c$ | Carry propagation: 1.92 bits/bounce |
-| Object velocity | Orbit growth: 0.51 bits/bounce |
+| Speed of light $c$ | Carry propagation: ~1.92 bits/bounce |
+| Object velocity | Orbit growth: ~0.51 bits/bounce |
 | Finite energy | Natural number: $B$ bits |
 | Event horizon | Position $B$: all zeros beyond |
-| Nothing escapes | No orbit sustains infinite bounces |
 
-The carry reads bits **faster than the orbit generates them**. This is the "speed limit" of the Collatz dynamics. No matter how the orbit twists and turns, it cannot outrun the carry propagation. The fuel budget is finite, the consumption exceeds the generation, and the bounces must terminate.
+The picture: the carry reads bits faster, on average, than the orbit generates them, so a finite budget should eventually be exhausted. Turning "on average" into "for every orbit" is exactly the hard part of the Collatz conjecture, and this picture does not do it.
 
 ## Natural numbers vs 2-adic integers
 
@@ -62,35 +50,23 @@ See the difference side by side:
 
 <NaturalVs2Adic />
 
-Why does this work for natural numbers but not for 2-adic integers?
-
 **Natural number** ($B$ bits, then zeros):
 - Fuel: $B$ bits
-- Consumption: ~1.4 bits/bounce
-- Bounces: $\leq B/1.4$
-- Outcome: **bounces terminate → deep drops → convergence → reaches 1**
+- Consumption: ~1.4 bits/bounce on average
+- In every example tested: the bounces stop, a deep drop follows
 
-**2-adic integer** (infinite bits):
+**2-adic integer** (infinitely many bits):
 - Fuel: unlimited
-- Consumption: ~1.4 bits/bounce
-- Bounces: potentially infinite
-- Outcome: **can sustain cycles** (e.g., $-1/3 = \ldots 010101$ cycles through its own pattern)
+- Bounces: can go on forever
+- Example: the negative integers $-1$, $-5$ and $-17$ each sit on a cycle, and in 2-adic terms they have infinitely many 1-bits
 
-The 2-adic cycles found by Monks et al. are exactly the "infinite fuel" objects. They correspond to negative integers in the 2-adic sense (numbers with infinitely many 1-bits, like $\ldots 11111 = -1$). They're mathematically real but don't correspond to any positive natural number.
+## What is missing
 
-::: warning What remains
-The framework makes the conjecture natural and verifies it to enormous bounds. The counting proof shows: for $B$-bit numbers, the bounce count $\leq (B+3)/4$ with zero violations up to $B = 23$.
+To make this an argument one would need to show that, for **every** positive integer, the constraints imposed at successive bounces cannot all be satisfied by its finitely many bits. The pieces I can prove are local (what one bounce requires of the next few bits); the claim that they combine into a bound for every orbit is open.
 
-The formal proof's last step — showing the bit constraints at successive bounces are genuinely independent — is being formalized. The algebraic structure (each bounce constrains $q \bmod 64$, with exactly 2/8 valid continuations) is proved. The bit-position shift ($\geq 1.92$ per bounce) is proved. The counting bound follows.
-:::
-
-## The punchline
-
-Every positive integer has finite binary expansion. The Collatz carry propagation consumes bits faster than the orbit generates them. After $B/1.4$ bounces, the bit budget is exhausted. The bounce sequence terminates. The orbit gets a deep drop. The geometric mean contraction (0.362 per cycle) drives the orbit toward 1. No cycle can trap it (Front 1). **Every orbit converges.**
-
-$$\text{Finite bits} \implies \text{finite bounces} \implies \text{deep drops} \implies \text{convergence}$$
+$$\text{Finite bits} \overset{?}{\implies} \text{finite bounces} \overset{?}{\implies} \text{deep drops} \overset{?}{\implies} \text{reaching } 1$$
 
 <div style="text-align: center; margin-top: 24px;">
   <a href="./the-countdown" class="vp-button medium">← The Countdown</a>
-  <a href="./the-picture" class="vp-button medium brand" style="margin-left: 12px;">Next: The Complete Picture →</a>
+  <a href="./the-picture" class="vp-button medium brand" style="margin-left: 12px;">Next: The Big Picture →</a>
 </div>

@@ -90,3 +90,43 @@ The difference shrinks by λ^(−2) per four bits (0.33 for "101", 0.29 for "100
 The limit is λ/2: self-generated digits are free, in every family tested. But a purely random model would give z-scores that wander around 0 with both signs; a *constant* z of −10 is a structured term of size √N that I cannot yet explain. **Open.** Candidate: a sub-population of about √N integers (for instance those below 2^(B/2), whose orbits are no longer in a random-looking regime by level B) that behaves deterministically.
 
 **Dead end recorded:** splitting trials by whether the current value is above or below 2²⁴ does not test digit freedom — value size is correlated with the recent step history, hence with the automaton state, so the two halves have different *predicted* rates. Do not reuse that design.
+
+## 5. Where the correction comes from (2026-09-19) — mostly explained
+
+Three experiments (`scripts/family_correction_analysis.py`; `family.rs` with `FAMILY_LIFT` / `FAMILY_BUCKET`; `family_paired.rs`). Results in `results/family_correction.json`, `family_paired_B34.json`, `family_small_value_scaling.json`.
+
+**1. Random-lift control — the correction belongs to the integers.** Replace each surviving r < 2^B by r + 2^B·j with j pseudo-random. The first B parities are unchanged (T^B(r + 2^B j) = T^B(r) + 3^s j) and every later digit is genuinely fresh. The z-scores collapse:
+
+| | 101 | 1001 | 000 | 00 |
+|---|---|---|---|---|
+| real, B = 30 / 34 / 38 | −8.5 / −9.3 / −10.3 | −11.2 / −10.9 / −9.5 | +3.2 / +4.6 / +3.6 | −0.4 / −0.4 / −1.1 |
+| lifted, same depths | −0.1 / −2.3 / −1.4 | −0.9 / −1.6 / +0.9 | −0.6 / +1.5 / −0.2 | +0.2 / −0.8 / −0.8 |
+
+**2. First guess refuted — small *starting* numbers are not the cause.** Dropping every r < 2^(B/2) (about √N of them, which is why the guess was natural) leaves the gap unchanged to three digits.
+
+**3. The cause — survivors whose value *after B steps* is small.** `family_paired.rs` runs the real and the lifted continuation from the same survivor and files both under the bit length of the real T^B(r), so the automaton-state mix is identical in both columns. For **101** at B = 34 the real−lifted gap is −8.2·10⁻⁵ (z −4.2); removing survivors whose value after 34 steps has ≤ 10 bits (0.7 % of trials) removes it (z +1.1). Across depths:
+
+| 101 (small = T^B(n) ≤ 10 bits) | B = 26 | 30 | 34 | 38 |
+|---|---|---|---|---|
+| share of trials | 6.4 % | 2.3 % | 0.74 % | 0.23 % |
+| their share of the real−lifted gap | 104 % | 110 % | 128 % | 85 % |
+| share ratio per 4 bits | | 0.354 | 0.326 | 0.309 |
+
+For **1001** the same holds with a 20-bit cut (82–103 % of the gap). A survivor whose value is small after B steps runs through a small integer for the next 14 steps, and small integers' orbits are specific rather than random — for 101 they fall towards 1 → 2 → 1, whose word 1010… contains 101, so they die (negative gap).
+
+**Why about 1/√N.** T^B(r) ≈ 3^s·r/2^B, so a small value needs r in a sliver of relative width ~3^(−s). The share of such survivors is therefore E[3^(−s)] over pattern-avoiding words, which decays like (μ/λ)^B with μ the Perron root of the transfer matrix whose odd-step edges carry weight 1/3:
+
+| factor | λ | μ | predicted decay | per 4 bits | measured per 4 bits |
+|---|---|---|---|---|---|
+| 101 | 1.7549 | 1.2767 | N^(−0.566) | 0.280 | 0.354 → 0.326 → 0.309 (falling towards it) |
+| 1001 | 1.8668 | 1.2884 | N^(−0.594) | 0.227 | 0.549 → 0.465 → 0.405 (falling; fixed 20-bit cut converges slowly) |
+| 000 | 1.8393 | 1.0000 | N^(−1.0) | 0.087 | — (small values essentially absent) |
+| 00 | 1.6180 | 0.7676 | N^(−1.55) | 0.051 | — (no measurable gap, as predicted) |
+
+So the "c/√N" was an exponent near ½ at the depths reachable, not exactly ½. **Prediction (testable with more compute):** for 101, the share ratio keeps falling towards 0.280 and the z-score, which scales like (μ/√λ)^B = 0.964^B, eventually starts to shrink. At B ≤ 42 it has not yet (−8 → −10).
+
+**Still open.**
+- **000.** Real z ≈ +3 to +5 against lifted ≈ 0 at three depths, so a small non-freshness exists, but it is *not* carried by small values (values ≤ 20 bits are < 0.1 % of trials). Unexplained.
+- The pre-asymptotic behaviour: why the measured ratios sit above (μ/λ)⁴ and how fast they converge.
+
+**What this settles for H3.** Past a number's own digits, the digits the orbit manufactures are statistically fresh *except* on the thin set of survivors that have already become small — a set whose share decays at a rate computable from a weighted transfer matrix. For the Collatz question this is the expected picture: structure appears only near small numbers, never in the bulk.

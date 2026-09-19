@@ -50,3 +50,4 @@ scripts/double_halving_rs/target/
 research/investigate-pinball-analogy/paper/*.aux
 research/investigate-pinball-analogy/paper/*.log
 research/investigate-pinball-analogy/paper/*.out
+scripts/double_halving_rs/target2/

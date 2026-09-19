@@ -50,10 +50,18 @@ fn children(n: Node, fam: &Family, out: &mut Vec<Node>) {
 }
 
 struct Tally { leaves: u64, absorbed: u64, overflow: u64, hist: Vec<u64>, best: Vec<(u64, u32)>,
-               big_trials: u64, big_succ: u64, small_trials: u64, small_succ: u64 }
+               trials: Vec<u64>, succ: Vec<u64> }
 
-/// A step counts as 'large' while the current value is at least 2^BIG_BITS.
-const BIG_BITS: u32 = 24;
+/// Survival trials at levels B+2 .. B+14 are tallied by the bit length of the starting number.
+const LEN_BUCKETS: usize = 65;
+
+/// splitmix64: a deterministic pseudo-random lift for the FAMILY_LIFT control
+fn mix(mut z: u64) -> u64 {
+    z = z.wrapping_add(0x9E3779B97F4A7C15);
+    z = (z ^ (z >> 30)).wrapping_mul(0xBF58476D1CE4E5B9);
+    z = (z ^ (z >> 27)).wrapping_mul(0x94D049BB133111EB);
+    z ^ (z >> 31)
+}
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -66,6 +74,9 @@ fn main() {
         (v, s.len() as u32)
     }).collect();
     let fam = Family { pats };
+    let lift = std::env::var("FAMILY_LIFT").map(|v| v == "1").unwrap_or(false);
+    // FAMILY_BUCKET=value tallies by the bit length of T^B(n) instead of n
+    let by_value = std::env::var("FAMILY_BUCKET").map(|v| v == "value").unwrap_or(false);
     let split = bits.min(18);
 
     // odd starting numbers only: the first symbol is 1
@@ -84,13 +95,14 @@ fn main() {
         .filter(|(i, _)| i % shards == shard).map(|(_, n)| n).collect();
     let work = Arc::new(frontier);
     let cursor = Arc::new(AtomicUsize::new(0));
-    let total = Arc::new(Mutex::new(Tally { leaves: 0, absorbed: 0, overflow: 0, hist: vec![0; HIST], best: vec![], big_trials: 0, big_succ: 0, small_trials: 0, small_succ: 0 }));
+    let total = Arc::new(Mutex::new(Tally { leaves: 0, absorbed: 0, overflow: 0, hist: vec![0; HIST], best: vec![], trials: vec![0; LEN_BUCKETS], succ: vec![0; LEN_BUCKETS] }));
     let start = std::time::Instant::now();
 
     let handles: Vec<_> = (0..threads).map(|_| {
         let (work, cursor, total, fam) = (work.clone(), cursor.clone(), total.clone(), fam.clone());
+        let (lift, by_value) = (lift, by_value);
         thread::spawn(move || {
-            let mut t = Tally { leaves: 0, absorbed: 0, overflow: 0, hist: vec![0; HIST], best: vec![], big_trials: 0, big_succ: 0, small_trials: 0, small_succ: 0 };
+            let mut t = Tally { leaves: 0, absorbed: 0, overflow: 0, hist: vec![0; HIST], best: vec![], trials: vec![0; LEN_BUCKETS], succ: vec![0; LEN_BUCKETS] };
             let mut stack: Vec<Node> = Vec::with_capacity(256);
             loop {
                 let i = cursor.fetch_add(1, Ordering::Relaxed);
@@ -99,8 +111,15 @@ fn main() {
                 while let Some(n) = stack.pop() {
                     if n.depth < bits { children(n, &fam, &mut stack); continue; }
                     t.leaves += 1;
-                    let (mut y, mut hist, mut steps) = (n.x, n.hist, n.depth);
-                    let mut since_one: u32 = if n.r == 1 { 1 } else { 0 };
+                    let mut y = n.x;
+                    if lift {
+                        // T^B(r + 2^B j) = T^B(r) + 3^s j : first B parities unchanged, later ones fresh
+                        let j = (mix(n.r) >> 24) as u128 | 1;
+                        y = n.x + n.pow3 * j;
+                    }
+                    let y_leaf = y;   // the value after B steps
+                    let (mut hist, mut steps) = (n.hist, n.depth);
+                    let mut since_one: u32 = if n.r == 1 && !lift { 1 } else { 0 };
                     let mut outcome = 0u8; // 0 died, 1 absorbed, 2 overflow
                     loop {
                         if y == 1 && since_one == 0 { since_one = 1; }
@@ -108,10 +127,12 @@ fn main() {
                         let odd = (y & 1) as u32;
                         hist = (hist << 1) | odd;
                         let dead = fam.dead(hist, steps + 1);
-                        // trials at levels B+2 .. B+14, split by the size of the current value
+                        // trials at levels B+2 .. B+14, by bit length of the starting number
                         if steps >= bits + 2 && steps < bits + 15 {
-                            if y >> BIG_BITS != 0 { t.big_trials += 1; if !dead { t.big_succ += 1; } }
-                            else { t.small_trials += 1; if !dead { t.small_succ += 1; } }
+                            let b = if by_value { (128 - y_leaf.leading_zeros()).min(64) as usize }
+                                    else { (64 - n.r.leading_zeros()) as usize };
+                            t.trials[b] += 1;
+                            if !dead { t.succ[b] += 1; }
                         }
                         if dead { break; }
                         if odd == 1 {
@@ -136,8 +157,7 @@ fn main() {
             }
             let mut g = total.lock().unwrap();
             g.leaves += t.leaves; g.absorbed += t.absorbed; g.overflow += t.overflow;
-            g.big_trials += t.big_trials; g.big_succ += t.big_succ;
-            g.small_trials += t.small_trials; g.small_succ += t.small_succ;
+            for b in 0..LEN_BUCKETS { g.trials[b] += t.trials[b]; g.succ[b] += t.succ[b]; }
             for (a, b) in g.hist.iter_mut().zip(t.hist.iter()) { *a += b; }
             g.best.extend(t.best);
             g.best.sort_by(|a, b| b.1.cmp(&a.1));
@@ -148,7 +168,9 @@ fn main() {
 
     let g = total.lock().unwrap();
     let hist: Vec<String> = g.hist.iter().enumerate().filter(|(_, c)| **c > 0).map(|(k, c)| format!("[{},{}]", k, c)).collect();
+    let by_len: Vec<String> = (0..LEN_BUCKETS).filter(|b| g.trials[*b] > 0)
+        .map(|b| format!("[{},{},{}]", b, g.succ[b], g.trials[b])).collect();
     let best: Vec<String> = g.best.iter().map(|(n, s)| format!("[{},{}]", n, s)).collect();
-    println!("{{\"bits\":{},\"factors\":{:?},\"seconds\":{:.1},\"leaves\":{},\"absorbed\":{},\"overflow\":{},\"big\":[{},{}],\"small\":[{},{}],\"best\":[{}],\"histogram\":[{}]}}",
-        bits, &args[3..], start.elapsed().as_secs_f64(), g.leaves, g.absorbed, g.overflow, g.big_succ, g.big_trials, g.small_succ, g.small_trials, best.join(","), hist.join(","));
+    println!("{{\"bits\":{},\"factors\":{:?},\"seconds\":{:.1},\"leaves\":{},\"absorbed\":{},\"overflow\":{},\"lift\":{},\"bucket\":\"{}\",\"by_len\":[{}],\"best\":[{}],\"histogram\":[{}]}}",
+        bits, &args[3..], start.elapsed().as_secs_f64(), g.leaves, g.absorbed, g.overflow, lift, if by_value { "value" } else { "start" }, by_len.join(","), best.join(","), hist.join(","));
 }

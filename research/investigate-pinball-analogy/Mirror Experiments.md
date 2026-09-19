@@ -33,6 +33,7 @@ Labels: **Proved**, **Verified** (computed), **Negative** (the experiment showed
 | E15 | Exchange family joining Collatz to the mirror | Phase transition at p_c = 0.1309: exchanging every 7th halving escapes, every 8th drains. See [[Signed Primes and the Exchange Family]]. |
 | E16 | Liouville sign along orbits | No correlation with the dynamics (all within noise). |
 | E17 | Does survival past own bits equal λ/2 for *every* forbidden-factor family? | **Yes in the limit**, to 4–6 decimals for 00, 000, 0000, 101, 1001, 111. The gap is c/√N with a constant z-score per family (≈ −10 for 101 and 1001) — real, unexplained. See [[Zeta Functions - Age Words versus Dropping Sets]] §4. |
+| E18 | Where does E17's correction come from? | **Survivors whose value after B steps is small** (≤ 10 bits for 101, ≤ 20 for 1001): they carry 85–128 % of the gap; a random-lift control removes it. Their share decays like (μ/λ)^B with μ the 1/3-weighted Perron root — N^(−0.57) for 101, looking like 1/√N at reachable depths. 000's small positive gap remains unexplained. |
 | E9 | Relation to the Collatz inverse tree? | The +1 mirror's B step is exactly the odd branch of the Collatz inverse tree (at m ≡ 4 mod 6); its A step replaces 2m by 2m/3. The two never both apply, so the tree collapses to a line. |
 
 ## The Fibonacci law — Proved

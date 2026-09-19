@@ -1,10 +1,12 @@
 # Affine Orbit Structure
 
+The affine structure of orbits within residue classes is due to Terras (1976) and Everett (1977). This page explains it in the dropping-set notation used on this site.
+
 ## Statement
 
 <div class="theorem">
 
-**Theorem (Affine Orbit Structure).** For any integer $n$ with [dropping time](/foundations/definitions#dropping-set) $k$ and orbital oddity $s$, within each residue-class subgroup mod $2^{k-s}$:
+**Theorem (Terras 1976, Everett 1977; stated in dropping-set notation).** For any integer $n$ with [dropping time](/foundations/definitions#dropping-set) $k$ and orbital oddity $s$, within each residue-class subgroup mod $2^{k-s}$:
 
 $$\text{dest}(n) = \frac{3^s}{2^{k-s}} \cdot n + C$$
 
@@ -14,9 +16,9 @@ Similarly, the orbit sum $\sum_{j=0}^{k-1} f^j(n)$ and orbit maximum $\max_j f^j
 
 </div>
 
-## Significance
+## Why it matters
 
-This theorem reveals that Collatz dynamics are piecewise-affine: within each residue class of a Dropping Set, the destination, orbit sum, and orbit maximum are all linear functions of the starting value. Every drop is a linear map, making orbits algebraically tractable rather than chaotic. The universal contraction ratio $3^s/2^{k-s}$ connects directly to the Odd Stopping Time Spectrum: $3^s/2^{k-s} < 1$ iff $k > s \cdot \log_2 6$.
+Collatz dynamics are piecewise-affine: within each residue class of a Dropping Set, the destination, orbit sum, and orbit maximum are all linear functions of the starting value. Each individual drop is simple; the difficulty is in how the pieces chain together. The universal contraction ratio $3^s/2^{k-s}$ connects directly to the Odd Stopping Time Spectrum: $3^s/2^{k-s} < 1$ iff $k > s \cdot \log_2 6$.
 
 ## Examples
 
@@ -91,12 +93,11 @@ After $k$ steps with $s$ odd steps and $k-s$ even steps, exactly $k-s$ bits of $
 
 <div class="corollary">
 
-**Corollary 4 (Dropping Condition).** The contraction ratio $3^s / 2^{k-s} < 1$ is equivalent to $k > s \cdot \log_2 6$, linking to the [Odd Stopping Time Spectrum](/proofs/bit-destruction): $k = \lceil s \cdot \log_2 6 \rceil$.
+**Corollary 4 (Dropping Condition).** The contraction ratio $3^s / 2^{k-s} < 1$ is equivalent to $k > s \cdot \log_2 6$, linking to the [odd stopping time spectrum](/proofs/bit-destruction): $k = \lceil s \cdot \log_2 6 \rceil$ (the possible values are OEIS A122437).
 
 </div>
 
 ## Related Results
 
-- [Logarithmic Escape Theorem](/proofs/logarithmic-escape) — uses the affine structure to bound self-chains
-- [Bit Destruction Bound](/proofs/bit-destruction) — derives bit destruction rate from the contraction ratio
-- [3-Adic Mixing](/proofs/mixing) — the $3^s$ multiplication scrambles residue classes
+- [Bit Destruction](/proofs/bit-destruction) — the size of a drop, from the contraction ratio
+- [3-Adic Mixing](/proofs/mixing) — how the $3^s$ factor spreads destinations over residue classes

@@ -23,10 +23,12 @@ import ZooExplorer from './components/journey/ZooExplorer.vue'
 import SpectrumVisualizer from './components/journey/SpectrumVisualizer.vue'
 import EisensteinWalk from './components/journey/EisensteinWalk.vue'
 import AlphaPositionChart from './components/journey/AlphaPositionChart.vue'
+import { setupAnalytics } from './analytics'
 
 export default {
   extends: DefaultTheme,
-  enhanceApp({ app }) {
+  enhanceApp({ app, router }) {
+    setupAnalytics(router)
     app.component('AlphaExplorer', AlphaExplorer)
     app.component('BinaryShortcut', BinaryShortcut)
     app.component('SturmianFractal', SturmianFractal)

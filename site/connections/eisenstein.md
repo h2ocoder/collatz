@@ -2,7 +2,7 @@
 
 The Collatz map speaks two languages: halving ($\div 2$) and tripling ($\times 3 + 1$). These are exactly the two primes that define the **Eisenstein integers** $\mathbb{Z}[\omega]$, where $\omega = e^{2\pi i/3}$ is a primitive cube root of unity.
 
-The Eisenstein integers form a **triangular lattice** in the complex plane. Every Collatz orbit traces a walk on this lattice — and convergence becomes a geometric question about where the walk ends.
+The Eisenstein integers form a **triangular lattice** in the complex plane. Every Collatz orbit traces a walk on this lattice, which turns questions about convergence into geometric questions about where the walk goes. This page is an exploration: a way of looking, not a set of results about every orbit.
 
 ## The Two Primes
 
@@ -70,7 +70,7 @@ Why do large $\alpha$ values cluster at the end of orbits? Because as the orbit 
 
 <AlphaPositionChart />
 
-This is the [Finite Propagation Theorem](/proofs/bit-destruction) expressed geometrically: the lattice walk **must** eventually produce large $\alpha$ steps, because modular constraints tighten exponentially as the orbit value decreases. The walk cannot stay below the geodesic forever.
+This fits the [finite fuel](/journey/finite-fuel) picture expressed geometrically: in every orbit tested, the lattice walk eventually produces large $\alpha$ steps and climbs above the geodesic. Showing that no walk can stay below the geodesic forever would amount to proving that no orbit diverges, which is open.
 
 ## The Eigenvalue Connection
 
@@ -84,21 +84,23 @@ $$\lambda_k = \left(\frac{4}{3}\right)^{1/3} \cdot \omega^k, \quad k = 0, 1, 2$$
 
 They lie on a circle of radius $(4/3)^{1/3} \approx 1.1006$, equally spaced at $0°$, $120°$, $240°$ — because $\omega$ is a **unit of $\mathbb{Z}[\omega]$**. The critical circle is the unit circle of the Eisenstein ring, scaled by the cube root of the norm ratio.
 
-Convergence requires the critical circle radius $> 1$:
+The radius exceeds 1 exactly because the halving norm beats the tripling norm:
 
 $$(4/3)^{1/3} > 1 \iff N(2) > N(1+2\omega) \iff 4 > 3$$
 
+This is the same inequality that makes the average drift downward. It is a statement about the model operator, not about every orbit.
+
 ## The Three Layers
 
-The Eisenstein lattice unifies three independent proof strategies:
+The Eisenstein lattice gives three ways of looking at the same average behaviour:
 
-| Layer | Question | Tool | Answer |
+| Layer | Question | Tool | What it shows |
 |-------|----------|------|--------|
 | **Thermodynamics** | Does energy dissipate on average? | Criticality $\mu = 3/4$ | Yes — $E[\alpha] = 2 > \log_2 3$ |
-| **Spectral** | Can orbits avoid the average? | Transfer operator $\lambda^3 = 4/3$ | No — $N(2) > N(1+2\omega)$ |
-| **Geometric** | Where does convergence happen? | Eisenstein lattice walk | Late — $\alpha \geq 4$ at position 0.74 |
+| **Spectral** | What does the model operator look like? | Transfer operator $\lambda^3 = 4/3$ | Spectrum governed by $N(2) > N(1+2\omega)$ |
+| **Geometric** | Where do orbits contract? | Eisenstein lattice walk | Late, in the data — $\alpha \geq 4$ at mean position 0.74 |
 
-All three reduce to the same arithmetic fact: in $\mathbb{Z}[\omega]$, the norm of the inert prime exceeds the norm of the ramified prime. **4 is greater than 3.**
+All three come back to the same arithmetic fact: in $\mathbb{Z}[\omega]$, the norm of the inert prime exceeds the norm of the ramified prime. **4 is greater than 3.** That explains why orbits shrink on average. It does not show that every orbit does.
 
 The trivial cycle $\{1, 2, 4\}$ maps to the lattice point $(2, 1)$ with Eisenstein norm $N(2, 1) = 3$ — the norm of the ramified prime $(1+2\omega)$ itself. The ground state of the Collatz system is literally the Eisenstein prime that generates the tripling operation.
 
@@ -107,5 +109,5 @@ The trivial cycle $\{1, 2, 4\}$ maps to the lattice point $(2, 1)$ with Eisenste
 - [The Transfer Operator](/connections/hilbert-polya) — spectral analysis and the critical circle
 - [Universal Dynamics](/connections/universal-dynamics) — the thermodynamic framework and Collatz Zoo
 - [The Hidden Rotation](/journey/the-rotation) — the near-conjugacy to irrational rotation on the base-6 circle
-- [Bit Destruction Bound](/proofs/bit-destruction) — the Finite Propagation Theorem
+- [Finite Fuel](/journey/finite-fuel) — the heuristic picture behind the late large-$\alpha$ steps
 - [abc Conjecture](/connections/abc-conjecture) — $\text{rad}(6) = 6$ as the minimal radical

@@ -95,7 +95,7 @@ Each dropping set is a union of arithmetic progressions (a fact that follows fro
 </div>
 
 ::: info Note on existence
-This is a **definition**, not a claim. We do not assert that every integer belongs to some $\text{Dset}_k$ — that assertion would be equivalent to the Collatz conjecture. We define $\text{Dset}_k$ as the set of integers with dropping time $k$, and our theorems describe properties of these sets. An integer with no finite dropping time would simply not belong to any $\text{Dset}_k$.
+This is a **definition**, not a claim. We do not assert that every integer belongs to some $\text{Dset}_k$ — that assertion would be equivalent to the Collatz conjecture. We define $\text{Dset}_k$ as the set of integers with dropping time $k$, and the results on this site describe properties of these sets. An integer with no finite dropping time would simply not belong to any $\text{Dset}_k$.
 :::
 
 **Example.**

@@ -42,6 +42,7 @@ Findings from notebook investigations:
 - **Ascending Convergent Elimination**: All cycle candidates with 3^S > 2^E eliminated (C>0 forces n<0). Half of all convergents killed for free.
 - **First Convergent Eliminated**: No 13-step cycle exists. All 91 parity words checked; none have 13 | C. Gap=13 ruled out.
 - **Divisibility Obstruction Conjecture**: For gap g = 2^E - 3^S > 1, g never divides 2^E * C. Would prove no non-trivial cycles.
+- **Pinball / Stopping Vectors (SCRUM-30)**: stopping_vector(n) = (n, *stopping_orbit(n)); each subgroup of Set_k is a lattice line in Z^(k+1) with integer direction. Integer-only decision model in `collatz/pinball/` returns exact Fraction probabilities. Collatz routing matches the Bayes posterior on Collatz questions but loses to fixed-depth bit reading on other data. Vault: `research/investigate-pinball-analogy/`.
 
 ## Research Plans
 - [[path-to-proof]] — structured roadmap toward proving the Collatz conjecture

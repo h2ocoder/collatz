@@ -1,8 +1,8 @@
-# No Loops
+# No Loops?
 
-Before we prove orbits must descend, let's prove they can't go **in circles**.
+There are two ways the conjecture could fail: an orbit could grow forever, or it could go **in circles**. This chapter is about the circles. Nobody has ruled them out. What we can do is see why a loop is so hard to build, and what is actually known.
 
-A Collatz cycle would be an orbit that returns to its starting value: $n \to \cdots \to n$. If such a cycle has $S$ odd steps and $E$ even steps (total $K = S + E$), then the starting value must satisfy:
+A Collatz cycle would be an orbit that returns to its starting value: $n \to \cdots \to n$. If such a cycle has $S$ odd steps and $E$ even steps (total $K = S + E$), then the starting value must satisfy the **cycle equation** (Böhm and Sontacchi, 1978):
 
 $$n = \frac{C \cdot 2^E}{2^E - 3^S}$$
 
@@ -10,59 +10,47 @@ where $C$ is a constant determined by the specific pattern of odd and even steps
 
 ## Hunt for cycles
 
-Pick any $(S, E)$ combination. The widget computes the gap, enumerates all valid parity words, and checks whether ANY word produces a cycle:
+Pick any $(S, E)$ combination. The widget computes the gap, enumerates all valid parity words, and checks whether any word produces a cycle:
 
 <CycleHunter />
 
 ### What to try
 
-- **(S=5, E=8)** — the first non-trivial candidate. 91 parity words, gap = 13. Watch the histogram: the remainder at 0 is **empty**. No cycle.
-- **(S=1, E=2)** — the trivial case. This gives the cycle 4 → 2 → 1. The only one.
-- **(S=3, E=5)** — ascending ($3^3 > 2^5$). Eliminated automatically: the gap is negative, forcing $n < 0$.
-- **(S=41, E=65)** — too large to enumerate here, but computationally eliminated via a meet-in-the-middle search (87 minutes in Rust).
+- **(S=5, E=8)** — the first interesting case. 91 parity words, gap = 13. Watch the histogram: the remainder at 0 is **empty**. No cycle of this shape.
+- **(S=1, E=2)** — the trivial case. This gives the cycle 4 → 2 → 1.
+- **(S=3, E=5)** — here $3^3 > 2^5$, so the gap is negative and the equation forces $n < 0$. No positive cycle of this shape.
+- **(S=41, E=65)** — too large to enumerate here. My own meet-in-the-middle search found no cycle of this shape either, though the known results below already rule out cycles this short.
 
-## The convergents of $\log_2 3$
+## Why the gap has to be tiny
 
-The cycle candidates come from the **convergents** of $\log_2 3$ — the best rational approximations. Explore them:
+Along a cycle the values are multiplied by 3 a total of $S$ times and divided by 2 a total of $E$ times, with the $+1$ terms making up the difference. For the orbit to come back to $n$, the product $3^S / 2^E$ has to be very close to 1 — just a little below it. So a cycle needs $2^E$ slightly bigger than $3^S$, which means $E/S$ slightly bigger than $\log_2 3 \approx 1.58496$.
+
+Because $\log_2 3$ is irrational, $2^E \neq 3^S$ for any positive integers, so the gap is never zero. But it can be relatively small, and the pairs where it is smallest come from the **convergents** of $\log_2 3$ — its best rational approximations:
+
+$$1/1,\ 2/1,\ 3/2,\ 8/5,\ 19/12,\ 65/41,\ 84/53,\ 485/306,\ \ldots$$
 
 <ConvergentNavigator />
 
-Blue dots (ascending) are eliminated automatically. Red dots (descending) need computation or counting. Zoom in to see how the convergents cluster around $\log_2 3$ without ever reaching it.
+Blue dots have $3^S > 2^E$ (negative gap, no positive cycle possible). Red dots have $2^E > 3^S$. Zoom in to see how the convergents cluster around $\log_2 3$ without ever reaching it.
 
-## Why no cycles exist
+The convergents are the *most dangerous* candidates, but they are not the only ones. Any pair with $2^E > 3^S$ is a candidate in principle, and ruling out every one of them for every $S$ is exactly the open problem.
 
-The proof eliminates ALL possible cycles through three mechanisms:
+## Counting words against the gap
 
-### 1. Ascending convergents: sign argument
+There is a tempting heuristic. The number of parity words for a given $(S, E)$ is roughly $\binom{E}{S} \approx 2^{0.95 E}$, while the gap is often close to $2^E$ in size. If the constants $C$ were spread out like random numbers, the *expected* number of words with $g \mid C \cdot 2^E$ would be tiny, and shrink as $S$ grows.
 
-When $3^S > 2^E$ (the gap $g$ is negative), the formula gives $n < 0$. Since we need positive integers, these are **automatically eliminated**. This kills roughly half of all candidates.
+That is a heuristic, not a proof. The constants $C$ are not random, the gap can be far smaller than $2^E$ when $E/S$ is near a convergent, and an expected count below one does not show the actual count is zero.
 
-### 2. Small convergents: direct computation
+## What is actually known
 
-For $(S=5, E=8)$: gap = 13, all 91 words checked, zero hits.
-For $(S=41, E=65)$: gap ≈ $4.2 \times 10^{17}$, eliminated by MITM.
+Ruling out nontrivial cycles is open. The strongest results use the cycle equation together with lower bounds on $|2^E - 3^S|$ from Baker's theory of linear forms in logarithms, and computer verification of small numbers:
 
-### 3. Large convergents: the counting argument
+- **Steiner (1977)** — there is no nontrivial cycle made of a single run of odd steps followed by a single run of even steps (a "1-cycle").
+- **Eliahou (1993)** — since every number below a verified bound reaches 1, the ratio $E/S$ of any nontrivial cycle must lie extremely close to $\log_2 3$, and the cycle must be enormously long; the bound grows as verification extends.
+- **Simons and de Weger (2005)** — no nontrivial $m$-cycles for $m \leq 68$ (an $m$-cycle has $m$ separate climbing runs).
+- **Hercher (2023)** — extended this to $m \leq 91$.
 
-For $S \geq 306$: the number of parity words is $C(E-1, S-1) \approx 2^{0.95E}$, while the gap $g \approx 2^E$. Since $0.95 < 1$: words/gap → 0 exponentially. There simply aren't enough words to hit even one multiple of the gap.
-
-The **second moment bound** (Parseval's inequality) makes this rigorous: the deviation of the actual zero-count from the expected count is bounded by $\sqrt{\text{words}/g}$. When words/gap $< 0.38$: the bound forces zero cycles. This holds for all $S \geq 306$.
-
-## The role of $\log_2 3$
-
-Why does this work? The gap $g = 2^E - 3^S$ is governed by how well $E/S$ approximates $\log_2 3 \approx 1.5850$. The best approximations (convergents of the continued fraction) give the smallest gaps — but even these aren't small enough.
-
-The **irrationality** of $\log_2 3$ is what prevents cycles. If $\log_2 3$ were rational ($= p/q$), then $2^p = 3^q$ and the gap would be zero — cycles would exist trivially. But $\log_2 3$ is irrational, so $2^E \neq 3^S$ for any positive integers, and the gap is always nonzero.
-
-The convergents of $\log_2 3$ are: $1/1, 2/1, 3/2, 8/5, 19/12, 65/41, 84/53, 485/306, \ldots$
-
-Each gives a cycle candidate. All fail. The ascending ones (even indices) fail by sign. The descending ones (odd indices) fail by computation or counting.
-
-::: tip Front 1: Complete
-**Theorem.** No non-trivial Collatz cycle exists.
-
-Every convergent is eliminated. The cycle threat is dead. Now we focus on the other threat: can an orbit grow forever?
-:::
+The widgets on this page are a hands-on way to see the first few cases of the problem these authors attacked.
 
 <div style="text-align: center; margin-top: 24px;">
   <a href="./binary-engine" class="vp-button medium">← The Binary Engine</a>

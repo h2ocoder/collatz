@@ -83,7 +83,7 @@ H3 is the cheapest and the most informative: it generalises the one measurement 
 | 38 | −4.6·10⁻⁵ (z −10.3) | −8.0·10⁻⁶ (z −9.5) | +4.4·10⁻⁶ (z +3.6) |
 | 42 | −1.5·10⁻⁵ (z −10.2) | −2.4·10⁻⁶ (z −10.0) | — |
 
-The difference shrinks by λ^(−2) per four bits (0.33 for "101", 0.29 for "1001"): it is proportional to **1/√N**, where N ≈ λ^B is the number of integers tested, and the z-score is constant (≈ −10 for "101" and "1001", ≈ +4 for "000", ≈ −1 for "00"). So
+The difference shrinks by λ^(−2) per four bits (0.33 for "101", 0.29 for "1001"): it is proportional to **1/√N**, where N ≈ λ^B is the number of integers tested, and for "101" and "1001" the z-score is constant (≈ −10 at every depth). "000" is less clean: its gap is negative at B = 26 (z −3.4), then positive and roughly constant (z ≈ +3 to +5) from B = 30 on. "00" is within noise (z ≈ −1). So
 
     survival = λ/2 + c_F / √N,      c_F a constant of the family.
 

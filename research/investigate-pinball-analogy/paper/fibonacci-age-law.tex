@@ -1,0 +1,306 @@
+\documentclass[11pt]{article}
+% Uses only packages present in a minimal MiKTeX install (no amsart/amsthm/booktabs/hyperref).
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\setlength{\textwidth}{6.3in}\setlength{\oddsidemargin}{0.1in}\setlength{\evensidemargin}{0.1in}
+\setlength{\textheight}{8.8in}\setlength{\topmargin}{-0.4in}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remarkx}[theorem]{Remark}
+\newenvironment{remark}{\begin{remarkx}\rmfamily}{\end{remarkx}}
+\newtheorem{questionx}{Question}
+\renewcommand{\thequestionx}{Q}
+\newenvironment{question}{\begin{questionx}\rmfamily}{\end{questionx}}
+\newenvironment{proof}{\par\noindent\textit{Proof.}\ }{\hfill$\square$\par\medskip}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\age}{\operatorname{age}}
+\newcommand{\toprule}{\hline}\newcommand{\midrule}{\hline}\newcommand{\bottomrule}{\hline}
+
+\begin{document}
+
+\title{A Fibonacci age law for an injective relative of the $3x+1$ map,
+and numerical evidence for an open question of Reyes Jim\'enez}
+\author{Darcy Thomas\thanks{\texttt{musicalmathmind@gmail.com}}}
+\date{September 2026. Draft --- not yet checked against all primary sources; see Section~\ref{sec:related}.}
+
+
+
+\maketitle
+
+\begin{abstract}
+Replacing the halving step $n\mapsto n/2$ of the $3x+1$ map by $n\mapsto n-|n/2|$ leaves positive integers
+unchanged and turns the map on negative integers into the injective, magnitude-increasing map
+$m\mapsto 3m-1$ ($m$ odd), $m\mapsto 3m/2$ ($m$ even). Its inverse is a terminating process, giving every
+integer an \emph{age}. We prove that the ages are governed by Fibonacci numbers:
+$\Pr(\age\ge t)=F_{t+3}/(2\cdot 3^{t})$, and more generally $F_{t+3}/(2q^{t})$ when $3$ is replaced by any odd
+$q\ge 3$. The Fibonacci structure comes from the prime $2$ only. We show that a recent forward Fibonacci count of
+Reyes Jim\'enez is the $2$-adic counterpart of this law and reprove it in a few lines, identifying the counted set as
+the integers whose initial Syracuse exponents are all at most $2$. That paper asks whether every $n>1$ eventually
+has two consecutive halvings. We observe that the $3x+1$ conjecture implies this, that it fails for negative
+integers, and we verify it exhaustively for all $n<2^{56}$ with an algorithm whose cost is $O(\varphi^{B})$ rather
+than $O(2^{B})$. Beyond an integer's own binary digits, the measured per-step survival probability is $0.809017$,
+against $\varphi/2=0.809017$. The same method, run backwards in base $3$, verifies a conjecture of Banerji for all
+odd $n<2\cdot 3^{32}$.
+\end{abstract}
+
+\section{The map}
+
+Let $F(n)=3n+1$ for odd $n$ and $F(n)=n-|n/2|$ for even $n$. For $n>0$ this is the Collatz map. For $n<0$ the even
+step is $n\mapsto 3n/2$, so on magnitudes $m=|n|$ the map is
+\begin{equation}\label{eq:G}
+G(m)=3m-1\quad(m\text{ odd}),\qquad G(m)=3m/2\quad(m\text{ even}).
+\end{equation}
+For odd $q\ge 3$ and $c=\pm 1$ put $G_{q,c}(m)=qm+c$ for odd $m$ and $qm/2$ for even $m$, so that $G=G_{3,-1}$.
+The orbit of $1$ under $G$ is $1,2,3,8,12,18,27,80,120,180,270,405,1214,\dots$
+
+The closest named relative is the map $x\mapsto(3x+1)/2$ ($x$ odd), $3x/2$ ($x$ even) from Mahler's $Z$-number
+problem~\cite{Ma}. The map \eqref{eq:G} differs in the odd branch, and that difference is what makes it injective.
+
+\section{Elementary properties}
+
+\begin{proposition}\label{prop:inj}
+$G_{q,c}$ is injective and $G_{q,c}(m)>m$ for all $m\ge 1$. Its image is
+$\{m: q\mid m\}\cup\{m\text{ even}: m\equiv c \pmod q\}$, of density $3/(2q)$. For $q=3$, $c=-1$ exactly half of
+the positive integers have no predecessor, namely those with $m\equiv 1\pmod 3$ or $m\equiv 5\pmod 6$.
+\end{proposition}
+\begin{proof}
+$qm+c>m$ and $qm/2>m$. Odd $m$ map to even values congruent to $c$ modulo $q$; even $m$ map to multiples of $q$.
+These two sets are disjoint, each branch is injective, and every element of either set is attained.
+\end{proof}
+
+\begin{proposition}[Valuation transfer]\label{prop:val}
+Let $b$ be odd and write $qb+c=2^{a}u$ with $u$ odd. The next odd value on the $G_{q,c}$-orbit of $b$ is $q^{a}u$,
+and $\gcd(u,q)=1$. Hence its $q$-adic valuation equals $v_2(qb+c)$.
+\end{proposition}
+\begin{proof}
+Each of the $a$ even steps replaces one factor $2$ by one factor $q$. Since $qb+c\equiv c\pmod q$, $u$ is prime to $q$.
+\end{proof}
+Thus $G$ retains, as a power of $3$, exactly the power of $2$ that the Syracuse map discards. In terms of prime
+factorisations, the even step of $G$ exchanges a factor $2$ for a factor $3$ and preserves the number $\Omega$ of
+prime factors, whereas halving decreases $\Omega$ by one.
+
+\section{The age law}
+
+Backward steps from $m$ are: \textbf{A}, $m\mapsto 2m/q$, available iff $q\mid m$; and \textbf{B}, $m\mapsto(m-c)/q$,
+available iff $m$ is even and $m\equiv c\pmod q$. At most one is available. Let $\age(m)$ be the number of backward
+steps that can be taken from $m$, and let the \emph{age word} of $m$ record them, most recent first. The last value
+reached, which has no predecessor, is the \emph{seed} of $m$. For $G$: $\age(27)=6$, with word
+$\mathrm{AAABAB}$ and seed $1$.
+
+Write $F_1=F_2=1$ for the Fibonacci numbers.
+
+\begin{theorem}\label{thm:age}
+Let $q\ge 3$ be odd, $c=\pm 1$ and $t\ge 1$.
+\begin{enumerate}
+\item The age words are exactly the words over $\{\mathrm{A},\mathrm{B}\}$ with no factor $\mathrm{BB}$.
+\item $\min(\age(m),t)$ depends only on $m \bmod 2q^{t}$.
+\item The number of residues modulo $2q^{t}$ with $\age\ge t$ is $F_{t+3}$. Consequently the natural density of
+$\{m:\age(m)\ge t\}$ is $F_{t+3}/(2q^{t})$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i) After a step B the value $(m-c)/q$ is odd, since $m-c$ is odd and $q$ is odd; but B requires an even value. So B
+never follows B. After a step A the value $2m/q$ is even, so the parity requirement of B is automatic there. Hence
+the only parity condition in an entire backward walk is on $m$ itself, and only if the first step is B.
+
+(ii) Each backward step has the form $m\mapsto(um+v)/q$ with $u\in\{1,2\}$, a unit modulo $q$. After $i$ steps the
+ancestor is $(Um+V)/q^{i}$ with $U$ a unit modulo $q$. The condition for step $i+1$, that the ancestor be congruent
+to $0$ or to $c$ modulo $q$, therefore selects exactly one of the $q$ lifts of $m\bmod q^{i}$ to $m\bmod q^{i+1}$. By
+induction every $\mathrm{BB}$-free word of length $t$ occurs, determines $m\bmod q^{t}$ uniquely, and distinct words
+determine distinct residues.
+
+(iii) By the Chinese remainder theorem a word beginning with A corresponds to two residues modulo $2q^{t}$ (the
+parity of $m$ is free), and a word beginning with B to one ($m$ even). There are $F_{t+1}$ $\mathrm{BB}$-free words
+of length $t$ beginning with A and $F_{t}$ beginning with B, and $2F_{t+1}+F_{t}=F_{t+3}$.
+\end{proof}
+
+\begin{corollary}\label{cor:age}
+\begin{enumerate}
+\item The mean age is $\sum_{t\ge1}F_{t+3}/(2q^{t})=\tfrac12\bigl(\tfrac{2+x}{1-x-x^{2}}-2\bigr)$ at $x=1/q$; for
+$q=3$ it equals $11/10$.
+\item The language of age words has factor complexity $p(n)=F_{n+2}$: it is the full golden-mean shift.
+\item Every positive integer has unique coordinates (seed, age word), and the positive integers are a disjoint
+union of $G_{q,c}$-orbits of seeds.
+\item Forward, the run of even steps after an odd $b$ has length $v_2(qb+c)$, which is geometric of ratio $1/2$
+with respect to density. Backward, a run of steps A continues iff $q$ divides the ancestor, which is geometric of
+ratio $1/q$.
+\end{enumerate}
+\end{corollary}
+
+The Fibonacci numbers here are produced by the prime $2$ alone (an odd value cannot take the odd-type step);
+$q$ enters only through the denominator.
+
+\emph{Checks.} Part (iii) was confirmed by exhaustive count for $q\in\{3,5,7,9,11\}$ and both signs of $c$, with
+$t\le 9$ for $q=3$; the mean age over $m\le 2\cdot 3^{11}$ is $1.09999$; the run-length tails in
+Corollary~\ref{cor:age}(iv) agree to four decimals.
+
+\section{The forward counterpart}
+
+Let $T(n)=n/2$ for even $n$ and $(3n+1)/2$ for odd $n$. Reyes Jim\'enez~\cite[Theorem 4.7]{RJ} proves that exactly
+$F_{m+1}$ odd integers $n\in\{1,\dots,2^{m}\}$ satisfy $T^{i}(n)\not\equiv4\pmod6$ for $1\le i\le m-1$, using the
+spectral radius $\varphi$ of the modulo-$6$ transition graph with the vertex $4$ removed.
+
+\begin{proposition}\label{prop:dual}
+For odd $n$, some $T^{i}(n)$ with $1\le i\le m-1$ is congruent to $4$ modulo $6$ if and only if the parity word of $n$
+of length $m$ contains $00$.
+\end{proposition}
+\begin{proof}
+After an odd step the value is $\equiv2\pmod3$. Halving such a value gives a value $\equiv1\pmod3$; values
+$\equiv1\pmod3$ arise in no other way, and no value after the first step is divisible by $3$. A value is
+$\equiv4\pmod6$ iff it is $\equiv1\pmod3$ and even, that is, iff it was produced by a halving and the next step is
+a halving.
+\end{proof}
+
+By the bijection of Terras~\cite{Te} between parity words of length $m$ and residues modulo $2^{m}$, words that
+begin with $1$ and avoid $00$ correspond to $F_{m+1}$ odd residues. This reproves~\cite[Theorem 4.7]{RJ} and
+identifies the counted set: the $n$ whose initial Syracuse exponents are all at most $2$. We verified the equality
+of the two sets for $m\le 14$.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+ & forward \cite{RJ} & backward (Theorem~\ref{thm:age})\\
+\midrule
+forbidden factor & $00$ & $\mathrm{BB}$\\
+digit bijection & parity word $\leftrightarrow n \bmod 2^{m}$ & age word $\leftrightarrow m\bmod q^{t}$\\
+count & $F_{m+1}$ of $2^{m-1}$ & $F_{t+3}$ of $2q^{t}$\\
+status & selects a null set of orbits & holds for every integer\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{An open question of Reyes Jim\'enez}
+
+In \cite[Section~5]{RJ} it is asked whether every odd $n>2$ eventually meets $4 \pmod 6$, with the remark that an
+explicit bound $m_0(n)\le f(n)$ on the first such level would settle it. By Proposition~\ref{prop:dual} this is:
+
+\begin{question}\label{q}
+Does every integer $n>1$ have two consecutive halvings in its $T$-orbit? Equivalently, is some Syracuse iterate of
+every odd $n>1$ congruent to $5$ modulo $8$?
+\end{question}
+
+\begin{remark}\label{rem:Q}
+\begin{enumerate}
+\item \emph{The $3x+1$ conjecture implies a positive answer.} The odd Syracuse predecessors of $1$ other than $1$
+are $(4^{j}-1)/3$ with $j\ge2$, reached with exponent $2j\ge4$.
+\item \emph{The statement fails for negative integers:} $-1$ is fixed with exponent $1$, and $-5\mapsto-7\mapsto-5$
+uses exponents $1,2$. Any proof must therefore use positivity.
+\item The $2$-adic integers whose parity sequence avoids $00$ form a set of Hausdorff dimension
+$\log_2\varphi\approx0.694$, because the parity-sequence map is a $2$-adic isometry conjugating $T$ to the shift~\cite{La85}.
+\item An orbit giving a negative answer is either a non-trivial cycle all of whose exponents are at most $2$, or is
+unbounded. Inside the family the exponent is $1$ for $n\equiv3,7\pmod8$ and $2$ for $n\equiv1\pmod8$, so typical
+members grow; Question~\ref{q} is of divergence type. The bounds on $m$-cycles of Simons--de Weger~\cite{SdW} and
+Hercher~\cite{He} do not apply, since such a cycle may have arbitrarily many local minima.
+\end{enumerate}
+\end{remark}
+
+\subsection*{Algorithm}
+The residues $r$ modulo $2^{j}$ whose first $j$ steps avoid $00$ form a tree with $F_{j+1}$ nodes at level $j$. With
+each node carry $x=T^{j}(r)$ and $3^{s}$, where $s$ is the number of odd steps so far. Replacing $r$ by $r+2^{j}$
+replaces $x$ by $x+3^{s}$, which has the opposite parity, so both children are obtained in $O(1)$: the odd child
+always survives, and the even child survives iff the previous step was not a halving. Walk the tree to depth $B$
+and finish each of the $F_{B+1}$ leaves, which are genuine integers $r<2^{B}$ with $T^{B}(r)$ already known, by
+direct iteration. Integers that leave the family earlier are pruned. The search is exhaustive for $n<2^{B}$ at cost
+$O(\varphi^{B})$.
+
+\subsection*{Results}
+\begin{center}
+\begin{tabular}{rrrrrr}
+\toprule
+$B$ & leaves $F_{B+1}$ & time & longest survival & attained at $n$ & steps$/\log_2 n$\\
+\midrule
+32 & 3\,524\,578 & $<0.1$ s & 100 & 1\,548\,635\,775 & 3.28\\
+40 & 165\,580\,141 & 0.2 s & 129 & 971\,145\,319\,023 & 3.24\\
+48 & 7\,778\,742\,049 & 10.5 s & 152 & 19\,914\,105\,817\,593 & 3.44\\
+56 & 365\,435\,296\,162 & 525 s & 173 & 66\,107\,737\,450\,688\,865 & 3.10\\
+%ROW60
+\bottomrule
+\end{tabular}
+\end{center}
+(Rust, 32 threads, 128-bit arithmetic with an overflow guard that never triggered; counts and records agree with an
+independent Python implementation for $B=24,32,40$.)
+
+\emph{Question~\ref{q} has a positive answer for every $n$ below the largest bound in the table.} A model in which
+each further step is survived with probability $\varphi/2$ predicts record survival times
+$\log_2 n/\log_2(2/\varphi)\approx3.27\log_2 n$, and the observed records lie on that line. We conjecture
+$m_0(n)\le4\log_2 n$ for all sufficiently large $n$.
+
+\subsection*{Self-generated digits}
+For $B=56$, among the $3.65\cdot10^{11}$ integers that survive their own $56$ binary digits, the conditional
+probability of surviving one more step is $0.809017$, $0.809017$, $0.809012$, $0.809021$ at levels $56,64,72,80$;
+and $\varphi/2=0.809017$. Beyond level $B$ the parity is no longer read from the digits of $n$ but from digits
+produced by the iteration, and these leave the family at exactly the rate at which free digits would.
+
+\subsection*{The backward counterpart}
+Banerji~\cite{Ba} conjectured that backward Syracuse iteration restricted to exponents at most $2$ always reaches
+a multiple of $3$. On odd $n$ this iteration is the deterministic map $b(n)=(2n-1)/3$ if $n\equiv2\pmod3$,
+$b(n)=(4n-1)/3$ if $n\equiv1\pmod3$, with $n=1$ fixed. The same algorithm applies with base-$3$ digits: replacing $r$
+by $r+2\cdot3^{j}d$ changes $b^{j}(r)$ by a power of $2$ times $d$, so exactly one of the three lifts dies, and the
+survivors of $t$ steps are $2^{t}$ of the $3^{t}$ odd residues modulo $2\cdot3^{t}$. The conjecture holds for every odd
+$1<n<2\cdot3^{32}\approx2^{51.7}$; the longest survival is $83$ steps, at $n=116\,393\,404\,689\,949$; the per-step
+survival probability is $0.66667$ against $2/3$. The exceptional set is $3$-adic, of dimension $\log_3 2$.
+
+\section{Related work, and what has been checked}\label{sec:related}
+
+Forward Fibonacci counts for the $3x+1$ map are known: the set of itineraries of the unaccelerated map is the
+golden-mean shift~\cite{Ge}; Winkler~\cite{Wk} counts residue classes modulo powers of $2$ by Fibonacci numbers; and
+\cite{RJ} is discussed above. Albert, Gudmundsson and Ulfarsson~\cite{AGU} enumerate Collatz-induced permutations
+by Fibonacci numbers. That backward admissibility is decided $3$-adically is the mechanism of
+Wirsching~\cite{Wi}, for the map $T$, where runs of halvings are unrestricted and the counts are not Fibonacci.
+Step~A of the inverse of $G$ is the digit-$0$ edge of the base-$3/2$ number system of Akiyama, Frougny and
+Sakarovitch~\cite{AFS}; see also~\cite{FK} for negative integers and $3$-adic convergence. Merlini and
+Sala~\cite{MS} obtain a Fibonacci-type recursion as a heuristic growth rate of the inverse tree.
+
+We text-searched both annotated bibliographies of Lagarias~\cite{La1,La2} and found no entry for the map
+\eqref{eq:G}, for an injective variant of this form, or for a Fibonacci count of backward residues. The sequence
+$1,2,3,8,12,18,27,80,\dots$ is not in the OEIS. \textbf{We have not read the primary texts of
+\cite{Wi}, \cite{Wk}, \cite{MS} or \cite{Ba}}, only annotations and abstracts.
+
+Theorem~\ref{thm:age} and Proposition~\ref{prop:dual} are elementary, and every ingredient is known. The prudent
+description is: an elementary backward, $q$-adic companion to the known forward Fibonacci counts, obtained by
+Wirsching's mechanism applied to an injective relative of Mahler's map.
+
+\section{Questions}
+\begin{enumerate}
+\item Is there a single bijection explaining both Fibonacci counts, exchanging the roles of $2$ and $q$?
+\item Does a single $G$-orbit have the Markov statistics ($\pi_{\mathrm A}=2/3$, $P(\mathrm B\mid\mathrm A)=1/2$)?
+Three orbits of $200\,000$ steps pass a $\chi^{2}$ test; a proof appears as hard as the distribution of
+$(3/2)^{k}$ modulo $1$.
+\item Can Question~\ref{q} be settled for cycles alone?
+\end{enumerate}
+
+\subsection*{Acknowledgements and reproducibility}
+Code, tests and raw results are in the author's repository (\texttt{collatz/pinball/}, \texttt{scripts/}). The
+computations, the literature search and the drafting of this note were carried out with substantial assistance
+from Claude (Anthropic); all statements were checked by computation as described.
+
+\begin{thebibliography}{99}\small
+\bibitem{AFS} S. Akiyama, C. Frougny, J. Sakarovitch, Powers of rationals modulo 1 and rational base number systems,
+\emph{Israel J. Math.} 168 (2008), 53--91.
+\bibitem{AGU} M. H. Albert, B. Gudmundsson, H. Ulfarsson, Collatz meets Fibonacci, arXiv:1404.3054.
+\bibitem{Ba} R. B. Banerji, Some properties of the $3n+1$ function, \emph{Cybernetics and Systems} 27 (1996),
+473--486. [Known to us only through the annotation in \cite{La1}.]
+\bibitem{FK} C. Frougny, K. Klouda, Rational base number systems for $p$-adic numbers, \emph{RAIRO Theor. Inform.
+Appl.} 46 (2012), 87--106.
+\bibitem{Ge} D.-A. German, The golden mean shift is the set of $3x+1$ itineraries, NKS 2004 conference.
+\bibitem{He} C. Hercher, There are no Collatz $m$-cycles with $m\le91$, \emph{J. Integer Seq.} 26 (2023), 23.3.5.
+\bibitem{La1} J. C. Lagarias, The $3x+1$ problem: an annotated bibliography (1963--1999), arXiv:math/0309224.
+\bibitem{La2} J. C. Lagarias, The $3x+1$ problem: an annotated bibliography, II (2000--2009), arXiv:math/0608208.
+\bibitem{La85} J. C. Lagarias, The $3x+1$ problem and its generalizations, \emph{Amer. Math. Monthly} 92 (1985), 3--23.
+\bibitem{Ma} K. Mahler, An unsolved problem on the powers of $3/2$, \emph{J. Austral. Math. Soc.} 8 (1968), 313--321.
+\bibitem{MS} D. Merlini, N. Sala, On the Fibonacci's attractor and the long orbits in the $3n+1$ problem,
+\emph{Int. J. Chaos Theory Appl.} 4 (1999).
+\bibitem{RJ} M.-A. Reyes Jim\'enez, A Fibonacci theorem for Collatz trajectories via modular graph structure,
+arXiv:2606.02621 (2026).
+\bibitem{SdW} J. Simons, B. de Weger, Theoretical and computational bounds for $m$-cycles of the $3n+1$ problem,
+\emph{Acta Arith.} 117 (2005), 51--70.
+\bibitem{Te} R. Terras, A stopping time problem on the positive integers, \emph{Acta Arith.} 30 (1976), 241--252.
+\bibitem{Wi} G. J. Wirsching, \emph{The Dynamical System Generated by the $3n+1$ Function}, Lecture Notes in Math.
+1681, Springer, 1998.
+\bibitem{Wk} M. Winkler, arXiv:1412.0519.
+\end{thebibliography}
+
+\end{document}

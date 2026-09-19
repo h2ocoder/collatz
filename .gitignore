@@ -45,3 +45,8 @@ data/sms_spam/
 
 # Rust build output
 scripts/double_halving_rs/target/
+
+# LaTeX build files
+research/investigate-pinball-analogy/paper/*.aux
+research/investigate-pinball-analogy/paper/*.log
+research/investigate-pinball-analogy/paper/*.out

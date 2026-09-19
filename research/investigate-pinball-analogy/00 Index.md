@@ -23,6 +23,12 @@ Third follow-up — signed prime factorizations? **The sign choices are the unit
 
 Also: [[Jev and System One Models]] — what Jev is, and why it is never used as a teacher (its customer agreement prohibits distillation and benchmarking).
 
+## Write-up
+
+- `paper/fibonacci-age-law.tex` / `.pdf` — 6-page note (compiles with a minimal MiKTeX; run pdflatex with a PATH that omits the malformed `.cargoin\cargo.exe` entry).
+- `paper/cover-email.md` — draft email to Reyes Jiménez (and Winkler), with a pre-send checklist.
+- [[Draft Note - A Fibonacci Age Law]] — the markdown precursor.
+
 ## Headline numbers
 
 - Task A (Collatz): pinball 0.9834 accuracy vs exact Bayes ceiling 0.9854; ECE 0.039 vs 0.294 for the fixed-depth control.

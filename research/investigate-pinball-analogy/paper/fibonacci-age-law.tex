@@ -37,8 +37,9 @@ $m\mapsto 3m-1$ ($m$ odd), $m\mapsto 3m/2$ ($m$ even). Its inverse is a terminat
 integer an \emph{age}. We prove that the ages are governed by Fibonacci numbers:
 $\Pr(\age\ge t)=F_{t+3}/(2\cdot 3^{t})$, and more generally $F_{t+3}/(2q^{t})$ when $3$ is replaced by any odd
 $q\ge 3$. The Fibonacci structure comes from the prime $2$ only. We show that a recent forward Fibonacci count of
-Reyes Jim\'enez is the $2$-adic counterpart of this law and reprove it in a few lines, identifying the counted set as
-the integers whose initial Syracuse exponents are all at most $2$. That paper asks whether every $n>1$ eventually
+Reyes Jim\'enez is the $2$-adic counterpart of this law: avoiding $4 \pmod 6$ is the parity condition ``no two
+consecutive halvings'', which makes that count a direct corollary of Winkler's finite-state parity principle and
+identifies the counted set as the integers whose initial Syracuse exponents are all at most $2$. That paper asks whether every $n>1$ eventually
 has two consecutive halvings. We observe that the $3x+1$ conjecture implies this, that it fails for negative
 integers, and we verify it exhaustively for all $n<2^{56}$ with an algorithm whose cost is $O(\varphi^{B})$ rather
 than $O(2^{B})$. Beyond an integer's own binary digits, the measured per-step survival probability is $0.809017$,
@@ -154,10 +155,20 @@ $\equiv4\pmod6$ iff it is $\equiv1\pmod3$ and even, that is, iff it was produced
 a halving.
 \end{proof}
 
-By the bijection of Terras~\cite{Te} between parity words of length $m$ and residues modulo $2^{m}$, words that
-begin with $1$ and avoid $00$ correspond to $F_{m+1}$ odd residues. This reproves~\cite[Theorem 4.7]{RJ} and
-identifies the counted set: the $n$ whose initial Syracuse exponents are all at most $2$. We verified the equality
-of the two sets for $m\le 14$.
+By the bijection of Terras and Everett~\cite{Te,Ev} between parity words of length $m$ and residues modulo
+$2^{m}$, words that begin with $1$ and avoid $00$ correspond to $F_{m+1}$ odd residues. This reproves~\cite[Theorem
+4.7]{RJ} and identifies the counted set: the $n$ whose initial Syracuse exponents are all at most $2$. We verified
+the equality of the two sets for $m\le 14$.
+
+\begin{remark}\label{rem:winkler}
+The counting step is an instance of Winkler's finite-state parity principle~\cite[Proposition 5.1]{Wk}: any
+condition on the first $k$ parity symbols recognised by a finite automaton is a transfer-matrix count of residue
+classes modulo $2^{k}$; his own theorems use the forbidden factor $11$. Winkler remarks that the theorem of
+\cite{RJ} ``is not a direct corollary'' of that principle, because its states record residues modulo $6$ rather
+than parity information. Proposition~\ref{prop:dual} removes the obstruction: avoiding $4 \pmod 6$ \emph{is} a
+parity condition, the forbidden factor $00$, so \cite[Theorem 4.7]{RJ} is a direct corollary of
+\cite[Proposition 5.1]{Wk}. What is contributed here is only the translation.
+\end{remark}
 
 \begin{center}
 \begin{tabular}{lll}
@@ -246,8 +257,11 @@ survival probability is $0.66667$ against $2/3$. The exceptional set is $3$-adic
 \section{Related work, and what has been checked}\label{sec:related}
 
 Forward Fibonacci counts for the $3x+1$ map are known: the set of itineraries of the unaccelerated map is the
-golden-mean shift~\cite{Ge}; Winkler~\cite{Wk} counts residue classes modulo powers of $2$ by Fibonacci numbers; and
-\cite{RJ} is discussed above. Albert, Gudmundsson and Ulfarsson~\cite{AGU} enumerate Collatz-induced permutations
+golden-mean shift~\cite{Ge}; Winkler~\cite{Wk} proves Fibonacci counts of residue classes modulo $2^{r+2}$ defined by
+a local cut time, via the Terras--Everett bijection and the forbidden factor $11$, and formulates the general
+finite-state principle used in Remark~\ref{rem:winkler}; and \cite{RJ} is discussed above. All of these are forward
+counts modulo powers of $2$. Winkler leaves the extension to maps $n\mapsto(qn+1)/2$ for separate investigation;
+Theorem~\ref{thm:age} is a different statement (backward, modulo powers of $q$), but it does hold for all odd $q$. Albert, Gudmundsson and Ulfarsson~\cite{AGU} enumerate Collatz-induced permutations
 by Fibonacci numbers. That backward admissibility is decided $3$-adically is the mechanism of
 Wirsching~\cite{Wi}, for the map $T$, where runs of halvings are unrestricted and the counts are not Fibonacci.
 Step~A of the inverse of $G$ is the digit-$0$ edge of the base-$3/2$ number system of Akiyama, Frougny and
@@ -256,8 +270,9 @@ Sala~\cite{MS} obtain a Fibonacci-type recursion as a heuristic growth rate of t
 
 We text-searched both annotated bibliographies of Lagarias~\cite{La1,La2} and found no entry for the map
 \eqref{eq:G}, for an injective variant of this form, or for a Fibonacci count of backward residues. The sequence
-$1,2,3,8,12,18,27,80,\dots$ is not in the OEIS. \textbf{We have not read the primary texts of
-\cite{Wi}, \cite{Wk}, \cite{MS} or \cite{Ba}}, only annotations and abstracts.
+$1,2,3,8,12,18,27,80,\dots$ is not in the OEIS. We have read \cite{Wk} (v3) and the introduction of
+\cite{FK}. \textbf{We have not read the primary texts of \cite{Wi}, \cite{MS}, \cite{Ba} or \cite{Ge}}, only
+annotations and abstracts, and \cite{RJ} only in part.
 
 Theorem~\ref{thm:age} and Proposition~\ref{prop:dual} are elementary, and every ingredient is known. The prudent
 description is: an elementary backward, $q$-adic companion to the known forward Fibonacci counts, obtained by
@@ -283,6 +298,8 @@ from Claude (Anthropic); all statements were checked by computation as described
 \bibitem{AGU} M. H. Albert, B. Gudmundsson, H. Ulfarsson, Collatz meets Fibonacci, arXiv:1404.3054.
 \bibitem{Ba} R. B. Banerji, Some properties of the $3n+1$ function, \emph{Cybernetics and Systems} 27 (1996),
 473--486. [Known to us only through the annotation in \cite{La1}.]
+\bibitem{Ev} C. J. Everett, Iteration of the number-theoretic function $f(2n)=n$, $f(2n+1)=3n+2$, \emph{Adv.
+Math.} 25 (1977), 42--45.
 \bibitem{FK} C. Frougny, K. Klouda, Rational base number systems for $p$-adic numbers, \emph{RAIRO Theor. Inform.
 Appl.} 46 (2012), 87--106.
 \bibitem{Ge} D.-A. German, The golden mean shift is the set of $3x+1$ itineraries, NKS 2004 conference.
@@ -300,7 +317,8 @@ arXiv:2606.02621 (2026).
 \bibitem{Te} R. Terras, A stopping time problem on the positive integers, \emph{Acta Arith.} 30 (1976), 241--252.
 \bibitem{Wi} G. J. Wirsching, \emph{The Dynamical System Generated by the $3n+1$ Function}, Lecture Notes in Math.
 1681, Springer, 1998.
-\bibitem{Wk} M. Winkler, arXiv:1412.0519.
+\bibitem{Wk} M. Winkler, Fibonacci enumeration of parity blocks in Collatz trajectories, arXiv:1412.0519v3
+(10 August 2026).
 \end{thebibliography}
 
 \end{document}

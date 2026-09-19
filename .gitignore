@@ -42,3 +42,6 @@ emanon/src/**/obj/
 
 # Third-party datasets (downloaded by scripts/pinball_experiments.py)
 data/sms_spam/
+
+# Rust build output
+scripts/double_halving_rs/target/

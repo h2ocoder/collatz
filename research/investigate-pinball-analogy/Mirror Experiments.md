@@ -7,7 +7,7 @@ jira: SCRUM-30
 
 # Mirror Experiments
 
-Thirteen experiments on the mirror table of [[The Mirror Table]] (m → 3m − 1 for odd m, m → 3m/2 for even m), a proof of the Fibonacci law, and a literature check.
+Fourteen experiments on the mirror table of [[The Mirror Table]] (m → 3m − 1 for odd m, m → 3m/2 for even m), a proof of the Fibonacci law, and a literature check.
 
 Run: `python -X utf8 scripts/mirror_experiments.py` (about 2 minutes). Raw numbers: `results/mirror_experiments.json`.
 
@@ -29,6 +29,7 @@ Labels: **Proved**, **Verified** (computed), **Negative** (the experiment showed
 | E11 | How long can a positive integer avoid two consecutive halvings? | Records sit at 2.5–3.8 × log₂n for odd n < 4·10⁶ (random model predicts 3.27). No n > 1 reaches 1 inside the family. 2^B − 1 survives exactly B steps. |
 | E12 | Does (*) hold exhaustively? | **Yes for every n < 2⁴⁰** (Fibonacci-tree search, 232 s). Longest survival 129 steps = 3.24 × log₂n; random model 3.27. |
 | E13 | Do single rays follow the Markov model? | Yes: χ² z-scores +0.75, +0.31, −1.24 on 200,000 steps each. |
+| E14 | Does Banerji's backward conjecture (the dual of (*)) hold exhaustively? | **Yes for every odd n < 2·3³² ≈ 2^51.7** (Rust, 50 s). Longest survival 83 steps = 1.78 × log₂n; random model 1.71. Survival rate per step 0.66667, 0.66665, 0.66663 against 2/3. |
 | E9 | Relation to the Collatz inverse tree? | The +1 mirror's B step is exactly the odd branch of the Collatz inverse tree (at m ≡ 4 mod 6); its A step replaces 2m by 2m/3. The two never both apply, so the tree collapses to a line. |
 
 ## The Fibonacci law — Proved
@@ -103,6 +104,27 @@ It is necessary for Collatz, it concerns a set of dimension log₂φ ≈ 0.694 r
 
 **Every n > 1 in range satisfies (*).** The random model (survival probability φ/2 per step) predicts records at log₂n / log₂(2/φ) = 3.27 × log₂n. Observed records sit on that line. Empirically m₀(n) ≤ 4·log₂n throughout; that is the explicit bound the open question asks for, as a conjecture.
 
+## The backward dual, searched the same way — Verified (E14)
+
+Banerji (1996, via Lagarias's annotation) conjectured that backward Syracuse iteration restricted to exponents ≤ 2 always reaches a multiple of 3. On odd n that iteration is **deterministic**:
+
+    b(n) = (2n − 1)/3  if n ≡ 2 (mod 3),      b(n) = (4n − 1)/3  if n ≡ 1 (mod 3),      stop if 3 | n.
+
+n = 1 is fixed. This is (*) with time reversed and the primes swapped, and the same tree idea applies with base-3 digits: lifting r by 2·3^j·d changes b^j(r) by a power of 2 times d, so exactly one of the three lifts dies and the other two continue. Survivors of t steps are 2^t of the 3^t odd residues mod 2·3^t, and a walk of that tree is exhaustive for odd n < 2·3^t at cost 2^t. (`scripts/banerji_backward_search.py`, with the tree count asserted against brute force at t = 8; `scripts/double_halving_rs/src/bin/banerji.rs` for depth, cross-checked against the Python version at t = 22.)
+
+| | forward (*) — Reyes Jiménez Q1 | backward — Banerji |
+|---|---|---|
+| map | T restricted to "no 00" | b, deterministic |
+| survivors | F(B+1) of 2^(B−1) residues | 2^t of 3^t residues |
+| dimension of the exceptional set | log₂φ ≈ 0.694 (2-adic) | log₃2 ≈ 0.631 (3-adic) |
+| typical behaviour inside | grows | shrinks (mean log factor ½·log(8/9) < 0) |
+| survival per step, measured | 0.80902 (φ/2 = 0.80902) | 0.66667 (2/3) |
+| records, measured / model | 3.24–3.44 / 3.27 × log₂n | 1.67–1.78 / 1.71 × log₂n |
+| exhaustive range | see E12 | odd n < 2·3³² ≈ 2^51.7 |
+| fixed point excluded | n = 1 | n = 1 |
+
+No odd n > 1 in range reaches the fixed point 1 from outside, and none survives. Both directions behave exactly like free digits. The pair is the cleanest statement of the 2-adic/3-adic duality this investigation has found: **one question read forward in base 2, the same question read backward in base 3.**
+
 ## Single-ray statistics — Verified (E13)
 
 Three mirror rays (seeds 1, 5, 7), 200,000 steps each, cut into 25,000 non-overlapping blocks of length 8 and compared with the Markov prediction (π_A = 2/3, P(B|A) = 1/2, P(A|B) = 1) over the 55 allowed blocks: χ² = 61.8, 57.2, 41.1 on 54 degrees of freedom (z = +0.75, +0.31, −1.24). No "BB" occurs. Single rays are statistically indistinguishable from the Markov model. This remains unprovable for the same reason as Mahler's 3/2 problem.
@@ -140,7 +162,7 @@ Web search plus abstracts; one paper skimmed (Frougny–Klouda, pp. 1–6). No f
 | Wirsching, LNM 1681 (1998) | 3-adic equidistribution hypothesis for predecessor sets under backward iteration. | Confirms backward structure is studied 3-adically. Book not accessed; no Fibonacci mention in the annotations. |
 | Mahler (1968) Z-numbers; Flatto–Lagarias–Pollington; Odlyzko–Wilf (Josephus, ⌈3n/2⌉) | Distribution of (3/2)^k mod 1. | Governs the open single-ray question above. Not read this session. |
 
-Checked since: both Lagarias annotated bibliographies (arXiv math/0309224, math/0608208) were text-searched in full — no entry for the map 3m − 1 / 3m/2, for an injective Collatz variant of this form, or for a Fibonacci count of backward residues. Reyes Jiménez states "To our knowledge, no prior work establishes a Fibonacci count of this kind for Collatz trajectories" for the forward count. Still not read: Wirsching's book itself, Kohl's RCWA papers, Merlini–Sala (1999) "On the Fibonacci's attractor and the long orbits in the 3n+1 problem".
+Checked since: both Lagarias annotated bibliographies (arXiv math/0309224, math/0608208) were text-searched in full — no entry for the map 3m − 1 / 3m/2, for an injective Collatz variant of this form, or for a Fibonacci count of backward residues. Reyes Jiménez states "To our knowledge, no prior work establishes a Fibonacci count of this kind for Collatz trajectories" for the forward count. Third pass (secondary sources only): Wirsching's admissible vectors are decided mod 3^m — the same mechanism as the age law, for the map T, with non-Fibonacci counts; Kohl treats the opposite (surjective, non-injective) case; Merlini–Sala's "Fibonacci attractor" is a heuristic inverse-tree growth rate. More forward-direction prior art turned up: German (NKS 2004, golden-mean shift of 3x+1 itineraries) and Winkler arXiv:1412.0519 (Fibonacci counts of residue classes mod 2^k). Full citations in [[Draft Note - A Fibonacci Age Law]] §6. Backward law still not found anywhere.
 
 **Assessment.** The map G itself and the age law were not found. The ingredients are all known (no consecutive odd steps; base-3/2 backward division is 3-adic; Fibonacci from mod-6 graphs). The likeliest status is "elementary, possibly folklore, apparently unrecorded" — worth a short note only after the unchecked sources are read.
 

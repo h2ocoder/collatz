@@ -32,24 +32,23 @@ features:
     details: The +1 carry acts like a countdown on the trailing bits. An elementary lemma you can watch run.
     link: /journey/the-countdown
   - title: "6. Finite Fuel"
-    details: A heuristic picture — finite bits as fuel. Not a theorem, and the page says where it breaks.
+    details: A heuristic picture — finite bits as fuel. Not a theorem, and the page says what is missing.
     link: /journey/finite-fuel
 ---
 
-::: warning No proof is claimed
-The Collatz conjecture is open. Earlier versions of this site were framed as a "proof journey" and marked things as proved that are not; an audit in September 2026 found real errors. They are listed, with counterexamples, on [How to read this site](/about/how-to-read). Pages that still overclaim carry a warning until they are rewritten.
+::: info
+This is a work in progress by an amateur. No proof of the Collatz conjecture is claimed.
 :::
 
 ## What This Site Is
 
-I am not a professional mathematician. I have been circling the 3n+1 problem for years because it is the most approachable hard problem I know: you can explain it to a child, and nobody can solve it. This site is where I keep what I find — and what I get wrong.
+I am not a professional mathematician. I have been circling the 3n+1 problem for years because it is the most approachable hard problem I know: you can explain it to a child, and nobody can solve it. This site is where I keep what I find.
 
-It has four kinds of page, and each one says which kind it is:
+It has three kinds of page:
 
 - **Explainers of known mathematics** — dropping sets, why log₂3 keeps appearing, Terras's parity vectors. None of it is mine; all of it is worth understanding.
 - **A few results of my own** — small, fully proved or exhaustively computed, and checked against the literature as far as I can.
 - **Explorations and analogies** — Eisenstein lattices, transfer operators, thermodynamics, pinball. Ideas thrown at the wall to see what sticks.
-- **Retractions** — things I believed that turned out false or empty, kept on purpose.
 
 ## Where to Start
 
@@ -57,8 +56,8 @@ It has four kinds of page, and each one says which kind it is:
 
 **A mathematician?** Read [How to read this site](/about/how-to-read) first. It states exactly what is and is not claimed, in one page.
 
-**Working on Collatz yourself?** Start with the retractions on that same page. They are the mistakes I made so that you need not. The one test every idea must pass: *it has to fail for −1*, because −1 → −2 → −1 loops forever under the same rule.
+**Working on Collatz yourself?** The one test every idea must pass: *it has to fail for −1*, because −1 → −2 → −1 loops forever under the same rule.
 
 ## Prior Work
 
-This exploration grew out of several years of self-published work by an amateur mathematician working in industry. The earlier writings developed the dropping set framework, the geometric correspondence, and the base-6 rotation discovery. [Read more →](/publications)
+This exploration grew out of several years of self-published work by an amateur mathematician working in industry. The earlier writings developed the dropping set framework, the geometric correspondence, and proportional power ratios in base 6. [Read more →](/publications)

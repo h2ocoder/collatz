@@ -27,13 +27,15 @@ const enriched = computed(() => {
 
     let status: string
     if (isAscending) {
-      status = 'Ascending (auto-eliminated)'
+      status = 'Negative gap: no positive cycle'
+    } else if (c.q === 1) {
+      status = 'The trivial cycle 1 → 4 → 2 → 1'
     } else if (c.q <= 5) {
-      status = 'Enumerated: no cycle'
+      status = 'Enumerated: no cycle of this shape'
     } else if (c.q <= 41) {
-      status = 'MITM: no cycle'
+      status = 'Meet-in-the-middle search: none found'
     } else {
-      status = 'Counting bound: words/gap → 0'
+      status = 'Too short for a cycle (Eliahou 1993)'
     }
 
     return {

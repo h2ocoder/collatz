@@ -1,22 +1,22 @@
-# 3-Adic Mixing Theorem
+# 3-Adic Mixing
 
-## Statement
+This page collects two elementary facts about how drops spread numbers over residue classes, and one measurement. The facts are classical; the measurement is mine. None of it says what an individual orbit must do.
+
+## Destinations cover every residue class
+
+From the [Affine Orbit Structure](/proofs/affine-orbit), within one residue class of $\text{Dset}_k$ (period $P = 2^{k-s}$):
+
+$$\text{dest}(n_0 + P j) = \text{dest}(n_0) + 3^s j$$
+
+Since $3^s$ is odd, it is invertible mod $2^B$. So as $j$ runs through $2^B$ consecutive values, the destinations run through **every** residue class mod $2^B$ exactly once. Starting points that agree on their low bits can land anywhere.
+
+## The order of 3 modulo $2^B$
 
 <div class="theorem">
 
-**Theorem (3-Adic Mixing).** For $B \geq 3$:
-
-$$\text{ord}(3 \bmod 2^B) = 2^{B-2}$$
-
-After a drop through $\text{Dset}_k$ with oddity $s$, the destination's residue mod $2^B$ is determined by multiplication by $3^s \pmod{2^B}$. Since $3^s$ generates a subgroup of order $2^{B-2} / \gcd(s, 2^{B-2})$ in $(\mathbb{Z}/2^B\mathbb{Z})^*$, destinations are equidistributed among a large fraction of residue classes.
+**Theorem (classical).** For $B \geq 3$: $\text{ord}(3 \bmod 2^B) = 2^{B-2}$.
 
 </div>
-
-## Significance
-
-The Collatz map acts as an effective scrambler of 2-adic information. After each drop, the multiplication by $3^s$ spreads destinations across residue classes so thoroughly that the next dropping set assignment is nearly independent of the current one.
-
-## Order of 3 mod $2^B$
 
 | $B$ | $2^B$ | $\text{ord}(3 \bmod 2^B)$ | Ratio |
 |-----|-------|---------------------------|-------|
@@ -31,34 +31,37 @@ The Collatz map acts as an effective scrambler of 2-adic information. After each
 | 16 | 65536 | 16384 | 1/4 |
 | 20 | 1048576 | 262144 | 1/4 |
 
-The ratio stabilizes at exactly $1/4$ for all $B \geq 3$. The element 3 generates exactly half of the odd residues mod $2^B$.
-
-## Proof
+The ratio stabilizes at exactly $1/4$ for all $B \geq 3$: the powers of 3 reach exactly half of the odd residues mod $2^B$.
 
 <div class="proof">
-
-This is a classical result in 2-adic number theory. We sketch the key argument.
-
-**Claim:** $\text{ord}(3 \bmod 2^B) = 2^{B-2}$ for $B \geq 3$.
-
-Write $3 = 1 + 2$. By the binomial theorem:
-
-$$3^{2^{B-2}} = (1 + 2)^{2^{B-2}} = 1 + \binom{2^{B-2}}{1} \cdot 2 + \binom{2^{B-2}}{2} \cdot 4 + \cdots$$
-
-The key is to show $v_2(3^{2^{B-2}} - 1) = B$ (so $3^{2^{B-2}} \equiv 1 \pmod{2^B}$) but $v_2(3^{2^{B-3}} - 1) = B - 1$ (so $3^{2^{B-3}} \not\equiv 1 \pmod{2^B}$).
 
 By lifting the exponent: $v_2(3^{2^j} - 1) = v_2(3 - 1) + v_2(3 + 1) + v_2(2^j) - 1 = 1 + 2 + j - 1 = j + 2$.
 
 So $v_2(3^{2^{B-2}} - 1) = (B-2) + 2 = B$, confirming $3^{2^{B-2}} \equiv 1 \pmod{2^B}$.
 And $v_2(3^{2^{B-3}} - 1) = (B-3) + 2 = B-1 < B$, so $3^{2^{B-3}} \not\equiv 1 \pmod{2^B}$.
 
-Therefore $\text{ord}(3 \bmod 2^B) = 2^{B-2}$.
+Since the order divides $2^{B-1}$ (the size of the group of odd residues), it is $2^{B-2}$.
 
 </div>
 
-## Entropy Measurement
+### Powers of $3^s$
 
-The near-independence of consecutive dropping set assignments was measured empirically over $n < 50{,}000$:
+For **odd** $s$, $3^s$ has the same order as 3, so its powers reach the same half of the odd residues. For **even** $s$, the order drops by a factor $2^{v_2(s)}$:
+
+| Set$_k$ | $s$ | $v_2(s)$ | Share of the powers of 3 reached by powers of $3^s$ |
+|---------|-----|----------|----------------|
+| 3 | 1 | 0 | 100% |
+| 6 | 2 | 1 | 50% |
+| 8 | 3 | 0 | 100% |
+| 11 | 4 | 2 | 25% |
+| 13 | 5 | 0 | 100% |
+| 16 | 6 | 1 | 50% |
+| 19 | 7 | 0 | 100% |
+| 21 | 8 | 3 | 12.5% |
+
+## Measured: consecutive sets are nearly independent
+
+Over $n < 50{,}000$, I measured how much the dropping set of $n$ tells you about the dropping set of its destination:
 
 | Quantity | Value |
 |----------|-------|
@@ -68,37 +71,13 @@ The near-independence of consecutive dropping set assignments was measured empir
 | Total variation distance | < 0.003 |
 | Information ratio | 1.3% |
 
-Set transitions are **98.7% independent** — knowing what set you're in tells you almost nothing about what set the destination will be in.
+On average over starting values, knowing the current set tells you almost nothing about the next one.
 
-## Mixing Quality by Oddity
+## What this does not show
 
-The quality of mixing depends on the parity of $s$:
+These are statements about **averages over residue classes**. They do not stop a particular orbit from landing in slow sets many times in a row — for example, 294583 → 248555 → 209719 → 176951 → 149303 → 125975 → 106292 is six consecutive drops, every one of them through Set₈. And the same residue-class facts hold for the negative integers, where the rule has cycles. The classical "almost all" results (Terras 1976; Tao 2019 for a much stronger form) are proved by other, more careful arguments.
 
-For **odd** $s$: $\gcd(s, 2^{B-2}) = 1$, so $3^s$ has the same order as 3 — full mixing. Destinations cycle through **all** odd residues mod $2^B$.
+## Related
 
-For **even** $s$: $\gcd(s, 2^{B-2}) = 2^{v_2(s)}$, reducing the order. Destinations cover a fraction $1/2^{v_2(s)}$ of odd residues.
-
-| Set$_k$ | $s$ | Parity | $v_2(s)$ | Mixing coverage |
-|---------|-----|--------|----------|----------------|
-| 3 | 1 | odd | 0 | 100% |
-| 6 | 2 | even | 1 | 50% |
-| 8 | 3 | odd | 0 | 100% |
-| 11 | 4 | even | 2 | 25% |
-| 13 | 5 | odd | 0 | 100% |
-| 16 | 6 | even | 1 | 50% |
-| 19 | 7 | odd | 0 | 100% |
-| 21 | 8 | even | 3 | 12.5% |
-
-Most slow sets (Set$_{13}$, Set$_{44}$, Set$_{75}$) have odd $s$, giving **full mixing** precisely where it matters most.
-
-## Implications
-
-1. **No systematic slow-set targeting:** An orbit cannot repeatedly land in slow sets because each drop scrambles the destination's residue class.
-2. **Average behavior dominates:** The observed bit destruction rate (~$0.725$ bits/drop) matches the density-weighted average, confirming orbits behave "as if random."
-3. **Terras-type result:** Combined with the density of dropping sets converging to 1, this gives: for "almost all" $n$ (density 1), the orbit reaches 1.
-
-## Related Results
-
-- [Affine Orbit Structure](/proofs/affine-orbit) — the $3^s/2^{k-s}$ ratio that creates the mixing
-- [Bit Destruction Bound](/proofs/bit-destruction) — uses mixing to justify average-case analysis
-- [Logarithmic Escape](/proofs/logarithmic-escape) — complements mixing: bounds same-set chains
+- [Affine Orbit Structure](/proofs/affine-orbit) — where the $3^s j$ shift comes from
+- [Bit Destruction](/proofs/bit-destruction) — the size of each drop

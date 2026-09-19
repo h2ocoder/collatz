@@ -124,7 +124,7 @@ init()
     <div class="insight" v-if="currentEntry && currentEntry.constraintBits > initialBits * 0.8">
       <strong>Fuel running low!</strong> The constraint bits ({{ currentEntry.constraintBits.toFixed(1) }})
       are approaching the bit budget ({{ initialBits }}). The event horizon is near.
-      Beyond it: all bits are zero, and the bounce sequence must terminate.
+      Beyond it: all bits are zero, and in every case tested the bounce sequence stops.
     </div>
   </div>
 </template>

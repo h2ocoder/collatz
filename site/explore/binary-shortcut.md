@@ -1,8 +1,8 @@
 # The Binary Shortcut
 
-## The Discovery
+## The Shortcut
 
-There's a shortcut for computing Collatz steps using binary arithmetic, discovered through pattern exploration:
+There's a classical shortcut for computing Collatz steps using binary arithmetic: a number $n = 2^m c - 1$ with $c$ odd (so $n$ ends in exactly $m$ 1-bits) becomes $3^m c - 1$ after $m$ steps of $(3n+1)/2$. I found it by playing with binary patterns, but it is well known. Here it is as a recipe:
 
 1. Take an odd number $n$ and write it in binary
 2. Count the **trailing 1-bits** (from the right). Call this $m$.

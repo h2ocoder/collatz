@@ -7,12 +7,12 @@ const rows = [
   {
     physics: 'Speed of light c',
     collatz: 'Carry propagation: 1.92 bits/bounce',
-    detail: 'The ×3 operation propagates carries through the binary representation at rate log₂(3) ≈ 1.58 bits per multiplication. Over a bounce cycle (~4 multiplications): the active bit window shifts by ≥ 1.92 positions. Nothing can outrun this speed.'
+    detail: 'The ×3 operation propagates carries through the binary representation at rate log₂(3) ≈ 1.58 bits per multiplication. Over a bounce cycle (~4 multiplications): the active bit window shifts by about 1.92 positions in the cases studied.'
   },
   {
     physics: 'Particle velocity v < c',
     collatz: 'Orbit growth: 0.51 bits/bounce',
-    detail: 'The orbit grows at rate 9/8 per weak drop, adding ~0.17 bits per step. Over a bounce cycle: ~0.51 new bits. This is the "velocity" of information generation — always less than the "speed of light" (1.92).'
+    detail: 'The orbit grows at rate 9/8 per weak drop, adding ~0.17 bits per step. Over a bounce cycle: ~0.51 new bits. This is the "velocity" of information generation — on average less than the "speed of light" (1.92).'
   },
   {
     physics: 'Finite energy E = mc²',
@@ -27,17 +27,17 @@ const rows = [
   {
     physics: 'Hawking radiation',
     collatz: '~0.51 new bits per bounce from growth',
-    detail: 'The orbit\'s growth generates a trickle of new bits — like Hawking radiation slowly leaking from a black hole. But the rate (0.51) is too slow to prevent the eventual exhaustion of the bit budget.'
+    detail: 'The orbit\'s growth generates a trickle of new bits — like Hawking radiation slowly leaking from a black hole. On average the rate (0.51) is slower than the reading rate. Whether that holds along every orbit is the open question.'
   },
   {
     physics: 'Heat death of universe',
-    collatz: 'Bit budget exhausted → orbit collapses',
-    detail: 'When the reading window has consumed all B bits and the growth can\'t keep up: the bounce sequence terminates, a deep drop occurs, and the orbit begins its final descent to 1. Inevitable thermodynamic collapse.'
+    collatz: 'Bit budget exhausted → deep drop',
+    detail: 'The picture: when the reading window has consumed all B bits and the growth can\'t keep up, the bounce sequence stops and a deep drop follows. That is what happens in every example tested; it is not proved for every orbit.'
   },
   {
     physics: 'Trivial zeros of ζ(s)',
-    collatz: '2-adic cycles at negative integers',
-    detail: 'The 2-adic Collatz cycles (at -1, -1/3, etc.) are "trivial" solutions — they exist in the infinite-precision world of Z₂ but not among natural numbers. Like the trivial zeros of the Riemann zeta function at negative even integers, they\'re structurally forced by symmetry.'
+    collatz: 'Cycles at negative integers',
+    detail: 'The cycles through -1, -5 and -17 live in the infinite-precision world of Z₂ (negative integers have infinitely many 1-bits) but not among the positive integers. A loose parallel with the trivial zeros of the Riemann zeta function at the negative even integers.'
   },
 ]
 </script>

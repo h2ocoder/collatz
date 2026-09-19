@@ -40,17 +40,17 @@ In one sentence: **the irrationality of $\log_2 3$ is *why* the Collatz dropping
 
 ### Dropping orbits → the cutting picture
 
-Any individual Collatz orbit $n \to T(n) \to T^2(n) \to \ldots$ runs through *some* sequence of odd and even steps. The number of odd steps until the orbit first drops below $n$ is the orbit's odd-step count $o$. Its stopping time is $k_o$. So every Collatz orbit "lives at" one rung of the Beatty ladder shown in **Panel B** — and the entire set of orbits that share a stopping time is a single rung of that ladder.
+Any individual Collatz orbit $n \to T(n) \to T^2(n) \to \ldots$ runs through *some* sequence of odd and even steps. The number of odd steps until the orbit first drops below $n$ is the orbit's odd-step count $o$. Its stopping time is $k_o$. So every Collatz orbit that drops "lives at" one rung of the Beatty ladder shown in **Panel B** — and the entire set of orbits that share a stopping time is a single rung of that ladder.
 
 ### Dropping classes $R_k$ → the Beatty ladder
 
-The **dropping class $R_k$** is the set of residues mod $2^k$ whose Collatz orbits first drop below the starting value at exactly step $k$. By the Affine Orbit Structure, these residues come in families of exactly $2^o$ (where $o$ is the corresponding odd-step count). The dropping classes are nonempty *exactly* for $k$ on the Beatty list $\{3, 6, 8, 11, 13, 16, 19, \ldots\}$ shown in **Panel B**. There is no dropping class for $k = 4, 5, 7, 9, 10, \ldots$ — those gaps in the integer number line are the missing Beatty rungs.
+The **dropping class $R_k$** is the set of residues mod $2^k$ whose Collatz orbits first drop below the starting value at exactly step $k$. By the Affine Orbit Structure, these residues come in families of exactly $2^o$ (where $o$ is the corresponding odd-step count). The dropping classes are nonempty *exactly* for $k$ on the Beatty list $\{3, 6, 8, 11, 13, 16, 19, \ldots\}$ shown in **Panel B** (OEIS A122437; the numbers of residue families in the classes are OEIS A100982). There is no dropping class for $k = 4, 5, 7, 9, 10, \ldots$ — those gaps in the integer number line are the missing Beatty rungs.
 
 Try focusing $o = 7$: you'll see $k_7 = 19$, and the panel shows there are $|R_{19}| = 3{,}840$ residues mod $2^{19}$ in this class. Every one of those 3,840 numbers traces a Collatz orbit that drops at exactly step 19.
 
 ### The sign rule (Parts 4–7) → the rotation threshold
 
-For each dropping class $R_{k_o}$, the χ_6 Hecke L-function partial sum has a **sign** $\epsilon_o \in \{+1, -1\}$. The proved closed form (Part 5) says
+For each dropping class $R_{k_o}$, the χ_6 Hecke L-function partial sum has a **sign** $\epsilon_o \in \{+1, -1\}$. The closed form (Part 5; outlined on [the L-probe page](/connections/sturmian-l-probe)) says
 
 $$\epsilon_o = \begin{cases} +1 & \text{if } \{(o-1)\log_2 3\} \ge \tau \\ -1 & \text{if } \{(o-1)\log_2 3\} < \tau \end{cases}$$
 
@@ -75,7 +75,7 @@ The fact that 12-TET and 53-TET both arise as deep convergents of $\log_2 3$ is 
 
 ### The Part 8 dichotomy → not everything is Sturmian
 
-The cutting picture predicts the **sign** of the χ_6 sum for each dropping class. It does *not* predict the **magnitude**. [Part 8](https://github.com/h2ocoder/collatz/blob/main/docs/Explorations/Dropping%20Zeta%20Spectrum.md) showed that the magnitude's mod-2 reduction — the Stopping-Class parity $P_o \bmod 2$ — is full-entropy Bernoulli, the *opposite* complexity class. So inside the same closed form, one factor is the lowest-complexity infinite binary sequence (the Sturmian sign) and the other is the highest. The bridge picture above is the *sign* side of that dichotomy.
+The cutting picture predicts the **sign** of the χ_6 sum for each dropping class. It does *not* predict the **magnitude**. [Part 8](https://github.com/h2ocoder/collatz/blob/main/docs/Explorations/Dropping%20Zeta%20Spectrum.md) found that the magnitude's mod-2 reduction — the Stopping-Class parity $P_o \bmod 2$ — looks statistically like full-entropy Bernoulli, the *opposite* complexity class. So inside the same closed form, one factor is the lowest-complexity infinite binary sequence (the Sturmian sign) and the other is the highest. The bridge picture above is the *sign* side of that dichotomy.
 
 ### The qx+1 cousins → universal Sturmian skeleton, varying cycles
 
@@ -89,7 +89,7 @@ So the Sturmian skeleton is **universal across $qx+1$ cousins**, and what makes 
 
 ## In one paragraph
 
-The Collatz tug-of-war between $\times 3$ and $\div 2$ makes $\log_2 3$ the natural exchange rate. Its irrationality makes the dropping schedule a Sturmian cutting sequence. That Sturmian-ness propagates through the affine orbit structure and Eisenstein factorization into the χ_6 sign rule, where it becomes a proved closed form. The rational approximations of $\log_2 3$ (which double as the musical scales 12-TET and 53-TET) index a tower of finer characters yet to be built. The turtle program from the [Sturmian Fractals](/explore/sturmian-fractals) page is the visual rendering of the same gap sequence, and the dichotomy of [Part 8](https://github.com/h2ocoder/collatz/blob/main/docs/Explorations/Dropping%20Zeta%20Spectrum.md) is what lies beyond it.
+The Collatz tug-of-war between $\times 3$ and $\div 2$ makes $\log_2 3$ the natural exchange rate. Its irrationality makes the dropping schedule a Sturmian cutting sequence. That Sturmian-ness propagates through the affine orbit structure and Eisenstein factorization into the χ_6 sign rule, where it becomes an explicit closed form. The rational approximations of $\log_2 3$ (which double as the musical scales 12-TET and 53-TET) index a tower of finer characters yet to be built. The turtle program from the [Sturmian Fractals](/explore/sturmian-fractals) page is the visual rendering of the same gap sequence, and the dichotomy of [Part 8](https://github.com/h2ocoder/collatz/blob/main/docs/Explorations/Dropping%20Zeta%20Spectrum.md) is what lies beyond it.
 
 ## See also
 

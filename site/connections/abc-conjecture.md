@@ -18,57 +18,42 @@ The Collatz map involves only two primes: 2 and 3. The radical of any product of
 
 $$\text{rad}(2^a \cdot 3^b) = 6$$
 
-regardless of the exponents. This is the **smallest possible radical** for a product of two distinct primes. The abc conjecture is maximally constraining precisely in this setting — the terms can be enormous ($2^{485}$, $3^{306}$), yet the radical stays at 6.
+regardless of the exponents. This is the **smallest possible radical** for a product of two distinct primes. This is where abc has the most to say — the terms can be enormous ($2^{485}$, $3^{306}$), yet the radical stays at 6.
 
-## Application to Collatz Cycles
+## What abc would say about the gap $2^E - 3^S$
 
-The cycle equation from the [Affine Orbit Structure](/proofs/affine-orbit):
+The quantity that controls Collatz cycles is the gap $g = 2^E - 3^S$ (see [Convergent Elimination](/cycles/convergent-elimination)). Apply abc with
 
-$$3^S \cdot n + C_\text{total} = 2^E \cdot n$$
+$$a = 3^S, \quad b = g, \quad c = 2^E.$$
 
-can be rewritten as:
+Then $\text{rad}(abc) = 6 \cdot \text{rad}(g) \leq 6g$, and abc gives $2^E < K(\varepsilon) \cdot (6g)^{1+\varepsilon}$. In words: **the gap would have to be almost as large as $2^E$ itself**, $g > 2^{E(1-\varepsilon')}$ up to a constant. Powers of 2 and 3 could not come unusually close together.
 
-$$(2^E - 3^S) \cdot n = C_\text{total}$$
+That is exactly the kind of statement that feeds into lower bounds on cycle length: the closer $2^E$ can get to $3^S$, the more room there is for a cycle.
 
-Setting $a = 3^S \cdot n$, $b = C_\text{total}$, $c = 2^E \cdot n$:
+## Hierarchy of bounds
 
-$$\text{rad}(abc) = \text{rad}(2^E \cdot 3^S \cdot n^2 \cdot C_\text{total}) \leq 6 \cdot n \cdot C_\text{total}$$
+How close can $s \log_2 3$ get to an integer — equivalently, how small can the [bit destruction](/proofs/bit-destruction) $\beta(s)$ be?
 
-The abc conjecture says $c < K(\varepsilon) \cdot \text{rad}(abc)^{1+\varepsilon}$, giving:
+| Method | Bound on $\beta(s)$ | Status |
+|--------|---------------------|--------|
+| Irrationality of $\log_2 3$ | $\beta > 0$ | Proved |
+| Baker's theory of linear forms in logarithms | $\beta > s^{-\kappa}$, effective $\kappa$ (Rhin: $\kappa \approx 13$) | Proved |
+| abc conjecture | $\beta > 2^{-\varepsilon s}$ up to a constant, for every $\varepsilon > 0$ | Unproved |
 
-$$2^E \cdot n < K(\varepsilon) \cdot (6 \cdot n \cdot C_\text{total})^{1+\varepsilon}$$
-
-For large cycles ($E$ large), this forces $n$ to be **bounded** — you can't have arbitrarily large cycles of a given pattern.
-
-## Hierarchy of Bounds
-
-| Method | Bound on $\beta(s)$ | Bound on cycle $n$ | Status |
-|--------|---------------------|---------------------|--------|
-| Irrationality of $\log_2 3$ | $\beta > 0$ | Finite for each pattern | Proved |
-| Roth's theorem | $\beta > c/s$ | $n < \exp(c \cdot s^2)$ | Proved |
-| Baker's theorem | $\beta > \exp(-c \cdot \log s \cdot \log\log s)$ | $n < \exp(\exp(c \cdot s))$ | Proved |
-| Pillai conjecture | $\beta > c$ (constant) | Much tighter | Unproved |
-| abc conjecture | $\beta > 2^{-\varepsilon k}$ | Exponential bound on $n$ | Unproved |
-
-Each row strengthens the previous. The abc conjecture gives the strongest constraints but remains unproved. Our **divisibility obstruction** is an independent constraint from the affine structure, orthogonal to all of these.
+Baker's bound is the one actually used in the literature on cycles (Eliahou 1993, Simons and de Weger 2005, Hercher 2023). The [divisibility obstruction](/cycles/divisibility-obstruction) is a different kind of statement: it is equivalent to the absence of nontrivial cycles, so it is not a bound that could be combined with these to finish the job.
 
 ## S-Unit Equations
 
 The equation $|2^E - 3^S| = g$ is a special case of the **S-unit equation** with $S = \{2, 3\}$.
 
-Evertse (1984) proved: for each fixed $g$, there are **finitely many** solutions $(E, S)$. This means:
-- Each gap value $g$ can only appear for finitely many convergents
-- The gaps $|2^E - 3^S|$ grow without bound along the convergent sequence
+Evertse (1984) proved: for each fixed $g$, there are **finitely many** solutions $(E, S)$. So each gap value appears only finitely often, and the gaps $|2^E - 3^S|$ grow without bound. That alone does not rule out cycles: a cycle does not need a small gap, only one that divides the right sum.
 
-Combined with our framework: if the divisibility obstruction holds for all gaps up to some bound $G$, and Baker's theorem shows all convergents beyond a certain size have gap $> G$, then **all cycles are eliminated** by a finite computation.
+## Why the connection is natural
 
-## The Punchline
-
-The Collatz conjecture lives in the gap between what we can prove about powers of 2 and 3, and what the abc conjecture says must be true. The two smallest primes, the smallest radical, the tightest constraint. Collatz is the **atomic case of abc**.
+The Collatz map involves only the primes 2 and 3, the smallest radical there is. Questions about Collatz cycles keep turning into questions about how close powers of 2 and 3 can be — which is exactly the territory of Baker's theorem and the abc conjecture.
 
 ## Related
 
-- [Convergent Elimination](/cycles/convergent-elimination) — the computational elimination that abc would strengthen
-- [Divisibility Obstruction](/cycles/divisibility-obstruction) — our independent algebraic constraint
-- [Bit Destruction Bound](/proofs/bit-destruction) — where Roth's theorem and Pillai enter
-- [Path to Proof](/roadmap/path-to-proof) — how all pieces fit together
+- [Convergent Elimination](/cycles/convergent-elimination) — the cycle equation and its gap
+- [Divisibility Obstruction](/cycles/divisibility-obstruction) — the cycle problem as a divisibility question
+- [Bit Destruction](/proofs/bit-destruction) — the size of a drop in bits

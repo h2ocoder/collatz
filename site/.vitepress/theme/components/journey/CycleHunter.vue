@@ -112,7 +112,7 @@ const wordsPerGap = computed(() => {
       <div v-if="isAscending" class="verdict ascending">
         <strong>ASCENDING</strong> — $3^{{ '{' + S + '}' }} > 2^{{ '{' + E + '}' }}$.
         The gap is negative. Any cycle solution gives $n &lt; 0$.
-        <br/><strong>Eliminated automatically.</strong>
+        <br/><strong>No positive cycle of this shape.</strong>
       </div>
       <div v-else class="stats-grid">
         <div class="stat-card">
@@ -130,7 +130,7 @@ const wordsPerGap = computed(() => {
           <div class="stat-val" :class="{ danger: wordsPerGap > 1, safe: wordsPerGap < 1 }">
             {{ wordsPerGap < 0.001 ? wordsPerGap.toExponential(1) : wordsPerGap.toFixed(3) }}
           </div>
-          <div class="stat-sub">{{ wordsPerGap < 1 ? 'Too few words for a cycle' : 'Needs closer inspection' }}</div>
+          <div class="stat-sub">{{ wordsPerGap < 1 ? 'Fewer words than residues (heuristic only)' : 'Many words per residue' }}</div>
         </div>
       </div>
 
@@ -153,7 +153,7 @@ const wordsPerGap = computed(() => {
           <span>{{ Number(gap).toLocaleString() }}</span>
         </div>
         <div class="verdict" :class="histogramData.zeroCount === 0 ? 'safe' : 'danger'">
-          <strong>{{ histogramData.zeroCount === 0 ? 'NO CYCLES' : 'CYCLE FOUND' }}</strong>
+          <strong>{{ histogramData.zeroCount === 0 ? 'NO CYCLE OF THIS SHAPE' : 'CYCLE FOUND' }}</strong>
           — {{ histogramData.zeroCount }} of {{ histogramData.total }} words have remainder 0.
           {{ histogramData.zeroCount === 0 ? 'The gap never divides T.' : '' }}
         </div>
@@ -161,8 +161,8 @@ const wordsPerGap = computed(() => {
 
       <div v-if="K > 25 && !isAscending" class="too-large">
         <p>K = {{ K }} is too large to enumerate words directly.
-        For $(S, E) = (41, 65)$: eliminated by MITM computation (87 min in Rust).
-        For $S \geq 306$: the second moment bound proves words/gap $\to 0$ exponentially.</p>
+        For $(S, E) = (41, 65)$: a meet-in-the-middle search (87 min in Rust) found no cycle.
+        Ruling out cycles for every $(S, E)$ is open; see the known results below.</p>
       </div>
     </div>
   </div>

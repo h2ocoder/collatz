@@ -59,7 +59,7 @@ function draw() {
 
   // Bars
   const barW = Math.max(2, (w - pad - 20) / maxS.value - 2)
-  const convergentS = new Set([1, 2, 5, 12, 29, 41]) // denominators of convergents of log2(3)
+  const convergentS = new Set([1, 3, 5, 17, 29, 41]) // s with a record-low beta(s): best approximations of log2(3) from above
 
   for (let s = 1; s <= maxS.value; s++) {
     const b = beta(s)
@@ -70,7 +70,7 @@ function draw() {
     // Color: green for fast (high beta), red for slow (low beta), gold for convergents
     let color: string
     if (convergentS.has(s)) {
-      color = '#ef4444' // convergent = slow set
+      color = '#ef4444' // record-slow set
     } else if (b > 0.5) {
       color = '#22c55e'
     } else if (b > 0.2) {
@@ -148,7 +148,7 @@ onUnmounted(() => window.removeEventListener('resize', draw))
       <span><span class="dot" style="background: #22c55e"></span> Fast (β > 0.5)</span>
       <span><span class="dot" style="background: #3b82f6"></span> Moderate</span>
       <span><span class="dot" style="background: #f59e0b"></span> Slow (β < 0.2)</span>
-      <span><span class="dot" style="background: #ef4444"></span> Convergent (slowest)</span>
+      <span><span class="dot" style="background: #ef4444"></span> Record slowest so far</span>
     </div>
   </div>
 </template>

@@ -2,7 +2,7 @@
 
 The Hecke L-function probe $\chi_6$ on $\mathbb{Z}[\omega]$, when restricted to a single Collatz dropping set, has an **exact closed form** — and that closed form's phase is the cutting sequence of $\log_2 3$.
 
-This is the strongest "L-function sees Collatz" statement we have: every quantity is explicit, every constant is algebraic, every claim is proven.
+Every quantity is explicit and every constant is algebraic. The closed form matches the computed sums shown in the table and plots below; the argument for it is given as an outline, with the lemmas in Step 5 stated rather than proved in full here.
 
 ## The Setup
 
@@ -18,7 +18,7 @@ $$D_{\chi_6}^{(k_o)}(N) = \sum_{\substack{n \le N \text{ odd} \\ T(n) = k_o}} \c
 
 ## The Theorem
 
-::: tip Theorem (Sturmian L-Probe Closed Form)
+::: tip Sturmian L-Probe Closed Form (proof outlined below)
 For all $o \ge 1$ except the unique singular case $o = 3$:
 
 $$D_{\chi_6}^{(k_o)}(N) = i\sqrt{3} \cdot \epsilon_o \cdot A_o \cdot \frac{N_{k_o}}{|R_{k_o}|}$$
@@ -38,7 +38,7 @@ The phase $\epsilon_o$ is the **Sturmian cutting sequence of $\log_2 3$** — th
 
 ## What the closed form looks like
 
-| $o$ | $k_o$ | gap | $\alpha_o$ | $\arg$ | per-$n$ size | clean form |
+| $o$ | $k_o$ | gap | $\arg$ | per-$n$ size | clean form |
 |---:|---:|---:|---:|---:|---:|---|
 | 1 | 3 | 2 | $-90°$ | 0.8660 | $\sqrt{3}/2$ |
 | 2 | 6 | 3 | $+90°$ | 0.8660 | $\sqrt{3}/2$ |
@@ -75,7 +75,7 @@ The probe's phase pattern *is* the irrational rotation of $\log_2 3$, made arith
 
 ## Proof outline
 
-The proof reduces to a chain of explicit calculations:
+The argument is a chain of explicit calculations:
 
 **Step 1 — Eisenstein column collapse.** The 9-cell lookup of $\chi_6$ on $\mathbb{Z}[\omega]/3$ has column sums
 $\sum_i \chi_6(i + 0 \cdot \omega) = 0$, $\sum_i \chi_6(i + 1 \cdot \omega) = -i\sqrt{3}$, $\sum_i \chi_6(i + 2 \cdot \omega) = +i\sqrt{3}$.
@@ -96,21 +96,21 @@ $$A_{o+1} = \tfrac{1}{2}(P_o + \sigma_o A_o), \quad \sigma_o = (-1)^{\text{gap}_
 
 ## What this is *not*
 
-The closed form is not RH for any classical L-function. The Hecke L-function $L(s, \chi_6)$ on $\mathbb{Z}[\omega]$ has its own zeros, governed by Tate's thesis. Our theorem is about the **orbit-twisted partial sum**, which is a different object: a character sum restricted to the *Collatz-orbit-pair image* in $\mathbb{Z}[\omega]$, not over all ideals.
+The closed form is not RH for any classical L-function. The Hecke L-function $L(s, \chi_6)$ on $\mathbb{Z}[\omega]$ has its own zeros. The closed form is about the **orbit-twisted partial sum**, which is a different object: a character sum restricted to the *Collatz-orbit-pair image* in $\mathbb{Z}[\omega]$, not over all ideals.
 
 The natural full L-function for Collatz would be
 
 $$L_{\text{Collatz}}(s, \chi_6) = \sum_{n \text{ odd}} \frac{\chi_6(\iota_2(n))}{n^s}$$
 
-with our closed form giving its leading-order partial-sum asymptotic. Its zeros are not the zeros of the classical $L(s, \chi_6)$ — they would be a genuinely new spectral object encoding orbit-counting fluctuations.
+with the closed form describing its partial sums one dropping set at a time. Its zeros, if it has interesting ones, would not be the zeros of the classical $L(s, \chi_6)$. I have not studied them.
 
 ## Implications
 
-**The L-function probe *proves* the "see Collatz" signal.** Phase 1 of the L-function design spec called for empirical evidence that $\chi_6$ has structural correlation with Collatz orbits beyond GRH-random behavior. We now have that correlation **as a theorem**, with explicit constants.
+**The character $\chi_6$ is not blind to Collatz.** Restricted to a dropping set, the character sum is far from random: it has an explicit size and a phase fixed by the Sturmian word of $\log_2 3$.
 
-**Multiplication Symmetry is automatic.** The closed form depends only on the Beatty boundary $B_j = \lfloor j \log_2 3 \rfloor$ and combinatorial path counts. Both are intrinsic — invariant under the $\times 3$ action on residues. So the Multiplication Symmetry Theorem reduces to a corollary of the closed form.
+**The structure is combinatorial.** The closed form depends only on the Beatty boundary $B_j = \lfloor j \log_2 3 \rfloor$ and counts of lattice paths below it (the admissible parity words of OEIS A100982).
 
-**A Collatz counterexample would deviate from this prediction.** If any odd $n_0$ had a non-dropping orbit (divergent or in a non-trivial cycle), it would not appear in any $R_k$. Its missing contribution would cause $D_{\chi_6}(N) - D_{\chi_6}^{\text{pred}}(N)$ to grow faster than the expected $O(\sqrt{N} \log N)$ residual. The probe is, in this sense, a **falsifiability instrument** for Collatz.
+**It says nothing about convergence.** The formula is stated in terms of the numbers that *do* drop, so it is equally consistent with the conjecture being true or false.
 
 ## Related
 

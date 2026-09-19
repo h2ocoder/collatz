@@ -99,6 +99,8 @@ It is necessary for Collatz, it concerns a set of dimension log₂φ ≈ 0.694 r
 
 (2⁴⁰ took 232 s in pure Python. Integers that leave the family before step B are pruned by the tree — they satisfy (*) trivially — so the search is exhaustive.)
 
+**The bits an orbit makes for itself are as good as random.** Among the 165,580,141 integers below 2⁴⁰ that survive their own 40 bits, the chance of surviving one more step is 0.8090, 0.8090, 0.8093, 0.8090, 0.8096, 0.8089 at L = 40, 46, 52, 58, 64, 70 — against φ/2 = 0.8090. Past step 40 the parity is no longer read from n's own digits; it comes from digits created by the ×3 growth. Those created digits leave the family at exactly the rate free digits would. This is the finite-bit-string question of [[Nesting and the Never-Drain Fractal]] §7 measured directly: no sign of any structure a never-draining integer could exploit.
+
 **Every n > 1 in range satisfies (*).** The random model (survival probability φ/2 per step) predicts records at log₂n / log₂(2/φ) = 3.27 × log₂n. Observed records sit on that line. Empirically m₀(n) ≤ 4·log₂n throughout; that is the explicit bound the open question asks for, as a conjecture.
 
 ## Single-ray statistics — Verified (E13)

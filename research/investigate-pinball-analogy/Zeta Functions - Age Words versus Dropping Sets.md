@@ -56,3 +56,37 @@ The function in §1 is closed. The research questions live in the gap between ro
 **H3. The pole is the dimension, the dimension is the survival rate.** Forward: pole 1/φ in z = 2^(−s) ↔ survival φ/2 = 0.809017 (measured to six decimals in E12). Backward for Banerji: 2^t of 3^t survivors ↔ pole at z = 1/2 in z = 3^(−s) ↔ survival 2/3 = 0.66667 (measured). *Hypothesis:* for any forbidden-factor family F of parity words, the per-step survival of positive integers *past their own bits* equals λ(F)/2 exactly, where λ is the Perron root. *Test:* pick three more families (forbid 000; forbid 101; forbid 0000) and run the tree search — the code needs only a different automaton. A deviation would mean self-generated bits are *not* free, which would be real news; agreement is expected.
 
 H3 is the cheapest and the most informative: it generalises the one measurement in this project that nobody else has.
+
+## 4. H3 tested (2026-09-19) — Verified, with an unexplained 1/√N correction
+
+`scripts/double_halving_rs/src/bin/family.rs` generalises the tree search to any forbidden factor; `scripts/family_survival_analysis.py` compares the per-step survival of positive integers past their own B bits (pooled over levels B+2..B+14) with λ/2. It reproduces the "00" run exactly (same leaves, same records). Depth B = 38:
+
+| forbidden | integers surviving B bits | reach 1 inside the family | λ/2 | measured | difference |
+|---|---|---|---|---|---|
+| 00 | 63,245,986 | 1 (n = 1) | 0.809017 | 0.808988 | −0.000029 |
+| 000 | 7,046,319,384 | 1 | 0.919643 | 0.919648 | +0.000005 |
+| 0000 | 38,317,465,040 | 37,929,896 | 0.963781 | 0.963782 | +0.000001 |
+| 101 | 1,042,002,567 | 0 | 0.877439 | 0.877393 | −0.000046 |
+| 1001 | 11,411,317,488 | 20,246,218 | 0.933380 | 0.933372 | −0.000008 |
+| 111 | 5,913,882,532 | 123,922,649 | 0.919643 | 0.919630 | −0.000013 |
+| 11 | 39,088,169 | 378,934 | 0.809017 | 0.809838 | +0.000821 |
+
+**H3 holds to 4–6 decimals in every family.** ("11" is the exception that proves the rule: 1% of its members reach the cycle at 1 and then never leave, because 1010… avoids "11"; absorbed orbits are counted as survivors, which is why it sits above λ/2.)
+
+**The differences are real, and they are a finite-size effect.** Standard errors estimated from 24 independent shards agree with the binomial ones, so orbit merging is not inflating significance. Varying the depth:
+
+| B | 101 | 1001 | 000 |
+|---|---|---|---|
+| 26 | −1.05·10⁻³ (z −8.0) | −3.43·10⁻⁴ (z −9.6) | −1.60·10⁻⁴ (z −3.4) |
+| 30 | −3.62·10⁻⁴ (z −8.5) | −1.14·10⁻⁴ (z −11.2) | +4.4·10⁻⁵ (z +3.2) |
+| 34 | −1.29·10⁻⁴ (z −9.3) | −3.2·10⁻⁵ (z −10.9) | +1.9·10⁻⁵ (z +4.6) |
+| 38 | −4.6·10⁻⁵ (z −10.3) | −8.0·10⁻⁶ (z −9.5) | +4.4·10⁻⁶ (z +3.6) |
+| 42 | −1.5·10⁻⁵ (z −10.2) | −2.4·10⁻⁶ (z −10.0) | — |
+
+The difference shrinks by λ^(−2) per four bits (0.33 for "101", 0.29 for "1001"): it is proportional to **1/√N**, where N ≈ λ^B is the number of integers tested, and the z-score is constant (≈ −10 for "101" and "1001", ≈ +4 for "000", ≈ −1 for "00"). So
+
+    survival = λ/2 + c_F / √N,      c_F a constant of the family.
+
+The limit is λ/2: self-generated digits are free, in every family tested. But a purely random model would give z-scores that wander around 0 with both signs; a *constant* z of −10 is a structured term of size √N that I cannot yet explain. **Open.** Candidate: a sub-population of about √N integers (for instance those below 2^(B/2), whose orbits are no longer in a random-looking regime by level B) that behaves deterministically.
+
+**Dead end recorded:** splitting trials by whether the current value is above or below 2²⁴ does not test digit freedom — value size is correlated with the recent step history, hence with the automaton state, so the two halves have different *predicted* rates. Do not reuse that design.

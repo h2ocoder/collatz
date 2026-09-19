@@ -32,6 +32,7 @@ Labels: **Proved**, **Verified** (computed), **Negative** (the experiment showed
 | E14 | Does Banerji's backward conjecture (the dual of (*)) hold exhaustively? | **Yes for every odd n < 2·3³⁶ ≈ 2^58.1** (Rust, 146 s, 6.9·10¹⁰ leaves). Longest survival 95 steps = 1.74 × log₂n; random model 1.71. Survival rate per step 0.666667, 0.666668, 0.666666 against 2/3. |
 | E15 | Exchange family joining Collatz to the mirror | Phase transition at p_c = 0.1309: exchanging every 7th halving escapes, every 8th drains. See [[Signed Primes and the Exchange Family]]. |
 | E16 | Liouville sign along orbits | No correlation with the dynamics (all within noise). |
+| E17 | Does survival past own bits equal λ/2 for *every* forbidden-factor family? | **Yes in the limit**, to 4–6 decimals for 00, 000, 0000, 101, 1001, 111. The gap is c/√N with a constant z-score per family (≈ −10 for 101 and 1001) — real, unexplained. See [[Zeta Functions - Age Words versus Dropping Sets]] §4. |
 | E9 | Relation to the Collatz inverse tree? | The +1 mirror's B step is exactly the odd branch of the Collatz inverse tree (at m ≡ 4 mod 6); its A step replaces 2m by 2m/3. The two never both apply, so the tree collapses to a line. |
 
 ## The Fibonacci law — Proved

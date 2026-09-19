@@ -17,7 +17,7 @@ Three questions from the ticket, with the answers this vault reaches.
 
 Follow-up question — can composition rules guarantee no machine runs forever? **No: composition is free (any arrangement is played by some 2-adic ball). The structure is a provable fractal (nesting theorem, never-drain set of dimension 0.95), and the conjecture is that this fractal holds no positive integer > 1.** See [[Nesting and the Never-Drain Fractal]].
 
-Second follow-up — replace halving with n → n − |n/2|? **Positives unchanged; negatives become an injective, always-escaping map that converts 2s into 3s. Its "age classes" are the 3-adic mirror of stopping classes, with P(age ≥ t) = F(t+3)/(2·3^t) exactly. It does not weaken the barrier.** See [[The Mirror Table]] and [[Mirror Experiments]] (ten experiments, a proof that the law is F(t+3)/(2·q^t) for every odd q, and a literature check: closest prior art is Reyes Jiménez arXiv:2606.02621, which E10 shows is the forward dual).
+Second follow-up — replace halving with n → n − |n/2|? **Positives unchanged; negatives become an injective, always-escaping map that converts 2s into 3s. Its "age classes" are the 3-adic mirror of stopping classes, with P(age ≥ t) = F(t+3)/(2·3^t) exactly. It does not weaken the barrier.** See [[The Mirror Table]] and [[Mirror Experiments]] (ten experiments, a proof that the law is F(t+3)/(2·q^t) for every odd q, and a literature check: closest prior art is Reyes Jiménez arXiv:2606.02621, which E10 shows is the forward dual. Its Open Question 1 — every n > 1 eventually halves twice in a row — is verified here for all n < 2⁴⁰).
 
 Also: [[Jev and System One Models]] — what Jev is, and why it is never used as a teacher (its customer agreement prohibits distillation and benchmarking).
 
@@ -33,6 +33,7 @@ Also: [[Jev and System One Models]] — what Jev is, and why it is never used as
 - `collatz/pinball/` — `vectors.py`, `table.py`, `encode.py`, `model.py`, `baselines.py`, `hilbert.py`, `nesting.py`, `mirror.py`
 - `tests/test_pinball.py` — 35 tests
 - `scripts/mirror_experiments.py` — E1–E10 on the mirror table (≈ 2 min)
+- `scripts/double_halving_search.py [B]` — exhaustive Fibonacci-tree search (B = 40 in ≈ 4 min)
 - `scripts/pinball_experiments.py` — `python -X utf8 scripts/pinball_experiments.py [A] [B] [C]` (A and B together ≈ 2 min; C a few minutes more)
 - `results/pinball_experiments.json` — raw numbers
 

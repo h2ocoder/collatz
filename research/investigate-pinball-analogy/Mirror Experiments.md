@@ -7,7 +7,7 @@ jira: SCRUM-30
 
 # Mirror Experiments
 
-Eleven experiments on the mirror table of [[The Mirror Table]] (m → 3m − 1 for odd m, m → 3m/2 for even m), a proof of the Fibonacci law, and a literature check.
+Thirteen experiments on the mirror table of [[The Mirror Table]] (m → 3m − 1 for odd m, m → 3m/2 for even m), a proof of the Fibonacci law, and a literature check.
 
 Run: `python -X utf8 scripts/mirror_experiments.py` (about 2 minutes). Raw numbers: `results/mirror_experiments.json`.
 
@@ -27,6 +27,8 @@ Labels: **Proved**, **Verified** (computed), **Negative** (the experiment showed
 | E8 | Forward versus backward halving runs? | Forward runs are geometric with ratio 1/2; backward runs geometric with ratio 1/3. Both exact to 4 decimals. |
 | E10 | Is the published Fibonacci theorem (Reyes Jiménez) the forward dual of the age law? | **Yes.** "Avoids 4 mod 6" is exactly "no two consecutive halvings"; identical sets for m = 2..14. |
 | E11 | How long can a positive integer avoid two consecutive halvings? | Records sit at 2.5–3.8 × log₂n for odd n < 4·10⁶ (random model predicts 3.27). No n > 1 reaches 1 inside the family. 2^B − 1 survives exactly B steps. |
+| E12 | Does (*) hold exhaustively? | **Yes for every n < 2⁴⁰** (Fibonacci-tree search, 232 s). Longest survival 129 steps = 3.24 × log₂n; random model 3.27. |
+| E13 | Do single rays follow the Markov model? | Yes: χ² z-scores +0.75, +0.31, −1.24 on 200,000 steps each. |
 | E9 | Relation to the Collatz inverse tree? | The +1 mirror's B step is exactly the odd branch of the Collatz inverse tree (at m ≡ 4 mod 6); its A step replaces 2m by 2m/3. The two never both apply, so the tree collapses to a line. |
 
 ## The Fibonacci law — Proved
@@ -73,7 +75,35 @@ The forward golden-mean orbits (no "00", every α ≤ 2) multiply by 3/2 or 3/4 
 - **Record survival grows like log n.** Records for odd n < 4·10⁶: 1665 (30 steps), 10881 (41), 687871 (67), 3041391 (81) — between 2.5 and 3.8 × log₂n. A random model with survival probability (φ/2)^m predicts records at log₂n / log₂(2/φ) = 3.27 × log₂n. The data are consistent with pure chance; nothing in the family behaves specially.
 - **2^B − 1 survives exactly B steps**, one per bit (checked to B = 128): it imitates −1 until its ones run out. This is the [[Nesting and the Never-Drain Fractal]] §7 picture in miniature — a positive integer can shadow a never-draining 2-adic ball only for as long as it has bits to spend.
 
-A clean, weaker-than-Collatz statement comes out of this: **"every positive integer n > 1 has two consecutive halvings somewhere in its orbit"** (equivalently, its orbit hits 4 mod 6 after the first step). It is necessary for Collatz, it is a statement about a set of dimension log₂φ ≈ 0.694 rather than 0.95, and it uses positivity (−1 violates it). I do not know whether it is known or provable; it is the most tractable-looking target this investigation has produced. **Open.**
+A clean, weaker-than-Collatz statement comes out of this:
+
+> **(*)** Every positive integer n > 1 has two consecutive halvings somewhere in its orbit. Equivalently: some Syracuse iterate is ≡ 5 (mod 8); the orbit hits 4 (mod 6) after the first step; some α ≥ 3.
+
+It is necessary for Collatz, it concerns a set of dimension log₂φ ≈ 0.694 rather than 0.95, and it uses positivity (−1 and the cycle −5, −7 violate it).
+
+**Prior art: (*) is already posed as an open question.** Reyes Jiménez, arXiv:2606.02621, Section 5, asks whether every odd n > 2 has a finite first level m₀(n) at which the orbit meets 4 (mod 6), and notes that an explicit bound m₀(n) ≤ f(n) would settle it. Nothing is proved toward it there; even "every nontrivial positive cycle visits 4 mod 6" is left open. That paper does not remark that Collatz implies (*), nor mention negative integers or the dimension. So (*) is **Open, and not ours.** What we add is evidence and context (E11, E12 below).
+
+**Why the known cycle theorems do not settle the cycle half.** Simons–de Weger and Hercher bound the number of local minima of a cycle; a cycle with every α ≤ 2 has unrestricted many. It is excluded only in the weak sense that any nontrivial cycle is known to be astronomically long.
+
+**Structure of (*).** An orbit that avoids 5 (mod 8) forever is either bounded — hence eventually periodic, hence a nontrivial cycle with every α ≤ 2, since 1 cannot be entered from outside without α ≥ 4 — or divergent. Inside the family α = 1 occurs for residues 3, 7 (mod 8) and α = 2 for 1 (mod 8), so a typical member *grows* (drift ⅔·log 1.5 + ⅓·log 0.75 > 0). (*) therefore says: growing orbits cannot stay in the family. It has the flavour of a divergence problem and I see no route to a proof.
+
+## Exhaustive search for (*) — Verified (E12)
+
+`scripts/double_halving_search.py` does not scan all n < 2^B. It walks the tree of residues mod 2^j whose first j steps contain no "00" — only F(j+1) of them — and finishes each leaf by direct iteration. This is exhaustive for n < 2^B at a cost of F(B+1) instead of 2^B.
+
+| Range | Survivors of B steps | Longest survival | At n | steps / log₂n |
+|---|---|---|---|---|
+| n < 2²⁴ | 75,025 = F(25) | 82 | 3,041,391 | 3.81 |
+| n < 2³² | 3,524,578 = F(33) | 100 | 1,548,635,775 | 3.28 |
+| n < 2⁴⁰ | 165,580,141 = F(41) | 129 | 971,145,319,023 | 3.24 |
+
+(2⁴⁰ took 232 s in pure Python. Integers that leave the family before step B are pruned by the tree — they satisfy (*) trivially — so the search is exhaustive.)
+
+**Every n > 1 in range satisfies (*).** The random model (survival probability φ/2 per step) predicts records at log₂n / log₂(2/φ) = 3.27 × log₂n. Observed records sit on that line. Empirically m₀(n) ≤ 4·log₂n throughout; that is the explicit bound the open question asks for, as a conjecture.
+
+## Single-ray statistics — Verified (E13)
+
+Three mirror rays (seeds 1, 5, 7), 200,000 steps each, cut into 25,000 non-overlapping blocks of length 8 and compared with the Markov prediction (π_A = 2/3, P(B|A) = 1/2, P(A|B) = 1) over the 55 allowed blocks: χ² = 61.8, 57.2, 41.1 on 54 degrees of freedom (z = +0.75, +0.31, −1.24). No "BB" occurs. Single rays are statistically indistinguishable from the Markov model. This remains unprovable for the same reason as Mahler's 3/2 problem.
 
 ## An arrow of time — Proved, Verified (E8)
 
@@ -103,9 +133,12 @@ Web search plus abstracts; one paper skimmed (Frougny–Klouda, pp. 1–6). No f
 | Albert, Gudmundsson, Ulfarsson, "Collatz meets Fibonacci", arXiv:1404.3054 | Fibonacci enumeration of Collatz-induced permutations; reportedly because two up-steps are never consecutive. | Same no-BB combinatorics, different object. |
 | Akiyama, Frougny, Sakarovitch, "Powers of rationals modulo 1 and rational base number systems", Israel J. Math. 168 (2008) | Base 3/2 number system; division step 2s = 3s′ + a, a ∈ {0, 1, 2}. | Our A step is their digit-0 edge. Our B step, (m+1)/3, is *not* one of their edges (theirs are (2s − a)/3). Their tree gives every integer a parent; ours leaves half of all integers with none. |
 | Frougny, Klouda, "Rational base number systems for p-adic numbers", RAIRO-ITA 46 (2012) | Negative integers in base 3/2; expansions converge r-adically exactly for primes r dividing 3 (Lemma 3.5). | Explains in general why backward structure is 3-adic. No Fibonacci counts seen in pp. 1–6. |
+| Mahler, "An unsolved problem on the powers of 3/2", J. Austral. Math. Soc. 8 (1968) | The map g(x) = (3x+1)/2 for odd x, 3x/2 for even x; a Z-number exists in [n, n+1) iff no iterate of n is ≡ 3 mod 4. | **Closest named relative of the mirror map**: same 3x/2 even branch and a residue-avoidance question. The odd branch differs (ours is 3m ± 1 with no halving), which is what makes ours injective with predecessor-free seeds. |
+| Banerji, "Some properties of the 3n+1 function", Cybernetics and Systems 27 (1996), via Lagarias's annotation | Conjectures that backward Syracuse iteration using only α ≤ 2 preimages always reaches a multiple of 3 in finitely many steps. | The backward-time dual of (*). Closely related, not identical. Original not seen. |
+| Wirsching, LNM 1681 (1998) | 3-adic equidistribution hypothesis for predecessor sets under backward iteration. | Confirms backward structure is studied 3-adically. Book not accessed; no Fibonacci mention in the annotations. |
 | Mahler (1968) Z-numbers; Flatto–Lagarias–Pollington; Odlyzko–Wilf (Josephus, ⌈3n/2⌉) | Distribution of (3/2)^k mod 1. | Governs the open single-ray question above. Not read this session. |
 
-Not checked: Lagarias's annotated 3x+1 bibliographies, Wirsching's 3-adic predecessor averages, Kohl's bijective Collatz-type maps. Those are the places a prior statement of the age law would most likely be.
+Checked since: both Lagarias annotated bibliographies (arXiv math/0309224, math/0608208) were text-searched in full — no entry for the map 3m − 1 / 3m/2, for an injective Collatz variant of this form, or for a Fibonacci count of backward residues. Reyes Jiménez states "To our knowledge, no prior work establishes a Fibonacci count of this kind for Collatz trajectories" for the forward count. Still not read: Wirsching's book itself, Kohl's RCWA papers, Merlini–Sala (1999) "On the Fibonacci's attractor and the long orbits in the 3n+1 problem".
 
 **Assessment.** The map G itself and the age law were not found. The ingredients are all known (no consecutive odd steps; base-3/2 backward division is 3-adic; Fibonacci from mod-6 graphs). The likeliest status is "elementary, possibly folklore, apparently unrecorded" — worth a short note only after the unchecked sources are read.
 

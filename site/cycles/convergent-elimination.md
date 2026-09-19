@@ -1,5 +1,11 @@
 # Convergent Elimination
 
+<!-- audit-banner -->
+::: danger The premise is wrong
+This page assumes a cycle's (S, E) must be a continued-fraction convergent of log₂3. That is false: any pair with 2^E > 3^S is a candidate, and Eliahou's theorem only forces E/S to be *close* to log₂3. The individual computations (for example the 13-step case) are correct but already covered by the literature.
+:::
+
+
 ## The Cycle Equation
 
 From the [Affine Orbit Structure](/proofs/affine-orbit), a Collatz cycle of total length $K$ with $S$ odd steps and $E = K - S$ even steps satisfies:

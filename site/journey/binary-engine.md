@@ -1,5 +1,11 @@
 # The Binary Engine
 
+<!-- audit-banner -->
+::: warning One error on this page
+The appeal to Roth's theorem below is a mistake: Roth applies to algebraic numbers and log₂3 is transcendental. The known bound (Baker, Rhin) is much weaker. The rest is an explainer of known mathematics.
+:::
+
+
 Forget the numbers. Watch the **bits**.
 
 Every positive integer is a string of binary digits: 27 = `11011`. The Collatz map does two very different things to these bits:

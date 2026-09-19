@@ -1,5 +1,11 @@
 # Affine Orbit Structure
 
+<!-- audit-banner -->
+::: info Known mathematics
+The affine structure of orbits within residue classes is due to Terras (1976) and Everett (1977). This page is an explainer with my notation, not a new theorem.
+:::
+
+
 ## Statement
 
 <div class="theorem">

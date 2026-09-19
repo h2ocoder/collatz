@@ -1,5 +1,11 @@
 # Finite Fuel
 
+<!-- audit-banner -->
+::: danger A heuristic picture, not a proof
+"The fuel always runs out" is not proved. The argument applies an average to every number and rests on a computer check up to 5 million. Read this as an analogy. See [How to read this site](/about/how-to-read).
+:::
+
+
 Here's the key insight that separates natural numbers from everything else: **they end.**
 
 A natural number like 76,827 has 17 bits: `10010110000011011`. After bit 17, every digit is 0. Forever. This is what "finite" means in binary.

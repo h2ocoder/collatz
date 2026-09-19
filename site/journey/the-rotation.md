@@ -1,5 +1,11 @@
 # The Hidden Rotation
 
+<!-- audit-banner -->
+::: warning Analogy
+The rotation picture is due to Shakibaei Asli (arXiv:2601.04289). Weyl's theorem applies to an exact rotation, not to this perturbed one, so nothing here *guarantees* anything about individual orbits. The use of Roth's theorem below is a mistake (log₂3 is transcendental).
+:::
+
+
 In the right coordinates, the chaos disappears.
 
 Plot every Collatz orbit value on a circle, where the position is the **fractional part of $\log_6(\text{value})$**. Something remarkable emerges:

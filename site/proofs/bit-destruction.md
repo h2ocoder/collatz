@@ -1,5 +1,11 @@
 # Bit Destruction Bound
 
+<!-- audit-banner -->
+::: warning Mostly empty, and one error
+"β(s) > 0 always" only restates that a drop is a decrease. The identity β = 1 − {s·log₂3} is a fine explainer. The Roth-based bound and the "conditional convergence" corollary below are wrong: Roth does not apply to log₂3.
+:::
+
+
 ## Statement
 
 <div class="theorem">

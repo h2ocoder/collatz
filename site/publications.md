@@ -1,5 +1,11 @@
 # Prior Work
 
+<!-- audit-banner -->
+::: warning Wording
+Phrases like "the proof framework" below date from an earlier framing of this site. No proof is claimed.
+:::
+
+
 ::: info About the Author
 I'm a software engineer and polymath, not an academic mathematician. These are self-published explorations — not peer-reviewed papers. They represent several years of off-and-on investigation into the Collatz conjecture, each building on the last. The proof framework on this site is the culmination of that journey.
 

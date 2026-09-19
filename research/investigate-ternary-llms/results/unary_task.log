@@ -1,0 +1,10 @@
+== binary input, n <= 1024, held-out 20% of n
+    binary step 2000 loss 0.0001 (38s)
+    binary step 4000 loss 0.0000 (76s)
+    binary step 6000 loss 0.0000 (113s)
+  train exact 1.000   held-out exact 1.000   by parity/size: even,n<=256: 1.00[n=20], even,n>256: 1.00[n=73], odd,n<=256: 1.00[n=29], odd,n>256: 1.00[n=82]
+== unary input, n <= 1024, held-out 20% of n
+    unary step 2000 loss 0.4362 (69s)
+    unary step 4000 loss 0.3386 (139s)
+    unary step 6000 loss 0.2674 (210s)
+  train exact 0.104   held-out exact 0.015   by parity/size: even,n<=256: 0.05[n=20], even,n>256: 0.03[n=73], odd,n<=256: 0.00[n=29], odd,n>256: 0.00[n=82]

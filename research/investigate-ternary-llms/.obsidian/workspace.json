@@ -1,0 +1,230 @@
+{
+  "main": {
+    "id": "7648bf0253ffbaec",
+    "type": "split",
+    "children": [
+      {
+        "id": "196d685ed639b6ef",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "62f06a8bdaced07d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Why 3x+1 is Special.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Why 3x+1 is Special"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "e40f7c6ec56aa2f7",
+    "type": "split",
+    "children": [
+      {
+        "id": "f55e659849cf5409",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4669150ab38a6926",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "6fb97e2b4f9e74c6",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "0de76c042abea729",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "443d4b035d8f499c",
+    "type": "split",
+    "children": [
+      {
+        "id": "7c341a46a23b87d8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8279dd7de11709ad",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Why 3x+1 is Special.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "ffc3da58de4c8e4a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Why 3x+1 is Special.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "61cad0e2775ad5f7",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "233e40ea4e080a7b",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "8cec64ce7fd50b8c",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Why 3x+1 is Special.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "62f06a8bdaced07d",
+  "lastOpenFiles": [
+    "Primes and the Circuit.md.tmp.7324.d4e689a2cc2b",
+    "Summary - Findings and Open Questions.md.tmp.7324.2a20973726b4",
+    "Why 3x+1 is Special.md.tmp.7324.3584954a545e",
+    "Literature - 3x+k Cycles and Divergence.md.tmp.7324.c3c96e7ce8ea",
+    "Literature - 3x+k Cycles and Divergence.md.tmp.7324.7a285d8afa48",
+    "Literature - 3x+k Cycles and Divergence.md.tmp.7324.dbb4f3db208e",
+    "Literature - 3x+k Cycles and Divergence.md",
+    "Literature - 3x+k Cycles and Divergence.md.tmp.7324.66a0a0b74017",
+    "Primes and the Circuit.md",
+    "Why 3x+1 is Special.md",
+    "Why 3x+1 is Special.md.tmp.7324.caf4e30b9f94",
+    "results/cycle_count_mechanism.json",
+    "scripts/cycle_count_mechanism.py",
+    "scripts/cycle_count_mechanism.py.tmp.7324.b502c83e3601",
+    "Summary - Findings and Open Questions.md",
+    "Experiment E - Ternary RNN Rediscovers the Transducer.md",
+    "Experiment D - Quantization by Subgroup.md",
+    "Experiment B - Base Polarity.md",
+    "Minimal Ternary Circuit.md",
+    "Tag Systems and the Ternary Circuit.md",
+    "Trit Packing and log2(3).md",
+    "Ternary Syracuse Circuit.md",
+    "Ternary LLMs - State of the Art.md",
+    "Collatz Bridge - Trits and Stopping Times.md",
+    "Exact Admissible Sequence DP.md",
+    "Experiment A - Ternary Dropping-Set Classifier.md",
+    "LOOP.md",
+    "Research Directions - Ternary Nets x Collatz.md",
+    "Waste Bias at First Drop.md",
+    "Winkler Tail Bound.md",
+    "VDF Literature - Sequential Functions.md",
+    "VDF Feasibility - Collatz as a Delay Function.md",
+    "Paper - Breaking the 1.58-bit Barrier.md",
+    "Neural Networks and Collatz - Prior Work.md",
+    "00 Index.md",
+    "_draft_bridge_agentA.md"
+  ]
+}

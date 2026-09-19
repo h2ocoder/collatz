@@ -1,0 +1,8 @@
+{
+ "round_length_formula": true,
+ "tag_steps_equals_orbit_sum_plus_odd": true,
+ "zero_density_mean": 0.5,
+ "set13_slopes": [
+  "2309/128"
+ ]
+}

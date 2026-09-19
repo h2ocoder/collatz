@@ -1,0 +1,14 @@
+ideal machine: 4 distinct behavioural states (minimal Mealy machine)
+
+ternary_rnn_H64_H64_s0 (ternary, H=64): 9761 reachable hidden states, 4 behavioural classes
+  hidden states whose horizon-8 behaviour equals one of the 4 ideal non-start states: 9761/9761 = 1.0000
+  ideal non-start states realised: 4/4; glitch classes: 0 covering 0 states
+
+ternary_rnn_H64_H64_s1 (ternary, H=64): 9761 reachable hidden states, 4 behavioural classes
+  hidden states whose horizon-8 behaviour equals one of the 4 ideal non-start states: 9761/9761 = 1.0000
+  ideal non-start states realised: 4/4; glitch classes: 0 covering 0 states
+
+ternary_rnn_fp2_H16_s0 (full precision, H=16): 9761 reachable hidden states, 24 behavioural classes
+  hidden states whose horizon-8 behaviour equals one of the 4 ideal non-start states: 9703/9761 = 0.9941
+  ideal non-start states realised: 4/4; glitch classes: 20 covering 58 states
+  glitch classes: nearest-ideal Hamming distances (of 2048 outputs) and sizes: [(1, 24), (2, 4), (6, 1), (7, 5), (8, 4), (9, 2), (13, 1), (23, 1)]

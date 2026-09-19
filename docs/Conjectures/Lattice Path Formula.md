@@ -72,6 +72,16 @@ $$s - \textstyle\sum a_i \cdot \log_3 2 = 0 \implies \textstyle\sum a_i = s \cdo
 
 Since $\sum a_i$ is an integer and $s \cdot \log_2 3$ is irrational, the displacement is **never zero**. The $+1$ correction in $3n+1$ adds $\epsilon(n) = \log_3(1 + 1/3n) \approx 1/(3n \ln 3)$ per step, which is exponentially smaller than the gap from Diophantine approximation for $s \geq 12$.
 
+## Prior Art (added 2026-09-16)
+
+The sequence $N(s) = 1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045, \ldots$ is **OEIS A100982**, "Number of admissible sequences of order $n$; related to 3x+1 problem and Wagon's constant". It was defined by Wagon (1985), enumerated to order 1000 by Roosendaal (2005), and has a recursion due to Zarubin and binomial bounds due to Winkler:
+
+$$\frac{1}{s}\binom{m_s - 1}{s - 1} \;\le\; N(s) \;\le\; \frac{1}{s}\binom{m_s}{s - 1}, \qquad m_s = \lfloor s \log_2 3 \rfloor .$$
+
+The density formula above, summed against the stopping time, is the published definition of **Wagon's constant** $9.4779555565\ldots$ (OEIS A122790) $= \sum_s k(s)\,N(s)/2^{m_s}$, the mean stopping time of odd $n$. The bit-count $\lceil s \log_2 3 \rceil$ is A020914 and the still-undecided residues mod $2^n$ are A076227.
+
+What is new here relative to the OEIS entries is the lattice-path reading, the connection to the affine subgroup count, and (in `research/investigate-ternary-llms/`) three exact results: an $O(s^2)$ DP reproducing the b-file to $s = 1000$; the sharp decay rate $2^{-(1 - H(1/\log_2 3))\,p}$ of the undecided fraction after $p$ bits; and the fact that $N(s)$ equals Winkler's upper bound exactly when $s$ is an upper semiconvergent of $\log_2 3$ ($s = 1, 3, 5, 17, 29, 41, 94, \ldots$). Sources: https://oeis.org/A100982 , https://oeis.org/A122790 ; S. Wagon, "The Collatz problem", *Math. Intelligencer* 7 (1985) 72–76.
+
 ## Connections
 
 - Explains the shift densities in the [[Multiplication Symmetry Theorem]]

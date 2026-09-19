@@ -1,0 +1,34 @@
+{
+ "H": 16,
+ "lr": 0.001,
+ "full_precision": false,
+ "minimal_terras_states": 5,
+ "runs": [
+  {
+   "seed": 0,
+   "exact": 0.05400000140070915,
+   "bitacc": 0.8530499935150146,
+   "states": 142,
+   "deterministic": false,
+   "minimised": null,
+   "zero_density": [
+    0.28125,
+    0.34765625,
+    0.375
+   ]
+  },
+  {
+   "seed": 1,
+   "exact": 0.02250000089406967,
+   "bitacc": 0.8803499937057495,
+   "states": 279,
+   "deterministic": false,
+   "minimised": null,
+   "zero_density": [
+    0.15625,
+    0.40625,
+    0.3125
+   ]
+  }
+ ]
+}

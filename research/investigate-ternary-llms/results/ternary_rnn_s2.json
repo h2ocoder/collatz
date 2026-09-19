@@ -1,0 +1,23 @@
+{
+ "H": 16,
+ "lr": 0.003,
+ "full_precision": false,
+ "minimal_terras_states": 5,
+ "runs": [
+  {
+   "seed": 2,
+   "exact": 1.0,
+   "bitacc": 1.0,
+   "states": 45,
+   "deterministic": false,
+   "minimised": null,
+   "behavioural_states": 4,
+   "distinct_hidden": 1752,
+   "zero_density": [
+    0.34375,
+    0.40625,
+    0.3125
+   ]
+  }
+ ]
+}

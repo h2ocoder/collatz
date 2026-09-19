@@ -1,0 +1,165 @@
+{
+ "inverse_verified_k": [
+  4,
+  8,
+  12,
+  14,
+  64,
+  256,
+  1024
+ ],
+ "table_tradeoff": {
+  "p": 12,
+  "k": 240,
+  "mismatches": 0
+ },
+ "anf": [
+  {
+   "j": 0,
+   "degree": 1,
+   "monomials": 1
+  },
+  {
+   "j": 1,
+   "degree": 1,
+   "monomials": 1
+  },
+  {
+   "j": 2,
+   "degree": 2,
+   "monomials": 3
+  },
+  {
+   "j": 3,
+   "degree": 3,
+   "monomials": 5
+  },
+  {
+   "j": 4,
+   "degree": 4,
+   "monomials": 9
+  },
+  {
+   "j": 5,
+   "degree": 5,
+   "monomials": 17
+  },
+  {
+   "j": 6,
+   "degree": 6,
+   "monomials": 33
+  },
+  {
+   "j": 7,
+   "degree": 7,
+   "monomials": 69
+  },
+  {
+   "j": 8,
+   "degree": 8,
+   "monomials": 133
+  },
+  {
+   "j": 9,
+   "degree": 9,
+   "monomials": 263
+  },
+  {
+   "j": 10,
+   "degree": 10,
+   "monomials": 537
+  },
+  {
+   "j": 11,
+   "degree": 11,
+   "monomials": 1025
+  },
+  {
+   "j": 12,
+   "degree": 12,
+   "monomials": 2071
+  },
+  {
+   "j": 13,
+   "degree": 13,
+   "monomials": 4089
+  }
+ ],
+ "anf_inverse": [
+  {
+   "j": 0,
+   "degree": 1,
+   "monomials": 1
+  },
+  {
+   "j": 1,
+   "degree": 1,
+   "monomials": 1
+  },
+  {
+   "j": 2,
+   "degree": 2,
+   "monomials": 3
+  },
+  {
+   "j": 3,
+   "degree": 3,
+   "monomials": 5
+  },
+  {
+   "j": 4,
+   "degree": 4,
+   "monomials": 11
+  },
+  {
+   "j": 5,
+   "degree": 5,
+   "monomials": 19
+  },
+  {
+   "j": 6,
+   "degree": 6,
+   "monomials": 37
+  },
+  {
+   "j": 7,
+   "degree": 7,
+   "monomials": 69
+  },
+  {
+   "j": 8,
+   "degree": 8,
+   "monomials": 133
+  },
+  {
+   "j": 9,
+   "degree": 9,
+   "monomials": 259
+  },
+  {
+   "j": 10,
+   "degree": 10,
+   "monomials": 515
+  },
+  {
+   "j": 11,
+   "degree": 11,
+   "monomials": 1035
+  },
+  {
+   "j": 12,
+   "degree": 12,
+   "monomials": 2059
+  },
+  {
+   "j": 13,
+   "degree": 13,
+   "monomials": 4123
+  }
+ ],
+ "timing": {
+  "k": 20000,
+  "t_eval": 0.09673309326171875,
+  "t_verify": 0.3074376583099365
+ }
+}

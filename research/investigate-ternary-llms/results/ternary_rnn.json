@@ -1,0 +1,45 @@
+{
+ "H": 16,
+ "minimal_terras_states": 5,
+ "runs": [
+  {
+   "seed": 0,
+   "exact": 0.002500000176951289,
+   "bitacc": 0.8523499965667725,
+   "states": 65,
+   "deterministic": false,
+   "minimised": null,
+   "zero_density": [
+    0.46875,
+    0.46875,
+    0.3125
+   ]
+  },
+  {
+   "seed": 1,
+   "exact": 0.35450002551078796,
+   "bitacc": 0.8677749633789062,
+   "states": 37,
+   "deterministic": false,
+   "minimised": null,
+   "zero_density": [
+    0.375,
+    0.46484375,
+    0.3125
+   ]
+  },
+  {
+   "seed": 2,
+   "exact": 1.0,
+   "bitacc": 1.0,
+   "states": 45,
+   "deterministic": false,
+   "minimised": null,
+   "zero_density": [
+    0.34375,
+    0.40625,
+    0.3125
+   ]
+  }
+ ]
+}

@@ -27,9 +27,11 @@ Labels: **Proved**, **Verified** (computed), **Negative** (the experiment showed
 | E8 | Forward versus backward halving runs? | Forward runs are geometric with ratio 1/2; backward runs geometric with ratio 1/3. Both exact to 4 decimals. |
 | E10 | Is the published Fibonacci theorem (Reyes Jiménez) the forward dual of the age law? | **Yes.** "Avoids 4 mod 6" is exactly "no two consecutive halvings"; identical sets for m = 2..14. |
 | E11 | How long can a positive integer avoid two consecutive halvings? | Records sit at 2.5–3.8 × log₂n for odd n < 4·10⁶ (random model predicts 3.27). No n > 1 reaches 1 inside the family. 2^B − 1 survives exactly B steps. |
-| E12 | Does (*) hold exhaustively? | **Yes for every n < 2⁴⁰** (Fibonacci-tree search, 232 s). Longest survival 129 steps = 3.24 × log₂n; random model 3.27. |
+| E12 | Does (*) hold exhaustively? | **Yes for every n < 2⁵⁶** (Fibonacci-tree search; Rust, 32 threads, 525 s). Longest survival 173 steps = 3.10 × log₂n; random model 3.27. Per-step survival past the integer's own bits: 0.809017 against φ/2 = 0.809017. |
 | E13 | Do single rays follow the Markov model? | Yes: χ² z-scores +0.75, +0.31, −1.24 on 200,000 steps each. |
 | E14 | Does Banerji's backward conjecture (the dual of (*)) hold exhaustively? | **Yes for every odd n < 2·3³² ≈ 2^51.7** (Rust, 50 s). Longest survival 83 steps = 1.78 × log₂n; random model 1.71. Survival rate per step 0.66667, 0.66665, 0.66663 against 2/3. |
+| E15 | Exchange family joining Collatz to the mirror | Phase transition at p_c = 0.1309: exchanging every 7th halving escapes, every 8th drains. See [[Signed Primes and the Exchange Family]]. |
+| E16 | Liouville sign along orbits | No correlation with the dynamics (all within noise). |
 | E9 | Relation to the Collatz inverse tree? | The +1 mirror's B step is exactly the odd branch of the Collatz inverse tree (at m ≡ 4 mod 6); its A step replaces 2m by 2m/3. The two never both apply, so the tree collapses to a line. |
 
 ## The Fibonacci law — Proved
@@ -97,6 +99,8 @@ It is necessary for Collatz, it concerns a set of dimension log₂φ ≈ 0.694 r
 | n < 2²⁴ | 75,025 = F(25) | 82 | 3,041,391 | 3.81 |
 | n < 2³² | 3,524,578 = F(33) | 100 | 1,548,635,775 | 3.28 |
 | n < 2⁴⁰ | 165,580,141 = F(41) | 129 | 971,145,319,023 | 3.24 |
+| n < 2⁴⁸ (Rust, 10.5 s) | 7,778,742,049 = F(49) | 152 | 19,914,105,817,593 | 3.44 |
+| n < 2⁵⁶ (Rust, 525 s) | 365,435,296,162 = F(57) | 173 | 66,107,737,450,688,865 | 3.10 |
 
 (2⁴⁰ took 232 s in pure Python. Integers that leave the family before step B are pruned by the tree — they satisfy (*) trivially — so the search is exhaustive.)
 

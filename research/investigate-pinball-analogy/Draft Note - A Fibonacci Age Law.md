@@ -92,11 +92,12 @@ Remarks not in [RJ]:
 | 32 | 3,524,578 | < 0.1 s | 100 | 1,548,635,775 | 3.28 |
 | 40 | 165,580,141 | 0.2 s | 129 | 971,145,319,023 | 3.24 |
 | 48 | 7,778,742,049 | 10.5 s | 152 | 19,914,105,817,593 | 3.44 |
-ROWS_56_60
+| 56 | 365,435,296,162 | 525 s | 173 | 66,107,737,450,688,865 | 3.10 |
+ROWS_60
 
 **(Q) holds for every n below the largest bound in the table.** A model in which each further step is survived with probability φ/2 predicts record survival log₂n / log₂(2/φ) ≈ 3.27·log₂n; the records sit on that line. We conjecture m₀(n) ≤ 4·log₂n for n ≥ N₀.
 
-**Self-generated digits.** For B = 48, among the 7.78·10⁹ integers surviving their own 48 bits, the conditional probability of surviving one more step is 0.80902, 0.80902, 0.80899, 0.80885 at L = 48, 56, 64, 72, against φ/2 = 0.80902. Beyond step B the parity is no longer read from the digits of n but from digits produced by the iteration, and those leave the family at exactly the rate free digits would.
+**Self-generated digits.** For B = 56, among the 3.65·10¹¹ integers surviving their own 56 bits, the conditional probability of surviving one more step is 0.809017, 0.809017, 0.809012, 0.809021 at L = 56, 64, 72, 80, against φ/2 = 0.809017. Beyond step B the parity is no longer read from the digits of n but from digits produced by the iteration, and those leave the family at exactly the rate free digits would.
 
 **The backward dual.** Banerji's conjecture [Ba] — backward Syracuse iteration with exponents ≤ 2, which on odd n is the deterministic map b(n) = (2n − 1)/3 or (4n − 1)/3 according to n mod 3, always reaches a multiple of 3 — admits the same algorithm with base-3 digits: survivors of t steps are 2^t of the 3^t odd residues mod 2·3^t. It holds for every odd n < 2·3³² ≈ 2^51.7 (longest survival 83 steps at n = 116,393,404,689,949; per-step survival 0.66667 against 2/3; records 1.78·log₂n against a model value 1.71). The exceptional set is 3-adic of dimension log₃2.
 

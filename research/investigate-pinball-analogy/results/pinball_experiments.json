@@ -1,0 +1,381 @@
+{
+  "task_A": {
+    "bayes_ceiling": 0.9853511154515213,
+    "rows": [
+      {
+        "model": "pinball 3x+1, single table, identity order",
+        "accuracy": 0.9833984375,
+        "ece": 0.039042472891797166,
+        "seconds": 0.6,
+        "lanes": 307
+      },
+      {
+        "model": "  control: fixed-depth prefix",
+        "accuracy": 0.9833984375,
+        "ece": 0.2936374147387273,
+        "seconds": 0.6
+      },
+      {
+        "model": "  control: scrambled lanes",
+        "accuracy": 0.51123046875,
+        "ece": 0.01868167348035471,
+        "seconds": 0.7
+      },
+      {
+        "model": "integer naive Bayes",
+        "accuracy": 0.836669921875,
+        "ece": 0.08828284529509321,
+        "seconds": 17.6
+      },
+      {
+        "model": "integer decision tree (depth 10)",
+        "accuracy": 0.9833984375,
+        "ece": 0.031132967117962353,
+        "seconds": 0.2
+      }
+    ]
+  },
+  "task_B": {
+    "majority": [
+      {
+        "model": "pinball 3x+1 [random order]",
+        "accuracy": 0.868,
+        "ece": 0.30237516561790834,
+        "seconds": 0.7
+      },
+      {
+        "model": "  control: fixed-depth prefix [random order]",
+        "accuracy": 0.958,
+        "ece": 0.3175843442099867,
+        "seconds": 0.6
+      },
+      {
+        "model": "  control: scrambled lanes [random order]",
+        "accuracy": 0.878,
+        "ece": 0.3495684729600325,
+        "seconds": 0.8
+      },
+      {
+        "model": "pinball 3x+1 [learned order]",
+        "accuracy": 0.752,
+        "ece": 0.15675541249266825,
+        "seconds": 0.7
+      },
+      {
+        "model": "  control: fixed-depth prefix [learned order]",
+        "accuracy": 0.8955,
+        "ece": 0.24034604404831772,
+        "seconds": 0.6
+      },
+      {
+        "model": "  control: scrambled lanes [learned order]",
+        "accuracy": 0.828,
+        "ece": 0.29671801201347264,
+        "seconds": 0.8
+      },
+      {
+        "model": "pinball mixed qx+c tables [learned order]",
+        "accuracy": 0.8315,
+        "ece": 0.2202304719070671,
+        "seconds": 0.7
+      },
+      {
+        "model": "pinball 3x+1 product-combine [learned order]",
+        "accuracy": 0.7715,
+        "ece": 0.2171299026312772,
+        "seconds": 0.9
+      },
+      {
+        "model": "integer naive Bayes",
+        "accuracy": 0.993,
+        "ece": 0.2383342330021551,
+        "seconds": 0.0
+      },
+      {
+        "model": "integer decision tree (depth 8)",
+        "accuracy": 0.754,
+        "ece": 0.07219622579577845,
+        "seconds": 0.0
+      }
+    ],
+    "weighted threshold": [
+      {
+        "model": "pinball 3x+1 [random order]",
+        "accuracy": 0.847,
+        "ece": 0.2791799528581323,
+        "seconds": 0.7
+      },
+      {
+        "model": "  control: fixed-depth prefix [random order]",
+        "accuracy": 0.927,
+        "ece": 0.2889131592768244,
+        "seconds": 0.6
+      },
+      {
+        "model": "  control: scrambled lanes [random order]",
+        "accuracy": 0.8325,
+        "ece": 0.30315523788123394,
+        "seconds": 0.8
+      },
+      {
+        "model": "pinball 3x+1 [learned order]",
+        "accuracy": 0.7985,
+        "ece": 0.1691411260368768,
+        "seconds": 0.7
+      },
+      {
+        "model": "  control: fixed-depth prefix [learned order]",
+        "accuracy": 0.92,
+        "ece": 0.26173556599149017,
+        "seconds": 0.6
+      },
+      {
+        "model": "  control: scrambled lanes [learned order]",
+        "accuracy": 0.802,
+        "ece": 0.27270548839517866,
+        "seconds": 0.8
+      },
+      {
+        "model": "pinball mixed qx+c tables [learned order]",
+        "accuracy": 0.854,
+        "ece": 0.2165489119651029,
+        "seconds": 0.7
+      },
+      {
+        "model": "pinball 3x+1 product-combine [learned order]",
+        "accuracy": 0.7925,
+        "ece": 0.19720421391446144,
+        "seconds": 0.9
+      },
+      {
+        "model": "integer naive Bayes",
+        "accuracy": 0.9605,
+        "ece": 0.21269353709882124,
+        "seconds": 0.0
+      },
+      {
+        "model": "integer decision tree (depth 8)",
+        "accuracy": 0.839,
+        "ece": 0.025647174792014994,
+        "seconds": 0.0
+      }
+    ],
+    "parity of 3 bits": [
+      {
+        "model": "pinball 3x+1 [random order]",
+        "accuracy": 0.7025,
+        "ece": 0.18821567606402095,
+        "seconds": 0.7
+      },
+      {
+        "model": "  control: fixed-depth prefix [random order]",
+        "accuracy": 0.8635,
+        "ece": 0.3246742548770271,
+        "seconds": 0.6
+      },
+      {
+        "model": "  control: scrambled lanes [random order]",
+        "accuracy": 0.759,
+        "ece": 0.24586185496649704,
+        "seconds": 0.8
+      },
+      {
+        "model": "pinball 3x+1 [learned order]",
+        "accuracy": 0.733,
+        "ece": 0.207669150210917,
+        "seconds": 0.7
+      },
+      {
+        "model": "  control: fixed-depth prefix [learned order]",
+        "accuracy": 0.995,
+        "ece": 0.4122742119869217,
+        "seconds": 0.6
+      },
+      {
+        "model": "  control: scrambled lanes [learned order]",
+        "accuracy": 0.736,
+        "ece": 0.22317722395423334,
+        "seconds": 0.8
+      },
+      {
+        "model": "pinball mixed qx+c tables [learned order]",
+        "accuracy": 0.879,
+        "ece": 0.34520292323641477,
+        "seconds": 0.7
+      },
+      {
+        "model": "pinball 3x+1 product-combine [learned order]",
+        "accuracy": 0.7625,
+        "ece": 0.16736965327500367,
+        "seconds": 0.9
+      },
+      {
+        "model": "integer naive Bayes",
+        "accuracy": 0.4945,
+        "ece": 0.04907893227844033,
+        "seconds": 0.0
+      },
+      {
+        "model": "integer decision tree (depth 8)",
+        "accuracy": 0.7025,
+        "ece": 0.09732027758378535,
+        "seconds": 0.0
+      }
+    ],
+    "noisy rule (1/8 label flips)": [
+      {
+        "model": "pinball 3x+1 [random order]",
+        "accuracy": 0.715,
+        "ece": 0.17951924679835793,
+        "seconds": 0.7
+      },
+      {
+        "model": "  control: fixed-depth prefix [random order]",
+        "accuracy": 0.801,
+        "ece": 0.21633038237271832,
+        "seconds": 0.6
+      },
+      {
+        "model": "  control: scrambled lanes [random order]",
+        "accuracy": 0.5885,
+        "ece": 0.06766914850950707,
+        "seconds": 0.8
+      },
+      {
+        "model": "pinball 3x+1 [learned order]",
+        "accuracy": 0.7145,
+        "ece": 0.12032648962619714,
+        "seconds": 0.7
+      },
+      {
+        "model": "  control: fixed-depth prefix [learned order]",
+        "accuracy": 0.7945,
+        "ece": 0.19779536394844763,
+        "seconds": 0.6
+      },
+      {
+        "model": "  control: scrambled lanes [learned order]",
+        "accuracy": 0.6255,
+        "ece": 0.10103471770754549,
+        "seconds": 0.8
+      },
+      {
+        "model": "pinball mixed qx+c tables [learned order]",
+        "accuracy": 0.7125,
+        "ece": 0.12092944027797785,
+        "seconds": 0.7
+      },
+      {
+        "model": "pinball 3x+1 product-combine [learned order]",
+        "accuracy": 0.699,
+        "ece": 0.297652781679295,
+        "seconds": 0.9
+      },
+      {
+        "model": "integer naive Bayes",
+        "accuracy": 0.675,
+        "ece": 0.022002353518619202,
+        "seconds": 0.0
+      },
+      {
+        "model": "integer decision tree (depth 8)",
+        "accuracy": 0.806,
+        "ece": 0.06880719144106842,
+        "seconds": 0.0
+      }
+    ],
+    "distillation (oracle teacher)": [
+      {
+        "model": "3x+1 student, hard noisy labels",
+        "accuracy": 0.6946,
+        "ece": 0.11035721900514325
+      },
+      {
+        "model": "3x+1 student, oracle soft labels",
+        "accuracy": 0.704,
+        "ece": 0.10361601974603254
+      },
+      {
+        "model": "fixed-depth student, hard noisy labels",
+        "accuracy": 0.6902999999999999,
+        "ece": 0.12390538691948168
+      },
+      {
+        "model": "fixed-depth student, oracle soft labels",
+        "accuracy": 0.737,
+        "ece": 0.1231155572697753
+      }
+    ]
+  },
+  "task_C": {
+    "majority_class_accuracy": 0.8681614349775785,
+    "rows": [
+      {
+        "model": "pinball 3x+1 [random order]",
+        "accuracy": 0.8681614349775785,
+        "ece": 0.003016935100553415,
+        "seconds": 0.4
+      },
+      {
+        "model": "  control: fixed-depth prefix [random order]",
+        "accuracy": 0.8681614349775785,
+        "ece": 0.1163029178830841,
+        "seconds": 0.4
+      },
+      {
+        "model": "  control: scrambled lanes [random order]",
+        "accuracy": 0.8681614349775785,
+        "ece": 0.06575505173485309,
+        "seconds": 0.5
+      },
+      {
+        "model": "pinball 3x+1 [learned order]",
+        "accuracy": 0.8753363228699551,
+        "ece": 0.0989629621181069,
+        "seconds": 0.4
+      },
+      {
+        "model": "  control: fixed-depth prefix [learned order]",
+        "accuracy": 0.9049327354260089,
+        "ece": 0.07273054643776351,
+        "seconds": 0.4
+      },
+      {
+        "model": "  control: scrambled lanes [learned order]",
+        "accuracy": 0.8681614349775785,
+        "ece": 0.13580654977044015,
+        "seconds": 0.5
+      },
+      {
+        "model": "pinball mixed qx+c tables [learned order]",
+        "accuracy": 0.8825112107623319,
+        "ece": 0.10168488471488982,
+        "seconds": 0.4
+      },
+      {
+        "model": "pinball 3x+1 product-combine [learned order]",
+        "accuracy": 0.9094170403587444,
+        "ece": 0.08376118107970319,
+        "seconds": 0.5
+      },
+      {
+        "model": "integer naive Bayes",
+        "accuracy": 0.885201793721973,
+        "ece": 0.10106460694912738,
+        "seconds": 0.8
+      },
+      {
+        "model": "integer decision tree (depth 8)",
+        "accuracy": 0.9336322869955157,
+        "ece": 0.03453919945489364,
+        "seconds": 0.0
+      },
+      {
+        "model": "pinball distilled from naive Bayes soft labels",
+        "accuracy": 0.8986547085201794,
+        "ece": 0.13666448755954044,
+        "seconds": 0.4
+      }
+    ]
+  }
+}

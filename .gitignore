@@ -39,3 +39,6 @@ site/.vitepress/dist/
 # .NET build artifacts
 emanon/src/**/bin/
 emanon/src/**/obj/
+
+# Third-party datasets (downloaded by scripts/pinball_experiments.py)
+data/sms_spam/

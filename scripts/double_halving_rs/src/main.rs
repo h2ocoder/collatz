@@ -5,7 +5,9 @@
 //! mod 2^j whose first j steps contain no "00" (Fibonacci(j+1) nodes per level),
 //! then finish each depth-B leaf by direct iteration. Exhaustive for n < 2^B.
 //!
-//! Usage: double_halving <B> [threads]      prints one JSON object
+//! Usage: double_halving <B> [threads] [k/K]      prints one JSON object
+//! The optional k/K runs shard k of K (for splitting one search across machines);
+//! merge the outputs with scripts/merge_search_shards.py.
 
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
@@ -101,6 +103,13 @@ fn main() {
         }
         frontier = next;
     }
+    // optional sharding for multi-machine runs: "k/K" keeps work items with index % K == k
+    let (shard, shards): (usize, usize) = args.get(3).map(|s| {
+        let mut it = s.split('/');
+        (it.next().unwrap().parse().unwrap(), it.next().unwrap().parse().unwrap())
+    }).unwrap_or((0, 1));
+    let frontier: Vec<Node> = frontier.into_iter().enumerate()
+        .filter(|(i, _)| i % shards == shard).map(|(_, n)| n).collect();
     let work = Arc::new(frontier);
     let cursor = Arc::new(AtomicUsize::new(0));
     let total = Arc::new(Mutex::new(Tally::new()));
@@ -148,8 +157,8 @@ fn main() {
     let best: Vec<String> = g.best.iter().map(|(n, s)| format!("[{},{}]", n, s)).collect();
     let over: Vec<String> = g.overflow.iter().map(|n| n.to_string()).collect();
     println!(
-        "{{\"bits\":{},\"threads\":{},\"seconds\":{:.1},\"leaves\":{},\"best\":[{}],\"overflow\":[{}],\"histogram\":[{}]}}",
-        bits, threads, start.elapsed().as_secs_f64(), g.leaves, best.join(","), over.join(","), hist.join(",")
+        "{{\"bits\":{},\"shard\":\"{}/{}\",\"threads\":{},\"seconds\":{:.1},\"leaves\":{},\"best\":[{}],\"overflow\":[{}],\"histogram\":[{}]}}",
+        bits, shard, shards, threads, start.elapsed().as_secs_f64(), g.leaves, best.join(","), over.join(","), hist.join(",")
     );
 }
 

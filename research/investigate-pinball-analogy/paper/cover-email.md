@@ -1,7 +1,7 @@
 # Cover email — draft
 
 **To:** Manuel-Alejandro Reyes Jiménez (address: from the arXiv listing of 2606.02621)
-**Subject:** Your Open Question 1 (orbits meeting 4 mod 6): verified for n < 2^56, and a backward companion to your Fibonacci theorem
+**Subject:** Your Open Question 1 (orbits meeting 4 mod 6): verified for n < 2^56, and a backward companion to your Fibonacci theorem (the "mirror map")
 
 Dear Dr. Reyes Jiménez,
 
@@ -15,7 +15,7 @@ Three things, in order of how sure I am that they are useful to you:
 
    Two small remarks that I did not see in the paper: the 3x+1 conjecture implies a positive answer (the only odd predecessors of 1 other than 1 are (4^j − 1)/3, reached with exponent at least 4); and the statement is false for negative integers (−1, and the cycle −5, −7), so any proof has to use positivity.
 
-3. **A backward, 3-adic companion to your theorem.** Consider m → 3m − 1 (m odd), m → 3m/2 (m even) — what the Collatz map becomes on negative integers if halving is replaced by n → n − |n/2|. It is injective, so its inverse is a terminating process and every integer has an "age". The number of residues mod 2·3^t with age ≥ t is exactly F(t+3), and the same holds with 3 replaced by any odd q. The proof is short: a backward odd-type step always lands on an odd number and can only leave an even one, so it never occurs twice in a row, and each backward step reads one base-q digit. It is your count with the roles of 2 and 3 exchanged and time reversed.
+3. **A backward, 3-adic companion to your theorem.** Consider m → 3m − 1 (m odd), m → 3m/2 (m even) — what the Collatz map becomes on negative integers if halving is replaced by n → n − |n/2|. I have been calling it the *mirror map*: it is the Collatz map reflected through zero, and where Collatz discards a factor 2 it exchanges it for a factor 3. It is injective, so its inverse is a terminating process and every integer has an "age". The number of residues mod 2·3^t with age ≥ t is exactly F(t+3), and the same holds with 3 replaced by any odd q. The proof is short: a backward odd-type step always lands on an odd number and can only leave an even one, so it never occurs twice in a row, and each backward step reads one base-q digit. It is your count with the roles of 2 and 3 exchanged and time reversed.
 
 One more connection, which also concerns Mike Winkler's recent revision of arXiv:1412.0519 (v3, August 2026), where your paper is cited. His Proposition 5.1 says that any finite-state condition on parity words gives a transfer-matrix count of residues mod 2^k, and he remarks that your theorem is "not a direct corollary" of it because your states are residues mod 6. But the observation in point 1 shows that avoiding 4 (mod 6) *is* a parity-word condition — the forbidden factor 00 — so your Theorem 4.7 does follow directly from his principle. You may both find that worth knowing. I am copying him for that reason. [Delete this sentence if not copying him.]
 

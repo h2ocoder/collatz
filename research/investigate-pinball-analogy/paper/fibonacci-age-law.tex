@@ -42,7 +42,7 @@ Reyes Jim\'enez is the $2$-adic counterpart of this law: avoiding $4 \pmod 6$ is
 consecutive halvings'', which makes that count a direct corollary of Winkler's finite-state parity principle and
 identifies the counted set as the integers whose initial Syracuse exponents are all at most $2$. That paper asks whether every $n>1$ eventually
 has two consecutive halvings. We observe that the $3x+1$ conjecture implies this, that it fails for negative
-integers, and we verify it exhaustively for all $n<2^{56}$ with an algorithm whose cost is $O(\varphi^{B})$ rather
+integers, and we verify it exhaustively for all $n<2^{60}$ with an algorithm whose cost is $O(\varphi^{B})$ rather
 than $O(2^{B})$. Beyond an integer's own binary digits, the measured per-step survival probability is $0.809017$,
 against $\varphi/2=0.809017$. The same method, run backwards in base $3$, verifies a conjecture of Banerji for all
 odd $n<2\cdot 3^{32}$.
@@ -231,7 +231,7 @@ $B$ & leaves $F_{B+1}$ & time & longest survival & attained at $n$ & steps$/\log
 40 & 165\,580\,141 & 0.2 s & 129 & 971\,145\,319\,023 & 3.24\\
 48 & 7\,778\,742\,049 & 10.5 s & 152 & 19\,914\,105\,817\,593 & 3.44\\
 56 & 365\,435\,296\,162 & 525 s & 173 & 66\,107\,737\,450\,688\,865 & 3.10\\
-%ROW60
+60 & 2\,504\,730\,781\,961 & 3564 s & 200 & 1\,138\,814\,298\,721\,115\,263 & 3.33\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -244,8 +244,8 @@ $\log_2 n/\log_2(2/\varphi)\approx3.27\log_2 n$, and the observed records lie on
 $m_0(n)\le4\log_2 n$ for all sufficiently large $n$.
 
 \subsection*{Self-generated digits}
-For $B=56$, among the $3.65\cdot10^{11}$ integers that survive their own $56$ binary digits, the conditional
-probability of surviving one more step is $0.809017$, $0.809017$, $0.809012$, $0.809021$ at levels $56,64,72,80$;
+For $B=60$, among the $2.50\cdot10^{12}$ integers that survive their own $60$ binary digits, the conditional
+probability of surviving one more step is $0.809017$, $0.809017$, $0.809016$, $0.809018$ at levels $60,68,76,84$;
 and $\varphi/2=0.809017$. Beyond level $B$ the parity is no longer read from the digits of $n$ but from digits
 produced by the iteration, and these leave the family at exactly the rate at which free digits would.
 

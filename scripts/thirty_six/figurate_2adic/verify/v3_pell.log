@@ -1,0 +1,72 @@
+====================================================================================================
+A. Generation and identities (j <= 5000 where cheap)
+====================================================================================================
+  first terms m: [0, 1, 6, 35, 204, 1189]  u: [1, 3, 17, 99, 577, 3363]  n: [0, 1, 8, 49, 288, 1681]  N: [0, 1, 36, 1225, 41616]
+  u^2 - 8m^2 = 1 and T_(n_j) = m_j^2 (every 7th j <= 5000): True
+  m_(j+1) = 6m_j - m_(j-1), u_(j+1) = 3u_j + 8m_j (j < 2000): True
+  v2(m_i - m_j) = v2(i - j) for ALL pairs -700 <= i < j <= 700 (negative indices included): True
+  m_i - m_j = 2 m_((i-j)/2) u_((i+j)/2) on all those pairs with i = j mod 2: True
+  Bumby / Webb-Long criterion for uniform distribution mod 2^h of w_(j+1) = a w_j + b w_(j-1):
+     a = 2 mod 4, b = 3 mod 4, w_0 != w_1 mod 2.   Here a = 6, b = -1, (w_0, w_1) = (0, 1): True
+
+====================================================================================================
+B. Minimal periods mod 2^k, brute force over EVERY candidate period (k <= 11), then powers of two (k <= 20)
+====================================================================================================
+   k: (per m, per N, per u, per n)
+   [(1, 2, 2, 1, 2), (2, 4, 2, 2, 2), (3, 8, 4, 2, 2), (4, 16, 8, 2, 4), (5, 32, 16, 4, 8), (6, 64, 32, 8, 16), (7, 128, 64, 16, 32), (8, 256, 128, 32, 64)]
+   [(9, 512, 256, 64, 128), (10, 1024, 512, 128, 256), (11, 2048, 1024, 256, 512), (12, 4096, 2048, 512, 1024), (13, 8192, 4096, 1024, 2048), (14, 16384, 8192, 2048, 4096)]
+   all k = 1..20 as the README predicts: True
+
+====================================================================================================
+C. Closures: residues of n_j and u_j;  the README's '0 or 1 mod 8' sharpened
+====================================================================================================
+  k = 3..16: m_j permutation; N_j = multiset of squares; n_j residues = {0,1 mod 8 with T square};
+             union with NOT-image = all of {T_r square}, disjoint: True
+  (n_j mod 16, j mod 2) for j < 400: [(0, 0), (1, 1), (8, 0)]   -> n_j = 0 mod 8 (j even) or 1 mod 16 (j odd)
+  (u_j mod 32, j mod 2) for j < 400: [(1, 0), (3, 1), (17, 0)]   -> u_j = 1 mod 16 (j even) or 3 mod 32 (j odd)
+  the full 2-adic solution set of 'T_n is a square' lies in n = 0, 7 mod 8 and n = 1, 14 mod 16: [0, 1, 7, 8, 14, 15]
+
+====================================================================================================
+D. Dropping classes along the orbit, actual integers 2 <= j <= 600, for THREE rules
+   entry: number of distinct Terras stopping times seen for j even / j odd
+====================================================================================================
+  3x+1  N_j:  j even: {1: 300}   |  j odd: {2: 299}
+  3x+1  n_j:  j even: {1: 300}   |  j odd: {2: 299}
+  3x+1  u_j:  j even: {2: 300}   |  j odd: {4: 299}
+  3x-1  N_j:  j even: {1: 300}   |  j odd: 31 distinct values, top [(5, 75), (8, 49), (7, 37), (10, 21)]
+  3x-1  n_j:  j even: {1: 300}   |  j odd: 36 distinct values, top [(8, 55), (7, 38), (13, 31), (10, 29)]
+  3x-1  u_j:  j even: 48 distinct values, top [(16, 27), (13, 25), (10, 18), (18, 17)]   |  j odd: {2: 299}
+  5x+1  N_j:  j even: {1: 300}   |  j odd: 26 distinct values, top [(None, 114), (5, 74), (7, 38), (12, 14)]
+  5x+1  n_j:  j even: {1: 300}   |  j odd: 20 distinct values, top [(5, 149), (None, 69), (7, 37), (10, 10)]
+  5x+1  u_j:  j even: {5: 150, 7: 149, None: 1}   |  j odd: {3: 299}
+  -> the two-class concentration (README Q2.3-d) is a 3x+1 statement.  For 3x-1 and 5x+1 the odd-index
+     terms (odd squares, 1 mod 8) and the u_j spread over many classes: 'still two' was not computed and is false.
+
+====================================================================================================
+E. What singles out 36
+====================================================================================================
+  j <= 5000 with m_j triangular (Ljunggren): [0, 1, 2];   with N_j 3-smooth: [1, 2]
+  The 3-smooth statement needs no search: N = T_n is 3-smooth iff n and n+1 are both 3-smooth, and
+  consecutive 3-smooth numbers are (1,2), (2,3), (3,4), (8,9) (Levi ben Gerson), so T_n in {1, 3, 6, 36};
+  the squares among these are 1 and 36.  Status: proved, not 'computed j <= 3000'.
+  3-smooth triangular numbers with index < 2*10^6: [1, 3, 6, 36]
+  3 | m_j <=> 2 | j: True ;  v2(m_j) = v2(j): True
+
+====================================================================================================
+F. Pythagorean-lift discriminants 4^k + 9^s: perfect squares, and never 2*square
+====================================================================================================
+  (k, s) with 1 <= k < 300, 1 <= s < 200 and 4^k + 9^s a perfect square: [(2, 1)]
+  proof: primitive triple (2^k, 3^s, y) => 2^k = 2ab, 3^s = a^2 - b^2 with b = 1, a = 2^(k-1);
+         (2^(k-1) - 1)(2^(k-1) + 1) = 3^s forces 2^(k-1) - 1 = 1.  So (2, 1) is the only cell, for all k, s.
+  4^8 + 9^5 = 124585 (= D of Set_13 in scripts/pythagorean_lifts/README.md)
+
+====================================================================================================
+G. Null test re-run with a different seed, 30 controls per term (the researcher used 10), 5 <= j <= 160
+   controls: random integers with the same bit length and the same residue mod 16
+====================================================================================================
+  u_j: mean z = +0.049, sd z = 1.360, standard error 0.109, |mean| / se = 0.45
+  n_j: mean z = +0.121, sd z = 1.199, standard error 0.096, |mean| / se = 1.26
+  m_j: mean z = +0.048, sd z = 1.089, standard error 0.087, |mean| / se = 0.55
+  N_j: mean z = +0.136, sd z = 1.149, standard error 0.092, |mean| / se = 1.48
+
+done in 50.1 s

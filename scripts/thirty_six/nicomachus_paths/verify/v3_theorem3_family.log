@@ -1,0 +1,80 @@
+edge cases
+  k=1: tau_1 = 1 identically; T_1 = 1; tau_1(1) = 1 (fixed, trivially; the theorem is stated for k >= 2)
+  k=2: T_2 = 3, tau_2(9) = 3 (not fixed; 3 is not a product of two distinct primes)
+Theorem 3 for 2 <= k <= 20000: counterexamples []; #k = 379
+  first k: [3, 4, 5, 6, 10, 13, 22, 37, 46, 58, 61, 73, 82, 106, 157, 166, 178, 193, 226, 262]
+  fixed points T_k^2: [36, 100, 225, 441, 3025, 8281, 64009, 494209, 1168561, 2927521]
+  index list starts with all 54 listed terms of OEIS A164977: True
+  k <= 20000 with T_k a prime square: []
+  k <= 20000 with omega(T_k) = 1: [2]
+
+all fixed points of tau_k that are perfect squares m^2, m <= 3000, k = 2..12 (brute force)
+  k= 2: [1]   T_k^2 = 9  
+  k= 3: [1, 36]   T_k^2 = 36  (T_k semiprime)
+  k= 4: [1, 100]   T_k^2 = 100  (T_k semiprime)
+  k= 5: [1, 225]   T_k^2 = 225  (T_k semiprime)
+  k= 6: [1, 441]   T_k^2 = 441  (T_k semiprime)
+  k= 7: [1]   T_k^2 = 784  
+  k= 8: [1]   T_k^2 = 1296  
+  k= 9: [1]   T_k^2 = 2025  
+  k=10: [1, 3025]   T_k^2 = 3025  (T_k semiprime)
+  k=11: [1]   T_k^2 = 4356  
+  k=12: [1]   T_k^2 = 6084  
+
+B = C(a+k-1,a) squarefree with exactly a prime factors => tau_k(B^a) = B^a   (k <= 80, a <= 12)
+  k=7, a=4: B=210 = 2*3*5*7
+  k=8, a=4: B=330 = 2*3*5*11
+  k=9, a=3: B=165 = 3*5*11
+  k=11, a=3: B=286 = 2*11*13
+  k=12, a=4: B=1365 = 3*5*7*13
+  k=13, a=3: B=455 = 5*7*13
+  k=17, a=3: B=969 = 3*17*19
+  k=17, a=4: B=4845 = 3*5*17*19
+  k=19, a=4: B=7315 = 5*7*11*19
+  k=20, a=4: B=8855 = 5*7*11*23
+  k=21, a=3: B=1771 = 7*11*23
+  k=21, a=6: B=230230 = 2*5*7*11*13*23
+  k=28, a=4: B=31465 = 5*7*29*31
+  k=29, a=3: B=4495 = 5*29*31
+  k=33, a=6: B=2760681 = 3*7*11*17*19*37
+  k=34, a=6: B=3262623 = 3*7*13*17*19*37
+  k=37, a=3: B=9139 = 13*19*37
+  k=37, a=5: B=749398 = 2*13*19*37*41
+  k=37, a=6: B=5245786 = 2*7*13*19*37*41
+  k=38, a=6: B=6096454 = 2*7*13*19*41*43
+  k=41, a=3: B=12341 = 7*41*43
+  k=41, a=4: B=135751 = 7*11*41*43
+  k=41, a=6: B=9366819 = 3*7*11*23*41*43
+  k=42, a=6: B=10737573 = 3*7*11*23*43*47
+  k=43, a=5: B=1533939 = 3*11*23*43*47
+  k=46, a=8: B=886322710 = 2*5*7*13*17*23*47*53
+  k=46, a=10: B=29248649430 = 2*3*5*7*11*13*17*23*47*53
+  k=54, a=9: B=20286591270 = 2*3*5*11*19*29*31*59*61
+  k=57, a=3: B=32509 = 19*29*59
+  k=57, a=5: B=5949147 = 3*19*29*59*61
+  k=58, a=4: B=521855 = 5*29*59*61
+  k=58, a=5: B=6471002 = 2*29*31*59*61
+  k=58, a=6: B=67945521 = 3*7*29*31*59*61
+  k=59, a=4: B=557845 = 5*31*59*61
+  k=65, a=7: B=1329890705 = 5*11*13*17*23*67*71
+  k=66, a=6: B=143218999 = 7*11*17*23*67*71
+  k=67, a=5: B=13019909 = 7*17*23*67*71
+  k=68, a=10: B=1096993404430 = 2*5*7*11*17*19*23*37*71*73
+  k=69, a=10: B=1258315963905 = 3*5*7*11*13*19*23*37*71*73
+  k=73, a=7: B=2898753715 = 5*11*13*19*37*73*79
+  pairs verified: 74  (README examples (7,4)->210^4 and (9,3)->165^3: True True )
+
+k and q=(k+1)/2 both prime
+  k < 2000: [3, 5, 13, 37, 61, 73, 157, 193, 277, 313, 397, 421, 457, 541, 613, 661, 673, 733, 757, 877, 997, 1093, 1153, 1201, 1213, 1237, 1321, 1381, 1453, 1621, 1657, 1753, 1873, 1933, 1993]
+  fixed k, q k^2, (q k)^2 and cycle {q k, k^2} verified for all of them: True
+  note: 'k is a fixed point of tau_k' holds for EVERY prime k (tau_k(p) = k); only the other three need q prime
+  every prime k <= 200 fixed: True
+
+control: is T_k^2 the LARGEST fixed point of tau_k?  (complete lists from v2_tauk_attractors.log)
+  k=2: T_k^2 =     9 in list: False; largest fixed point 2; T_k^2 largest: False; all fixed points 2-smooth-ish? max prime 2
+  k=3: T_k^2 =    36 in list: True; largest fixed point 36; T_k^2 largest: True; all fixed points 3-smooth-ish? max prime 3
+  k=4: T_k^2 =   100 in list: True; largest fixed point 1920; T_k^2 largest: False; all fixed points 4-smooth-ish? max prime 7
+  k=5: T_k^2 =   225 in list: True; largest fixed point 225; T_k^2 largest: True; all fixed points 5-smooth-ish? max prime 5
+  k=6: T_k^2 =   441 in list: True; largest fixed point 19559232; T_k^2 largest: False; all fixed points 6-smooth-ish? max prime 11
+  k=7: T_k^2 =   784 in list: False; largest fixed point 1944810000; T_k^2 largest: False; all fixed points 7-smooth-ish? max prime 11
+  k=8: T_k^2 =  1296 in list: False; largest fixed point 311203233792; T_k^2 largest: False; all fixed points 8-smooth-ish? max prime 19

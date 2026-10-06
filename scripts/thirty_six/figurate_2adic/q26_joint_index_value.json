@@ -1,0 +1,38 @@
+{
+ "3x+1 | triangular T_n": {
+  "mutual_information_bits": 0.5,
+  "marginal_entropy_bits": 2.2157703019605353
+ },
+ "3x+1 | hexagonal n(2n-1)": {
+  "mutual_information_bits": 1.64527541669096,
+  "marginal_entropy_bits": 2.2157703019605353
+ },
+ "3x-1 | triangular T_n": {
+  "mutual_information_bits": 0.744139930523681,
+  "marginal_entropy_bits": 2.2157703019605353
+ },
+ "3x-1 | hexagonal n(2n-1)": {
+  "mutual_information_bits": 1.5851186940299948,
+  "marginal_entropy_bits": 2.2157703019605353
+ },
+ "5x+1 | triangular T_n": {
+  "mutual_information_bits": 0.20603461617810223,
+  "marginal_entropy_bits": 2.0454302650441427
+ },
+ "5x+1 | hexagonal n(2n-1)": {
+  "mutual_information_bits": 1.221561776614962,
+  "marginal_entropy_bits": 2.0454302650441427
+ },
+ "low_level_rules_ok": true,
+ "first_run_law": {
+  "3x+1 vs T_n": true,
+  "3x-1 vs T_(n-1)": true,
+  "5x+1 vs n(3n+1)/2": true,
+  "control: 5x+1 vs T_n (should fail)": false,
+  "control: 3x-1 vs T_n (should fail)": false
+ },
+ "matched 3x+1": 0.5,
+ "matched 3x-1": 0.5,
+ "matched 5x+1": 0.26604701395037356,
+ "matched 5x-1": 0.3241964266241024
+}

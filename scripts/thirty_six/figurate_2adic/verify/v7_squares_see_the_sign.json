@@ -1,0 +1,54 @@
+{
+ "A": {
+  "3x+1": {
+   "word": "10101010",
+   "drop": 2,
+   "classes": 1,
+   "exact": true
+  },
+  "3x-1": {
+   "word": "11111111",
+   "drop": null,
+   "classes": 9,
+   "exact": true
+  },
+  "5x+1": {
+   "word": "11000110",
+   "drop": 5,
+   "classes": 6,
+   "exact": true
+  },
+  "5x-1": {
+   "word": "10101010",
+   "drop": null,
+   "classes": 6,
+   "exact": true
+  },
+  "7x+1": {
+   "word": "10010010",
+   "drop": 3,
+   "classes": 1,
+   "exact": true
+  },
+  "7x-1": {
+   "word": "11011101",
+   "drop": null,
+   "classes": 5,
+   "exact": true
+  },
+  "15x+1": {
+   "word": "10001000",
+   "drop": 4,
+   "classes": 4,
+   "exact": true
+  }
+ },
+ "A_grid_ok": "True",
+ "B": {
+  "mirror_ok": true,
+  "plus": {
+   "2": 19999
+  },
+  "minus_distinct": 78
+ }
+}

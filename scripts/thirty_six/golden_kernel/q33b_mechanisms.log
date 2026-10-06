@@ -1,0 +1,74 @@
+=== 1. the 124 irrational-cosine hits of the (q, d, N) survey, by mechanism ===
+   even branch x -> a x is an involution iff a^2 = 1;  odd branch x -> b x + 1/d is an involution iff b = -1 (b^2 = 1 alone gives o^2 = a translation)
+   A: both branches involutions (a^2 = 1, b = -1): symmetric matrix: 29: [(5, 3, 4, [8]), (5, 3, 8, [16]), (9, 3, 4, [8]), (6, 4, 5, [5, 10]), (11, 4, 5, [5, 10]), (11, 4, 15, [5, 10, 20]), (3, 5, 8, [8]), (7, 5, 6, [12]), (7, 5, 12, [12]), (11, 5, 8, [8]), (8, 6, 7, [7, 14]), (5, 7, 4, [8]), (5, 7, 12, [8]), (9, 7, 4, [8]), (9, 7, 8, [16]), (9, 7, 16, [32]), (10, 8, 9, [9, 18]), (6, 9, 5, [5, 10]), (7, 9, 16, [8]), (11, 9, 5, [5, 10]), (11, 9, 10, [20]), (11, 9, 20, [5, 10, 20]), (12, 10, 11, [11, 22]), (4, 11, 15, [12]), (5, 11, 4, [8]), (5, 11, 8, [16]), (7, 11, 6, [12]), (9, 11, 4, [8]), (9, 11, 20, [8])]
+   B: reflection + translation (a = -1, b = 1): 2: [(9, 4, 5, [5]), (4, 9, 5, [5])]
+   C: odd branch a reflection (b = -1), even branch not an involution: 33: [(3, 2, 5, [5]), (8, 2, 5, [5]), (2, 3, 5, [5]), (4, 3, 7, [8]), (7, 3, 5, [5]), (7, 3, 10, [10]), (8, 3, 11, [10]), (11, 3, 7, [8]), (11, 3, 14, [8]), (12, 3, 5, [5]), (7, 4, 11, [10]), (2, 5, 7, [8]), (6, 5, 11, [10]), (9, 5, 7, [8]), (9, 5, 14, [8]), (3, 7, 5, [5]), (3, 7, 10, [10]), (8, 7, 5, [5]), (8, 7, 15, [5, 10]), (2, 8, 5, [5]), (7, 8, 5, [5]), (7, 8, 15, [12]), (12, 8, 5, [5]), (2, 9, 11, [10]), (10, 9, 19, [10]), (4, 10, 7, [8]), (11, 10, 7, [8]), (11, 10, 21, [8]), (12, 11, 23, [8]), (2, 12, 7, [8]), (3, 12, 5, [5]), (8, 12, 5, [5]), (9, 12, 7, [8])]
+   D: even branch an involution (a^2 = 1), odd branch neither reflection nor translation: 43: [(7, 3, 8, [8]), (2, 4, 5, [5]), (2, 4, 15, [5]), (3, 4, 5, [5]), (7, 4, 5, [5]), (8, 4, 5, [5]), (8, 4, 15, [5]), (12, 4, 5, [5]), (2, 6, 7, [8]), (2, 6, 35, [8]), (4, 6, 7, [8]), (4, 6, 35, [8]), (8, 6, 35, [7, 14, 28]), (9, 6, 7, [8]), (9, 6, 35, [8]), (11, 6, 7, [8]), (10, 8, 21, [12]), (2, 9, 5, [5]), (3, 9, 5, [5]), (3, 9, 10, [5]), (3, 9, 20, [5]), (3, 9, 40, [10]), (7, 9, 5, [5]), (7, 9, 10, [5]), (7, 9, 20, [5]), (7, 9, 40, [5]), (8, 9, 5, [5]), (12, 9, 5, [5]), (2, 10, 11, [10]), (2, 10, 33, [5, 10]), (5, 10, 33, [5, 10]), (6, 10, 11, [10]), (7, 10, 11, [10]), (8, 10, 11, [10]), (8, 10, 33, [5, 10]), (3, 11, 20, [8]), (3, 11, 40, [8]), (7, 11, 8, [8]), (7, 11, 15, [12]), (7, 11, 20, [8]), (7, 11, 30, [12]), (7, 11, 40, [8]), (7, 11, 60, [24])]
+   E: neither branch an involution: 17: [(8, 3, 17, [8]), (9, 5, 17, [8]), (4, 6, 25, [5]), (9, 6, 25, [5]), (2, 7, 17, [8]), (2, 7, 51, [8]), (2, 8, 35, [5]), (6, 8, 49, [7]), (12, 8, 35, [5, 10]), (2, 10, 17, [8]), (2, 10, 51, [8]), (4, 11, 25, [5]), (9, 11, 25, [5]), (9, 11, 50, [5]), (3, 12, 55, [5]), (8, 12, 55, [5, 10]), (9, 12, 17, [8])]
+   class E hits and the orders of (a, b) modulo each prime power of N:
+      (q,d,N) = (8,3,17) cosines j = [8]: mod 17: a = 6 (ord 16), b = 14 (ord 16)
+      (q,d,N) = (9,5,17) cosines j = [8]: mod 17: a = 7 (ord 16), b = 12 (ord 16)
+      (q,d,N) = (4,6,25) cosines j = [5]: mod 25: a = 21 (ord 5), b = 9 (ord 10)
+      (q,d,N) = (9,6,25) cosines j = [5]: mod 25: a = 21 (ord 5), b = 14 (ord 10)
+      (q,d,N) = (2,7,17) cosines j = [8]: mod 17: a = 5 (ord 16), b = 10 (ord 16)
+      (q,d,N) = (2,7,51) cosines j = [8]: mod 3: a = 1 (ord 1), b = 2 (ord 2); mod 17: a = 5 (ord 16), b = 10 (ord 16)
+      (q,d,N) = (2,8,35) cosines j = [5]: mod 5: a = 2 (ord 4), b = 4 (ord 2); mod 7: a = 1 (ord 1), b = 2 (ord 3)
+      (q,d,N) = (6,8,49) cosines j = [7]: mod 49: a = 43 (ord 7), b = 13 (ord 14)
+      (q,d,N) = (12,8,35) cosines j = [5, 10]: mod 5: a = 2 (ord 4), b = 4 (ord 2); mod 7: a = 1 (ord 1), b = 5 (ord 6)
+      (q,d,N) = (2,10,17) cosines j = [8]: mod 17: a = 12 (ord 16), b = 7 (ord 16)
+      (q,d,N) = (2,10,51) cosines j = [8]: mod 3: a = 1 (ord 1), b = 2 (ord 2); mod 17: a = 12 (ord 16), b = 7 (ord 16)
+      (q,d,N) = (4,11,25) cosines j = [5]: mod 25: a = 16 (ord 5), b = 14 (ord 10)
+      (q,d,N) = (9,11,25) cosines j = [5]: mod 25: a = 16 (ord 5), b = 19 (ord 10)
+      (q,d,N) = (9,11,50) cosines j = [5]: mod 2: a = 1 (ord 1), b = 1 (ord 1); mod 25: a = 16 (ord 5), b = 19 (ord 10)
+      (q,d,N) = (3,12,55) cosines j = [5]: mod 5: a = 3 (ord 4), b = 4 (ord 2); mod 11: a = 1 (ord 1), b = 3 (ord 5)
+      (q,d,N) = (8,12,55) cosines j = [5, 10]: mod 5: a = 3 (ord 4), b = 4 (ord 2); mod 11: a = 1 (ord 1), b = 8 (ord 10)
+      (q,d,N) = (9,12,17) cosines j = [8]: mod 17: a = 10 (ord 16), b = 5 (ord 16)
+
+=== 2. the two proved all-cosine mechanisms, checked on the whole survey range ===
+   A: both branches involutions (a^2 = 1, b = -1): symmetric matrix: 70 triples, primitive spectrum all real in 70
+   B: reflection + translation (a = -1, b = 1): 22 triples, primitive spectrum all real in 22
+   C: odd branch a reflection (b = -1), even branch not an involution: 82 triples, primitive spectrum all real in 20
+   D: even branch an involution (a^2 = 1), odd branch neither reflection nor translation: 153 triples, primitive spectrum all real in 27
+   E: neither branch an involution: 2227 triples, primitive spectrum all real in 2
+   all-real levels NOT explained by A or B: [(2, 3, 5), (2, 4, 5), (2, 4, 15), (2, 8, 5), (2, 9, 5), (3, 2, 5), (3, 4, 5), (3, 7, 5), (3, 7, 10), (3, 9, 5), (3, 9, 10), (3, 9, 20), (3, 9, 40), (3, 11, 20), (3, 12, 5), (4, 5, 9), (4, 8, 9), (7, 2, 9), (7, 3, 5), (7, 3, 8), (7, 3, 10), (7, 4, 5), (7, 5, 8), (7, 8, 5), (7, 8, 9), (7, 9, 5), (7, 9, 10), (7, 9, 20), (7, 9, 40), (7, 11, 8), (7, 11, 9), (7, 11, 20), (8, 2, 5), (8, 4, 5), (8, 4, 15), (8, 7, 5), (8, 7, 15), (8, 9, 5), (8, 12, 5), (9, 3, 10), (9, 5, 14), (9, 7, 10), (11, 3, 14), (11, 5, 12), (11, 7, 12), (12, 3, 5), (12, 4, 5), (12, 8, 5), (12, 9, 5)]
+
+=== 3. the 3x+1 kernel: moduli N prime to 6 with an involutive branch ===
+   N < 2000: [(5, 'o')]    (o^2 = id  <=>  (3/2)^2 = 1  <=>  N | 3^2 - 2^2 = 5;  e^2 = id  <=>  N | 3)
+   so 5 = 3^2 - 2^2 = 3 + 2 is the only modulus at which a branch of the 3x+1 map is an involution: there 3/2 = -1, the odd branch is a reflection,
+   and the word 'oo' (the cell (k, s) = (2, 2) of the exponent lattice, 2^2 - 3^2 = -5) is the identity.
+
+=== 4. the family G_N = (1/2)(x -> -2x) + (1/2)(x -> -x - 2) on Z/N, N odd, 5 <= N <= 301  [(d+1, d) mod 2d+1] ===
+   N =   5 (ord(-2) =   4): irrational cosines j = {5: 1}   prim = x*(x - 1)*(x**2 + x - 1)
+   N =   7 (ord(-2) =   6): irrational cosines j = {8: 1}   prim = (x**2 - 2)*(x**4 - x**2 + 2)
+   N =  11 (ord(-2) =   5): irrational cosines j = {10: 1}   prim = x*(x + 1)*(x**2 - x - 1)*(x**6 - 3*x**4 + x**3 + 4*x**2 - 3*x - 1)
+   N =  15 (ord(-2) =   4): irrational cosines j = {5: 1, 10: 1}   prim = x**2*(x - 1)*(x + 1)*(x**2 - x - 1)*(x**2 + x - 1)
+   N =  19 (ord(-2) =   9): irrational cosines j = {10: 1}
+   N =  21 (ord(-2) =   6): irrational cosines j = {8: 2}   prim = x**2*(x - 1)*(x + 1)*(x**2 - 2)**2*(x**4 - x**2 + 2)
+   N =  23 (ord(-2) =  22): irrational cosines j = {8: 1}
+   N =  33 (ord(-2) =   5): irrational cosines j = {10: 2}
+   N =  57 (ord(-2) =   9): irrational cosines j = {10: 2}
+   N =  69 (ord(-2) =  22): irrational cosines j = {8: 2}
+   golden (j = 5 or 10) at N = [5, 11, 15, 19, 33, 57]
+   octagon (j = 8, sqrt2) at N = [7, 21, 23, 69]
+   other irrational j seen: []
+   levels with all eigenvalues real: [5, 15]
+
+=== 5. all kernels (1/2)(x -> a x) + (1/2)(x -> 1 - x) on Z/p, 5 <= p <= 61: the a with an irrational cosine ===
+   p =  5: a = 2 (ord 4; j = [5]; -1/2/root of a^2+a-1), a = 3 (ord 4; j = [5]; -2/root of a^2-a-1)
+   p =  7: a = 3 (ord 6; j = [8]; -1/2/sqrt2/-4), a = 5 (ord 6; j = [8]; -2/1/sqrt2/-1/4)
+   p = 11: a = 3 (ord 5; j = [10]; root of a^2+a-1), a = 4 (ord 5; j = [10]; root of a^2-a-1), a = 5 (ord 5; j = [10]; -1/2), a = 9 (ord 5; j = [10]; -2)
+   p = 13: none
+   p = 17: none
+   p = 19: a = 4 (ord 9; j = [10]; root of a^2+a-1), a = 5 (ord 9; j = [10]; root of a^2-a-1), a = 9 (ord 9; j = [10]; -1/2), a = 17 (ord 9; j = [10]; -2)
+   p = 23: a = 5 (ord 22; j = [8]; sqrt2), a = 11 (ord 22; j = [8]; -1/2), a = 14 (ord 22; j = [8]; 1/sqrt2), a = 17 (ord 22; j = [8]; -1/4), a = 19 (ord 22; j = [8]; -4), a = 21 (ord 22; j = [8]; -2)
+   p = 29: a = 3 (ord 28; j = [5]; ?), a = 8 (ord 28; j = [10]; ?), a = 10 (ord 28; j = [5]; ?), a = 11 (ord 28; j = [10]; ?), a = 18 (ord 28; j = [10]; ?), a = 19 (ord 28; j = [5]; ?), a = 21 (ord 28; j = [10]; ?), a = 23 (ord 7; j = [10]; root of a^2+a-1), a = 24 (ord 7; j = [10]; root of a^2-a-1), a = 26 (ord 28; j = [5]; ?)
+   p = 31: a = 18 (ord 15; j = [10]; root of a^2+a-1), a = 19 (ord 15; j = [10]; root of a^2-a-1)
+   p = 37: none
+   p = 41: a = 6 (ord 40; j = [5]; root of a^2+a-1), a = 7 (ord 40; j = [5]; root of a^2-a-1), a = 34 (ord 40; j = [5]; root of a^2+a-1), a = 35 (ord 40; j = [5]; root of a^2-a-1)
+   p = 43: none
+   p = 47: a = 15 (ord 46; j = [8]; ?), a = 22 (ord 46; j = [8]; ?)
+   p = 53: none
+   p = 59: a = 25 (ord 29; j = [10]; root of a^2+a-1), a = 26 (ord 29; j = [10]; root of a^2-a-1)
+   p = 61: a = 17 (ord 60; j = [5]; root of a^2+a-1), a = 18 (ord 60; j = [5]; root of a^2-a-1), a = 43 (ord 60; j = [5]; root of a^2+a-1), a = 44 (ord 60; j = [5]; root of a^2-a-1)
+   a = -2 and a = -1/2 are the family G_p and its transpose.  Kernels with a and 1/a have the same spectrum (transpose).
+total time 78 s

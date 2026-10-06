@@ -1,0 +1,159 @@
+{
+ "dropping_cells": [
+  {
+   "K": 1,
+   "k": 1,
+   "s": 0,
+   "D": 1,
+   "words_seen": 1,
+   "thr_min": "0",
+   "thr_max": "0",
+   "smallest_member": 2,
+   "integer_thresholds": [
+    [
+     "0",
+     0
+    ]
+   ]
+  },
+  {
+   "K": 3,
+   "k": 2,
+   "s": 1,
+   "D": 1,
+   "words_seen": 1,
+   "thr_min": "1",
+   "thr_max": "1",
+   "smallest_member": 5,
+   "integer_thresholds": [
+    [
+     "10",
+     1
+    ]
+   ]
+  },
+  {
+   "K": 6,
+   "k": 4,
+   "s": 2,
+   "D": 7,
+   "words_seen": 1,
+   "thr_min": "5/7",
+   "thr_max": "5/7",
+   "smallest_member": 3,
+   "integer_thresholds": []
+  },
+  {
+   "K": 8,
+   "k": 5,
+   "s": 3,
+   "D": 5,
+   "words_seen": 2,
+   "thr_min": "19/5",
+   "thr_max": "23/5",
+   "smallest_member": 11,
+   "integer_thresholds": []
+  },
+  {
+   "K": 11,
+   "k": 7,
+   "s": 4,
+   "D": 47,
+   "words_seen": 3,
+   "thr_min": "65/47",
+   "thr_max": "85/47",
+   "smallest_member": 7,
+   "integer_thresholds": []
+  },
+  {
+   "K": 13,
+   "k": 8,
+   "s": 5,
+   "D": 13,
+   "words_seen": 7,
+   "thr_min": "211/13",
+   "thr_max": "319/13",
+   "smallest_member": 39,
+   "integer_thresholds": []
+  },
+  {
+   "K": 16,
+   "k": 10,
+   "s": 6,
+   "D": 295,
+   "words_seen": 12,
+   "thr_min": "133/59",
+   "thr_max": "217/59",
+   "smallest_member": 287,
+   "integer_thresholds": []
+  },
+  {
+   "K": 19,
+   "k": 12,
+   "s": 7,
+   "D": 1909,
+   "words_seen": 30,
+   "thr_min": "2059/1909",
+   "thr_max": "3767/1909",
+   "smallest_member": 231,
+   "integer_thresholds": []
+  },
+  {
+   "K": 21,
+   "k": 13,
+   "s": 8,
+   "D": 1631,
+   "words_seen": 85,
+   "thr_min": "6305/1631",
+   "thr_max": "1907/233",
+   "smallest_member": 191,
+   "integer_thresholds": []
+  },
+  {
+   "K": 24,
+   "k": 15,
+   "s": 9,
+   "D": 13085,
+   "words_seen": 173,
+   "thr_min": "19171/13085",
+   "thr_max": "44143/13085",
+   "smallest_member": 127,
+   "integer_thresholds": []
+  },
+  {
+   "K": 26,
+   "k": 16,
+   "s": 10,
+   "D": 6487,
+   "words_seen": 476,
+   "thr_min": "58025/6487",
+   "thr_max": "148813/6487",
+   "smallest_member": 359,
+   "integer_thresholds": []
+  }
+ ],
+ "cells_with_integer_threshold": [
+  [
+   1,
+   1,
+   0,
+   [
+    [
+     "0",
+     0
+    ]
+   ]
+  ],
+  [
+   3,
+   2,
+   1,
+   [
+    [
+     "10",
+     1
+    ]
+   ]
+  ]
+ ]
+}

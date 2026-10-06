@@ -1,0 +1,163 @@
+==============================================================================
+Q5.4  rational-slope ballot numbers vs A100982
+convention: shortcut map; order s = number of odd steps; N(s) = A100982(s)
+==============================================================================
+
+[0] N(s), s = 1..20: [1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045, 17637, 51033, 108950, 312455, 663535, 1900470, 5936673]
+    compared with OEIS b100982.txt (downloaded 2026-10-06, 2218 terms): s = 1..1000: ALL AGREE
+
+[1] log2 3 = [ 1; 1; 1; 2; 2; 3; 1; 5; 2; 23; 2; 2 ...]
+    convergents P_n/Q_n: 1/1, 2/1, 3/2, 8/5, 19/12, 65/41, 84/53, 485/306, 1054/665, 24727/15601, 50508/31867, 125743/79335
+    lower equality orders L_3 (strict record minima of {s*log2 3}), s <= 1000: [1, 2, 7, 12, 53, 359, 665]
+    upper equality orders U_3 (strict record maxima), s <= 1000: [1, 3, 5, 17, 29, 41, 94, 147, 200, 253, 306, 971]
+
+[2] Winkler sandwich  C(m-1,s-1)/s <= N(s) <= C(m,s-1)/s,  m = floor(s log2 3)
+    violations for s <= 1000: []
+    lower equality at s = [1, 2, 7, 12, 53, 359, 665]
+    upper equality at s = [1, 3, 5, 17, 29, 41, 94, 147, 200, 253, 306, 971]
+    lower equality set == L_3 : True
+    upper equality set == U_3 : True
+
+[3] Agreement windows.  For slope a/b:  c_s(a/b) = N(s) exactly for s <= W.
+    predicted W for a one-sided best approximation in its natural convention
+    (lower: weak, upper: strict) = next order on the same side in L_3 / U_3;
+    in the other convention W = b.
+         a/b   side  best?  W weak W strict  predicted (natural)   ok
+       1/1    lower   True       2        1                    2  yes
+       2/1    upper   True       1        3                    3  yes
+       3/2    lower   True       7        2                    7  yes
+       5/3    upper   True       3        5                    5  yes
+       8/5    upper   True       5       17                   17  yes
+      11/7    lower   True      12        7                   12  yes
+      19/12   lower   True      53       12                   53  yes
+      27/17   upper   True      17       29                   29  yes
+      46/29   upper   True      29       41                   41  yes
+      65/41   upper   True      41       94                   94  yes
+      84/53   lower   True     359       53                  359  yes
+     149/94   upper   True      94      147                  147  yes
+     485/306  upper   True     306      971                  971  yes
+       7/4    upper  False       3        3                 None     
+      13/8    upper  False       5        5                 None     
+      30/19   lower  False      12       12                 None     
+      49/31   lower  False      12       12                 None     
+    all predictions for one-sided best approximations confirmed: True
+
+[3b] every one-sided best approximation with denominator <= 400:
+      ('lower', '1/1', 2, 2, True)
+      ('lower', '3/2', 7, 7, True)
+      ('lower', '11/7', 12, 12, True)
+      ('lower', '19/12', 53, 53, True)
+      ('lower', '84/53', 359, 359, True)
+      ('lower', '569/359', 665, 665, True)
+      ('upper', '2/1', 3, 3, True)
+      ('upper', '5/3', 5, 5, True)
+      ('upper', '8/5', 17, 17, True)
+      ('upper', '27/17', 29, 29, True)
+      ('upper', '46/29', 41, 41, True)
+      ('upper', '65/41', 94, 94, True)
+      ('upper', '149/94', 147, 147, True)
+      ('upper', '233/147', 200, 200, True)
+      ('upper', '317/200', 253, 253, True)
+      ('upper', '401/253', 306, 306, True)
+      ('upper', '485/306', 971, 971, True)
+     all windows equal the next same-side order: True
+
+[4] Bizley closed forms at s = k*Q_n, k <= 1 + floor(Q_(n+1)/Q_n)
+    lower convergent P/Q: N(kQ) = phi_k(P-Q, Q)   (paths may touch the line)
+    upper convergent P/Q: N(kQ) = psi_k(P-Q, Q)   (paths touch only at the ends)
+    (bizley() checked against brute-force path enumeration for (1,2),(3,5),(2,3),(1,1), k<=4)
+      ('1/1', 'lower', 1, 1, '1 (degenerate)', True)
+      ('1/1', 'lower', 2, 2, '1 (degenerate)', True)
+      ('2/1', 'upper', 1, 1, '1', True)
+      ('2/1', 'upper', 2, 2, '1', True)
+      ('2/1', 'upper', 3, 3, '2', True)
+      ('2/1', 'upper', 4, 4, '5', 'outside window: False')
+      ('3/2', 'lower', 1, 2, '1', True)
+      ('3/2', 'lower', 2, 4, '3', True)
+      ('3/2', 'lower', 3, 6, '12', True)
+      ('3/2', 'lower', 4, 8, '55', 'outside window: False')
+      ('8/5', 'upper', 1, 5, '7', True)
+      ('8/5', 'upper', 2, 10, '476', True)
+      ('8/5', 'upper', 3, 15, '51033', True)
+      ('8/5', 'upper', 4, 20, '6561583', 'outside window: False')
+      ('19/12', 'lower', 1, 12, '2652', True)
+      ('19/12', 'lower', 2, 24, '257978502', True)
+      ('19/12', 'lower', 3, 36, '38088111350198', True)
+      ('19/12', 'lower', 4, 48, '6687324379116300569', True)
+      ('19/12', 'lower', 5, 60, '1291765184032166459794074', 'outside window: False')
+      ('65/41', 'upper', 1, 41, '6113392816333320', True)
+      ('65/41', 'upper', 2, 82, '841105791458...(34 digits)', True)
+      ('65/41', 'upper', 3, 123, '178192804438...(53 digits)', 'outside window: False')
+      ('84/53', 'lower', 1, 53, '1122428422670255691408', True)
+      ('84/53', 'lower', 2, 106, '417451108431...(45 digits)', True)
+      ('84/53', 'lower', 3, 159, '238522316421...(69 digits)', True)
+      ('84/53', 'lower', 4, 212, '162540014725...(93 digits)', True)
+      ('84/53', 'lower', 5, 265, '121996738590...(117 digits)', True)
+      ('84/53', 'lower', 6, 318, '973389389774...(140 digits)', True)
+      ('84/53', 'lower', 7, 371, '810125828680...(164 digits)', 'outside window: False')
+      ('485/306', 'upper', 1, 306, '381768687590...(135 digits)', True)
+      ('485/306', 'upper', 2, 612, '666231099234...(273 digits)', True)
+      ('485/306', 'upper', 3, 918, '178981829806...(412 digits)', True)
+      ('1054/665', 'lower', 1, 665, '616887309787...(297 digits)', True)
+    all in-window Bizley identities hold: True
+    orders s <= 1000 with a Bizley closed form that are NOT Winkler equality orders: [4, 6, 10, 15, 24, 36, 48, 82, 106, 159, 212, 265, 318, 612, 918]
+
+    spelled out, with F_j = C(j(m+n), jm) / (j(m+n)):
+      (m,n)=(3,5)  [8/5, upper]: F1=7, F2=1001/2, F3=163438/3
+        N(10) = F2 - F1^2/2            = 476   (A100982(10) = 476)
+        N(15) = F3 - F1*F2 + F1^3/6    = 51033   (A100982(15) = 51033)
+      (m,n)=(7,12) [19/12, lower]: F1=2652
+        N(24) = F2 + F1^2/2                         = 257978502   ok=True
+        N(36) = F3 + F1*F2 + F1^3/6                 = 38088111350198   ok=True
+        N(48) = F4 + F1*F3 + F2^2/2 + F1^2*F2/2 + F1^4/24 = 6687324379116300569   ok=True
+
+[5] first 22 terms of c_s(a/b) (natural convention) -- for OEIS lookup
+    1/1   weak: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    2/1 strict: [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, 6564120420, 24466267020]
+    2/1   weak: [1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, 6564120420, 24466267020, 91482563640]
+    3/2   weak: [1, 1, 2, 3, 7, 12, 30, 55, 143, 273, 728, 1428, 3876, 7752, 21318, 43263, 120175, 246675, 690690, 1430715, 4032015, 8414640]
+    3/2 strict: [1, 1, 1, 2, 3, 7, 12, 30, 55, 143, 273, 728, 1428, 3876, 7752, 21318, 43263, 120175, 246675, 690690, 1430715, 4032015]
+    5/3 strict: [1, 1, 2, 3, 7, 19, 37, 99, 293, 624, 1768, 5452, 12151, 35530, 112227, 257104, 766935, 2460954, 5742952, 17368680, 56356938, 133270307]
+    5/3   weak: [1, 1, 2, 5, 9, 23, 66, 136, 377, 1144, 2504, 7229, 22610, 51211, 151491, 482885, 1118076, 3361598, 10855425, 25523982, 77635093, 253086480]
+    8/5 strict: [1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045, 17637, 51033, 108950, 312455, 975990, 2212925, 6561583, 14409661, 42181080]
+    8/5   weak: [1, 1, 2, 3, 7, 19, 37, 99, 194, 525, 1570, 3387, 9690, 20423, 58040, 180017, 404809, 1193010, 2601329, 7574994, 23948310, 55076759]
+    11/7   weak: [1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 5393, 14985, 45729, 100994, 293891, 631711, 1820910, 3890343, 11192590, 35089723]
+    19/12   weak: [1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045, 17637, 51033, 108950, 312455, 663535, 1900470, 5936673, 13472296, 39993895]
+    8/5 strict, s = 16..24: [108950, 312455, 975990, 2212925, 6561583, 14409661, 42181080, 133917457, 309533232]
+    A100982,    s = 16..24: [108950, 312455, 663535, 1900470, 5936673, 13472296, 39993895, 87986917, 257978502]
+
+    c_s(3/2 weak) == A047749(s) for s = 1..400: True
+      i.e. N(s) = C(3m,m)/(2m+1) for s = 2m and C(3m+1,m+1)/(2m+1) for s = 2m+1, valid for s <= 7
+    c_s(3/2 strict) == A047749(s-1) for s = 1..400: True
+    c_s(2/1 strict) == Catalan(s-1) for s = 1..200: True
+    c_s(2/1 weak)   == Catalan(s)   for s = 1..200: True
+    c_s(3/2 weak) == (s - 2h + 1)/(s + h + 1) * C(s+h+1, h), h = floor(s/2), s = 1..400: True
+      => closed form for EVERY s <= 7: [1, 1, 2, 3, 7, 12, 30] = A100982(1..7); s = 8 gives 55 != 85
+    c_(3k)(5/3 weak)   k=1..6: [2, 23, 377, 7229, 151491, 3361598]  = Duchon numbers A060941 (phi_k(2,3)): True
+    c_(3k)(5/3 strict) k=1..6: [2, 19, 293, 5452, 112227, 2460954]  = A293946 (psi_k(2,3)): True
+      (slope 5/3 is an upper semiconvergent; its strict count agrees with A100982 only for s <= 5,
+       so the only Duchon-type value that is a value of A100982 at the same order is c_3 = 2.)
+
+[6] cousins qx+1: c_s(log2 q)
+    q=5: first terms [1, 2, 5, 14, 56, 202, 715, 3244, 12945, 49742]
+      OEIS b174795.txt: 32 terms, mismatches: []
+      log2 5 = [2, 3, 9, 2, 2, 4, 6, 2]; L_5 = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 87, 146], U_5 = [1, 2, 3, 31, 59, 205, 351]
+      sandwich equality sets match L/U: True, True
+      window = next same-side order, all best approximations with b <= 150: True
+    q=7: first terms [1, 2, 7, 30, 143, 728, 3148, 15986, 86009, 478907]
+      OEIS b174796.txt: 32 terms, mismatches: []
+      log2 7 = [2, 1, 4, 5, 4, 5, 4, 1]; L_7 = [1, 2, 3, 4, 5, 31, 57, 83, 109], U_7 = [1, 6, 11, 16, 21, 26, 135, 244, 353]
+      sandwich equality sets match L/U: True, True
+      window = next same-side order, all best approximations with b <= 150: True
+
+[7] Gersonides pairs and the first three convergents
+    1/1: 2^1 = 2, 3^1 = 3, difference 2^p - 3^q = -1
+    2/1: 2^2 = 4, 3^1 = 3, difference 2^p - 3^q = 1
+    3/2: 2^3 = 8, 3^2 = 9, difference 2^p - 3^q = -1
+    8/5: 2^8 = 256, 3^5 = 243, difference 2^p - 3^q = 13
+    19/12: 2^19 = 524288, 3^12 = 531441, difference 2^p - 3^q = -7153
+    |2^P - 3^Q| = 1 exactly for the convergents 1/1, 2/1, 3/2 (pairs (2,3), (3,4), (8,9)).
+    Their rational counts leave A100982 after s = 2, 3, 7; the lattice point that
+    separates the lines is the next same-side semiconvergent: 3/2, 5/3, 11/7.
+
+wrote q54_rational_ballot.json

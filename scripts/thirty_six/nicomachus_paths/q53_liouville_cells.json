@@ -1,0 +1,1155 @@
+{
+ "liouville_grid_ok": true,
+ "liouville_ok": true,
+ "intervals_eq_chains_sq": [
+  [
+   0,
+   0
+  ],
+  [
+   2,
+   2
+  ]
+ ],
+ "intervals_eq_n": [
+  [
+   0,
+   0
+  ],
+  [
+   0,
+   1
+  ],
+  [
+   1,
+   2
+  ],
+  [
+   2,
+   2
+  ]
+ ],
+ "cs_tests": {
+  "all paths, rectangle": 861,
+  "all paths, Pascal row": 301,
+  "all paths, triangle i+j<=n": 81,
+  "admissible, row s": 221,
+  "admissible, column e (first m cells)": 5973,
+  "admissible, antidiagonal j (words of length j)": 201,
+  "admissible, all cells with s <= S": 120,
+  "admissible, all cells with j <= J": 120,
+  "admissible, divisor rectangle of 2^j 3^s": 2400,
+  "A100982 window [a..b]": 24310,
+  "S(j) window [a..b]": 20301
+ },
+ "cs_hits": [
+  [
+   "all paths, rectangle",
+   "(0, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "all paths, Pascal row",
+   "0",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "all paths, triangle i+j<=n",
+   "0",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, row s",
+   "0",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, row s",
+   "1",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, row s",
+   "3",
+   "[1, 2]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(0, 1)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 1)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 2)",
+   "[1, 2]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 3)",
+   "[1, 2, 3]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 4)",
+   "[1, 2, 3, 4]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 5)",
+   "[1, 2, 3, 4, 5]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 6)",
+   "[1, 2, 3, 4, 5, 6]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 7)",
+   "[1, 2, 3, 4, 5, 6, 7]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 8)",
+   "[1, 2, 3, 4, 5, 6, 7, 8]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 9)",
+   "[1, 2, 3, 4, 5, 6, 7, 8, 9]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 10)",
+   "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 11)",
+   "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 12)",
+   "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 13)",
+   "13 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 14)",
+   "14 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 15)",
+   "15 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 16)",
+   "16 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 17)",
+   "17 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 18)",
+   "18 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 19)",
+   "19 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 20)",
+   "20 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 21)",
+   "21 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 22)",
+   "22 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 23)",
+   "23 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 24)",
+   "24 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 25)",
+   "25 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 26)",
+   "26 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 27)",
+   "27 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 28)",
+   "28 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 29)",
+   "29 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 30)",
+   "30 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 31)",
+   "31 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 32)",
+   "32 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 33)",
+   "33 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 34)",
+   "34 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 35)",
+   "35 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 36)",
+   "36 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 37)",
+   "37 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 38)",
+   "38 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 39)",
+   "39 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 40)",
+   "40 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 41)",
+   "41 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 42)",
+   "42 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 43)",
+   "43 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 44)",
+   "44 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 45)",
+   "45 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 46)",
+   "46 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 47)",
+   "47 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 48)",
+   "48 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 49)",
+   "49 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 50)",
+   "50 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 51)",
+   "51 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 52)",
+   "52 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 53)",
+   "53 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 54)",
+   "54 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 55)",
+   "55 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 56)",
+   "56 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 57)",
+   "57 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 58)",
+   "58 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 59)",
+   "59 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, column e (first m cells)",
+   "(1, 60)",
+   "60 values",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, antidiagonal j (words of length j)",
+   "0",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, antidiagonal j (words of length j)",
+   "1",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, antidiagonal j (words of length j)",
+   "2",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, antidiagonal j (words of length j)",
+   "4",
+   "[1, 2]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, all cells with s <= S",
+   "0",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, all cells with j <= J",
+   "0",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 1)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 2)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 3)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 4)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 5)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 6)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 7)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 8)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 9)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 10)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 11)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 12)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 13)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 14)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 15)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 16)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 17)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 18)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 19)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 20)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 21)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 22)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 23)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 24)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 25)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 26)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 27)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 28)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 29)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 30)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 31)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 32)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 33)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 34)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 35)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 36)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 37)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 38)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(0, 39)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(1, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(2, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(3, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(4, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(5, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(6, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(7, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(8, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(9, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(10, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(11, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(12, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(13, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(14, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(15, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(16, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(17, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(18, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(19, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(20, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(21, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(22, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(23, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(24, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(25, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(26, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(27, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(28, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(29, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(30, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(31, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(32, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(33, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(34, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(35, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(36, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(37, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(38, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(39, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(40, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(41, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(42, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(43, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(44, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(45, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(46, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(47, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(48, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(49, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(50, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(51, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(52, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(53, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(54, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(55, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(56, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(57, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(58, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "admissible, divisor rectangle of 2^j 3^s",
+   "(59, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "A100982 window [a..b]",
+   "(1, 1)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "A100982 window [a..b]",
+   "(2, 2)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "A100982 window [a..b]",
+   "(2, 3)",
+   "[1, 2]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "A100982 window [a..b]",
+   "(2, 4)",
+   "[1, 2, 3]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "S(j) window [a..b]",
+   "(0, 0)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "S(j) window [a..b]",
+   "(1, 1)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "S(j) window [a..b]",
+   "(2, 2)",
+   "[1]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "S(j) window [a..b]",
+   "(2, 3)",
+   "[1, 2]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "S(j) window [a..b]",
+   "(2, 4)",
+   "[1, 2, 3]",
+   "{1..n} (Nicomachus)"
+  ],
+  [
+   "S(j) window [a..b]",
+   "(2, 5)",
+   "[1, 2, 3, 4]",
+   "{1..n} (Nicomachus)"
+  ]
+ ],
+ "cs_nontrivial": 0,
+ "rows_cubesum_square": [
+  0,
+  1,
+  3
+ ],
+ "windows_cubesum_square": [
+  [
+   2,
+   3
+  ],
+  [
+   2,
+   4
+  ]
+ ]
+}

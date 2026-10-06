@@ -1,0 +1,42 @@
+   N =   5: dim V_0 = dim ker A = 1 (1), dim V_half = 1, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =   7: dim V_0 = dim ker A = 1 (1), dim V_half = 1, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  17: dim V_0 = dim ker A = 1 (1), dim V_half = 1, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  19: dim V_0 = dim ker A = 1 (1), dim V_half = 1, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  25: dim V_0 = dim ker A = 2 (2), dim V_half = 2, corank of the pairing = 1, dim ker A^2 - dim ker A = 1  ok
+   N =  35: dim V_0 = dim ker A = 4 (4), dim V_half = 4, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  37: dim V_0 = dim ker A = 2 (2), dim V_half = 2, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  41: dim V_0 = dim ker A = 5 (5), dim V_half = 5, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  49: dim V_0 = dim ker A = 2 (2), dim V_half = 2, corank of the pairing = 1, dim ker A^2 - dim ker A = 1  ok
+   N =  55: dim V_0 = dim ker A = 3 (3), dim V_half = 3, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  61: dim V_0 = dim ker A = 6 (6), dim V_half = 6, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  65: dim V_0 = dim ker A = 5 (5), dim V_half = 5, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  73: dim V_0 = dim ker A = 6 (6), dim V_half = 6, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  85: dim V_0 = dim ker A = 6 (6), dim V_half = 6, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N =  91: dim V_0 = dim ker A = 13 (13), dim V_half = 13, corank of the pairing = 0, dim ker A^2 - dim ker A = 0  ok
+   N = 125: dim V_0 = dim ker A = 3 (3), dim V_half = 3, corank of the pairing = 2, dim ker A^2 - dim ker A = 2  ok
+   N = 175: dim V_0 = dim ker A = 7 (7), dim V_half = 7, corank of the pairing = 3, dim ker A^2 - dim ker A = 3  ok
+   N = 245: dim V_0 = dim ker A = 7 (7), dim V_half = 7, corank of the pairing = 3, dim ker A^2 - dim ker A = 3  ok
+   N = 275: dim V_0 = dim ker A = 14 (14), dim V_half = 14, corank of the pairing = 1, dim ker A^2 - dim ker A = 1  ok
+   N = 289: dim V_0 = dim ker A = 2 (2), dim V_half = 2, corank of the pairing = 1, dim ker A^2 - dim ker A = 1  ok
+   N = 325: dim V_0 = dim ker A = 10 (10), dim V_half = 10, corank of the pairing = 5, dim ker A^2 - dim ker A = 5  ok
+   N = 343: dim V_0 = dim ker A = 3 (3), dim V_half = 3, corank of the pairing = 2, dim ker A^2 - dim ker A = 2  ok
+   N = 361: dim V_0 = dim ker A = 2 (2), dim V_half = 2, corank of the pairing = 1, dim ker A^2 - dim ker A = 1  ok
+identity holds at every level tested: True
+
+=== primes: the pairing is non-degenerate (THEOREM: for prime p it is, up to invertible diagonal factors, the matrix of Jacobi sums
+    J(chi, chi'), chi(3) = chi'(3) = -1, whose determinant is a non-zero multiple of the product of the Gaussian periods
+    sum_{h in <3>} zeta_p^(c h); these are sums of distinct members of the basis zeta, ..., zeta^(p-1) of Q(zeta_p), hence non-zero) ===
+   primes 5 <= p < 3000 with ord_p(3) even: 288;  degenerate pairing (Jordan block at 0) at: []
+
+=== composite test of the period rule: at N = p^2 q the periods of <3> vanish iff p does not divide ord_q(3) ===
+   N =  175 = 5^2 * 7: ord_7(3) = 6 (not divisible by 5); zeros at level N: 2; Jordan blocks on Z/N: 3; predicted by the rule: 3  ok
+   N =  325 = 5^2 * 13: ord_13(3) = 3 (not divisible by 5); zeros at level N: 4; Jordan blocks on Z/N: 5; predicted by the rule: 5  ok
+   N =  425 = 5^2 * 17: ord_17(3) = 16 (not divisible by 5); zeros at level N: 4; Jordan blocks on Z/N: 5; predicted by the rule: 5  ok
+   N =  275 = 5^2 * 11: ord_11(3) = 5 (divisible by 5); zeros at level N: 10; Jordan blocks on Z/N: 1; predicted by the rule: 1  ok
+   N =  775 = 5^2 * 31: ord_31(3) = 30 (divisible by 5); zeros at level N: 10; Jordan blocks on Z/N: 1; predicted by the rule: 1  ok
+   N = 1525 = 5^2 * 61: ord_61(3) = 10 (divisible by 5); zeros at level N: 60; Jordan blocks on Z/N: 1; predicted by the rule: 1  ok
+   N =  245 = 7^2 * 5: ord_5(3) = 4 (not divisible by 7); zeros at level N: 2; Jordan blocks on Z/N: 3; predicted by the rule: 3  ok
+   N =  539 = 7^2 * 11: ord_11(3) = 5 (not divisible by 7); zeros at level N: 2; Jordan blocks on Z/N: 3; predicted by the rule: 3  ok
+   N = 1421 = 7^2 * 29: ord_29(3) = 28 (divisible by 7); zeros at level N: 14; Jordan blocks on Z/N: 1; predicted by the rule: 1  ok
+   N = 2107 = 7^2 * 43: ord_43(3) = 42 (divisible by 7); zeros at level N: 42; Jordan blocks on Z/N: 1; predicted by the rule: 1  ok
+   rule holds on these ten levels: True

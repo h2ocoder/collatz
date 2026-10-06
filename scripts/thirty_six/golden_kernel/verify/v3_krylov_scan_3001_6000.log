@@ -1,0 +1,29 @@
+p =  3001 (m,t,idx)=(3,51,2) ord3   500 deg f 2993 = D_exp 2993: True | residue-filter survivors: Phi [1, 3] Psi [] | events beyond Theorem C: -  [0.2s, total 0s]
+p =  3251 (m,t,idx)=(2,1270,1) ord3  1625 deg f 3251 = D_exp 3251: True | residue-filter survivors: Phi [] Psi [] | events beyond Theorem C: -  [0.4s, total 8s]
+p =  3301 (m,t,idx)=(2,1145,1) ord3  1650 deg f 3300 = D_exp 3300: True | residue-filter survivors: Phi [3, 4, 6, 20] Psi [11, 12, 22, 44, 60] | events beyond Theorem C: -  [0.4s, total 10s]
+p =  3701 (m,t,idx)=(1,1733,1) ord3  3700 deg f 3701 = D_exp 3701: True | residue-filter survivors: Phi [1, 4, 5] Psi [5] | events beyond Theorem C: -  [0.5s, total 33s]
+p =  3851 (m,t,idx)=(350,2,1) ord3    11 deg f 3851 = D_exp 3851: True | residue-filter survivors: Phi [1, 2, 5, 7, 10, 14, 25, 35]... Psi [5, 10] | events beyond Theorem C: -  [0.5s, total 41s]
+p =  4001 (m,t,idx)=(1,2092,1) ord3  4000 deg f 4001 = D_exp 4001: True | residue-filter survivors: Phi [1, 2, 4, 5, 20] Psi [8, 10] | events beyond Theorem C: -  [0.5s, total 49s]
+p =  4051 (m,t,idx)=(5,81,1) ord3   810 deg f 4047 = D_exp 4047: True | residue-filter survivors: Phi [1, 2, 3, 5, 6, 10, 15, 30] Psi [30] | events beyond Theorem C: -  [0.5s, total 53s]
+p =  4201 (m,t,idx)=(5,148,2) ord3   420 deg f 4187 = D_exp 4187: True | residue-filter survivors: Phi [2, 4, 10, 20] Psi [30] | events beyond Theorem C: -  [0.6s, total 61s]
+p =  4451 (m,t,idx)=(2,1094,1) ord3  2225 deg f 4451 = D_exp 4451: True | residue-filter survivors: Phi [] Psi [5, 10, 7, 12, 14] | events beyond Theorem C: -  [0.5s, total 79s]
+p =  4651 (m,t,idx)=(1,453,1) ord3  4650 deg f 4651 = D_exp 4651: True | residue-filter survivors: Phi [1, 2, 3, 6] Psi [5, 10, 15] | events beyond Theorem C: -  [0.5s, total 93s]
+p =  4751 (m,t,idx)=(1,1535,2) ord3  2375 deg f 4751 = D_exp 4751: True | residue-filter survivors: Phi [] Psi [] | events beyond Theorem C: -  [0.7s, total 100s]
+p =  4801 (m,t,idx)=(5,97,4) ord3   240 deg f 4767 = D_exp 4767: True | residue-filter survivors: Phi [1, 2, 5, 8, 10, 40] Psi [] | events beyond Theorem C: -  [0.7s, total 104s]
+p =  4951 (m,t,idx)=(15,122,1) ord3   330 deg f 4937 = D_exp 4937: True | residue-filter survivors: Phi [2, 6, 10, 18, 30, 90] Psi [8] | events beyond Theorem C: -  [0.5s, total 114s]
+p =  5051 (m,t,idx)=(2,287,1) ord3  2525 deg f 5051 = D_exp 5051: True | residue-filter survivors: Phi [] Psi [5, 10, 12] | events beyond Theorem C: -  [0.7s, total 124s]
+p =  5101 (m,t,idx)=(4,213,1) ord3  1275 deg f 5101 = D_exp 5101: True | residue-filter survivors: Phi [3, 5, 6, 10, 12, 20] Psi [5, 10, 12, 15, 30] | events beyond Theorem C: -  [0.7s, total 128s]
+p =  5351 (m,t,idx)=(5,391,2) ord3   535 deg f 5351 = D_exp 5351: True | residue-filter survivors: Phi [2, 10] Psi [] | events beyond Theorem C: -  [0.6s, total 147s]
+p =  5501 (m,t,idx)=(125,29,1) ord3    44 deg f 5377 = D_exp 5377: True | residue-filter survivors: Phi [1, 2, 5, 10, 25, 50, 125, 250] Psi [] | events beyond Theorem C: -  [0.9s, total 161s]
+p =  5651 (m,t,idx)=(2,1217,1) ord3  2825 deg f 5651 = D_exp 5651: True | residue-filter survivors: Phi [1, 2] Psi [5, 10, 9, 12, 18, 36] | events beyond Theorem C: -  [0.9s, total 174s]
+p =  5701 (m,t,idx)=(4,109,1) ord3  1425 deg f 5701 = D_exp 5701: True | residue-filter survivors: Phi [3, 5, 6, 10, 12, 20] Psi [5, 10, 20] | events beyond Theorem C: -  [0.7s, total 181s]
+p =  5801 (m,t,idx)=(1,1826,1) ord3  5800 deg f 5801 = D_exp 5801: True | residue-filter survivors: Phi [1, 2] Psi [5, 8, 10] | events beyond Theorem C: -  [1.0s, total 190s]
+p =  5851 (m,t,idx)=(3,893,1) ord3  1950 deg f 5849 = D_exp 5849: True | residue-filter survivors: Phi [1, 3, 18] Psi [9, 30, 14] | events beyond Theorem C: -  [0.9s, total 197s]
+
+================ SUMMARY ================
+primes 3001 <= p <= 5987: 353;  modulus r = 2^31 - 1
+flagged primes (deg f < D_exp after one retry; resolved exactly when p <= 1500): []
+events beyond Theorem C (cosines Psi_j with ANY j, roots of unity Phi_k with ANY k, Jordan blocks at 0, integer roots 2 <= |c| <= 5000 of g): 
+largest prime with an event: None;  primes above it scanned clean: 353
+largest multiplicity of a residue kappa_n, as a fraction of (p-1)/2, over primes p > 13: 0.0455  (< 1: no factor Phi_k or Psi_j with p | k, j is possible)
+total time 209 s

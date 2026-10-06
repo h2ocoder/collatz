@@ -1,0 +1,51 @@
+[A] least n of each transient length among least-of-signature numbers below 1e+40
+    least-of-signature numbers below limit: 5754126  (researcher: 5754126)   (28s)
+    t =  0: least n = 1  signature ()
+    t =  1: least n = 2  signature (1,)
+    t =  2: least n = 8  signature (3,)
+    t =  3: least n = 30  signature (1, 1, 1)
+    t =  4: least n = 24  signature (3, 1)
+    t =  5: least n = 60  signature (2, 1, 1)
+    t =  6: least n = 72  signature (3, 2)
+    t =  7: least n = 180  signature (2, 2, 1)
+    t =  8: least n = 360  signature (3, 2, 1)
+    t =  9: least n = 1800  signature (3, 2, 2)
+    t = 10: least n = 37800  signature (3, 3, 2, 1)
+    t = 11: least n = 49896000  signature (6, 4, 3, 1, 1)
+    t = 12: least n = 105700299921216000  signature (9, 6, 3, 3, 2, 2, 1, 1)
+    agrees with the README list for t = 0..12 and no t >= 13: True
+    t(10), t(100) (non-periodic members of the signatures of 6 and 36): 1 1
+    136*171*91^2*55^2*28*10*6^3*3 == record: True ; all factors triangular: True
+    hence signature (17, 15, 12, 12, 9, 9, 6, 3, 2, 2, 2, 1) has t = 13; its least member is ~10^71
+
+[B] control: n <= 300 that are fixed by tau_k for some k >= 2
+    composite n <= 300 fixed by some tau_k: {18: [3], 36: [3], 75: [5], 100: [4], 200: [4], 224: [4], 225: [5]}
+    primes p <= 300 fixed by tau_p (trivially, tau_k(p) = k): all of them: True
+    so in 30..42 the fixed points of some tau_k are: {31: [31], 36: [3], 37: [37], 41: [41]}
+
+[C] Q5.3-d  T_(k+1) T_(s+1) = C(k+s,k)^2
+    solutions with k <= 2, s < 1500 or 3 <= k <= s < 40: [(0, 0), (2, 2)]
+    inequalities used in the proof for 3 <= k <= s (checked s < 120): True
+    k = 2: C(s+2,2) = T_(s+1), so the equation reads T_3 T_(s+1) = T_(s+1)^2, i.e. T_(s+1) = 6, s = 2
+    k = 1: 3 T_(s+1) = (s+1)^2 has no solution; k = 0: T_(s+1) = 1 gives s = 0
+    Q5.3-b  independent re-run of the search sum x^3 = (sum x)^2
+      multisets tested: 209434; hits: 21; hits that are not literally {1..m}: []
+      largest m among the hits: 4
+
+[D] Q5.5 lattice-point counts
+    pi_3(2^K) == sum_b (K+1-ceil(b log2 3)) for K < 300: True
+    first terms: [1, 2, 4, 6, 9, 13, 17, 22, 28, 34, 41, 48]  (OEIS A022331: 1, 2, 4, 6, 9, 13, 17, 22, 28, 34, 41, 48): True
+    pi_3(36) = 14
+    word lengths L(1..6) = [2, 4, 5, 7, 8, 10] ; G(6) = their sum = 36
+    pi3(2^K): values in 25..45: [28, 34, 41]
+    pi3(3^S): values in 25..45: [27, 37]
+    G(S): values in 25..45: [26, 36]
+    H(S): values in 25..45: [26, 32, 38, 45]
+    10 of the 21 integers 25..45 occur in at least one of these four sequences: [26, 27, 28, 32, 34, 36, 37, 38, 41, 45]
+
+[E] conditional unboundedness of the transient
+    t(squarefree n with j prime factors) = 2 + t(T_(j+1)) for 3 <= j < 60: True  (n -> 3^j -> T_(j+1))
+    first 11 terms of OEIS A127637 are squarefree triangular with exactly j prime factors: True
+    chain: j0 = 3 (t = 3);  T_11 = 66 is squarefree with 3 primes -> squarefree n with 10 primes has t = 5 ; A127637(10) = T_m with m = 254540 -> squarefree n with m-1 primes has t = 7
+
+total 28s

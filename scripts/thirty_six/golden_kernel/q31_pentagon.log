@@ -1,0 +1,79 @@
+=== 1. the two branches on Z/5 ===
+   e = x/2      : [0, 3, 1, 4, 2]   (x -> 3x)
+   o = (3x+1)/2 : [3, 2, 1, 0, 4]   (x -> 3 - x)
+   [ok] e(x) = 3x mod 5 (order 4, fixes 0)
+   [ok] o(x) = 3 - x mod 5 (a reflection of the additive pentagon, fixes -1 = 4)
+   [ok] e sends additive pentagon edges {i,i+1} to pentagram edges {i,i+2}
+   [ok] e sends pentagram edges {i,i+2} to pentagon edges
+   [ok] o preserves pentagon edges
+   [ok] <e, o> = AGL(1,5), order 20
+   [ok] <e^2, o> = D_5 (order 10): e^2 = (x -> -x) and o are two mirrors of the additive pentagon
+
+=== 2. spectrum and eigenvectors of A = 2K_5 (exact) ===
+   charpoly(2K_5) = x^5 - 2x^4 - 2x^3 + 5x^2 - 2x = x*(x - 2)*(x - 1)*(x**2 + x - 1)
+   [ok] charpoly(2K_5) = x (x-1) (x-2) (x^2+x-1)
+   eigenvalues of K_5: 1, 1/2, 0, (sqrt5-1)/4 = cos 72 = 1/(2 phi), -(sqrt5+1)/4 = -cos 36 = -phi/2
+   [ok] cos(72 deg) = 1/(2 phi) and cos(36 deg) = phi/2 (sympy exact)
+   [ok] right eigenvector for 2K-eigenvalue 2: [1, 1, 1, 1, 1]
+   [ok] right eigenvector for 2K-eigenvalue 1: [-1, 0, 0, 0, 1]
+   [ok] right eigenvector for 2K-eigenvalue 0: [1, 0, 1, -1, -1]
+   [ok] left eigenvector (measure) for 2K-eigenvalue 2: [1, 1, 1, 1, 1]
+   [ok] left eigenvector (measure) for 2K-eigenvalue 1: [-2, 2, 1, 0, -1]
+   [ok] left eigenvector (measure) for 2K-eigenvalue 0: [1, -1, 0, -1, 1]
+   [ok] right golden eigenvector f = (phi^4, 1, 2phi, -phi^2, -2phi^3):  2K f = f/phi
+   [ok] f = a + phi*b with a = (2,1,0,-1,-2) (sawtooth = -centred residue of x + 1/2), b = (3,0,2,-1,-4)
+   [ok] on the golden lattice W = Za + Zb:  2K a = b - a,  2K b = a   (matrix [[-1,1],[1,0]] = inverse Fibonacci matrix up to GL2(Z))
+   [ok] (2K)^2 a + 2K a - a = 0  (the sawtooth is a cyclic vector of the golden block)
+   [ok] W mod 5 = the affine-linear functions F_5 -> F_5 (a = 2 - x, b = 2x + 3 mod 5)
+
+=== 3. the folding: cells  Y = {-1/4} = {1},  Z = {+-1/2} = {2,3},  X = {0,-1} = {0,4} ===
+   [ok] Y, Z, X partition Z/5
+   push-forward of 1_Y: {3: Fraction(1, 1), 2: Fraction(1, 1)}   1_Z: {1: Fraction(2, 1), 4: Fraction(1, 1), 0: Fraction(1, 1)}   1_X: {0: Fraction(1, 1), 3: Fraction(1, 1), 2: Fraction(1, 1), 4: Fraction(1, 1)}
+   [ok] push(1_Y) = 1_Z
+   [ok] push(1_Z) = 2*1_Y + 1_X
+   [ok] push(1_X) = 1_X + 1_Z
+   matrix of 2K^T on span(1_Y, 1_Z, 1_X) (columns = images): [[0, 2, 0], [1, 0, 1], [0, 1, 1]]
+   [ok] its charpoly is (x-2)(x^2+x-1)
+   [ok] the same 3x3 matrix is the pentagon adjacency restricted to mirror-symmetric functions (cells apex / near / far)
+   [ok] 2K^T = adjacency of the 5-cycle (1, 2, 0, 4, 3) on span(1_Y,1_Z,1_X); steps [1, 3, 4, 4, 3]; is an affine image of the additive pentagon: False
+   [ok] 2K^T = adjacency of the 5-cycle (1, 2, 4, 0, 3) on span(1_Y,1_Z,1_X); steps [1, 2, 1, 3, 3]; is an affine image of the additive pentagon: False
+
+=== 4. the same statement on integers: T^k(n) mod 5 for n = 1 (mod 5) is a pentagon random walk ===
+   k =  0: counts of T^k(n) mod 5 = [0, 1, 0, 0, 0]  (2^k x pentagon-walk law in residue order: [0, 1, 0, 0, 0])  return prob 1 = (2^k + 2(-1)^k L_k)/(5 2^k)
+   k =  1: counts of T^k(n) mod 5 = [0, 0, 1, 1, 0]  (2^k x pentagon-walk law in residue order: [0, 0, 1, 1, 0])  return prob 0 = (2^k + 2(-1)^k L_k)/(5 2^k)
+   k =  2: counts of T^k(n) mod 5 = [1, 2, 0, 0, 1]  (2^k x pentagon-walk law in residue order: [1, 2, 0, 0, 1])  return prob 1/2 = (2^k + 2(-1)^k L_k)/(5 2^k)
+   k =  3: counts of T^k(n) mod 5 = [1, 0, 3, 3, 1]  (2^k x pentagon-walk law in residue order: [1, 0, 3, 3, 1])  return prob 0 = (2^k + 2(-1)^k L_k)/(5 2^k)
+   k =  4: counts of T^k(n) mod 5 = [4, 6, 1, 1, 4]  (2^k x pentagon-walk law in residue order: [4, 6, 1, 1, 4])  return prob 3/8 = (2^k + 2(-1)^k L_k)/(5 2^k)
+   k =  5: counts of T^k(n) mod 5 = [5, 2, 10, 10, 5]  (2^k x pentagon-walk law in residue order: [5, 2, 10, 10, 5])  return prob 1/16 = (2^k + 2(-1)^k L_k)/(5 2^k)
+   k =  6: counts of T^k(n) mod 5 = [15, 20, 7, 7, 15]  (2^k x pentagon-walk law in residue order: [15, 20, 7, 7, 15])  return prob 5/16 = (2^k + 2(-1)^k L_k)/(5 2^k)
+   k =  7: counts of T^k(n) mod 5 = [22, 14, 35, 35, 22]  (2^k x pentagon-walk law in residue order: [22, 14, 35, 35, 22])  return prob 7/64 = (2^k + 2(-1)^k L_k)/(5 2^k)
+   k =  8: counts of T^k(n) mod 5 = [57, 70, 36, 36, 57]  (2^k x pentagon-walk law in residue order: [57, 70, 36, 36, 57])  return prob 35/128 = (2^k + 2(-1)^k L_k)/(5 2^k)
+   [ok] for k = 0..14: law of T^k(n) mod 5 given n = 1 mod 5 (all 2^k residues mod 5*2^k) = law of the simple random walk on a pentagon after k steps
+   [ok] spectral formula for the walk law at k = 12: 1/5 + (2/5)(cos^k72 cos(72j) + cos^k144 cos(144j))
+
+=== 5. Lucas numbers count the closed walks:  tr(A^n) = 2^n + 1 + (-1)^n L_n ===
+   [ok] tr((2K_5)^n) = 2^n + 1 + (-1)^n L_n for n = 1..20
+   [ok] word count: #{w in {e,o}^n : 5 | 2^n - 3^s and 5 | C(w)} = (A_n + 1 + (-1)^n L_n)/5 with A_n = #{w : 5 | 2^n - 3^s}, n = 1..14
+   n, A_n, B_n: (1,0,0), (2,1,1), (3,3,0), (4,2,2), (5,10,0), (6,16,7), (7,28,0), (8,72,24), (9,120,9), (10,256,76), (11,528,66), (12,992,263), (13,2080,312), (14,4096,988)
+
+=== 6. what is NOT the mechanism (tests of the additive-pentagon story) ===
+   [ok] additive pentagon c1 = t + t^-1 and pentagram c2 = t^2 + t^-2:  c1 c2 = c1 + c2 and c1 + c2 = J - I  (so c^2 + c - 1 = 0 off constants)
+   [ok] R_e c1 = c2 R_e (e swaps pentagon and pentagram), R_o commutes with c1
+   [ok] but 2K does NOT commute with c1
+   [ok] the golden plane W is NOT invariant under the additive pentagon c1
+   golden eigenvector f: |proj on V1|^2 = 15*sqrt(5) + 35 = 68.541020,  |proj on V2|^2 = 15*sqrt(5) + 35 = 68.541020  (both non-zero: f lies in neither D5-isotypic plane)
+   [ok] golden eigenvector lies in neither V1 nor V2
+   [ok] 2K_5 is not normal (A A^T != A^T A) although its spectrum is real
+   singular values of 2K_5: 0, sqrt(2), sqrt(2), 2, 2  (no golden ratio: phi is in the eigenvalues, not the singular values)
+   automorphisms of the branch digraph: 1 (identity only); anti-automorphisms (reversals): 0
+   Latimer-MacDuffee sanity: of 104 integer 2x2 matrices with charpoly x^2+x-1 (|a11| <= 12, |a12| <= 200), 104 are GL2(Z)-conjugate to the
+   pentagon/A_4 block [[0,1],[1,-1]] (conjugator [v, Mv] with |v| <= 60).  So 'conjugate to the pentagon block' says nothing beyond the characteristic polynomial.
+
+=== 7. over Q: when does the folded pentagon close? ===
+   push-forward of point masses at rational points (valid mod every N prime to 6):
+     delta_0 + delta_{-1}       ->  (delta_0 + delta_{-1}) + (delta_{1/2} + delta_{-1/2})        [always]
+     delta_{1/2} + delta_{-1/2} ->  2 delta_{-1/4} + delta_{1/4} + delta_{5/4}
+     delta_{-1/4}               ->  delta_{-1/8} + delta_{1/8}
+   [ok] the configuration {-1/4; +-1/2; 0,-1} closes ({1/4,5/4} = {-1,0} and {+-1/8} = {+-1/2}) only for N = 5 among N < 2000 prime to 6
+
+39 checks, 0 failed

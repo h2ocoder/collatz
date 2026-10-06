@@ -1,0 +1,51 @@
+researcher's Pierpont points in the box 1 <= i <= 480, 0 <= j <= 300: 1625
+independent test (trial division by primes < 2000, then sympy BPSW on 30530 survivors): 1625 primes; same set: True   [16 s]
+Pierpont primes below 10^6, 10^9, 10^20, 10^100 (with 2 and 3): [42, 65, 157, 795]   (literature: [42, 65, 157, 795])
+  per decade up to 10^100: 7.95;  Gleason's heuristic 9 per decade = 3 ln 10/(ln 2 ln 3) = 9.07
+  => 'about 8 per decade, below Gleason's 9' is already visible in the published counts (not new).
+points with ln(p-1) <= 329.58: 1142;  sum i ln2 = 94986.1, sum j ln3 = 95959.4, theta_cm = 0.4975 +- 0.0098
+  theta_cm for cutoffs U = 20, 30, ..., 320 (it wanders by several sd-of-the-final-value; 0.4996 is one draw):
+    [0.486, 0.547, 0.485, 0.489, 0.479, 0.5, 0.505, 0.488, 0.491, 0.489, 0.499]
+  kappa = 3.4650
+
+exact table A(a,b), a <= 480, b <= 300 built   [17 s];  largest entry has 111 bits (< 128)
+  agreement with the researcher's exact 41 x 41 table (A and D): mismatches 0
+  values quoted in q41_rays.log:  ln A(480,300) = 76.75 (76.75);  ln A(480,240) = 72.361 (72.361);  ln A(476,300) = 76.554 (76.554);
+                                  ln A(300,300) = 65.997 (65.997);  ln A(160,101) = 40.906 (40.906);  ln A(120,300) = 47.171 (47.171)
+  float64 DP against the exact table on a sub-grid: max relative error 1.21e-15
+  diagonal A(a,a), a = 0..12: [2, 4, 8, 19, 39, 82, 166, 322, 610, 1126, 2031, 3561, 6120]
+  A(40,40) = 397356513   A(100,100) = 1224398428241739
+
+GROWTH ALONG THE CRITICAL RAY b = round(a ln2/ln3): fitted coefficient of sqrt(L) under different fit forms
+  heuristic h(1/2) = 2 sqrt(kappa pi^2/12) = 3.376
+  L >=  40:  a sqrt(L) + b ln L + c -> a = 3.479 (b = -1.74);   a sqrt(L) + c -> a = 3.257;   with an extra d/sqrt(L) -> a = 3.554 (b = -2.84)
+  L >= 100:  a sqrt(L) + b ln L + c -> a = 3.502 (b = -1.95);   a sqrt(L) + c -> a = 3.281;   with an extra d/sqrt(L) -> a = 3.555 (b = -2.85)
+  L >= 200:  a sqrt(L) + b ln L + c -> a = 3.514 (b = -2.07);   a sqrt(L) + c -> a = 3.305;   with an extra d/sqrt(L) -> a = 3.475 (b = -1.30)
+  L >= 400:  a sqrt(L) + b ln L + c -> a = 3.493 (b = -1.84);   a sqrt(L) + c -> a = 3.332;   with an extra d/sqrt(L) -> a = 3.319 (b = +2.14)
+  local slope d(ln A)/d(sqrt L) at L = 150, 300, 600: 3.184, 3.270, 3.343
+  ratio ln A / (2 sqrt(c L)) at L = 100, 300, 600: 0.749, 0.835, 0.878
+  => the '2 to 6 per cent high' agreement is a property of one three-parameter fit; the data fix the
+     exponent 1/2 and the shape in theta, not the constant.
+
+RIDGE of ln A on size level sets (my estimator) against the researcher's:
+  L =  60: theta* = 0.521  (researcher 0.522);  slope b/a = 0.580;  critical slope 0.631
+  L = 100: theta* = 0.522  (researcher 0.523);  slope b/a = 0.577;  critical slope 0.631
+  L = 140: theta* = 0.526  (researcher 0.528);  slope b/a = 0.569;  critical slope 0.631
+  L = 180: theta* = 0.529  (researcher 0.531);  slope b/a = 0.562;  critical slope 0.631
+  L = 220: theta* = 0.531  (researcher 0.534);  slope b/a = 0.557;  critical slope 0.631
+  L = 260: theta* = 0.532  (researcher 0.535);  slope b/a = 0.554;  critical slope 0.631
+  L = 300: theta* = 0.533  (researcher 0.536);  slope b/a = 0.553;  critical slope 0.631
+  L = 320: theta* = 0.533  (researcher 0.536);  slope b/a = 0.553;  critical slope 0.631
+  L = 300, 0.3 < theta < 0.7: residual from a quartic: rms 0.0005 overall, 0.0002 within 0.03 of theta = 1/2, max |res| 0.0020  (no kink at the critical line)
+
+CONTROL: 120 random point sets (same density law, seed 20261006), same estimator   [30 s]
+  L =  60: real 0.521;  control 0.533 +- 0.028;  z = -0.41;  fraction of controls >= real: 0.692;  |control - 1/2| > |real - 1/2|: 0.733
+  L = 100: real 0.522;  control 0.523 +- 0.026;  z = -0.01;  fraction of controls >= real: 0.483;  |control - 1/2| > |real - 1/2|: 0.542
+  L = 140: real 0.526;  control 0.517 +- 0.024;  z = +0.36;  fraction of controls >= real: 0.325;  |control - 1/2| > |real - 1/2|: 0.367
+  L = 180: real 0.529;  control 0.514 +- 0.023;  z = +0.66;  fraction of controls >= real: 0.267;  |control - 1/2| > |real - 1/2|: 0.300
+  L = 220: real 0.531;  control 0.511 +- 0.022;  z = +0.89;  fraction of controls >= real: 0.200;  |control - 1/2| > |real - 1/2|: 0.225
+  L = 260: real 0.532;  control 0.510 +- 0.021;  z = +1.06;  fraction of controls >= real: 0.183;  |control - 1/2| > |real - 1/2|: 0.208
+  L = 300: real 0.533;  control 0.508 +- 0.021;  z = +1.19;  fraction of controls >= real: 0.125;  |control - 1/2| > |real - 1/2|: 0.142
+  L = 320: real 0.533;  control 0.508 +- 0.020;  z = +1.25;  fraction of controls >= real: 0.125;  |control - 1/2| > |real - 1/2|: 0.142
+
+done in 30 s

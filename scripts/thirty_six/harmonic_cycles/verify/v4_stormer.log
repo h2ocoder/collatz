@@ -1,0 +1,77 @@
+==============================================================================
+1. Consecutive P-smooth pairs below 10^15 (recursive enumeration) and below 2*10^6 (sieve)
+==============================================================================
+ P = [2, 3]: 4 pairs below 10^15, largest (8, 9)
+ P = [2, 3, 5]: 10 pairs below 10^15, largest (80, 81)
+ P = [2, 3, 5, 7]: 23 pairs below 10^15, largest (4374, 4375)
+ P = [2, 3, 5, 7, 11]: 40 pairs below 10^15, largest (9800, 9801)
+ P = [2, 3, 5, 7, 11, 13]: 68 pairs below 10^15, largest (123200, 123201)
+ counts 4, 10, 23, 40, 68 = OEIS A002071; largest upper members 9, 81, 4375, 9801, 123201 = A117581.
+ (Completeness beyond 10^15 is Stormer's theorem, not this computation.)
+
+==============================================================================
+2. Unit cells: 2^k - 1 or 2^k + 1 smooth over M, k <= 3000
+==============================================================================
+ M = [3]: 4 unit cells (k, N): [(1, 1), (1, 3), (2, 3), (3, 9)]   [4 of 4 Stormer pairs]
+ M = [3, 5]: 6 unit cells (k, N): [(1, 1), (1, 3), (2, 3), (2, 5), (3, 9), (4, 15)]   [6 of 10 Stormer pairs]
+ M = [3, 5, 7]: 8 unit cells (k, N): [(1, 1), (1, 3), (2, 3), (2, 5), (3, 7), (3, 9), (4, 15), (6, 63)]   [8 of 23 Stormer pairs]
+ M = [3, 5, 7, 11]: 9 unit cells (k, N): [(1, 1), (1, 3), (2, 3), (2, 5), (3, 7), (3, 9), (4, 15), (5, 33), (6, 63)]   [9 of 40 Stormer pairs]
+ M = [3, 5, 7, 11, 13]: 11 unit cells (k, N): [(1, 1), (1, 3), (2, 3), (2, 5), (3, 7), (3, 9), (4, 15), (5, 33), (6, 63), (6, 65), (12, 4095)]   [11 of 68 Stormer pairs]
+ -> 4/4, 6/10, 8/23, 9/40, 11/68 confirmed.  NOTE: 'unit cells = Stormer pairs with a pure power
+    of two on one side' is true BY DEFINITION (a unit cell is a consecutive pair {2^k, N}); only
+    the counts and the finiteness bound carry information.
+
+==============================================================================
+3. Mixed-multiplier words by plain iteration (no fixed-point formula).
+   For each arrangement of the letters, search x in [-5000, 5000] with: letter 0 applied to
+   an even value, letter q applied to an odd value, and the word returning to x.
+==============================================================================
+ cell 4 - 3: 2 words, 2 with exactly one consistent integer fixed point, 1 necklaces
+      (0, 3): [2, 1]
+ cell 8 - 9: 3 words, 3 with exactly one consistent integer fixed point, 1 necklaces
+      (0, 3, 3): [-5, -7, -10]
+ cell 4 - 5: 2 words, 2 with exactly one consistent integer fixed point, 1 necklaces
+      (0, 5): [-1, -2]
+ cell 16 - 15: 12 words, 12 with exactly one consistent integer fixed point, 3 necklaces
+      (0, 0, 3, 5): [7, 11, 28, 14]
+      (0, 0, 5, 3): [20, 10, 5, 13]
+      (0, 3, 0, 5): [14, 7, 18, 9]
+ cell 8 - 7: 3 words, 3 with exactly one consistent integer fixed point, 1 necklaces
+      (0, 0, 7): [4, 2, 1]
+ cell 64 - 63: 60 words, 60 with exactly one consistent integer fixed point, 10 necklaces
+ cell 32 - 33: 20 words, 20 with exactly one consistent integer fixed point, 4 necklaces
+ cell 64 - 65: 30 words, 30 with exactly one consistent integer fixed point, 5 necklaces
+ -> 16 - 15: 3 cycles (7,11,28,14 / 5,13,20,10 / 9,14,7,18 up to rotation); 64 - 63: 10.  Confirmed.
+    7 is multiplied by 3 in one cycle and by 5 in another: this is a semigroup, not a map.
+
+==============================================================================
+4. Deterministic multi-divisor maps T_P: divide by the smallest prime < P that divides x,
+   otherwise x -> P x + 1.  (Prior art for T_5, T_7 on positive integers: T. Oliveira e Silva,
+   sweet.ua.pt/tos/px+1.html; OEIS A133421 ff.)  All cycles meeting [-200000, 200000].
+==============================================================================
+ 5x+1 with divisors (2, 3): 3 cycles
+      length  3, min     -1: divide by 4, multiply by 5, difference -1   [-1, -4, -2]
+      length  3, min      1: divide by 6, multiply by 5, difference +1   [1, 6, 3]
+      length  6, min     -7: divide by 24, multiply by 25, difference -1   [-7, -34, -17, -84, -42, -21]
+ 7x+1 with divisors (2, 3, 5): 6 cycles
+      length  3, min     -1: divide by 6, multiply by 7, difference -1   [-1, -6, -3]
+      length  4, min      1: divide by 8, multiply by 7, difference +1   [1, 8, 4, 2]
+      length  7, min    -11: divide by 48, multiply by 49, difference -1   [-11, -76, -38, -19, -132, -66, -33]
+      length 12, min   -509: divide by 2400, multiply by 2401, difference -1   [-509, -3562, -1781, -12466, -6233, -43630, -21815, -4363, -30540, -15270, -7635, -2545]
+      length 12, min   -701: divide by 2400, multiply by 2401, difference -1   [-701, -4906, -2453, -17170, -8585, -1717, -12018, -6009, -2003, -14020, -7010, -3505]
+      length 12, min   -961: divide by 2400, multiply by 2401, difference -1   [-961, -6726, -3363, -1121, -7846, -3923, -27460, -13730, -6865, -1373, -9610, -4805]
+ 11x+1 with divisors (2, 3, 5, 7): 5 cycles
+      length  3, min     -1: divide by 10, multiply by 11, difference -1   [-1, -10, -5]
+      length  4, min      1: divide by 12, multiply by 11, difference +1   [1, 12, 6, 3]
+      length  7, min    -13: divide by 120, multiply by 121, difference -1   [-13, -142, -71, -780, -390, -195, -65]
+      length  7, min    -17: divide by 120, multiply by 121, difference -1   [-17, -186, -93, -31, -340, -170, -85]
+      length 11, min     17: divide by 1344, multiply by 1331, difference +13   [17, 188, 94, 47, 518, 259, 37, 408, 204, 102, 51]
+ 13x+1 with divisors (2, 3, 5, 7, 11): 6 cycles
+      length  3, min      1: divide by 14, multiply by 13, difference +1   [1, 14, 7]
+      length  4, min     -1: divide by 12, multiply by 13, difference -1   [-1, -12, -6, -3]
+      length  7, min    -19: divide by 168, multiply by 169, difference -1   [-19, -246, -123, -41, -532, -266, -133]
+      length 15, min     19: divide by 28800, multiply by 28561, difference +239   [19, 248, 124, 62, 31, 404, 202, 101] ...
+      length 63, min -99503: divide by 8650400654897971200, multiply by 8650415919381337933, difference -15264483366733   [-99503, -1293538, -646769, -8407996, -4203998, -2101999, -27325986, -13662993] ...
+      length 69, min  -9959: divide by 1461905844558888960000, multiply by 1461920290375446110677, difference -14445816557150677   [-9959, -129466, -64733, -841528, -420764, -210382, -105191, -1367482] ...
+ -> 16 of 20 cycles found have (divide, multiply) differing by +-1, i.e. come from a
+    Stormer pair; the others are 'accidents' in the sense of Q1.1-c.

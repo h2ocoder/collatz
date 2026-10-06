@@ -1,0 +1,83 @@
+1. 3x+1, d <= 10^7
+
+  3x+1: 2 <= n <= 20000000; n that never drop within the caps: 0 (0.0000%)  first: []   [3 s]
+    n/2 <= dest(n) < n for every n that drops: True;  M(d) >= 1 for all 1 <= d <= 10000000: True
+    multiples of 3: 3333333, of which M = 1: 3333333
+    mean M = 1.690397; max M = 18
+    m: frequency: least d  ->  1: 0.531336: 1;  2: 0.337601: 2;  3: 0.078468: 20;  4: 0.028880: 10;  5: 0.015379: 91;  6: 0.004807: 122;  7: 0.002077: 61;  8: 0.000850: 1144;  9: 0.000350: 3844;  10: 0.000145: 6275;  11: 0.000061: 767;  12: 0.000028: 17479;  13: 0.000012: 81388;  14: 0.000004: 1000226;  15: 0.000002: 348391;  16: 0.000000: 795134;  17: 0.000000: 293501;  18: 0.000000: 7789084
+    d = 0 mod 3: mean M 1.0000, Pr[M = 1] 1.0000, min M 1
+    d = 1 mod 3: mean M 2.3410, Pr[M = 1] 0.0000, min M 1
+    d = 2 mod 3: mean M 1.7302, Pr[M = 1] 0.5940, min M 1
+    d = 1 mod 3, d > 1: min M = 2 (claim: >= 2);  M(1) = 1
+    M(1..40) = [1, 2, 1, 2, 2, 1, 2, 1, 1, 4, 2, 1, 2, 1, 1, 2, 1, 1, 2, 3, 1, 2, 3, 1, 2, 1, 1, 2, 2, 1, 2, 1, 1, 2, 1, 1, 3, 4, 1, 2]
+    max M(d), d <= 100: 7 at d = 61
+    max M(d), d <= 1000: 11 at d = 767
+    max M(d), d <= 10000: 11 at d = 767
+    max M(d), d <= 100000: 13 at d = 81388
+    max M(d), d <= 1000000: 17 at d = 293501
+    max M(d), d <= 5000000: 17 at d = 293501
+    max M(d), d <= 10000000: 18 at d = 7789084
+    multiplicities missing between 1 and max: []
+
+2. N(s) by independent word count: N(0) = 1, N(1..25) = A100982: True
+    s <=  25: sum N/2^k = 0.994176655491   sum N/3^s = 1.682430812761   sum N 3^s/4^k = 0.615501563135
+    s <= 100: sum N/2^k = 0.999982742256   sum N/3^s = 1.690336228246   sum N 3^s/4^k = 0.619936585235
+    s <= 200: sum N/2^k = 0.999999972716   sum N/3^s = 1.690360554352   sum N 3^s/4^k = 0.619949282948
+    s <= 400: sum N/2^k = 1.000000000000   sum N/3^s = 1.690360592196   sum N 3^s/4^k = 0.619949303357
+    s <= 550: sum N/2^k = 1.000000000000   sum N/3^s = 1.690360592196   sum N 3^s/4^k = 0.619949303357
+    observed: mean M(d), d <= 10000000: 1.690397;  mean n/dest(n): 1.690349;  mean dest(n)/n: 0.619956
+
+3. classes with k <= 16 by brute force over residues: 791; by s: [1, 1, 1, 2, 3, 7, 12, 30, 85, 173, 476]
+    #{n : dest(n) = d, k(n) <= 16} == class count, for every 1 <= d <= 200000: True
+    M(d) == class count (k <= 16) for 97.5290% of d <= 200000; never smaller: True
+    K =  4: exact 3-adic density of {M_K = 1} = 5/9 = 0.555556;  mean M_K = 1.444444
+    K =  8: exact 3-adic density of {M_K = 1} = 44/81 = 0.543210;  mean M_K = 1.584362
+    K = 12: exact 3-adic density of {M_K = 1} = 1174/2187 = 0.536808;  mean M_K = 1.614540
+    density of d met by some class with s > 15 (k > 24) is at most 0.0233; so the natural density of
+    {M = 1} exists (decreasing limit) and lies in [0.5330 - 0.0233, 0.5330]; observed 0.531336
+
+4. pairs n != n' <= 20000000 with the same (k, dest): 2: [(311291, 311295, 67, 230812), (9534459, 9534463, 46, 9298928)]
+
+5. MIRROR 3x-1 AND COUSIN 5x+1 (same code, n <= 4*10^6)
+
+  3x+1 (reference): 2 <= n <= 4000000; n that never drop within the caps: 0 (0.0000%)  first: []   [1 s]
+    n/2 <= dest(n) < n for every n that drops: True;  M(d) >= 1 for all 1 <= d <= 2000000: True
+    multiples of 3: 666666, of which M = 1: 666666
+    mean M = 1.690327; max M = 17
+    m: frequency: least d  ->  1: 0.531347: 1;  2: 0.337604: 2;  3: 0.078437: 20;  4: 0.028924: 10;  5: 0.015348: 91;  6: 0.004804: 122;  7: 0.002076: 61;  8: 0.000874: 1144;  9: 0.000353: 3844;  10: 0.000132: 6275;  11: 0.000059: 767;  12: 0.000025: 17479;  13: 0.000012: 81388;  14: 0.000001: 1000226;  15: 0.000003: 348391;  16: 0.000001: 795134;  17: 0.000000: 293501
+    d = 0 mod 3: mean M 1.0000, Pr[M = 1] 1.0000, min M 1
+    d = 1 mod 3: mean M 2.3410, Pr[M = 1] 0.0000, min M 1
+    d = 2 mod 3: mean M 1.7300, Pr[M = 1] 0.5940, min M 1
+
+  3x-1: 2 <= n <= 4000000; n that never drop within the caps: 2 (0.0001%)  first: [5, 17]   [1 s]
+    n/2 <= dest(n) < n for every n that drops: True;  M(d) >= 1 for all 1 <= d <= 2000000: True
+    multiples of 3: 666666, of which M = 1: 666666
+    mean M = 1.690418; max M = 19
+    m: frequency: least d  ->  1: 0.531345: 1;  2: 0.337618: 2;  3: 0.078441: 7;  4: 0.028916: 43;  5: 0.015345: 17;  6: 0.004760: 115;  7: 0.002100: 1124;  8: 0.000871: 367;  9: 0.000340: 5903;  10: 0.000150: 467;  11: 0.000058: 14980;  12: 0.000030: 21158;  13: 0.000013: 100888;  14: 0.000004: 29960;  15: 0.000002: 686816;  16: 0.000002: 689915;  17: 0.000000: 1206269;  18: 0.000000: 835720;  19: 0.000000: 1509830
+    d = 0 mod 3: mean M 1.0000, Pr[M = 1] 1.0000, min M 1
+    d = 1 mod 3: mean M 1.7302, Pr[M = 1] 0.5940, min M 1
+    d = 2 mod 3: mean M 2.3411, Pr[M = 1] 0.0000, min M 2
+
+  5x+1: 2 <= n <= 4000000; n that never drop within the caps: 704527 (17.6132%)  first: [5, 7, 9, 13, 17, 21, 23, 25, 29, 31]   [6 s]
+    n/2 <= dest(n) < n for every n that drops: True;  M(d) >= 1 for all 1 <= d <= 2000000: True
+    multiples of 5: 400000, of which M = 1: 400000
+    mean M = 1.453455; max M = 10
+    m: frequency: least d  ->  1: 0.678227: 1;  2: 0.220083: 2;  3: 0.077086: 12;  4: 0.020460: 62;  5: 0.003206: 119;  6: 0.000702: 476;  7: 0.000184: 2496;  8: 0.000039: 46138;  9: 0.000012: 114762;  10: 0.000002: 998657
+    d = 0 mod 5: mean M 1.0000, Pr[M = 1] 1.0000, min M 1
+    d = 1 mod 5: mean M 1.4852, Pr[M = 1] 0.6396, min M 1
+    d = 2 mod 5: mean M 2.4432, Pr[M = 1] 0.0000, min M 2
+    d = 3 mod 5: mean M 1.2193, Pr[M = 1] 0.8370, min M 1
+    d = 4 mod 5: mean M 1.1197, Pr[M = 1] 0.9146, min M 1
+
+6. MARTINGALE IDENTITY (new).  X_j = 3^(s_j)/2^j is a martingale under fair parity bits (E = (3/2 + 1/2)/2 = 1).
+    j =  1: dropped part 0.2500000000 + alive part 0.7500000000 = 1
+    j =  2: dropped part 0.4375000000 + alive part 0.5625000000 = 1
+    j =  5: dropped part 0.5253906250 + alive part 0.4746093750 = 1
+    j = 10: dropped part 0.5745201111 + alive part 0.4254798889 = 1
+    j = 20: dropped part 0.6002155916 + alive part 0.3997844084 = 1
+    j = 40: dropped part 0.6155015631 + alive part 0.3844984369 = 1
+    limit: mean of dest(n)/n = sum_s N(s) 3^s/4^k(s) = 0.6199493034 = 1 - p,  p = 0.3800506966
+    p = probability that a walk with odd-step probability 3/4 (the size-biased walk) never drops.
+    observed mean dest(n)/n over n <= 20000000: 0.619956
+
+done in 15 s

@@ -1,0 +1,75 @@
+==============================================================================
+1. Continued fraction of log2(3) by exact integer arithmetic, and record cells, s <= 3000
+==============================================================================
+log2(3) = [1; 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1, 1, ...]
+record cells with s <= 3000: 23;  (semi)convergents with s <= 3000: 23;  equal: True
+first twelve: [((1, 0), 'c'), ((1, 1), 'c'), ((2, 1), 'c'), ((3, 2), 'c'), ((5, 3), 's'), ((8, 5), 'c'), ((11, 7), 's'), ((19, 12), 'c'), ((27, 17), 's'), ((46, 29), 's'), ((65, 41), 'c'), ((84, 53), 'c')]
+
+==============================================================================
+2. The five known cycles: cell, interval, product formulas (exact)
+==============================================================================
+  min    0: cell (1,0), D =     1, 3^s/2^k = 1/2, record cell: True, circuits (bottom, top): []
+  min   -1: cell (1,1), D =    -1, 3^s/2^k = 3/2, record cell: True, circuits (bottom, top): []
+  min    1: cell (2,1), D =     1, 3^s/2^k = 3/4, record cell: True, circuits (bottom, top): [(1, 2)]
+  min   -5: cell (3,2), D =    -1, 3^s/2^k = 9/8, record cell: True, circuits (bottom, top): [(-5, -10)]
+  min  -17: cell (11,7), D =  -139, 3^s/2^k = 2187/2048, record cell: True, circuits (bottom, top): [(-17, -82), (-41, -136)]
+  NOTE: Proposition 8 fails for the cycle {0} (empty product 1, but 2^k/3^s = 2); it needs
+  'a cycle not containing 0'.
+  mirror: for 3x-1 the cycles are negated and every factor (1 + 1/(3x)) becomes (1 - 1/(3x));
+  the cells and intervals are IDENTICAL.  The interval of a cycle does not see the sign of the
+  map; only 'ascending <=> D < 0' does, and that is sign(D).
+     3x-1, min 1: cell (1,1), interval 3/2
+     3x-1, min 5: cell (3,2), interval 9/8
+     3x-1, min 17: cell (11,7), interval 2187/2048
+  cousin 5x+1 (intervals 5^s/2^k):
+     5x+1, min -1: cell (2,1), D = -1, 5^s/2^k = 5/4  (5-limit named: 5/4 major third)
+     5x+1, min 1: cell (5,2), D = 7, 5^s/2^k = 25/32  (25/32, 125/128 (diesis) etc.)
+     5x+1, min 13: cell (7,3), D = 3, 5^s/2^k = 125/128  (25/32, 125/128 (diesis) etc.)
+     5x+1, min 17: cell (7,3), D = 3, 5^s/2^k = 125/128  (25/32, 125/128 (diesis) etc.)
+
+==============================================================================
+3. Forcing: negative cycle other than {-1} => odd elements <= -5 => 1 < 3^s/2^k <= (15/14)^s
+==============================================================================
+  trajectory of -3: [-3, -4, -2, -1, -1] (falls into -1, so no cycle contains -3)
+  s = 2: admissible negative cells [(3, 2)]
+  s = 7: admissible negative cells [(11, 7)]
+  s = 12: admissible negative cells [(18, 12), (19, 12)]
+  s = 7 forces (11,7).  Note what this is: for s <= 10, (15/14)^s < 2, so there is AT MOST ONE
+  admissible k for each s; 'the cell is forced by s' holds for every small s, not just 7.
+  s <= 10 with exactly one admissible negative cell: [2, 4, 6, 7, 8, 9, 10]; of these, record cells at s = [2, 7]
+  heuristic weight (necklaces/|D|) of admissible non-unit negative cells, s <= 12: total 0.8325, on record cells 0.5866 (70.5%)
+
+==============================================================================
+4. Control family: primitive cycles of 3x+c, 5 <= c <= 199, gcd(c,6) = 1, meeting
+   [-20000, 20000]  (own path-following search; primitivity = gcd of the whole cycle with c is 1)
+==============================================================================
+  cycles: 257   in record cells: 55/257 = 21.4%
+  positive side: 18/175 = 10.3%;  negative side: 37/82 = 45.1%
+  |min| > 3c: 55/106 = 51.9%;  |min| <= 3c: 0/151 = 0.0%
+  distinct cells occupied: 124, record cells among them: 6
+
+  Extra control A (size-matched).  For c = 1 the non-trivial cycles have |min|/c = 5 and 17.
+  Cycles of 3x+c with |min| >= 5c:
+     53/89 = 59.6%  (positive 16/22 = 72.7%, negative 37/67 = 55.2%)
+  Extra control B (small cells).  Among ALL cells 1 <= s < k <= 11 how many are record cells?
+     5 of 55; among the octave-reduced ones (2^(k-1) < 3^s < 2^(k+1)): 5 of 12
+     cells with k <= 3 (1 <= s < k): (2,1), (3,1), (3,2): two of three are record cells, and
+     (1,0), (1,1) are record cells by definition (first on each side).
+  Verdict: the 21.4% headline is diluted by cycles with |min| <= 3c, for which the interval is
+  far from unison by the product formula; the size-matched figure is about one half.  'Cycles
+  sit at record cells' is still not a law, but it is a strong tendency for cycles that are
+  large relative to c, which is the classical Crandall/Eliahou mechanism.
+
+==============================================================================
+5. Cousin test: do the known cycles of 5x+1 also sit at record cells (of log2 5)?
+==============================================================================
+  record cells of 5^s/2^k, s <= 40: [(1, 0), (2, 1), (3, 1), (5, 2), (7, 3), (9, 4), (16, 7), (23, 10), (30, 13), (37, 16), (44, 19), (51, 22), (58, 25), (65, 28), (72, 31)]
+     5x+1 cycle through 0: cell (1,0), D = 1, record cell: True
+     5x+1 cycle through -1: cell (2,1), D = -1, record cell: True
+     5x+1 cycle through 1: cell (5,2), D = 7, record cell: True
+     5x+1 cycle through 13: cell (7,3), D = 3, record cell: True
+     5x+1 cycle through 17: cell (7,3), D = 3, record cell: True
+  -> all five known cycles of 5x+1 on Z sit at record cells too (5/4 is the unit cell, 25/32 and
+     125/128 are 'accidents' with D = 7 and D = 3).  'Known cycles sit at record cells' does not
+     distinguish the multiplier 3 from 5, nor 3x+1 from 3x-1: it is the size constraint
+     2^k/q^s = prod(1 + 1/(q x)) at work, plus the fact that tiny cells are record cells.

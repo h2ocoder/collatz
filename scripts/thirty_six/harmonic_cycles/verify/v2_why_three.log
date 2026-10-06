@@ -1,0 +1,81 @@
+==============================================================================
+1. Theorem 6 from the other side: 2^k -+ 1 = q^s with s >= 2, all k <= 1500
+==============================================================================
+perfect powers among 2^k - 1, 2^k + 1 (k <= 1500): [(3, 9, 3, 2)]
+  -> the only unit cell with s >= 2, for ANY odd q, is (q,k,s) = (3,3,2).  Agrees with Theorem 6.
+
+==============================================================================
+2. Brent cycle search for T_q, odd q <= 201, starts |n| <= 3000 (cap 10^30, 4000 steps)
+==============================================================================
+cycles NOT in unit cells (q, min|n|, k, s, D): [(3, -17, 11, 7, -139), (5, 1, 5, 2, 7), (5, 13, 7, 3, 3), (5, 17, 7, 3, 3), (181, 27, 15, 2, 7), (181, 35, 15, 2, 7)]
+multipliers whose only cycle found is {0}: 87 of 100
+multipliers with more than one unit-cell cycle: {3: [(1, 0, 1, 0), (1, 1, -1, -1), (2, 1, 1, 1), (3, 2, -1, -5)], 5: [(1, 0, 1, 0), (2, 1, -1, -1)], 7: [(1, 0, 1, 0), (3, 1, 1, 1)], 9: [(1, 0, 1, 0), (3, 1, -1, -1)], 15: [(1, 0, 1, 0), (4, 1, 1, 1)], 17: [(1, 0, 1, 0), (4, 1, -1, -1)], 31: [(1, 0, 1, 0), (5, 1, 1, 1)], 33: [(1, 0, 1, 0), (5, 1, -1, -1)], 63: [(1, 0, 1, 0), (6, 1, 1, 1)], 65: [(1, 0, 1, 0), (6, 1, -1, -1)], 127: [(1, 0, 1, 0), (7, 1, 1, 1)], 129: [(1, 0, 1, 0), (7, 1, -1, -1)]}
+  -> agrees with the researcher's list.  Prior art: the q = 181 cycle 27 -> 611 -> 27 is in Crandall
+     (1978); Franco-Pomerance (1995) classify the multipliers |q| < 10^11 having an orbit with two
+     odd elements (5 and 181 on this side); the 5x+1 cycles through 13 and 17 are standard.
+
+==============================================================================
+3. Signed kernel: is -1/2 an eigenvalue?  det(I + R_e - R_o) = 0, primes 5 <= p < 300
+   (their range: p < 100, det mod 2^61-1)
+==============================================================================
+  q : primes p < 300 (p not dividing 2q) with det(I + R_e - R_o) = 0
+      (zero modulo two 31-bit primes; confirmed by exact Bareiss determinant for p <= 61)
+    3: 60 of 60  (all)
+    5: 5 of 59  yes = [11, 13, 17, 29, 31]   [of these, p | q-3: []]
+    7: 3 of 59  yes = [11, 19, 23]   [of these, p | q-3: []]
+    9: 2 of 60  yes = [5, 19]   [of these, p | q-3: []]
+   11: 4 of 59  yes = [13, 19, 29, 31]   [of these, p | q-3: []]
+   13: 6 of 59  yes = [5, 19, 31, 37, 41, 59]   [of these, p | q-3: [5]]
+   15: 5 of 59  yes = [11, 17, 19, 43, 47]   [of these, p | q-3: []]
+   17: 4 of 59  yes = [7, 11, 47, 59]   [of these, p | q-3: [7]]
+   31: 4 of 59  yes = [7, 13, 17, 23]   [of these, p | q-3: [7]]
+   33: 4 of 59  yes = [5, 17, 19, 97]   [of these, p | q-3: [5]]
+   63: 8 of 59  yes = [5, 11, 13, 17, 19, 29, 37, 191]   [of these, p | q-3: [5]]
+   65: 3 of 58  yes = [17, 31, 193]   [of these, p | q-3: [31]]
+  127: 5 of 59  yes = [11, 19, 29, 31, 37]   [of these, p | q-3: [31]]
+  129: 6 of 59  yes = [5, 7, 11, 13, 19, 31]   [of these, p | q-3: [7]]
+  NOTE (skeptic): K^-_p depends on q only through q mod p.  So 'the yes-list contains the primes
+  dividing q - 3' is automatic (the matrix IS the q = 3 matrix there); it is not an independent
+  confirmation of Proposition 7.  The remaining 'sporadic' primes are the content, and they are
+  unexplained by the proposition.
+
+==============================================================================
+4. Universal eigenvalues, exactly: gcd over several primes of the characteristic
+   polynomials of 2K^- = R_e - R_o and 2K = R_e + R_o  (sympy, over Q)
+==============================================================================
+  q =   3: gcd charpoly(2K^-) = x**2*(x + 1);   gcd charpoly(2K) = x - 2
+  q =   5: gcd charpoly(2K^-) = x**2;   gcd charpoly(2K) = x - 2
+  q =   7: gcd charpoly(2K^-) = x**2;   gcd charpoly(2K) = x - 2
+  q =   9: gcd charpoly(2K^-) = x**3;   gcd charpoly(2K) = x - 2
+  q =  15: gcd charpoly(2K^-) = x**2;   gcd charpoly(2K) = x - 2
+  q =  17: gcd charpoly(2K^-) = x**2;   gcd charpoly(2K) = x - 2
+  q =  31: gcd charpoly(2K^-) = x**2;   gcd charpoly(2K) = x - 2
+  q =  33: gcd charpoly(2K^-) = x**2;   gcd charpoly(2K) = x - 2
+  (eigenvalue of K = root / 2.)  q = 3: the common factor of 2K^- contains (x + 1), i.e. -1/2;
+  for the other q only powers of x (and x - 2, i.e. eigenvalue 1 of K) are common.  Agrees.
+
+==============================================================================
+5. NEW (skeptic): the functional exists for every word in a unit cell with D = -1, and for
+   no word in a unit cell with D = +1.
+   Two-branch signed kernel  (K^-_w f)(x) = ( f(x/2^k) - f(T_w(x)) ) / 2,  T_w(x) = (N x + C)/2^k,
+   N = 3^s.  Let x_w = C/(2^k - N) (fixed point of T_w), a = -C/(N - 1) (where the branches agree).
+   Then x_w/2^k = a  <=>  (2^k - 1)(2^k + 1 - N) = 0  <=>  N = 2^k + 1  <=>  D = -1,
+   and in that case (delta_a - delta_{x_w}) K^-_w = -(1/2)(delta_a - delta_{x_w}),
+   a non-zero functional for every prime p not dividing 6*C*(2^k - 1).
+==============================================================================
+  q=3 cell (1,1) word 1   (3 = 2+1), x_w = -1: D = -1; x_w/2^k == a: True;  -1/2 in spectrum at 44 of 44 primes
+  q=3 cell (3,2) word 110 (9 = 8+1), x_w = -5: D = -1; x_w/2^k == a: True;  -1/2 in spectrum at 42 of 42 primes;  degenerate primes p | C(2^k-1) (p, eigenvalue present?): [(5, False), (7, False)]
+  q=3 cell (3,2) word 101,           x_w = -7: D = -1; x_w/2^k == a: True;  -1/2 in spectrum at 43 of 43 primes;  degenerate primes p | C(2^k-1) (p, eigenvalue present?): [(7, False)]
+  q=3 cell (3,2) word 011,           x_w = -10: D = -1; x_w/2^k == a: True;  -1/2 in spectrum at 42 of 42 primes;  degenerate primes p | C(2^k-1) (p, eigenvalue present?): [(5, False), (7, False)]
+  q=3 cell (2,1) word 10  (3 = 4-1), x_w = +1: D = +1; x_w/2^k == a: False;  -1/2 in spectrum at 9 of 44 primes
+  q=3 cell (2,1) word 01,            x_w = +2: D = +1; x_w/2^k == a: False;  -1/2 in spectrum at 9 of 44 primes
+  q=5 cell (2,1) word 10  (5 = 4+1), x_w = -1: D = -1; x_w/2^k == a: True;  -1/2 in spectrum at 43 of 43 primes
+  q=7 cell (3,1) word 100 (7 = 8-1), x_w = +1: D = +1; x_w/2^k == a: False;  -1/2 in spectrum at 18 of 43 primes
+  q=3 cell (11,7) word of -17 (D = -139): D = -139; x_w/2^k == a: False;  -1/2 in spectrum at 3 of 40 primes;  degenerate primes p | C(2^k-1) (p, eigenvalue present?): [(17, False), (23, False), (89, False)]
+  q=3 cell (5,3) word 11100 (D = +5), x_w = 19/5: D = +5; x_w/2^k == a: False;  -1/2 in spectrum at 0 of 40 primes;  degenerate primes p | C(2^k-1) (p, eigenvalue present?): [(19, False), (31, False)]
+  (Primes dividing C*(2^k - 1) are set aside: there x_w = a mod p and the functional vanishes.)
+  So the repo's 'q = d + 1' criterion (memory note AZ'': pairs (3,2), (5,4), (9,8), (17,16) ...)
+  is exactly 'the one-word cell is a unit cell with D = -1'.  Of the three non-trivial unit cells
+  of q = 3, the two with D = -1, (1,1) and (3,2), carry the functional, anchored at the negative
+  cycles -1 and -5; the D = +1 cell (2,1) (cycle {1,2}) does not.  Residue-only statement:
+  it sees 9 = 8 + 1, not the sign of the integers (3x-1 has the same kernels up to x -> -x).

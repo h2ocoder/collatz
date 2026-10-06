@@ -1,0 +1,37 @@
+==============================================================================
+Q5.5  lattice-point counts
+==============================================================================
+3-smooth numbers <= 100: [1, 2, 3, 4, 6, 8, 9, 12, 16, 18, 24, 27, 32, 36, 48, 54, 64, 72, 81, 96]
+pi_3(36) = 14  (36 is the 14th 3-smooth number);  number of divisors of 36 = 9
+Ramanujan estimate at x = 36: 13.148  (actual 14)
+
+Beatty-sum identity pi_3(2^K) = sum_b (K + 1 - ceil(b log2 3)), K < 400: True
+
+pi_3(2^K), K = 0..15: [1, 2, 4, 6, 9, 13, 17, 22, 28, 34, 41, 48, 56, 65, 74, 84]
+pi_3(3^S), S = 0..12: [1, 3, 7, 12, 19, 27, 37, 49, 62, 77, 93, 111, 131]
+G(S) = #{(j,s): 1<=s<=S, 2^j < 3^s}, S = 0..12: [0, 2, 6, 11, 18, 26, 36, 48, 61, 76, 92, 110, 130]
+H(S) = #{admissible cells (e,s), s<=S},  S = 0..12: [1, 2, 4, 6, 9, 12, 16, 21, 26, 32, 38, 45, 53]
+
+Does 36 (or any triangular / square number) occur more often than chance?
+  pi_3(2^K): index where value = 36: [];
+      triangular values (first 200 terms): [(0, 1), (3, 6), (8, 28), (22, 171), (27, 253), (163, 8515)]  [6 hits, ~6.5 expected by chance]
+      square values: [(0, 1), (2, 4), (4, 9), (45, 676), (118, 4489), (191, 11664)]  [6 hits, ~4.6 expected by chance]
+  pi_3(3^S): index where value = 36: [];
+      triangular values (first 200 terms): [(0, 1), (1, 3), (21, 378), (52, 2211), (79, 5050), (164, 21528)]  [6 hits, ~4.6 expected by chance]
+      square values: [(0, 1), (7, 49), (16, 225), (25, 529), (34, 961)]  [5 hits, ~3.3 expected by chance]
+  G(S): index where value = 36: [6];
+      triangular values (first 200 terms): [(0, 0), (2, 6), (6, 36), (25, 528)]  [4 hits, ~4.1 expected by chance]
+      square values: [(0, 0), (6, 36), (43, 1521)]  [3 hits, ~2.9 expected by chance]
+  H(S): index where value = 36: [];
+      triangular values (first 200 terms): [(0, 1), (3, 6), (7, 21), (11, 45), (28, 253)]  [5 hits, ~6.7 expected by chance]
+      square values: [(0, 1), (2, 4), (4, 9), (6, 16), (43, 576)]  [5 hits, ~4.7 expected by chance]
+
+  G(6) = 2+4+5+7+8+10 = 36: the six shortest dropping-word lengths A020914(1..6) add up to 36.
+  No mechanism: G is a Beatty sum ~ alpha S^2/2 and hits a square/triangular number about as
+  often as chance predicts.  LABEL: numerology.
+
+  The only exact 'T_8' statement is the trivial one: #{(a,b) : a, b >= 0, a + b <= 7} = T_8 = 36,
+  i.e. 36 is the number of 3-smooth numbers with at most 7 prime factors counted with multiplicity.
+  check: 36
+
+wrote q55_lattice_points.json

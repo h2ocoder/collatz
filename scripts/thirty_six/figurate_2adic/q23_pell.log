@@ -1,0 +1,125 @@
+================================================================================================
+A. Exact identities, checked for all 0 <= j <= 400 with Python integers
+================================================================================================
+  True   pell u^2-8m^2=1
+  True   N_j = T_(n_j) = m_j^2
+  True   u_(j+1) = 3u_j + 8m_j
+  True   n_(j+1) = (3n_j+1) + 4m_j
+  True   n_(j-1) = (3n_j+1) - 4m_j
+  True   n_(j+1)+n_(j-1) = 2(3n_j+1)
+  True   n_(2i) = 8 m_i^2 and n_(2i)+1 = u_i^2
+  True   n_(2i+1) = (u_i+4m_i)^2 and n_(2i+1)+1 = 2(u_i+2m_i)^2
+  True   v2(m_j) = v2(j)
+  True   v2(m_i - m_j) = v2(i - j)   (isometry in j)
+  True   m_i - m_j = 2 m_((i-j)/2) u_((i+j)/2)  (i-j even)
+  True   u_(j+P) - u_j = 16 m_(P/2) m_(j+P/2)  (P even)
+  True   N_(j+P) - N_j = m_P m_(2j+P)
+  True   u_j = 3^j mod 8
+
+================================================================================================
+B. Minimal periods of the Pell sequences mod 2^k   (k = 1 .. 18)
+   predicted: m: 2^k ;  N=m^2: 2 (k=1), 2^(k-1) (k>=2) ;  u: 1,2,2,2 then 2^(k-3) (k>=5) ;
+              n=(u-1)/2: 2,2,2 then 2^(k-2) (k>=4)
+================================================================================================
+    k    per(m)   per(N)   per(u)   per(n)   state(u,m)   all as predicted
+    1        2        2        1        2          2        True
+    2        4        2        2        2          4        True
+    3        8        4        2        2          8        True
+    4       16        8        2        4         16        True
+    5       32       16        4        8         32        True
+    6       64       32        8       16         64        True
+    7      128       64       16       32        128        True
+    8      256      128       32       64        256        True
+    9      512      256       64      128        512        True
+   10     1024      512      128      256       1024        True
+   11     2048     1024      256      512       2048        True
+   12     4096     2048      512     1024       4096        True
+   13     8192     4096     1024     2048       8192        True
+   14    16384     8192     2048     4096      16384        True
+   15    32768    16384     4096     8192      32768        True
+   16    65536    32768     8192    16384      65536        True
+   17   131072    65536    16384    32768     131072        True
+   18   262144   131072    32768    65536     262144        True
+
+================================================================================================
+C. 2-adic closure of the orbit: which residues mod 2^k are hit?
+   m_j : predicted every residue exactly once per period 2^k (j -> m_j is an isometry of Z_2)
+   N_j : predicted the same multiset as { x^2 mod 2^k : 0 <= x < 2^k }
+   n_j : predicted set  { r : r = 0,1 mod 8  and  T_r mod 2^(k-1) is a square mod 2^(k-1) }
+         (= half of the 2-adic solution set {T_n is a square}; the other half is NOT(n_j))
+================================================================================================
+    k   m perm  N=squares   #n_j res   predicted   equal    #/2^k     (1/12 = 0.083333)
+    3   True    True            2           2   True    0.250000   n_j u NOT(n_j) = all of {T_r square} (4): True
+    4   True    True            3           3   True    0.187500   n_j u NOT(n_j) = all of {T_r square} (6): True
+    5   True    True            4           4   True    0.125000   n_j u NOT(n_j) = all of {T_r square} (8): True
+    6   True    True            7           7   True    0.109375   n_j u NOT(n_j) = all of {T_r square} (14): True
+    7   True    True           12          12   True    0.093750   n_j u NOT(n_j) = all of {T_r square} (24): True
+    8   True    True           23          23   True    0.089844   n_j u NOT(n_j) = all of {T_r square} (46): True
+    9   True    True           44          44   True    0.085938   n_j u NOT(n_j) = all of {T_r square} (88): True
+   10   True    True           87          87   True    0.084961   n_j u NOT(n_j) = all of {T_r square} (174): True
+   11   True    True          172         172   True    0.083984   n_j u NOT(n_j) = all of {T_r square} (344): True
+   12   True    True          343         343   True    0.083740   n_j u NOT(n_j) = all of {T_r square} (686): True
+   13   True    True          684         684   True    0.083496   n_j u NOT(n_j) = all of {T_r square} (1368): True
+   14   True    True         1367        1367   True    0.083435   n_j u NOT(n_j) = all of {T_r square} (2734): True
+   15   True    True         2732        2732   True    0.083374   n_j u NOT(n_j) = all of {T_r square} (5464): True
+   16   True    True         5463        5463   True    0.083359   n_j u NOT(n_j) = all of {T_r square} (10926): True
+   17   True    True        10924       10924   True    0.083344   n_j u NOT(n_j) = all of {T_r square} (21848): True
+   18   True    True        21847       21847   True    0.083340   n_j u NOT(n_j) = all of {T_r square} (43694): True
+  all predictions hold for k = 3..18: True
+  multiplicities of n_j mod 2^14 over one period (4096 terms): {2: 1024, 4: 256, 8: 64, 16: 16, 32: 6, 64: 1}  (not uniform: j -> n_j is even in j)
+
+================================================================================================
+D. Dropping classes along the Pell orbit, actual integers, 2 <= j <= 400
+   entry = (Terras k, odd steps s); repo Dropping Set index = k+s
+================================================================================================
+  u_j          j even: {(2, 1): 200}    j odd: {(4, 2): 199}
+  n_j          j even: {(1, 0): 200}    j odd: {(2, 1): 199}
+  N_j = m_j^2  j even: {(1, 0): 200}    j odd: {(2, 1): 199}
+  roots m_j, j in [0, 2^16): class counts equal the natural counts N(k) 2^(K-k) exactly: True
+  roots m_j actual stopping times, j = 2..400: {1: 200, 2: 99, 4: 25, 5: 25, 7: 10, 8: 13, 10: 3, 12: 2, 13: 7, 15: 1, 16: 2, 18: 1, 21: 1, 23: 1, 24: 1, 26: 1, 29: 1, 32: 1, 39: 2, 43: 1, 53: 1, 64: 1}
+     natural expectation for 399 numbers: k=1: 199.5, k=2: 99.8, k=4: 24.9, k=5: 24.9, k=7: 9.4, k=8: 10.9
+
+================================================================================================
+E. Null test: total stopping time (T-steps to reach 1) along the Pell orbit, 5 <= j <= 200,
+   against 10 random integers with the same bit length and the same residue mod 16.
+   z = (tst - mean_control)/sd_control ; report mean z and sd of z (null: mean 0, sd 1)
+================================================================================================
+  u_j    mean z = -0.073   sd z = 1.386   (se of mean ~ 0.099)   mean T-steps per bit = 4.7851   (heuristic 1/(1 - log2(3)/2) = 4.8187)
+  n_j    mean z = +0.074   sd z = 1.369   (se of mean ~ 0.098)   mean T-steps per bit = 4.8169   (heuristic 1/(1 - log2(3)/2) = 4.8187)
+  m_j    mean z = +0.029   sd z = 1.278   (se of mean ~ 0.091)   mean T-steps per bit = 4.8011   (heuristic 1/(1 - log2(3)/2) = 4.8187)
+  N_j    mean z = +0.084   sd z = 1.207   (se of mean ~ 0.086)   mean T-steps per bit = 4.8431   (heuristic 1/(1 - log2(3)/2) = 4.8187)
+
+================================================================================================
+F. What singles out j = 2 (N = 36)?
+================================================================================================
+  (Ljunggren 1946) j <= 3000 with m_j triangular, i.e. N_j = (triangular)^2 = sum of cubes: [0, 1, 2]  -> m = [0, 1, 6], N = [0, 1, 36]
+  j <= 3000 with N_j 3-smooth: [1, 2]  -> N = [1, 36]
+  n_2 = 8 = 8*m_1^2, n_2 + 1 = 9 = u_1^2 : the pair (8, 9) IS the fundamental solution 3^2 - 8*1^2 = 1
+
+================================================================================================
+G. Relation to the repo's Pythagorean lifts (scripts/pythagorean_lifts): none beyond 'both are conics'
+   lift discriminant of the cell (k, s) is D = 4^k + 9^s (n^2 + ((3^s n + c)/2^k)^2 = y^2);
+   square-triangular numbers live in Q(sqrt 2).  4^k + 9^s is odd, so never 2*square.
+================================================================================================
+   cell k= 2 s=1  (repo Set_3)   D = 4^k + 9^s = 25   perfect square: True
+   cell k= 4 s=2  (repo Set_6)   D = 4^k + 9^s = 337   perfect square: False
+   cell k= 5 s=3  (repo Set_8)   D = 4^k + 9^s = 1753   perfect square: False
+   cell k= 7 s=4  (repo Set_11)   D = 4^k + 9^s = 22945   perfect square: False
+   cell k= 8 s=5  (repo Set_13)   D = 4^k + 9^s = 124585   perfect square: False
+   cell k=10 s=6  (repo Set_16)   D = 4^k + 9^s = 1580017   perfect square: False
+   cell k=12 s=7  (repo Set_19)   D = 4^k + 9^s = 21560185   perfect square: False
+   cell k=13 s=8  (repo Set_21)   D = 4^k + 9^s = 110155585   perfect square: False
+   only Set_3 (k=2, s=1) is degenerate: 4^2 + 3^2 = 5^2, the (3,4,5) triple.
+
+================================================================================================
+H. Mirror / control for the identity  n_(j+1) + n_(j-1) = 2 (3 n_j + 1)
+   For any odd q the unit q + sqrt(q^2-1) has trace 2q, so with u = (q-1) n + 1 (centre -1/(q-1),
+   where n -> q n + 1 is u -> q u) the same identity holds with q n + 1.  q = 3 is not singled out.
+================================================================================================
+   q=3: u^2 - 8 y^2 = 1, unit 3+sqrt(8);  n = (u-1)/2 integral for all j: True;  n_j = [0, 1, 8, 49, 288, 1681];  n_(j+1)+n_(j-1) = 2(3n_j+1): True
+   q=5: u^2 - 24 y^2 = 1, unit 5+sqrt(24);  n = (u-1)/4 integral for all j: True;  n_j = [0, 1, 12, 121, 1200, 11881];  n_(j+1)+n_(j-1) = 2(5n_j+1): True
+   q=7: u^2 - 48 y^2 = 1, unit 7+sqrt(48);  n = (u-1)/6 integral for all j: True;  n_j = [0, 1, 16, 225, 3136, 43681];  n_(j+1)+n_(j-1) = 2(7n_j+1): True
+   q=9: u^2 - 80 y^2 = 1, unit 9+sqrt(80);  n = (u-1)/8 integral for all j: True;  n_j = [0, 1, 20, 361, 6480, 116281];  n_(j+1)+n_(j-1) = 2(9n_j+1): True
+   mirror (3x-1): with n' = n + 1 (so N = T_(n'-1)) the identity reads n'_(j+1) + n'_(j-1) = 2(3n'_j - 1): True
+
+done in 3.6 s

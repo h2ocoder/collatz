@@ -1,0 +1,122 @@
+==============================================================================
+A. Unit cells |2^k - q^s| = 1 (k >= 1, 0 <= s <= k) for odd q in [3, 2001], s <= 150
+==============================================================================
+multipliers checked: 1000;  mismatches with the theorem's prediction: []
+  1 unit cell(s): 982 multipliers
+  2 unit cell(s): 17 multipliers  -> q = [5, 7, 9, 15, 17, 31, 33, 63, 65, 127, 129, 255, 257, 511, 513, 1023, 1025]
+  4 unit cell(s): 1 multipliers  -> q = [3]
+
+==============================================================================
+B. Every word of every unit cell is the parity word of an integer cycle of T_q
+==============================================================================
+words verified by direct iteration: 1112
+
+  q    cell   D   cycle (starting at the smallest |n| odd element)
+     3 (1,1)  -1  [-1]
+     3 (2,1)  +1  [1, 2]
+     3 (3,2)  -1  [-5, -7, -10]
+     5 (2,1)  -1  [-1, -2]
+     7 (3,1)  +1  [1, 4, 2]
+     9 (3,1)  -1  [-1, -4, -2]
+    15 (4,1)  +1  [1, 8, 4, 2]
+    17 (4,1)  -1  [-1, -8, -4, -2]
+    31 (5,1)  +1  [1, 16, 8, 4, 2]
+    33 (5,1)  -1  [-1, -16, -8, -4, -2]
+    63 (6,1)  +1  [1, 32, 16, 8, 4, 2]
+    65 (6,1)  -1  [-1, -32, -16, -8, -4, -2]
+   127 (7,1)  +1  [1, 64, 32, 16, 8, 4, 2]
+   129 (7,1)  -1  [-1, -64, -32, -16, -8, -4, -2]
+
+==============================================================================
+C. Brute force: all cycles of T_q meeting [-3000, 3000], odd q <= 201
+   (trajectory abandoned after 3000 steps or when |n| > 10^40)
+==============================================================================
+  q   #cycles   cycles as (min element; cell (k,s); D)   [U] = unit cell
+    3  5  (-1; (1,1); D=-1 [U]), (0; (1,0); D=1 [U]), (1; (2,1); D=1 [U]), (-5; (3,2); D=-1 [U]), (-17; (11,7); D=-139)
+    5  5  (0; (1,0); D=1 [U]), (-1; (2,1); D=-1 [U]), (1; (5,2); D=7), (13; (7,3); D=3), (17; (7,3); D=3)
+    7  2  (0; (1,0); D=1 [U]), (1; (3,1); D=1 [U])
+    9  2  (0; (1,0); D=1 [U]), (-1; (3,1); D=-1 [U])
+   11  1  (0; (1,0); D=1 [U])
+   13  1  (0; (1,0); D=1 [U])
+   15  2  (0; (1,0); D=1 [U]), (1; (4,1); D=1 [U])
+   17  2  (0; (1,0); D=1 [U]), (-1; (4,1); D=-1 [U])
+   19  1  (0; (1,0); D=1 [U])
+   21  1  (0; (1,0); D=1 [U])
+   23  1  (0; (1,0); D=1 [U])
+   25  1  (0; (1,0); D=1 [U])
+   27  1  (0; (1,0); D=1 [U])
+   29  1  (0; (1,0); D=1 [U])
+   31  2  (0; (1,0); D=1 [U]), (1; (5,1); D=1 [U])
+   33  2  (0; (1,0); D=1 [U]), (-1; (5,1); D=-1 [U])
+   63  2  (0; (1,0); D=1 [U]), (1; (6,1); D=1 [U])
+   65  2  (0; (1,0); D=1 [U]), (-1; (6,1); D=-1 [U])
+  127  2  (0; (1,0); D=1 [U]), (1; (7,1); D=1 [U])
+  129  2  (0; (1,0); D=1 [U]), (-1; (7,1); D=-1 [U])
+  181  3  (0; (1,0); D=1 [U]), (27; (15,2); D=7), (35; (15,2); D=7)
+  multipliers q <= 201 whose only cycle found is {0}: 87 of 100
+  check: for every q <= 201 the cycles found in unit cells are exactly the predicted ones.
+  cycles NOT in unit cells ('divisibility accidents'), (q, min, k, s, D): [(3, -17, 11, 7, -139), (5, 1, 5, 2, 7), (5, 13, 7, 3, 3), (5, 17, 7, 3, 3), (181, 27, 15, 2, 7), (181, 35, 15, 2, 7)]
+
+==============================================================================
+D. Link to the repo's half-eigenvalue theorem (signed Terras kernel mod p)
+   K^-_p f(x) = (1/2) f(x/2) - (1/2) f((q x + 1)/2)  on Z/p.
+   Test: is -1/2 an eigenvalue, i.e. det(I + R_e - R_o) = 0 ?  (exact, mod 2^61-1)
+==============================================================================
+  q : primes p < 100 (p not dividing 2q) at which -1/2 is an eigenvalue of K^-_p
+    3 : yes at 23 of 23 primes  (all)
+    5 : yes at 5 of 22 primes  yes = [11, 13, 17, 29, 31]
+    7 : yes at 3 of 22 primes  yes = [11, 19, 23]
+    9 : yes at 2 of 23 primes  yes = [5, 19]
+   11 : yes at 4 of 22 primes  yes = [13, 19, 29, 31]
+   13 : yes at 6 of 22 primes  yes = [5, 19, 31, 37, 41, 59]
+   15 : yes at 5 of 22 primes  yes = [11, 17, 19, 43, 47]
+   17 : yes at 4 of 22 primes  yes = [7, 11, 47, 59]
+   31 : yes at 4 of 22 primes  yes = [7, 13, 17, 23]
+   33 : yes at 4 of 22 primes  yes = [5, 17, 19, 97]
+   63 : yes at 7 of 22 primes  yes = [5, 11, 13, 17, 19, 29, 37]
+   65 : yes at 2 of 21 primes  yes = [17, 31]
+  127 : yes at 5 of 23 primes  yes = [11, 19, 29, 31, 37]
+  129 : yes at 6 of 22 primes  yes = [5, 7, 11, 13, 19, 31]
+
+  Universal eigenvalues (numerical): values that are eigenvalues of the kernel for
+  EVERY prime 7 <= p < 100 not dividing 2q(q-1)(q-2), tolerance 1e-7
+  q =   3  K^-: [(np.float64(-0.5), np.float64(0.0)), (np.float64(0.0), np.float64(0.0))]   (22 primes)
+  q =   3  K  : [(np.float64(1.0), np.float64(0.0))]   (22 primes)
+  q =   5  K^-: [(np.float64(0.0), np.float64(0.0))]   (22 primes)
+  q =   5  K  : [(np.float64(1.0), np.float64(0.0))]   (22 primes)
+  q =   7  K^-: [(np.float64(0.0), np.float64(0.0))]   (21 primes)
+  q =   7  K  : [(np.float64(1.0), np.float64(0.0))]   (21 primes)
+  q =   9  K^-: [(np.float64(0.0), np.float64(0.0))]   (21 primes)
+  q =   9  K  : [(np.float64(1.0), np.float64(0.0))]   (21 primes)
+  q =  11  K^-: [(np.float64(0.0), np.float64(0.0))]   (21 primes)
+  q =  11  K  : [(np.float64(1.0), np.float64(0.0))]   (21 primes)
+  q =  13  K^-: [(np.float64(0.0), np.float64(0.0))]   (20 primes)
+  q =  13  K  : [(np.float64(1.0), np.float64(0.0))]   (20 primes)
+  q =  15  K^-: [(np.float64(0.0), np.float64(0.0))]   (20 primes)
+  q =  15  K  : [(np.float64(1.0), np.float64(0.0))]   (20 primes)
+  q =  17  K^-: [(np.float64(0.0), np.float64(0.0))]   (21 primes)
+  q =  17  K  : [(np.float64(1.0), np.float64(0.0))]   (21 primes)
+  q =  31  K^-: [(np.float64(0.0), np.float64(0.0))]   (20 primes)
+  q =  31  K  : [(np.float64(1.0), np.float64(0.0))]   (20 primes)
+  q =  33  K^-: [(np.float64(0.0), np.float64(0.0))]   (20 primes)
+  q =  33  K  : [(np.float64(1.0), np.float64(0.0))]   (20 primes)
+  q =  63  K^-: [(np.float64(0.0), np.float64(0.0))]   (19 primes)
+  q =  63  K  : [(np.float64(1.0), np.float64(0.0))]   (19 primes)
+  q =  65  K^-: [(np.float64(0.0), np.float64(0.0))]   (20 primes)
+  q =  65  K  : [(np.float64(1.0), np.float64(0.0))]   (20 primes)
+  q = 127  K^-: [(np.float64(0.0), np.float64(0.0))]   (21 primes)
+  q = 127  K  : [(np.float64(1.0), np.float64(0.0))]   (21 primes)
+  q = 129  K^-: [(np.float64(0.0), np.float64(0.0))]   (21 primes)
+  q = 129  K  : [(np.float64(1.0), np.float64(0.0))]   (21 primes)
+
+  Geometry behind the theorem for general q (d = 2):
+    fixed point of the odd branch      x_o = -1/(q-2)   (cell (1,1), D = 2 - q)
+    point where the two branches agree a   = -1/(q-1)
+    the functional delta_a - delta_{x_o} is a left eigenvector of K^- with eigenvalue
+    -1/2  iff  e(x_o) = a  iff  2(q-2) = q-1  iff  q = 3.
+    q = 3: x_o = -1, e(x_o) = -1/2, a = -1/2, e(x_o) == a: True
+    q = 5: x_o = -1/3, e(x_o) = -1/6, a = -1/4, e(x_o) == a: False
+    q = 7: x_o = -1/5, e(x_o) = -1/10, a = -1/6, e(x_o) == a: False
+    q = 9: x_o = -1/7, e(x_o) = -1/14, a = -1/8, e(x_o) == a: False
+
+wrote q12_why_three.json

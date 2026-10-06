@@ -1,0 +1,404 @@
+{
+ "rows": [
+  {
+   "n": 36,
+   "role": "the value",
+   "dropping_time": 1,
+   "terras_k": 1,
+   "odd_steps_s": 0,
+   "destination": 18,
+   "dropping_orbit": [
+    36
+   ],
+   "orbital_oddity": 0,
+   "dropping_genus": [
+    1,
+    0,
+    17
+   ],
+   "stopping_signature": [
+    1,
+    18,
+    0
+   ],
+   "stopping_point": [
+    -18,
+    18
+   ],
+   "stopping_orbit": [
+    18
+   ],
+   "total_stopping_time": 21,
+   "orbit": [
+    36,
+    18,
+    9,
+    28,
+    14,
+    7,
+    22,
+    11,
+    34,
+    17,
+    52,
+    26,
+    13,
+    40,
+    20,
+    10,
+    5,
+    16,
+    8,
+    4,
+    2,
+    1
+   ],
+   "residue_mod_2k": 0
+  },
+  {
+   "n": 35,
+   "role": "v = n+1 = 36",
+   "dropping_time": 6,
+   "terras_k": 4,
+   "odd_steps_s": 2,
+   "destination": 20,
+   "dropping_orbit": [
+    35,
+    106,
+    53,
+    160,
+    80,
+    40
+   ],
+   "orbital_oddity": 2,
+   "dropping_genus": [
+    6,
+    0,
+    2
+   ],
+   "stopping_signature": [
+    6,
+    3,
+    0
+   ],
+   "stopping_point": [
+    -15,
+    20
+   ],
+   "stopping_orbit": [
+    106,
+    53,
+    160,
+    80,
+    40,
+    20
+   ],
+   "total_stopping_time": 13,
+   "orbit": [
+    35,
+    106,
+    53,
+    160,
+    80,
+    40,
+    20,
+    10,
+    5,
+    16,
+    8,
+    4,
+    2,
+    1
+   ],
+   "residue_mod_2k": 3
+  },
+  {
+   "n": 8,
+   "role": "index, T_8 = 36",
+   "dropping_time": 1,
+   "terras_k": 1,
+   "odd_steps_s": 0,
+   "destination": 4,
+   "dropping_orbit": [
+    8
+   ],
+   "orbital_oddity": 0,
+   "dropping_genus": [
+    1,
+    0,
+    3
+   ],
+   "stopping_signature": [
+    1,
+    4,
+    0
+   ],
+   "stopping_point": [
+    -4,
+    4
+   ],
+   "stopping_orbit": [
+    4
+   ],
+   "total_stopping_time": 3,
+   "orbit": [
+    8,
+    4,
+    2,
+    1
+   ],
+   "residue_mod_2k": 0
+  },
+  {
+   "n": 17,
+   "role": "u = 2*8+1, 17^2 = 8*36+1",
+   "dropping_time": 3,
+   "terras_k": 2,
+   "odd_steps_s": 1,
+   "destination": 13,
+   "dropping_orbit": [
+    17,
+    52,
+    26
+   ],
+   "orbital_oddity": 1,
+   "dropping_genus": [
+    3,
+    0,
+    3
+   ],
+   "stopping_signature": [
+    3,
+    4,
+    0
+   ],
+   "stopping_point": [
+    -4,
+    13
+   ],
+   "stopping_orbit": [
+    52,
+    26,
+    13
+   ],
+   "total_stopping_time": 12,
+   "orbit": [
+    17,
+    52,
+    26,
+    13,
+    40,
+    20,
+    10,
+    5,
+    16,
+    8,
+    4,
+    2,
+    1
+   ],
+   "residue_mod_2k": 1
+  },
+  {
+   "n": 6,
+   "role": "root, 6^2 = 36 = T_3^2",
+   "dropping_time": 1,
+   "terras_k": 1,
+   "odd_steps_s": 0,
+   "destination": 3,
+   "dropping_orbit": [
+    6
+   ],
+   "orbital_oddity": 0,
+   "dropping_genus": [
+    1,
+    0,
+    2
+   ],
+   "stopping_signature": [
+    1,
+    3,
+    0
+   ],
+   "stopping_point": [
+    -3,
+    3
+   ],
+   "stopping_orbit": [
+    3
+   ],
+   "total_stopping_time": 8,
+   "orbit": [
+    6,
+    3,
+    10,
+    5,
+    16,
+    8,
+    4,
+    2,
+    1
+   ],
+   "residue_mod_2k": 0
+  },
+  {
+   "n": 37,
+   "role": "36+1 (3x-1 cycle of 17)",
+   "dropping_time": 3,
+   "terras_k": 2,
+   "odd_steps_s": 1,
+   "destination": 28,
+   "dropping_orbit": [
+    37,
+    112,
+    56
+   ],
+   "orbital_oddity": 1,
+   "dropping_genus": [
+    3,
+    0,
+    8
+   ],
+   "stopping_signature": [
+    3,
+    9,
+    0
+   ],
+   "stopping_point": [
+    -9,
+    28
+   ],
+   "stopping_orbit": [
+    112,
+    56,
+    28
+   ],
+   "total_stopping_time": 21,
+   "orbit": [
+    37,
+    112,
+    56,
+    28,
+    14,
+    7,
+    22,
+    11,
+    34,
+    17,
+    52,
+    26,
+    13,
+    40,
+    20,
+    10,
+    5,
+    16,
+    8,
+    4,
+    2,
+    1
+   ],
+   "residue_mod_2k": 1
+  },
+  {
+   "n": 9,
+   "role": "8+1 (pair 8,9)",
+   "dropping_time": 3,
+   "terras_k": 2,
+   "odd_steps_s": 1,
+   "destination": 7,
+   "dropping_orbit": [
+    9,
+    28,
+    14
+   ],
+   "orbital_oddity": 1,
+   "dropping_genus": [
+    3,
+    0,
+    1
+   ],
+   "stopping_signature": [
+    3,
+    2,
+    0
+   ],
+   "stopping_point": [
+    -2,
+    7
+   ],
+   "stopping_orbit": [
+    28,
+    14,
+    7
+   ],
+   "total_stopping_time": 19,
+   "orbit": [
+    9,
+    28,
+    14,
+    7,
+    22,
+    11,
+    34,
+    17,
+    52,
+    26,
+    13,
+    40,
+    20,
+    10,
+    5,
+    16,
+    8,
+    4,
+    2,
+    1
+   ],
+   "residue_mod_2k": 1
+  }
+ ],
+ "antidiagonal_4": [
+  [
+   4,
+   0,
+   15,
+   4,
+   80
+  ],
+  [
+   3,
+   1,
+   23,
+   3,
+   80
+  ],
+  [
+   2,
+   2,
+   35,
+   2,
+   80
+  ],
+  [
+   1,
+   3,
+   53,
+   1,
+   80
+  ],
+  [
+   0,
+   4,
+   80,
+   0,
+   80
+  ]
+ ],
+ "base_rate_17_and_8": {
+  "N": 1000,
+  "has8": 997,
+  "has17": 437,
+  "both": 437
+ }
+}

@@ -1,0 +1,44 @@
+==============================================================================
+[1] dropping classes of the repo package vs A100982
+    s = odd steps; L = shortcut stopping time = A020914(s); k = L + s = Paper-1 dropping time
+==============================================================================
+     s   L  k=L+s  #classes mod 2^L  A100982(s)  #words  density N/2^L
+     1   2      3                 1           1       1  1/2^2
+     2   4      6                 1           1       1  1/2^4
+     3   5      8                 2           2       2  2/2^5
+     4   7     11                 3           3       3  3/2^7
+     5   8     13                 7           7       7  7/2^8
+     6  10     16                12          12      12  12/2^10
+     7  12     19                30          30      30  30/2^12
+     8  13     21                85          85      85  85/2^13
+     9  15     24               173         173     173  173/2^15
+    all rows agree: True
+    smallest classes: s=1: [1] mod 4;  s=2: [3] mod 16;  s=3: [11, 23] mod 32;  s=4: [7, 15, 59] mod 128
+
+[2] the cell (j,s) = (2,2)  (2^2 vs 3^2, the exponent point of 36)
+    every dropping word with s >= 2 (checked s = 2..12) starts with 11: True
+    equivalently every class with s >= 2 lies in n = 3 (mod 4), where T^2(n) = (9n+5)/4;
+    in v = n+1 this is v = 0 (mod 4) -> 9v/4.  The point (2,2) is the common gateway;
+    the NUMBER 36 plays no role beyond naming that point.
+
+[3] mirror 3x-1  (T(n) = n/2, (3n-1)/2)
+    s=1: #classes(3x-1) = 1, = #classes(3x+1): True; classes are the negatives mod 2^L: True; actual 3x-1 orbits drop at (L,s): True
+    s=2: #classes(3x-1) = 1, = #classes(3x+1): True; classes are the negatives mod 2^L: True; actual 3x-1 orbits drop at (L,s): True
+    s=3: #classes(3x-1) = 2, = #classes(3x+1): True; classes are the negatives mod 2^L: True; actual 3x-1 orbits drop at (L,s): True
+    s=4: #classes(3x-1) = 3, = #classes(3x+1): True; classes are the negatives mod 2^L: True; actual 3x-1 orbits drop at (L,s): True
+    s=5: #classes(3x-1) = 7, = #classes(3x+1): True; classes are the negatives mod 2^L: True; actual 3x-1 orbits drop at (L,s): True
+    s=6: #classes(3x-1) = 12, = #classes(3x+1): True; classes are the negatives mod 2^L: True; actual 3x-1 orbits drop at (L,s): True
+    s=7: #classes(3x-1) = 30, = #classes(3x+1): True; classes are the negatives mod 2^L: True; actual 3x-1 orbits drop at (L,s): True
+    s=8: #classes(3x-1) = 85, = #classes(3x+1): True; classes are the negatives mod 2^L: True; actual 3x-1 orbits drop at (L,s): True
+    => the count N(s) and every statement of Q5.4 are identical for 3x+1 and 3x-1 (sign-blind): True
+
+[4] cousin 5x+1  (T(n) = n/2, (5n+1)/2)
+    s=1: L=3, #classes = 1, #words = 1, A174795(s) = 1, A100982(s) = 1
+    s=2: L=5, #classes = 2, #words = 2, A174795(s) = 2, A100982(s) = 1
+    s=3: L=7, #classes = 5, #words = 5, A174795(s) = 5, A100982(s) = 2
+    s=4: L=10, #classes = 14, #words = 14, A174795(s) = 14, A100982(s) = 3
+    s=5: L=12, #classes = 56, #words = 56, A174795(s) = 56, A100982(s) = 7
+    s=6: L=14, #classes = 202, #words = 202, A174795(s) = 202, A100982(s) = 12
+    => the counts distinguish the multiplier 5 from 3: True
+
+wrote q5x_verify_classes_and_mirrors.json

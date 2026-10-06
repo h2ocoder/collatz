@@ -1,0 +1,67 @@
+==============================================================================
+1. Theorem 1 over a wider range: |2^k - 3^s| = 1, k <= 20000 (their range: k <= 3000)
+==============================================================================
+solutions (k, s, D) with k >= 0: [(1, 0, 1), (1, 1, -1), (2, 1, 1), (3, 2, -1)]
+  note k = 0: 2^0 - 3^0 = 0, no solution; all four solutions have s <= k.
+
+n in [-3000000, 3000000] with T_n = n(n+1)/2 3-smooth (direct factoring):
+   [(-9, 36), (-4, 6), (-3, 3), (-2, 1), (1, 1), (2, 3), (3, 6), (8, 36)]
+  edge cases: T_0 = T_(-1) = 0 is not 3-smooth; T_(-n-1) = T_n, so the negative list mirrors
+  the positive one (n = -2, -3, -4, -9).  36 = T_8 = T_(-9).
+
+==============================================================================
+2. Lemma 3 (adjacent transposition) and Theorem 4, exhaustive k <= 15, for
+   3x+1, 3x-1, 5x+1, 5x-1, 7x+1.  Also the CYCLIC transposition (positions k-1, 0),
+   which the README's lemma does not cover.
+==============================================================================
+ map 3x+1, k <= 15: 212993 adjacent swaps, lemma failures 0;
+    adjacent integer pairs outside unit cells: 0; cyclic-swap integer pairs outside unit cells: 0
+    all-integer cells with >1 word or k = 1 (k,s,D,#words): [(1, 0, 1, 1), (1, 1, -1, 1), (2, 1, 1, 2), (3, 2, -1, 3)]
+    primitive integer cycles (k,s,D,min|n|): [(1, 0, 1, 0), (1, 1, -1, -1), (2, 1, 1, 1), (3, 2, -1, -5), (11, 7, -139, -17)]
+ map 3x-1, k <= 15: 212993 adjacent swaps, lemma failures 0;
+    adjacent integer pairs outside unit cells: 0; cyclic-swap integer pairs outside unit cells: 0
+    all-integer cells with >1 word or k = 1 (k,s,D,#words): [(1, 0, 1, 1), (1, 1, -1, 1), (2, 1, 1, 2), (3, 2, -1, 3)]
+    primitive integer cycles (k,s,D,min|n|): [(1, 0, 1, 0), (1, 1, -1, 1), (2, 1, 1, -1), (3, 2, -1, 5), (11, 7, -139, 17)]
+ map 5x+1, k <= 13: 45057 adjacent swaps, lemma failures 0;
+    adjacent integer pairs outside unit cells: 0; cyclic-swap integer pairs outside unit cells: 0
+    all-integer cells with >1 word or k = 1 (k,s,D,#words): [(1, 0, 1, 1), (2, 1, -1, 2)]
+    primitive integer cycles (k,s,D,min|n|): [(1, 0, 1, 0), (2, 1, -1, -1), (5, 2, 7, 1), (7, 3, 3, 13), (7, 3, 3, 17)]
+ map 5x-1, k <= 13: 45057 adjacent swaps, lemma failures 0;
+    adjacent integer pairs outside unit cells: 0; cyclic-swap integer pairs outside unit cells: 0
+    all-integer cells with >1 word or k = 1 (k,s,D,#words): [(1, 0, 1, 1), (2, 1, -1, 2)]
+    primitive integer cycles (k,s,D,min|n|): [(1, 0, 1, 0), (2, 1, -1, 1), (5, 2, 7, -1), (7, 3, 3, -17), (7, 3, 3, -13)]
+ map 7x+1, k <= 13: 45057 adjacent swaps, lemma failures 0;
+    adjacent integer pairs outside unit cells: 0; cyclic-swap integer pairs outside unit cells: 0
+    all-integer cells with >1 word or k = 1 (k,s,D,#words): [(1, 0, 1, 1), (3, 1, 1, 3)]
+    primitive integer cycles (k,s,D,min|n|): [(1, 0, 1, 0), (3, 1, 1, 1)]
+
+==============================================================================
+3. Theorem 5 (word 1^a 0): wider range and a direct search that uses no word algebra
+==============================================================================
+a <= 6000 with (2^(a+1) - 3^a) | (3^a - 2^a):  (a, D, x) = [(0, 1, 0), (1, 1, 1), (2, -1, -5)]
+a <= 3000 with 6^a triangular: [0, 1, 2]
+
+direct search: every cycle with EXACTLY ONE EVEN ELEMENT meeting |n| <= 200000
+  3x+1: [[0], [2, 1], [-10, -5, -7]]
+  3x-1: [[0], [-2, -1], [10, 5, 7]]
+  5x+1: [[0], [-2, -1]]
+  5x-1: [[0], [2, 1]]
+  7x+1: [[0]]
+  7x-1: [[0]]
+  9x+1: [[0]]
+  -> 3x+1: {0}, {2,1}, {-10,-5,-7};  3x-1: mirror images;  5x+1: {0}, {-2,-1};  7x+1, 9x+1: only {0}.
+  The statement is sign-symmetric (3x-1 gives the negated cycles) and separates q = 3 from q >= 5
+  only by the arithmetic of |2^(a+1) - q^a| = 1.
+
+v = n + 1:  an even step sends v -> v' = (v+1)/2, so v*v' = T_v at every even step of every
+orbit (not only in cycles).  Check on 10^5 random even n, both signs:
+  OK.  So 'v_bot * v_top = T_(v_top)' is automatic; the content of Theorem 5 is v_top = (3/2)^a v_bot
+  with v_bot = +-2^a.
+  cycle [0]
+     v = [1];  even steps (v, v', v*v' = T_v): [(1, 1, 1)]
+  cycle [1, 2]
+     v = [2, 3];  even steps (v, v', v*v' = T_v): [(3, 2, 6)]
+  cycle [-5, -7, -10]
+     v = [-4, -6, -9];  even steps (v, v', v*v' = T_v): [(-9, -4, 36)]
+  cycle [-17, -25, -37, -55, -82, -41, -61, -91, -136, -68, -34]
+     v = [-16, -24, -36, -54, -81, -40, -60, -90, -135, -67, -33];  even steps (v, v', v*v' = T_v): [(-81, -40, 3240), (-135, -67, 9045), (-67, -33, 2211), (-33, -16, 528)]

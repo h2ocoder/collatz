@@ -1,0 +1,16 @@
+N =   5: charpoly_int == sympy charpoly: True
+N =   7: charpoly_int == sympy charpoly: True
+N =  11: charpoly_int == sympy charpoly: True
+N =  13: charpoly_int == sympy charpoly: True
+N =  25: charpoly_int == sympy charpoly: True
+N =  35: charpoly_int == sympy charpoly: True
+N =  37: charpoly_int == sympy charpoly: True
+charpoly(2K_5) = x^5 - 2x^4 - 2x^3 + 5x^2 - 2x   factored: x*(x - 2)*(x - 1)*(x**2 + x - 1)
+Psi_m == sympy minimal_polynomial(2cos(2pi/m)) for m = 1..40, 60, 97, 105, 120: True
+Phi_k == sympy cyclotomic_poly for k in (1,2,3,4,5,8,12,15,16,105): True
+Psi_5 = x^2 + x - 1;  Psi_10 = x^2 - x - 1;  Psi_7 = x^3 + x^2 - 2x - 1;  Psi_9 = x^3 - 3x + 1
+kronecker_candidates(100): 395 values of m (max 840), 198 values of k (max 420)
+timing: exact charpoly of 2K_101 in 0.05 s (leading 1, constant 0, value at 2 = 0)
+timing: exact charpoly of 2K_199 in 0.41 s (leading 1, constant 0, value at 2 = 0)
+timing: exact charpoly of 2K_397 in 6.76 s (leading 1, constant 0, value at 2 = 0)
+ALL OK

@@ -1,0 +1,30 @@
+=== 1. Proposition F by explicit eigenvectors, all primes 5 <= p <= 2000 ===
+   [ok] F1: delta_-1 - delta_0 is an eigenfunction with A-eigenvalue +1 at all 293 roots of d^2+d-1 (p <= 2000)
+   [ok] F2: delta_x1 - delta_x0 is an eigenfunction with A-eigenvalue -1 at all 292 roots of d^2+3d+1 (p <= 2000)
+   [ok] converse (all d, p <= 61): these two vectors are eigenvectors ONLY at roots of F1 resp. F2
+   d = 2: F1(2) = 5, F2(2) = 11;  the 2-cycle at p = 11: x0 = 1, x1 = 2
+
+=== 2. base rate of sporadic +-1 in the family, primes 5 <= p <= 151 ===
+   kernels: 2320;  with a sporadic +-1: 152;  roots of F1 or F2 among them: 52;  not: 100
+   Collatz column d = 2: sporadic at [(11, {1: 1, -1: 1}), (31, {1: 1}), (37, {1: 2, -1: 2})]
+   p = 37: sporadic d: {2: {1: 2, -1: 2}, 4: {1: 1}, 12: {-1: 1}, 17: {-1: 1}, 19: {-1: 2}, 22: {1: 1}, 24: {1: 1, -1: 1}, 28: {1: 1}, 34: {-1: 1}}
+     5 <= p <=  41: 11 primes, unexplained sporadic d per prime 3.91 = 21.5 % of the kernels
+    43 <= p <=  79: 9 primes, unexplained sporadic d per prime 4.11 = 7.0 % of the kernels
+    83 <= p <= 113: 8 primes, unexplained sporadic d per prime 1.75 = 1.8 % of the kernels
+   127 <= p <= 151: 6 primes, unexplained sporadic d per prime 1.00 = 0.7 % of the kernels
+   (p, sporadic d, kernels) for p <= 47: [(5, 0, 2), (7, 0, 4), (11, 4, 8), (13, 0, 10), (17, 10, 14), (19, 4, 16), (23, 9, 20), (29, 7, 26), (31, 10, 28), (37, 9, 34), (41, 8, 38), (43, 9, 40), (47, 6, 44)]
+
+=== 3. NEW (skeptic): the eigenvalue -1 of A is shared by d and 1/d, with equal geometric multiplicity ===
+   proof: rho(1 + e + o) is singular iff rho(e^-1 (1 + e + o)) = rho(1 + e^-1 + e^-1 o) is; e^-1 and e^-1 o are affine maps with
+   multipliers d and d + 1 and distinct fixed points, so they are conjugate in AGL(1,p) to the pair (e', o') of the parameter 1/d.
+   [ok] nullity(A_d + 1) = nullity(A_(1/d) + 1) for all 2320 kernels, p <= 151
+   the eigenvalue +1 is NOT shared in general: 1304 of 2320 kernels have nullity(A_d - 1) != nullity(A_(1/d) - 1), e.g. [(5, 2), (5, 3), (7, 3), (7, 5), (11, 3), (11, 4)]
+   [ok] nullity(A_d - 1) = nullity(A^-_(1/d) - 1) for all kernels with p <= 101  (same argument with -1 + e + o)
+   p = 31: orbit of d = 2 under d -> 1/d, d -> -1-d: [2, 10, 14, 16, 20, 28];  (d, nullity of A+1, nullity of A-1): [(2, 1, 1), (10, 1, 0), (14, 1, 1), (16, 1, 1), (20, 1, 1), (28, 1, 0)]
+   p = 37: orbit of d = 2 under d -> 1/d, d -> -1-d: [2, 12, 17, 19, 24, 34];  (d, nullity of A+1, nullity of A-1): [(2, 2, 2), (12, 2, 0), (17, 1, 1), (19, 2, 1), (24, 1, 1), (34, 2, 0)]
+   p = 41: orbit of d = 2 under d -> 1/d, d -> -1-d: [2, 13, 19, 21, 27, 38];  (d, nullity of A+1, nullity of A-1): [(2, 1, 0), (13, 0, 1), (19, 0, 0), (21, 1, 0), (27, 1, 1), (38, 1, 1)]
+   p = 43: orbit of d = 2 under d -> 1/d, d -> -1-d: [2, 14, 20, 22, 28, 40];  (d, nullity of A+1, nullity of A-1): [(2, 0, 1), (14, 0, 0), (20, 0, 0), (22, 0, 0), (28, 0, 1), (40, 0, 0)]
+   reading: the pairs {d, 1/d} carry the same -1 by the symmetry above, so 'all six sporadic at 37' is three independent facts, not six.
+   For Collatz: -1/2 is an eigenvalue of K_p (Terras) iff it is one of the kernel (1/2) f(2x) + (1/2) f(3x+1) of the semigroup <2x, 3x+1>.
+
+0 failures;  total time 32 s

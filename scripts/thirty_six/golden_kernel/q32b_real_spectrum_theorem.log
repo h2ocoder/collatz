@@ -1,0 +1,6 @@
+N prime to 6, 5 <= N <= 3000: 999 moduli
+   (i)   tr(A) = 2 and tr(A^2) = 3 + gcd(5, N): failures 0
+   (ii)  level sums S1(N) = 0 and S2(N) = 0 (S2(5) = 4): failures 0
+   (iii) g^(ord_N 3) fixes 0 (so g^(ord_N 3) = id, g being affine with multiplier 3^k = 1 and fixed point -1/4): failures 0
+   (iv)  exact level polynomials for N <= 150 (49 levels): x^n + 0 x^(n-1) + 0 x^(n-2) + ..., not x^n, some non-real root (N != 5);  N = 5: e2 = -2, all roots real: failures 0
+ALL OK

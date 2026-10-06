@@ -1,0 +1,130 @@
+=== 1. exact spectrum of K_37 ===
+   ord_37(2) = 36 (2 is a primitive root), ord_37(3) = 18, 3 = 2^26, 37 = 2^6 - 3^3, 2^2 3^2 = 36 = -1 (mod 37), ord(6) = 4, ord(3/4) = 3
+   charpoly(2K_37) = (x - 2) * (x - 1)^2 * (x)^2 * (x + 1)^2 * (x**2 + 1) * (x**28 + x**26 + 2*x**24 - 7*x**22 - 6*x**20 - 15*x**18 + 11*x**16 + 3*x**14 + 18*x**12 - 13*x**10 - 33*x**8 - 26*x**6 - 11*x**4 + 26*x**2 + 9)
+   in y = x^2 (the spectrum is invariant under x -> -x because 2 has order m = 2 modulo <3>):
+   g_37(y) = y*(y - 1)**2*(y + 1)*(y**14 + y**13 + 2*y**12 - 7*y**11 - 6*y**10 - 15*y**9 + 11*y**8 + 3*y**7 + 18*y**6 - 13*y**5 - 33*y**4 - 26*y**3 - 11*y**2 + 26*y + 9)
+   eigenvalues of K_37 other than 1, by modulus then argument (lambda | modulus | arg/pi | factor):
+      +0.673523+0.000000i | 0.673523 | +0.0000 | generic degree-28 factor
+      -0.673523+0.000000i | 0.673523 | +1.0000 | generic degree-28 factor
+      +0.354537+0.545760i | 0.650807 | +0.3166 | generic degree-28 factor
+      -0.354537+0.545760i | 0.650807 | +0.6834 | generic degree-28 factor
+      -0.354537-0.545760i | 0.650807 | -0.6834 | generic degree-28 factor
+      +0.354537-0.545760i | 0.650807 | -0.3166 | generic degree-28 factor
+      +0.276834+0.588463i | 0.650327 | +0.3600 | generic degree-28 factor
+      -0.276834+0.588463i | 0.650327 | +0.6400 | generic degree-28 factor
+      -0.276834-0.588463i | 0.650327 | -0.6400 | generic degree-28 factor
+      +0.276834-0.588463i | 0.650327 | -0.3600 | generic degree-28 factor
+      +0.402704+0.387384i | 0.558782 | +0.2438 | generic degree-28 factor
+      -0.402704+0.387384i | 0.558782 | +0.7562 | generic degree-28 factor
+      -0.402704-0.387384i | 0.558782 | -0.7562 | generic degree-28 factor
+      +0.402704-0.387384i | 0.558782 | -0.2438 | generic degree-28 factor
+      +0.531654+0.132439i | 0.547902 | +0.0777 | generic degree-28 factor
+      -0.531654+0.132439i | 0.547902 | +0.9223 | generic degree-28 factor
+      -0.531654-0.132439i | 0.547902 | -0.9223 | generic degree-28 factor
+      +0.531654-0.132439i | 0.547902 | -0.0777 | generic degree-28 factor
+      +0.270399+0.450819i | 0.525693 | +0.3280 | generic degree-28 factor
+      -0.270399+0.450819i | 0.525693 | +0.6720 | generic degree-28 factor
+      -0.270399-0.450819i | 0.525693 | -0.6720 | generic degree-28 factor
+      +0.270399-0.450819i | 0.525693 | -0.3280 | generic degree-28 factor
+      +0.500000+0.000000i | 0.500000 | +0.0000 | x - 1
+      +0.500000+0.000000i | 0.500000 | +0.0000 | x - 1
+      +0.000000+0.500000i | 0.500000 | +0.5000 | x**2 + 1
+      -0.500000+0.000000i | 0.500000 | +1.0000 | x + 1
+      -0.500000+0.000000i | 0.500000 | +1.0000 | x + 1
+      +0.000000-0.500000i | 0.500000 | -0.5000 | x**2 + 1
+      -0.000000+0.472208i | 0.472208 | +0.5000 | generic degree-28 factor
+      -0.000000-0.472208i | 0.472208 | -0.5000 | generic degree-28 factor
+      +0.435728+0.000000i | 0.435728 | +0.0000 | generic degree-28 factor
+      -0.435728+0.000000i | 0.435728 | +1.0000 | generic degree-28 factor
+      -0.000000+0.284759i | 0.284759 | +0.5000 | generic degree-28 factor
+      -0.000000-0.284759i | 0.284759 | -0.5000 | generic degree-28 factor
+      +0.000000+0.000000i | 0.000000 | +0.0000 | x
+      +0.000000+0.000000i | 0.000000 | +0.0000 | x
+   second-largest modulus |lambda_2(K_37)| = 0.673523
+   on the circle |lambda| = 1/2:  +-i/2 (THEOREM: characters of order 4 have chi(3) = -1, chi(2) = +-i; lattice form: m = 2, 2^2 = 3^7, x^2 = (-1)^(2+7) = -1)
+                                  +1/2 twice and -1/2 twice (NOT predicted: sporadic)
+   eigenvalue 0 twice = number of characters with chi(3) = -1 = (p-1)/ord(3) = 2  (kernel of 1 + M_3 in the coordinate y = 4x + 1)
+
+=== 2. P_p(x, theta) = det(x - R_e - theta R_o) / (x - 1 - theta): support on the relation lattice ===
+   p = 5: 5 monomials; cells (k, s) off the lattice p | 2^k - 3^s: [] (must be []); lattice cells in the triangle: 5, with zero coefficient: []
+      P_5(x, theta) = theta**4 - 2*theta**2*x**2 + theta*x + x**4 - 1
+      = (x^2 - theta^2)^2 + theta x - 1;   theta = 1: x (x-1)(x^2+x-1);   theta = -1: x (x+1)(x^2-x-1)
+   p = 7: 6 monomials; cells (k, s) off the lattice p | 2^k - 3^s: [] (must be []); lattice cells in the triangle: 6, with zero coefficient: []
+      P_7(x, theta) = -theta**6 + theta**4*x - 2*theta**2*x**2 + x**6 - 2*x**3 + 1
+   p = 11: 8 monomials; cells (k, s) off the lattice p | 2^k - 3^s: [] (must be []); lattice cells in the triangle: 8, with zero coefficient: []
+      P_11(x, theta) = -theta**10 - 2*theta**5 + theta**3*x**6 - 3*theta**2*x**4 + x**10 + x**2*(4*theta**6 + theta) - 1
+   p = 13: 11 monomials; cells (k, s) off the lattice p | 2^k - 3^s: [] (must be []); lattice cells in the triangle: 11, with zero coefficient: []
+   p = 37: 21 monomials; cells (k, s) off the lattice p | 2^k - 3^s: [] (must be []); lattice cells in the triangle: 21, with zero coefficient: []
+      cells (k, s): coefficient of x^(36-k) theta^s:  (0,0): 1, (6,3): -9, (12,6): 25, (14,13): 1, (16,2): -11, (18,9): -23, (20,16): -35, (22,5): 38, (24,12): 35, (26,1): 1, (26,19): 29, (28,8): -46, (28,26): 14, (30,15): -46, (32,4): 19, (32,22): -2, (34,11): 6, (34,29): 3, (36,0): -1, (36,18): 2, (36,36): -1
+      at (x, theta) = (1, 1):  P = 0,  dP/dx = 0,  dP/dtheta = 0
+      at (x, theta) = (-1, 1):  P = 0,  dP/dx = 0,  dP/dtheta = 0
+      at (x, theta) = (-1, -1):  P = 0,  dP/dx = -176,  dP/dtheta = -32
+      at (x, theta) = (I, 1):  P = 0,  dP/dx = -176*I,  dP/dtheta = 32
+      Hessian at (1,1): P_xx = -640, P_x,theta = -568, P_theta,theta = 4688;  P_x,theta^2 - P_xx P_theta,theta = 3322944 = {2: 6, 3: 4, 641: 1}  (> 0: a node with two real branches; sqrt = 72*sqrt(641))
+
+=== 3. eigenvectors / eigenfunctionals of support <= 2, all primes 5 <= p < 200, both signs (brute force) ===
+   (p, sign of the o-branch, side, support, coefficients, eigenvalue of R_e + sign R_o):
+      sign -1  left support ('-1/2', '-1') coef ('1', '-1') eigenvalue -1:  p in [7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199]
+      sign -1  left support ('-1/2',) coef ('1',) eigenvalue 0:  p in [7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199]
+      sign -1 right support ('-1/4',) coef ('1',) eigenvalue 0:  p in [19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199]
+      sign +1 right support ('0', '-1') coef ('1', '-1') eigenvalue 1:  p in [5]
+      sign +1 right support ('1', '2') coef ('1', '-1') eigenvalue -1:  p in [11]
+      sign -1  left support ('2', '-1') coef ('1', '-1') eigenvalue -1:  p in [5]
+      sign -1  left support ('2',) coef ('1',) eigenvalue 0:  p in [5]
+      sign -1 right support ('-2', '-1') coef ('1', '-1') eigenvalue -1:  p in [7]
+      sign -1 right support ('-2',) coef ('1',) eigenvalue 0:  p in [7]
+      sign -1 right support ('-3',) coef ('1',) eigenvalue 0:  p in [11]
+      sign -1 right support ('1',) coef ('1',) eigenvalue 0:  p in [5]
+      sign -1 right support ('3',) coef ('1',) eigenvalue 0:  p in [13]
+      sign -1 right support ('4',) coef ('1',) eigenvalue 0:  p in [17]
+
+=== 4. anatomy of the sporadic rational eigenvalues ===
+   p = 11, kernel K: (2K)^1 = 1 on a 1-dimensional space; minimal support of an eigenfunction: 7 of 11; of an eigenfunctional: 6 of 11
+      sparsest eigenfunction: {'0': -2, '1': 1, '2': 1, '3': -2, '-3/2': 2, '3/2': -2, '-1': 2}   (residues [0, 1, 2, 3, 4, 7, 10])
+      sparsest eigenfunctional: {'0': -2, '3': -2, '-1/2': 1, '1/2': -2, '-3': 2, '-1': 3}   (residues [0, 3, 5, 6, 8, 10])
+   p = 11, kernel K: (2K)^1 = -1 on a 1-dimensional space; minimal support of an eigenfunction: 2 of 11; of an eigenfunctional: 10 of 11
+      sparsest eigenfunction: {'1': -1, '2': 1}   (residues [1, 2])
+      sparsest eigenfunctional: {'0': 4, '1': -4, '2': 10, '3': 2, '-3/2': -6, '-1/2': -3, '3/2': -8, '-3': 6, '-2': -2, '-1': 1}   (residues [0, 1, 2, 3, 4, 5, 7, 8, 9, 10])
+   p = 23, kernel K^-: (2K)^1 = 1 on a 2-dimensional space; minimal support of an eigenfunction: 8 of 23; of an eigenfunctional: 18 of 23
+      sparsest eigenfunction: {'4': -1, '1/3': -1, '-3/2': 1, '-4/3': -1, '2/3': -1, '-1/4': 1, '3/4': 1, '-3': 1}   (residues [4, 8, 10, 14, 16, 17, 18, 20])
+   p = 31, kernel K: (2K)^1 = 1 on a 1-dimensional space; minimal support of an eigenfunction: 19 of 31; of an eigenfunctional: 29 of 31
+   p = 37, kernel K: (2K)^1 = 1 on a 2-dimensional space; minimal support of an eigenfunction: 24 of 37; of an eigenfunctional: 26 of 37
+   p = 37, kernel K: (2K)^1 = -1 on a 2-dimensional space; minimal support of an eigenfunction: 24 of 37; of an eigenfunctional: 31 of 37
+   p = 41, kernel K: (2K)^5 = -3 on a 5-dimensional space; minimal support of an eigenfunction: 37 (upper bound) of 41; of an eigenfunctional: 32 (upper bound) of 41
+   p = 11, eigenfunction delta_1 - delta_2 of 2K with eigenvalue -1:  (2K delta_a)(x) is supported on {2a, (2a-1)/3};
+      2K(delta_1 - delta_2) = delta_2 + delta_{1/3} - delta_4 - delta_1,  equal to -(delta_1 - delta_2) iff 1/3 = 4, i.e. iff p | 11.
+   p = 11, eigen-measure mu = 3 d_{-1} + d_{-1/2} + 2 d_{-1/4} - 2 d_0 - 2 d_{1/4} - 2 d_{1/2} with eigenvalue +1: over Q the push-forward is
+      mu + 2 d_{-1/2} + 2 d_{-1/8} - 2 d_{7/8} - 2 d_{5/4};  the defect vanishes iff {-1/2, -1/8} = {7/8, 5/4}, i.e. iff p | 11.
+      (the defect vanishes for N = 11)
+
+=== 5. the characteristic-p shadow: charpoly(2K_p) = prod_n (x - kappa_n) mod p, kappa_n = 2^-n (1 + 3^n) ===
+   p = 11 (K), c = 1: degrees n with kappa_n^1 = c (mod p): [4]   (upper bound for the multiplicity of the eigenvalue family)
+   p = 11 (K), c = -1: degrees n with kappa_n^1 = c (mod p): [9]   (upper bound for the multiplicity of the eigenvalue family)
+   p = 23 (K^-), c = 1: degrees n with kappa_n^1 = c (mod p): [9, 20]   (upper bound for the multiplicity of the eigenvalue family)
+   p = 31 (K), c = 1: degrees n with kappa_n^1 = c (mod p): [28]   (upper bound for the multiplicity of the eigenvalue family)
+   p = 37 (K), c = 1: degrees n with kappa_n^1 = c (mod p): [6, 30]   (upper bound for the multiplicity of the eigenvalue family)
+   p = 37 (K), c = -1: degrees n with kappa_n^1 = c (mod p): [12, 24]   (upper bound for the multiplicity of the eigenvalue family)
+   p = 41 (K), c = -3: degrees n with kappa_n^5 = c (mod p): [7, 15, 23, 31, 39]   (upper bound for the multiplicity of the eigenvalue family)
+   p = 5: ord(3/4) = 4; on the degrees n = 4 j the two branches act (on leading coefficients) by 2^-n = eta^-j and (3/2)^n = eta^j, eta = 2^4 of order r = 1: kappa_{4j} = eta^j + eta^-j = '2cos(2 pi j/1)' in F_5
+   p = 7: ord(3/4) = 2; on the degrees n = 2 j the two branches act (on leading coefficients) by 2^-n = eta^-j and (3/2)^n = eta^j, eta = 2^2 of order r = 3: kappa_{2j} = eta^j + eta^-j = '2cos(2 pi j/3)' in F_7
+   p = 11: ord(3/4) = 5; on the degrees n = 5 j the two branches act (on leading coefficients) by 2^-n = eta^-j and (3/2)^n = eta^j, eta = 2^5 of order r = 2: kappa_{5j} = eta^j + eta^-j = '2cos(2 pi j/2)' in F_11
+   p = 13: ord(3/4) = 6; on the degrees n = 6 j the two branches act (on leading coefficients) by 2^-n = eta^-j and (3/2)^n = eta^j, eta = 2^6 of order r = 2: kappa_{6j} = eta^j + eta^-j = '2cos(2 pi j/2)' in F_13
+   p = 31: ord(3/4) = 30; on the degrees n = 30 j the two branches act (on leading coefficients) by 2^-n = eta^-j and (3/2)^n = eta^j, eta = 2^30 of order r = 1: kappa_{30j} = eta^j + eta^-j = '2cos(2 pi j/1)' in F_31
+   p = 37: ord(3/4) = 3; on the degrees n = 3 j the two branches act (on leading coefficients) by 2^-n = eta^-j and (3/2)^n = eta^j, eta = 2^3 of order r = 12: kappa_{3j} = eta^j + eta^-j = '2cos(2 pi j/12)' in F_37
+   p = 41: ord(3/4) = 40; on the degrees n = 40 j the two branches act (on leading coefficients) by 2^-n = eta^-j and (3/2)^n = eta^j, eta = 2^40 of order r = 1: kappa_{40j} = eta^j + eta^-j = '2cos(2 pi j/1)' in F_41
+   p = 73: ord(3/4) = 36; on the degrees n = 36 j the two branches act (on leading coefficients) by 2^-n = eta^-j and (3/2)^n = eta^j, eta = 2^36 of order r = 1: kappa_{36j} = eta^j + eta^-j = '2cos(2 pi j/1)' in F_73
+   p = 37: r = 12, a dodecagon in characteristic 37 (37 = 2^6 - 3^3 makes 3/4 of order 3).  Its residues 2cos(2 pi j/12) mod 37, j = 0..12:
+      2, 22, 1, 0, 36, 15, 35, 15, 36, 0, 1, 22, 2   (sqrt3 = +-15 mod 37)
+      characteristic 0 keeps 2, 1 (twice), 0 (twice), -1 (twice) of these; -2 and +-sqrt3 are NOT eigenvalues of 2K_37.
+   p = 7: r = 3 (triangle: 2, -1, -1 in F_7) but characteristic 0 has -1 only once: polygon residues do not lift in general.
+
+=== 6. base rate across the family (d+1, d): see q34c_family_base_rate.py ===
+
+=== 7. the double eigenvalue at 37 ===
+   eigenvalue +1 of 2K_37: eigenspace of dimension 2 (semisimple: det of the left-right pairing = 16/3 != 0);
+      first-order splitting under R_e + (1 + eps) R_o: slopes d(2 lambda)/d(eps) are the roots of 40*x**2 + 71*x - 293 (discriminant 51921 = {3: 4, 641: 1})
+   eigenvalue -1 of 2K_37: eigenspace of dimension 2 (semisimple: det of the left-right pairing = -80/3 != 0);
+      first-order splitting under R_e + (1 + eps) R_o: slopes d(2 lambda)/d(eps) are the roots of 40*x**2 - 71*x - 293 (discriminant 51921 = {3: 4, 641: 1})
+   so the two branches through (x, theta) = (1, 1) are conjugate over Q(sqrt(641)): one Q-rational node, not two independent rational coincidences.
+
+total time 3 s

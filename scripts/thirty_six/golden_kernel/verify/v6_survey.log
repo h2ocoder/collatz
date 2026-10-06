@@ -1,0 +1,36 @@
+=== 1. survey 2 <= q, d <= 12, q != d, 2 <= N <= 60, gcd(N, q d) = 1 ===
+   d = 2 done (1 s, 231 triples)
+   d = 3 done (1 s, 479 triples)
+   d = 4 done (1 s, 710 triples)
+   d = 5 done (2 s, 977 triples)
+   d = 6 done (2 s, 1154 triples)
+   d = 7 done (3 s, 1433 triples)
+   d = 8 done (3 s, 1664 triples)
+   d = 9 done (3 s, 1912 triples)
+   d = 10 done (4 s, 2105 triples)
+   d = 11 done (4 s, 2397 triples)
+   d = 12 done (4 s, 2574 triples)
+   triples: 2574;  with an irrational cosine at level N: 124
+   [ok] 2574 triples, 124 with an irrational cosine
+   number of triples by j: {5: 50, 7: 3, 8: 43, 9: 1, 10: 24, 11: 1, 12: 8, 14: 2, 16: 3, 18: 1, 20: 3, 22: 1, 24: 1, 28: 1, 32: 1}
+   [ok] counts by j: 5 -> 50, 10 -> 24, 8 -> 43, 12 -> 8, 7 -> 3, 9 -> 1, 11 -> 1
+   [ok] with d = 2 the only hits are (3,2,5) and (8,2,5): [(3, 2, 5), (8, 2, 5)]
+   [ok] mechanism A (a^2 = 1, b = -1): 70 of 70 all real;  mechanism B (a = -1, b = 1): 22 of 22 all real
+   (4,3,7): prim = (x**2 - 2)*(x**4 - x**2 + 2)
+   [ok] (4,3,7): prim = (x^2 - 2)(x^4 - x^2 + 2)
+   q = 5, 7, 9, 11 with d = 2: hits [] (none: 5x+1, 7x+1, 9x+1, 11x+1 have no irrational cosine for N <= 60)
+
+=== 2. family G_N = (1/2)(x -> -2x) + (1/2)(x -> -x-2), N odd, 5 <= N <= 301 ===
+   golden (j = 5 or 10): [5, 11, 15, 19, 33, 57];  octagon (j = 8): [7, 21, 23, 69];  other: [];  all-real levels: [5, 15]
+   [ok] golden at 5, 11, 15, 19, 33, 57; octagon at 7, 21, 23, 69; nothing else; all real only at 5 and 15
+
+=== 3. tr(A_N) and tr(A_N^2) by direct fixed-point counts, N <= 5000 ===
+   3x+1: tr(A) != 2 at [];  tr(A^2) != 3 + gcd(5, N) at []   (N prime to 6, N <= 5000)
+   [ok] 3x+1: Theorem B ingredients hold for all N <= 5000 (sign-blind: identical for 3x+1 and 3x-1)
+   3x-1: tr(A) != 2 at [];  tr(A^2) != 3 + gcd(5, N) at []   (N prime to 6, N <= 5000)
+   [ok] 3x-1: Theorem B ingredients hold for all N <= 5000 (sign-blind: identical for 3x+1 and 3x-1)
+   5x+1: tr(A^2) != 4 exactly at the multiples of [3, 7, 9]... (first: [3, 7, 9, 21, 27, 33, 39, 49, 51, 57, 63, 69])
+   7x+1: tr(A^2) != 4 exactly at the multiples of [3, 5, 9]... (first: [3, 5, 9, 15, 25, 27, 33, 39, 45, 51, 55, 57])
+   so tr(A^2) deviates from 4 only at multiples of 3 or 7 for 5x+1 (21 = 5^2 - 2^2) and of 3 or 5 for 7x+1 (45 = 7^2 - 2^2): the role 5 = 3^2 - 2^2 plays for 3x+1.
+
+0 failures;  total time 37 s

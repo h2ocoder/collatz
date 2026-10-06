@@ -1,0 +1,32 @@
+convention check against collatz.dropping (dropping_time = k + s, orbital_oddity = s): 5810 values OK
+
+Dropping classes of 2 <= n < 2^17, grouped by shortcut cell (k, s).   K = k + s is the
+repo's Dropping Set index.  'words' = distinct shortcut dropping words seen (inner subsets).
+  K   (k,s)    D=2^k-3^s  words  thresholds x(w)=C(w)/D (min .. max)   smallest member   integer threshold?
+   1  (1,0)   1          1               0 .. 0                2                 [('0', 0)]
+   3  (2,1)   1          1               1 .. 1                5                 [('10', 1)]
+   6  (4,2)   7          1             5/7 .. 5/7              3                 no
+   8  (5,3)   5          2            19/5 .. 23/5             11                no
+  11  (7,4)   47         3           65/47 .. 85/47            7                 no
+  13  (8,5)   13         7          211/13 .. 319/13           39                no
+  16  (10,6)  295        12         133/59 .. 217/59           287               no
+  19  (12,7)  1909       30      2059/1909 .. 3767/1909        231               no
+  21  (13,8)  1631       85      6305/1631 .. 1907/233         191               no
+  24  (15,9)  13085      173    19171/13085 .. 44143/13085      127               no
+  26  (16,10) 6487       476    58025/6487 .. 148813/6487      359               no
+
+cells with an integer threshold: [(1, 1, 0, [('0', 0)]), (3, 2, 1, [('10', 1)])]
+  -> Dropping Set_1 (evens, threshold 0) and Dropping Set_3 (n = 1 mod 4, threshold 1):
+     exactly the two unit cells with D = +1.  These are the '> 0' and '> 1' in the repo docstring
+     'Dropping Set_3 = {n : n = 1 (mod 4), n > 1}'.
+
+Mirror map T-(n) = n/2 | (3n-1)/2 on positive integers: thresholds are -C(w)/D < 0, so every
+member of every dropping class drops; the unit cells with D = -1, (1,1) and (3,2), are RISING
+cells and hold the fixed point 1 and the cycle 5 -> 7 -> 10, whose members never drop:
+   n = 1: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+   n = 5: [5, 7, 10, 5, 7, 10, 5, 7, 10, 5, 7, 10, 5]
+   n = 7: [7, 10, 5, 7, 10, 5, 7, 10, 5, 7, 10, 5, 7]
+   n = 10: [10, 5, 7, 10, 5, 7, 10, 5, 7, 10, 5, 7, 10]
+   n = 17: [17, 25, 37, 55, 82, 41, 61, 91, 136, 68, 34, 17, 25]
+
+wrote q16_dropping_thresholds.json

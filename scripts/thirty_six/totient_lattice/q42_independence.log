@@ -1,0 +1,139 @@
+N = 10000000; arrays built in 8 s
+sigma, dest, sig_inf agree with collatz.dropping.dropping_time / dropping_destination /
+  collatz.core.total_stopping_time for 2 <= n < 3000  (standard-map step counts)
+mean sigma over 2 <= n <= N: 5.2359 standard steps;  mean shortcut k: 3.4908;  max sigma: 401
+
+RAW CORRELATIONS, all odd n in [3, 10000000] (4999999 numbers), nothing controlled:
+  F(n)  , sigma     Pearson -0.00558   Spearman -0.01044
+  F(n)  , sig_inf   Pearson +0.13339   Spearman +0.11263
+  F(n+1), sigma     Pearson +0.09238   Spearman +0.13010
+  F(n+1), sig_inf   Pearson +0.15532   Spearman +0.13528
+  (F(n) and sig_inf both grow like ln n: the +0.13 is the size confound.)
+
+CONTROLLED SAMPLE: odd n in (5000000, 10000000], 2500000 numbers; size bins: equal bins of ln n in the octave
+
+MEANS BY RESIDUE (why residue-mediated dependence must exist):
+  n mod 4 ->  1: F 19.083, sigma 3.00, sig_inf 162.44   |   3: F 19.057, sigma 15.96, sig_inf 174.86
+  n mod 8 ->  1: F 19.101, sigma 3.00, sig_inf 168.66   |   3: F 19.063, sigma 10.45, sig_inf 168.69   |   5: F 19.065, sigma 3.00, sig_inf 156.23   |   7: F 19.051, sigma 21.46, sig_inf 181.02
+  n mod 3 ->  0: F 18.730, sig_inf 168.62   |   1: F 19.197, sig_inf 168.72   |   2: F 19.284, sig_inf 168.61
+  n mod 9 ->  0: F 18.390, sig_inf 168.50   |   1: F 19.137, sig_inf 168.88   |   2: F 19.288, sig_inf 168.46   |   3: F 18.852, sig_inf 168.75   |   4: F 19.234, sig_inf 168.68   |   5: F 19.271, sig_inf 168.74   |   6: F 18.947, sig_inf 168.62   |   7: F 19.220, sig_inf 168.59   |   8: F 19.293, sig_inf 168.64
+
+TABLE A.  PARTIAL CORRELATIONS, top octave.  Removed additively: means over 256 size bins, class means of
+  n mod 2^k, class means of n mod 3^j.   (k, j) = (0, 0): size only.
+  pair               k   j     Pearson     Spearman
+  F(n)  , sigma      0   0    -0.01014    -0.01469
+  F(n)  , sigma      2   0    -0.00362    -0.00530
+  F(n)  , sigma      4   0    -0.00105    -0.00046
+  F(n)  , sigma      8   0    -0.00082    -0.00056
+  F(n)  , sigma     12   0    -0.00099    -0.00068
+  F(n)  , sigma     16   0    -0.00103    -0.00080
+  F(n)  , sigma      0   2    -0.01076    -0.01544
+  F(n)  , sigma      8   2    -0.00099    -0.00063
+  F(n)  , sigma     16   3    -0.00117    -0.00092
+  F(n)  , sig_inf    0   0    -0.00246    -0.00208
+  F(n)  , sig_inf    2   0    -0.00101    -0.00077
+  F(n)  , sig_inf    4   0    -0.00086    -0.00063
+  F(n)  , sig_inf    8   0    -0.00083    -0.00063
+  F(n)  , sig_inf   12   0    -0.00082    -0.00060
+  F(n)  , sig_inf   16   0    -0.00095    -0.00074
+  F(n)  , sig_inf    0   2    -0.00274    -0.00230
+  F(n)  , sig_inf    8   2    -0.00102    -0.00078
+  F(n)  , sig_inf   16   3    -0.00114    -0.00089
+  F(n+1), sigma      0   0    +0.15572    +0.19733
+  F(n+1), sigma      2   0    +0.08459    +0.10181
+  F(n+1), sigma      4   0    +0.02511    +0.01654
+  F(n+1), sigma      8   0    +0.00280    +0.00105
+  F(n+1), sigma     12   0    +0.00107    +0.00004
+  F(n+1), sigma     16   0    +0.00146    +0.00071
+  F(n+1), sigma      0   2    +0.16399    +0.20742
+  F(n+1), sigma      8   2    +0.00272    +0.00107
+  F(n+1), sigma     16   3    +0.00118    +0.00057
+  F(n+1), sig_inf    0   0    +0.03328    +0.03128
+  F(n+1), sig_inf    2   0    +0.01637    +0.01501
+  F(n+1), sig_inf    4   0    +0.00368    +0.00309
+  F(n+1), sig_inf    8   0    -0.00004    +0.00007
+  F(n+1), sig_inf   12   0    -0.00039    -0.00013
+  F(n+1), sig_inf   16   0    -0.00031    -0.00006
+  F(n+1), sig_inf    0   2    +0.03502    +0.03283
+  F(n+1), sig_inf    8   2    -0.00010    +0.00002
+  F(n+1), sig_inf   16   3    -0.00043    -0.00016
+  standard error of a correlation of independent variables at this sample size: 0.00063
+
+TABLE B.  MUTUAL INFORMATION in bits (plug-in), top octave, against a shuffle of X within strata
+  (size bin, n mod 2^k, n mod 3^j); 12 shuffles per row.  excess = observed - mean(shuffled).
+  'bins' = number of size bins in the strata.  The first five rows scan the bin width at k = 1: an
+  excess that shrinks with the bin width is a size confound (F and sig_inf both grow with ln n), not
+  a dependence.  sigma has no size trend, so its rows do not move.
+  X       Y            k  j  bins   I observed   mean shuffled   sd shuffled     excess         z
+  F       sigma        1  0    8    0.000537     0.000204      1.17e-05    +3.32e-04    +28.45
+  F       sig_inf      1  0    8    0.048816     0.047306      6.32e-05    +1.51e-03    +23.87
+  F(n+1)  sigma        1  0    8    0.029021     0.000201      1.27e-05    +2.88e-02   +2270.89
+  F(n+1)  sig_inf      1  0    8    0.050277     0.048453      6.81e-05    +1.82e-03    +26.80
+  F       sig_inf+inj  1  0    8    0.058012     0.047240      5.76e-05    +1.08e-02   +187.07
+     [k = 1, j = 0: 8 strata; 49 s]
+  F       sigma        1  0   32    0.000537     0.000208      8.58e-06    +3.29e-04    +38.32
+  F       sig_inf      1  0   32    0.048816     0.048605      5.57e-05    +2.11e-04     +3.79
+  F(n+1)  sigma        1  0   32    0.029021     0.000205      8.35e-06    +2.88e-02   +3449.69
+  F(n+1)  sig_inf      1  0   32    0.050277     0.049878      6.90e-05    +3.99e-04     +5.79
+  F       sig_inf+inj  1  0   32    0.058012     0.048506      4.92e-05    +9.51e-03   +193.39
+     [k = 1, j = 0: 32 strata; 63 s]
+  F       sigma        1  0  128    0.000537     0.000202      9.44e-06    +3.35e-04    +35.52
+  F       sig_inf      1  0  128    0.048816     0.048721      6.55e-05    +9.50e-05     +1.45
+  F(n+1)  sigma        1  0  128    0.029021     0.000199      8.40e-06    +2.88e-02   +3429.15
+  F(n+1)  sig_inf      1  0  128    0.050277     0.050035      6.80e-05    +2.42e-04     +3.56
+  F       sig_inf+inj  1  0  128    0.058012     0.048619      7.87e-05    +9.39e-03   +119.30
+     [k = 1, j = 0: 128 strata; 75 s]
+  F       sigma        1  0  512    0.000537     0.000207      1.05e-05    +3.30e-04    +31.55
+  F       sig_inf      1  0  512    0.048816     0.048792      5.28e-05    +2.36e-05     +0.45
+  F(n+1)  sigma        1  0  512    0.029021     0.000206      7.69e-06    +2.88e-02   +3748.65
+  F(n+1)  sig_inf      1  0  512    0.050277     0.050011      6.04e-05    +2.66e-04     +4.40
+  F       sig_inf+inj  1  0  512    0.058012     0.048701      5.42e-05    +9.31e-03   +171.67
+     [k = 1, j = 0: 512 strata; 86 s]
+  F       sigma        1  0  2048    0.000537     0.000207      1.22e-05    +3.30e-04    +26.98
+  F       sig_inf      1  0  2048    0.048816     0.048784      5.53e-05    +3.20e-05     +0.58
+  F(n+1)  sigma        1  0  2048    0.029021     0.000206      9.61e-06    +2.88e-02   +2997.22
+  F(n+1)  sig_inf      1  0  2048    0.050277     0.050060      5.52e-05    +2.17e-04     +3.92
+  F       sig_inf+inj  1  0  2048    0.058012     0.048687      6.22e-05    +9.32e-03   +149.96
+     [k = 1, j = 0: 2048 strata; 96 s]
+  F       sigma        2  0  128    0.000537     0.000490      8.32e-06    +4.67e-05     +5.62
+  F       sig_inf      2  0  128    0.048816     0.048771      4.54e-05    +4.46e-05     +0.98
+  F(n+1)  sigma        2  0  128    0.029021     0.021062      1.02e-05    +7.96e-03   +776.46
+  F(n+1)  sig_inf      2  0  128    0.050277     0.049894      5.33e-05    +3.83e-04     +7.19
+  F       sig_inf+inj  2  0  128    0.058012     0.048666      5.63e-05    +9.35e-03   +165.92
+     [k = 2, j = 0: 256 strata; 107 s]
+  F       sigma        4  0  128    0.000537     0.000528      9.78e-06    +9.08e-06     +0.93
+  F       sig_inf      4  0  128    0.048816     0.048803      5.66e-05    +1.27e-05     +0.22
+  F(n+1)  sigma        4  0  128    0.029021     0.027406      3.62e-05    +1.61e-03    +44.57
+  F(n+1)  sig_inf      4  0  128    0.050277     0.050144      6.19e-05    +1.33e-04     +2.14
+  F       sig_inf+inj  4  0  128    0.058012     0.048710      6.43e-05    +9.30e-03   +144.67
+     [k = 4, j = 0: 1024 strata; 118 s]
+  F       sigma        8  0  128    0.000537     0.000527      8.22e-06    +1.01e-05     +1.23
+  F       sig_inf      8  0  128    0.048816     0.048759      5.51e-05    +5.70e-05     +1.03
+  F(n+1)  sigma        8  0  128    0.029021     0.028931      2.84e-05    +8.97e-05     +3.16
+  F(n+1)  sig_inf      8  0  128    0.050277     0.050279      5.90e-05    -2.27e-06     -0.04
+  F       sig_inf+inj  8  0  128    0.058012     0.048669      6.53e-05    +9.34e-03   +143.14
+     [k = 8, j = 0: 16384 strata; 130 s]
+  F       sigma       12  0   32    0.000537     0.000530      1.22e-05    +7.26e-06     +0.60
+  F       sig_inf     12  0   32    0.048816     0.048642      6.27e-05    +1.74e-04     +2.77
+  F(n+1)  sigma       12  0   32    0.029021     0.029018      1.89e-05    +2.58e-06     +0.14
+  F(n+1)  sig_inf     12  0   32    0.050277     0.050132      5.07e-05    +1.45e-04     +2.87
+  F       sig_inf+inj 12  0   32    0.058012     0.048562      6.51e-05    +9.45e-03   +145.08
+     [k = 12, j = 0: 65536 strata; 141 s]
+  F       sigma        1  2  128    0.000537     0.000207      9.56e-06    +3.30e-04    +34.53
+  F       sig_inf      1  2  128    0.048816     0.048745      3.91e-05    +7.12e-05     +1.82
+  F(n+1)  sigma        1  2  128    0.029021     0.000208      1.05e-05    +2.88e-02   +2734.61
+  F(n+1)  sig_inf      1  2  128    0.050277     0.050017      5.82e-05    +2.60e-04     +4.47
+  F       sig_inf+inj  1  2  128    0.058012     0.048644      5.31e-05    +9.37e-03   +176.45
+     [k = 1, j = 2: 1152 strata; 152 s]
+  F       sigma        8  1  128    0.000537     0.000535      1.02e-05    +1.48e-06     +0.14
+  F       sig_inf      8  1  128    0.048816     0.048758      6.21e-05    +5.76e-05     +0.93
+  F(n+1)  sigma        8  1  128    0.029021     0.028934      1.97e-05    +8.65e-05     +4.39
+  F(n+1)  sig_inf      8  1  128    0.050277     0.050271      4.88e-05    +5.95e-06     +0.12
+  F       sig_inf+inj  8  1  128    0.058012     0.048647      6.41e-05    +9.37e-03   +146.01
+     [k = 8, j = 1: 49152 strata; 162 s]
+
+SCALE.  H(F) = 1.934 bits, H(sigma) = 2.725 bits, H(sig_inf) = 6.723 bits.
+  positive control: 'sig_inf+inj' adds 1 to sig_inf for a random 2% of the n with F even.
+  Its excess over the plain 'F, sig_inf' row is what a real dependence of that size looks like.
+
+done in 162 s

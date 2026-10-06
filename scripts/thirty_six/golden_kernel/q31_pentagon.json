@@ -1,0 +1,412 @@
+{
+ "checks": {
+  "e(x) = 3x mod 5 (order 4, fixes 0)": true,
+  "o(x) = 3 - x mod 5 (a reflection of the additive pentagon, fixes -1 = 4)": true,
+  "e sends additive pentagon edges {i,i+1} to pentagram edges {i,i+2}": true,
+  "e sends pentagram edges {i,i+2} to pentagon edges": true,
+  "o preserves pentagon edges": true,
+  "<e, o> = AGL(1,5), order 20": true,
+  "<e^2, o> = D_5 (order 10): e^2 = (x -> -x) and o are two mirrors of the additive pentagon": true,
+  "charpoly(2K_5) = x (x-1) (x-2) (x^2+x-1)": true,
+  "cos(72 deg) = 1/(2 phi) and cos(36 deg) = phi/2 (sympy exact)": true,
+  "right eigenvector for 2K-eigenvalue 2: [1, 1, 1, 1, 1]": true,
+  "right eigenvector for 2K-eigenvalue 1: [-1, 0, 0, 0, 1]": true,
+  "right eigenvector for 2K-eigenvalue 0: [1, 0, 1, -1, -1]": true,
+  "left eigenvector (measure) for 2K-eigenvalue 2: [1, 1, 1, 1, 1]": true,
+  "left eigenvector (measure) for 2K-eigenvalue 1: [-2, 2, 1, 0, -1]": true,
+  "left eigenvector (measure) for 2K-eigenvalue 0: [1, -1, 0, -1, 1]": true,
+  "right golden eigenvector f = (phi^4, 1, 2phi, -phi^2, -2phi^3):  2K f = f/phi": true,
+  "f = a + phi*b with a = (2,1,0,-1,-2) (sawtooth = -centred residue of x + 1/2), b = (3,0,2,-1,-4)": true,
+  "on the golden lattice W = Za + Zb:  2K a = b - a,  2K b = a   (matrix [[-1,1],[1,0]] = inverse Fibonacci matrix up to GL2(Z))": true,
+  "(2K)^2 a + 2K a - a = 0  (the sawtooth is a cyclic vector of the golden block)": true,
+  "W mod 5 = the affine-linear functions F_5 -> F_5 (a = 2 - x, b = 2x + 3 mod 5)": true,
+  "Y, Z, X partition Z/5": true,
+  "push(1_Y) = 1_Z": true,
+  "push(1_Z) = 2*1_Y + 1_X": true,
+  "push(1_X) = 1_X + 1_Z": true,
+  "its charpoly is (x-2)(x^2+x-1)": true,
+  "the same 3x3 matrix is the pentagon adjacency restricted to mirror-symmetric functions (cells apex / near / far)": true,
+  "2K^T = adjacency of the 5-cycle (1, 2, 0, 4, 3) on span(1_Y,1_Z,1_X); steps [1, 3, 4, 4, 3]; is an affine image of the additive pentagon: False": true,
+  "2K^T = adjacency of the 5-cycle (1, 2, 4, 0, 3) on span(1_Y,1_Z,1_X); steps [1, 2, 1, 3, 3]; is an affine image of the additive pentagon: False": true,
+  "for k = 0..14: law of T^k(n) mod 5 given n = 1 mod 5 (all 2^k residues mod 5*2^k) = law of the simple random walk on a pentagon after k steps": true,
+  "spectral formula for the walk law at k = 12: 1/5 + (2/5)(cos^k72 cos(72j) + cos^k144 cos(144j))": true,
+  "tr((2K_5)^n) = 2^n + 1 + (-1)^n L_n for n = 1..20": true,
+  "word count: #{w in {e,o}^n : 5 | 2^n - 3^s and 5 | C(w)} = (A_n + 1 + (-1)^n L_n)/5 with A_n = #{w : 5 | 2^n - 3^s}, n = 1..14": true,
+  "additive pentagon c1 = t + t^-1 and pentagram c2 = t^2 + t^-2:  c1 c2 = c1 + c2 and c1 + c2 = J - I  (so c^2 + c - 1 = 0 off constants)": true,
+  "R_e c1 = c2 R_e (e swaps pentagon and pentagram), R_o commutes with c1": true,
+  "but 2K does NOT commute with c1": true,
+  "the golden plane W is NOT invariant under the additive pentagon c1": true,
+  "golden eigenvector lies in neither V1 nor V2": true,
+  "2K_5 is not normal (A A^T != A^T A) although its spectrum is real": true,
+  "the configuration {-1/4; +-1/2; 0,-1} closes ({1/4,5/4} = {-1,0} and {+-1/8} = {+-1/2}) only for N = 5 among N < 2000 prime to 6": true
+ },
+ "quotient_matrix": [
+  [
+   "0",
+   "2",
+   "0"
+  ],
+  [
+   "1",
+   "0",
+   "1"
+  ],
+  [
+   "0",
+   "1",
+   "1"
+  ]
+ ],
+ "integer_walk_check": [
+  {
+   "k": 0,
+   "counts_by_residue_0..4": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ],
+   "walk_law_times_2^k": [
+    0,
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "k": 1,
+   "counts_by_residue_0..4": [
+    0,
+    0,
+    1,
+    1,
+    0
+   ],
+   "walk_law_times_2^k": [
+    0,
+    0,
+    1,
+    1,
+    0
+   ]
+  },
+  {
+   "k": 2,
+   "counts_by_residue_0..4": [
+    1,
+    2,
+    0,
+    0,
+    1
+   ],
+   "walk_law_times_2^k": [
+    1,
+    2,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "k": 3,
+   "counts_by_residue_0..4": [
+    1,
+    0,
+    3,
+    3,
+    1
+   ],
+   "walk_law_times_2^k": [
+    1,
+    0,
+    3,
+    3,
+    1
+   ]
+  },
+  {
+   "k": 4,
+   "counts_by_residue_0..4": [
+    4,
+    6,
+    1,
+    1,
+    4
+   ],
+   "walk_law_times_2^k": [
+    4,
+    6,
+    1,
+    1,
+    4
+   ]
+  },
+  {
+   "k": 5,
+   "counts_by_residue_0..4": [
+    5,
+    2,
+    10,
+    10,
+    5
+   ],
+   "walk_law_times_2^k": [
+    5,
+    2,
+    10,
+    10,
+    5
+   ]
+  },
+  {
+   "k": 6,
+   "counts_by_residue_0..4": [
+    15,
+    20,
+    7,
+    7,
+    15
+   ],
+   "walk_law_times_2^k": [
+    15,
+    20,
+    7,
+    7,
+    15
+   ]
+  },
+  {
+   "k": 7,
+   "counts_by_residue_0..4": [
+    22,
+    14,
+    35,
+    35,
+    22
+   ],
+   "walk_law_times_2^k": [
+    22,
+    14,
+    35,
+    35,
+    22
+   ]
+  },
+  {
+   "k": 8,
+   "counts_by_residue_0..4": [
+    57,
+    70,
+    36,
+    36,
+    57
+   ],
+   "walk_law_times_2^k": [
+    57,
+    70,
+    36,
+    36,
+    57
+   ]
+  },
+  {
+   "k": 9,
+   "counts_by_residue_0..4": [
+    93,
+    72,
+    127,
+    127,
+    93
+   ],
+   "walk_law_times_2^k": [
+    93,
+    72,
+    127,
+    127,
+    93
+   ]
+  },
+  {
+   "k": 10,
+   "counts_by_residue_0..4": [
+    220,
+    254,
+    165,
+    165,
+    220
+   ],
+   "walk_law_times_2^k": [
+    220,
+    254,
+    165,
+    165,
+    220
+   ]
+  },
+  {
+   "k": 11,
+   "counts_by_residue_0..4": [
+    385,
+    330,
+    474,
+    474,
+    385
+   ],
+   "walk_law_times_2^k": [
+    385,
+    330,
+    474,
+    474,
+    385
+   ]
+  },
+  {
+   "k": 12,
+   "counts_by_residue_0..4": [
+    859,
+    948,
+    715,
+    715,
+    859
+   ],
+   "walk_law_times_2^k": [
+    859,
+    948,
+    715,
+    715,
+    859
+   ]
+  },
+  {
+   "k": 13,
+   "counts_by_residue_0..4": [
+    1574,
+    1430,
+    1807,
+    1807,
+    1574
+   ],
+   "walk_law_times_2^k": [
+    1574,
+    1430,
+    1807,
+    1807,
+    1574
+   ]
+  },
+  {
+   "k": 14,
+   "counts_by_residue_0..4": [
+    3381,
+    3614,
+    3004,
+    3004,
+    3381
+   ],
+   "walk_law_times_2^k": [
+    3381,
+    3614,
+    3004,
+    3004,
+    3381
+   ]
+  }
+ ],
+ "hidden_colour_5": [
+  {
+   "n": 1,
+   "words_with_5|2^n-3^s": 0,
+   "of_which_5|C(w)": 0,
+   "L_n": 1
+  },
+  {
+   "n": 2,
+   "words_with_5|2^n-3^s": 1,
+   "of_which_5|C(w)": 1,
+   "L_n": 3
+  },
+  {
+   "n": 3,
+   "words_with_5|2^n-3^s": 3,
+   "of_which_5|C(w)": 0,
+   "L_n": 4
+  },
+  {
+   "n": 4,
+   "words_with_5|2^n-3^s": 2,
+   "of_which_5|C(w)": 2,
+   "L_n": 7
+  },
+  {
+   "n": 5,
+   "words_with_5|2^n-3^s": 10,
+   "of_which_5|C(w)": 0,
+   "L_n": 11
+  },
+  {
+   "n": 6,
+   "words_with_5|2^n-3^s": 16,
+   "of_which_5|C(w)": 7,
+   "L_n": 18
+  },
+  {
+   "n": 7,
+   "words_with_5|2^n-3^s": 28,
+   "of_which_5|C(w)": 0,
+   "L_n": 29
+  },
+  {
+   "n": 8,
+   "words_with_5|2^n-3^s": 72,
+   "of_which_5|C(w)": 24,
+   "L_n": 47
+  },
+  {
+   "n": 9,
+   "words_with_5|2^n-3^s": 120,
+   "of_which_5|C(w)": 9,
+   "L_n": 76
+  },
+  {
+   "n": 10,
+   "words_with_5|2^n-3^s": 256,
+   "of_which_5|C(w)": 76,
+   "L_n": 123
+  },
+  {
+   "n": 11,
+   "words_with_5|2^n-3^s": 528,
+   "of_which_5|C(w)": 66,
+   "L_n": 199
+  },
+  {
+   "n": 12,
+   "words_with_5|2^n-3^s": 992,
+   "of_which_5|C(w)": 263,
+   "L_n": 322
+  },
+  {
+   "n": 13,
+   "words_with_5|2^n-3^s": 2080,
+   "of_which_5|C(w)": 312,
+   "L_n": 521
+  },
+  {
+   "n": 14,
+   "words_with_5|2^n-3^s": 4096,
+   "of_which_5|C(w)": 988,
+   "L_n": 843
+  }
+ ],
+ "digraph_automorphisms": 1,
+ "digraph_antiautomorphisms": [],
+ "latimer_macduffee_sample": {
+  "matrices": 104,
+  "conjugate_found": 104
+ },
+ "closing_moduli": [
+  5
+ ]
+}

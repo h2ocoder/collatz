@@ -107,4 +107,5 @@ The critical circle shrinks below 1 as $n$ exceeds $y^2 = 4$. Only $n = 3$ keeps
 - [Universal Dynamics](/connections/universal-dynamics) — the thermodynamic framework and Collatz Zoo
 - [abc Conjecture](/connections/abc-conjecture) — why $\text{rad}(6) = 6$ is the minimal radical
 - [3-Adic Mixing](/proofs/mixing) — spectral gap on the Markov chain (related but distinct operator)
+- [The Folded Pentagon](/explore/folded-pentagon) — a different operator again, the residue chain modulo 5, whose mixing rate is exactly $\cos 36^\circ = \varphi/2$
 - [The Hidden Rotation](/journey/the-rotation) — the near-conjugacy to irrational rotation

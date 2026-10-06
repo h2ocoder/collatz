@@ -1,0 +1,43 @@
+=== 1. tr A_N = 2 and tr A_N^2 = 3 + gcd(5, N) by direct fixed-point count, every N <= 5000 prime to 6 ===
+   1666 moduli; fixed points of the two-letter words at N = 5, 7, 25, 35: {5: {'ee': 1, 'eo': 1, 'oe': 1, 'oo': 5}, 7: {'ee': 1, 'eo': 1, 'oe': 1, 'oo': 1}, 25: {'ee': 1, 'eo': 1, 'oe': 1, 'oo': 5}, 35: {'ee': 1, 'eo': 1, 'oe': 1, 'oo': 5}}
+   [ok] tr A_N = 2 (fixed points 0 and -1) for 3x+1 and for 3x-1
+   [ok] three two-letter words have exactly one fixed point, 'oo' has gcd(5, N): tr A_N^2 = 3 + gcd(5, N), for 3x+1 and 3x-1
+   [ok] odd then odd is x -> (9x+5)/4
+   [ok] level sums of squares: 4 at level 5, 0 at every other level 5 < N <= 5000
+   [ok] at level 5: 1 + 0 + 1/phi^2 + phi^2 = 4
+=== 2. the level decomposition used here agrees with the full matrix (float) ===
+   [ok] N = 5: eigenvalues of A_N = union of the levels d | N
+   [ok] N = 25: eigenvalues of A_N = union of the levels d | N
+   [ok] N = 35: eigenvalues of A_N = union of the levels d | N
+   [ok] N = 55: eigenvalues of A_N = union of the levels d | N
+   [ok] N = 77: eigenvalues of A_N = union of the levels d | N
+   level 5, eigenvalues of K: [-0.809017  0.        0.309017  0.5     ]
+   [ok] level 5: eigenvalues of K are 1/2, 0, cos 72, -cos 36, all real
+=== 3. every level 5 <= N <= 400 prime to 6 (float, tolerance 1e-6 on eigenvalues of A) ===
+   [ok] J_MAX = 16000 covers every j with deg Psi_j <= 1300: phi(j) > 2982 for j >= 16000
+   [ok] 132 moduli prime to 6 from 5 to 400, of which 76 primes
+   cosine orders j -> number of levels: {3: 65, 4: 102, 5: 1, 6: 68}   (thread: j=4: 102, j=6: 68, j=3: 65, j=5: 1)
+   [ok] sum of eigenvalues = 0 at every level; sum of squares = 0 at every level but 5 (= 4 there)
+   [ok] levels whose eigenvalues are all real: [5]
+   [ok] no level has all eigenvalues zero
+   [ok] irrational cosines (orders j other than 1, 2, 3, 4, 6): {5: [5]}
+   [ok] the only cosines at levels > 1 are 0 (j=4), +1/2 (j=6), -1/2 (j=3) and the golden pair (j=5)
+   [ok] level counts 102 / 68 / 65 / 1 as in the thread's census table
+   levels with no cosine eigenvalue: 29  (thread: 29)
+   [ok] level 25: no golden eigenvalue (nearest eigenvalue of A to -phi or 1/phi is 0.3820 away)
+   [ok] level 125: no golden eigenvalue (nearest eigenvalue of A to -phi or 1/phi is 0.0987 away)
+   [ok] level 55: no golden eigenvalue (nearest eigenvalue of A to -phi or 1/phi is 0.0444 away)
+   [ok] level 35: no golden eigenvalue (nearest eigenvalue of A to -phi or 1/phi is 0.0219 away)
+=== 4. every prime 5 <= p <= 1300 (float): irrational cosines, and eigenvalues of modulus exactly 1/2 ===
+   irrational cosines at prime levels: {5: [5]}
+   [ok] the golden pair at 5 is the only irrational cosine at a prime level up to 1300
+   distance from the golden pair to the spectrum of A_p at the Fibonacci/Lucas primes: {11: 0.382, 13: 0.4982, 29: 0.1919, 89: 0.11, 199: 0.1349}
+   [ok] no golden eigenvalue at 11, 13, 29, 89, 199
+   primes where the number of eigenvalues with |lambda| = 1/2 differs from Theorem C's count: {11: 2, 31: 1, 37: 4}
+   [ok] eigenvalues of modulus exactly 1/2 beyond Theorem C: only at 11 (+-1/2), 31 (one), 37 (four), p <= 1300; this float test would also see eigenvalues on the circle that are NOT half a root of unity, and finds none
+=== 5. control 5x+1, levels 3 <= N <= 200 prime to 10 (float) ===
+   79 levels; cosine orders j -> levels: {3: 4, 4: 59, 6: 5}; level 3 eigenvalues of A: [-1.-0.j -0.+0.j]
+   [ok] 5x+1: no irrational cosine at any level up to 200 ({})
+   [ok] 5x+1: the only all-real level up to 200 is [3]
+
+0 failures

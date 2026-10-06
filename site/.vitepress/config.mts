@@ -89,7 +89,9 @@ export default defineConfig({
           { text: 'Sturmian Bridge', link: '/explore/sturmian-bridge' },
           { text: 'Sturmian Fractals', link: '/explore/sturmian-fractals' },
           { text: 'The Wobble', link: '/explore/log6-wobble' },
-          { text: 'The Dropping Dictionary', link: '/explore/dropping-dictionary' }
+          { text: 'The Dropping Dictionary', link: '/explore/dropping-dictionary' },
+          { text: 'Thirty-Six', link: '/explore/thirty-six' },
+          { text: 'The Folded Pentagon', link: '/explore/folded-pentagon' }
         ]
       }
     ],

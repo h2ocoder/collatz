@@ -1,0 +1,134 @@
+
+== 0. The four facts about 36
+PASS  36 = T_8 = 6^2 (triangular and square)
+PASS  36 = 1^3 + 2^3 + 3^3 = T_3^2
+PASS  cos 36 deg = phi/2 (float, 1e-15)
+
+== 1. Consecutive numbers 2^a 3^b (Levi ben Gerson)
+      35084 three-smooth numbers below 10^100
+PASS  consecutive pairs below 10^100: [(1, 2), (2, 3), (3, 4), (8, 9)]
+PASS  cells with |2^k - 3^s| = 1, k <= 3000: [(1, 0), (1, 1), (2, 1), (3, 2)]
+PASS  three-smooth triangular numbers T_n, n <= 200000: [(1, 1), (2, 3), (3, 6), (8, 36)]
+PASS  cell (1,0): pair (1,2), T_1 = 2^0 3^0 = 1
+PASS  cell (1,1): pair (2,3), T_2 = 2^0 3^1 = 3
+PASS  cell (2,1): pair (3,4), T_3 = 2^1 3^1 = 6
+PASS  cell (3,2): pair (8,9), T_8 = 2^2 3^2 = 36
+PASS  octave 2/1 = 1200.000 cents
+PASS  fifth 3/2 = 701.955 cents
+PASS  fourth 4/3 = 498.045 cents
+PASS  whole tone 9/8 = 203.910 cents
+PASS  apotome 2187/2048 = 113.685 cents
+
+== 2. The cycles in the unit cells, and the cycle through -17
+PASS  cycle [0]: cell (1,0), 2^k - 3^s = 1
+PASS  cycle [-1]: cell (1,1), 2^k - 3^s = -1
+PASS  cycle [1, 2]: cell (2,1), 2^k - 3^s = 1
+PASS  cycle [-5, -7, -10]: cell (3,2), 2^k - 3^s = -1
+PASS  cycle [-17, -25, -37, -55, -82, -41, -61, -91, -136, -68, -34]: cell (11,7), 2^k - 3^s = -139
+PASS  v = n + 1 on the -5 cycle: -4 -> -6 -> -9; (-4)(-9) = (-6)^2 = T_8 = T_(-9) = 36
+PASS  in v the odd step is v -> 3v/2 and the even step is v -> (v+1)/2
+PASS  3x-1: cycle 5 -> 7 -> 10 -> 5, v = n - 1 = 4, 6, 9
+PASS  cell (11,7): 2^11 - 3^7 = -139, interval 3^7/2^11 = 2187/2048
+PASS  first run of the -17 cycle in v: [-16, -24, -36, -54, -81]
+
+== 2b. One-even-element theorem (word 1^a 0)
+PASS  1^a 0 closes on an integer, a <= 400: [(0, 0), (1, 1), (2, -5)]
+PASS  6^a triangular, a <= 400: a in [0, 1, 2]
+PASS  |2^(a+1) - 3^a| = 1, 1, 1, 11, ...
+
+== 2c. Why 3: cells with |2^k - q^s| = 1 for odd q
+PASS  q = 3 is the only odd multiplier <= 2001 with four unit cells
+PASS  two unit cells exactly for q = 2^j +- 1 (q != 3): [5, 7, 9, 15, 17, 31, 33, 63] ... (17 values)
+PASS  every other q has one: 982 values
+
+== 2d. Control: do cycles of 3x+c sit at record cells?
+      record cells of log2 3 (s <= 700): 19; first: [(1, 0), (1, 1), (2, 1), (3, 2), (5, 3), (8, 5), (11, 7), (19, 12)]
+PASS  record ladder starts (1,0), (1,1), (2,1), (3,2), (5,3), (8,5), (11,7), (19,12)
+PASS  19 record cells with s <= 700
+      primitive cycles of 3x+c, 5 <= c <= 199, meeting [-20000, 20000]: 257
+      in record cells: 55 = 21.4 %   (positive 18/175, negative 37/82)
+      with |min| >= 5c: 53 of 89 = 59.6 %
+PASS  257 primitive cycles in the control family
+PASS  21.4 % of them in record cells
+PASS  size-matched (|min| >= 5c): 53 of 89 = 59.6 %
+PASS  5x+1: the five known cycles sit in cells [(1, 0), (2, 1), (5, 2), (7, 3), (7, 3)], all record cells of log2 5
+
+== 3. Triangle, square, cube against the dropping classes
+PASS  N(s), s = 0..13: [1, 1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045]  (A100982 with the class 'even' prepended)
+PASS  Terras levels 1, 2, 4, 5, 7, 8, 10, 12 <-> site Dset_1, 3, 6, 8, 11, 13, 16, 19
+PASS  site examples: drop(5) = 3 = 2 + 1, drop(3) = 6 = 4 + 2
+PASS  T_0 .. T_(2^k - 1) is a complete residue system mod 2^k for k = 1..16
+PASS  T_n = T_(-1-n): the fold is n <-> -1-n
+PASS  x -> x^3 permutes the odd residues mod 2^16
+PASS  every odd square is 1 mod 8
+PASS  levels <= 16: [1, 2, 4, 5, 7, 8, 10, 12, 13, 15, 16]
+PASS  first 2^16 triangular numbers: exactly N(k) 2^(K-k) in every class of level k <= 16
+PASS  first 2^16 cubes: exactly N(k) 2^(K-k) in every class of level k <= 16
+PASS  first 2^16 squares under 3x+1: {1: 32768, 2: 32768}  (Dset_1 and Dset_3 only)
+      squares under 3x-1 by Terras level: {1: 32768, 5: 8192, 7: 4096, 8: 5120, 10: 2304, 12: 1472, 13: 2112, 15: 1088, 16: 1508, 18: 767, 20: 509, 21: 797, 23: 442, 24: 646, 26: 328, 27: 499, 29: 245, 31: 210, 32: 304, 34: 183, 35: 243, 37: 138, 39: 90, 40: 173, 42: 108, 43: 134, 45: 89, 46: 123, 48: 69, 50: 57, 51: 54, 53: 39, 54: 54, 56: 38, 58: 27, 59: 51, 61: 24, 62: 48, 64: 23, 65: 44, 67: 25, 69: 20, 70: 29, 72: 23, 73: 17, 75: 13, 77: 12, 78: 17, 80: 11, 81: 14, 83: 11, 85: 11, 86: 11, 88: 5, 89: 9, 91: 4, 92: 9, 94: 6, 96: 2, 97: 6, 99: 7, 100: 4, 102: 2, 104: 4, 105: 4, 107: 1, 108: 4, 110: 2, 111: 8, 113: 4, 115: 3, 116: 2, 118: 1, 119: 2, 121: 1, 123: 1, 124: 2, 126: 1, 129: 2, 130: 1, 134: 1, 138: 1, 145: 1, 146: 1, 154: 1, 200: 1, 205: 1, 216: 1}, never: 1
+PASS  squares under 3x-1: half in Dset_1 (even), none in Dset_3 or Dset_6
+PASS  odd squares under 3x-1: shares 1/4, 1/8, 5/32 at Terras levels 5, 7, 8
+      distinct stopping times of the first 2^16 squares under 3x-1: 88
+PASS  squares n^2, 2 <= n <= 200000, under 3x+1: Terras stopping times {1, 2} only
+PASS  same squares under 3x-1: 103 distinct stopping times
+PASS  sums of cubes T_n^2, 2 <= n <= 50000: two stopping times under 3x+1, 83 under 3x-1
+PASS  mirror: stopping time of n^2 under 3x-1 = that of -n^2 under 3x+1 (in absolute value), n < 3000
+PASS  polygonal trichotomy by v_2(s - 2): fold / collapse / isometry, s = 3..34, mod 2^10
+
+== 4. Eight solutions of phi(x) = 36
+PASS  phi(x) >= sqrt(x/2) on the sieve range
+PASS  phi(x) = 36: [37, 57, 63, 74, 76, 108, 114, 126]
+PASS  36 is the least n with exactly eight solutions (multiplicities below 36: 1:2, 2:3, 4:4, 6:4, 8:5, 10:2, 12:6, 16:6, 18:4, 20:5, 22:2, 24:10, 28:2, 30:2, 32:7)
+PASS  7 = 2*3 + 1, 19 = 2*3^2 + 1, 37 = 2^2 3^2 + 1: lattice points (1,1), (1,2), (2,2)
+PASS    37 = 37  ->  (2, 2) = (2,2)
+PASS    57 = 3^1 * 19  ->  (1, 0) + (1, 2) = (2,2)
+PASS    63 = 3^2 * 7  ->  (1, 1) + (1, 1) = (2,2)
+PASS    74 = 2^1 * 37  ->  (0, 0) + (2, 2) = (2,2)
+PASS    76 = 2^2 * 19  ->  (1, 0) + (1, 2) = (2,2)
+PASS   108 = 2^2 * 3^3  ->  (1, 0) + (1, 2) = (2,2)
+PASS   114 = 2^1 * 3^1 * 19  ->  (0, 0) + (1, 0) + (1, 2) = (2,2)
+PASS   126 = 2^1 * 3^2 * 7  ->  (0, 0) + (1, 1) + (1, 1) = (2,2)
+PASS  8 = 1 (no prime: 108) + 2 (with 7) + 3 (with 19) + 2 (with 37)
+PASS  degree of cos(2 pi/n) is phi(n)/2 = 18 = 2 * 3^2 for the eight n; phi(10) = 4 = 2^2
+PASS  cos(2 pi/10) = (1 + sqrt 5)/4
+
+== 5. F(n) = sum over d | n of tau(d)
+PASS  F from the definition = product of T_(a+1), n <= 5000
+PASS  orbit 72 -> 60 -> 54 -> 30 -> 27 -> 10 -> 9 -> 6 -> 9
+PASS  fixed points up to 10^6: 1, 3, 18, 36
+PASS  F(n) < n outside {1, 2, 3, 4, 6, 8, 12, 18, 24, 36}, n <= 10^6
+PASS  2-cycle 6 <-> 9
+PASS  the nine divisors of 36 have 36 divisors in all: F(36) = 36
+PASS  F(n) = 3n/2 exactly at n = 2, 4, 6, 12 (n <= 10^6)
+PASS  every orbit from n <= 10^6 ends at 1, 3, 18, 36 or {6,9}: {1: 1, 3: 78498, '{6,9}': 779257, 18: 140650, 36: 1594}
+PASS  tau_k(p^2 q^2) = T_k^2 = 1^3 + ... + k^3 for k < 200
+PASS  T_k^2 fixed by tau_k iff T_k = p*q: k = [3, 4, 5, 6, 10, 13, 22, 37, 46, 58] (k <= 60); fixed points 36, 100, 225, 441
+
+== 5b. Dropping-word counts: Winkler's sandwich and the Bizley values
+PASS  N(10) = 476, N(36) = 38088111350198
+PASS  N(10) = F_2 - F_1^2/2 with F_j = C(8j,3j)/(8j)  (convergent 8/5)
+PASS  N(36) = F_3 + F_1 F_2 + F_1^3/6 with F_j = C(19j,7j)/(19j)  (convergent 19/12)
+PASS  C(m-1,s-1)/s <= N(s) <= C(m,s-1)/s for s <= 400  (Winkler)
+PASS  equality orders <= 400: lower [1, 2, 7, 12, 53, 359], upper [1, 3, 5, 17, 29, 41, 94, 147, 200, 253, 306]
+PASS  orders <= 16 with no closed form of this type: [8, 9, 11, 13, 14, 16]
+      sum_(s <= 700) N(s)/3^s = 1.6903605922   (last term 3.80e-22)
+PASS  mean number of one-round predecessors = 1.69036059...
+
+== 6. The folded pentagon modulo 5 (teaser for the companion page)
+PASS  P(T^k(n) = 1 mod 5 | n = 1 mod 5) = (2^k + 2(-1)^k L_k)/(5 * 2^k), k <= 14, by brute force
+PASS  charpoly(2 K_5) = x*(x - 2)*(x - 1)*(x**2 + x - 1)
+PASS  2 cos 144 deg = -phi, a root of x^2 + x - 1
+PASS  5 = 3 + 2 = 3^2 - 2^2
+
+== 7. Further statements on the page
+PASS  81119 dropping classes of level <= 24
+PASS  least residues that do not drop at their class level, levels <= 24: [0, 1]
+PASS  5x+1: natural shares begin 1/2, 1/8, 1/16, and the first 2^12 triangular numbers carry them exactly
+PASS  NOT T NOT (m) = T_(3x-1)(m + 1) - 1 for |m| <= 2000
+PASS  10924 squares modulo 2^16: a share 0.16669, near 1/6
+PASS  T_n^2 is triangular only for T_n = 0, 1, 6 (n < 10^5): 36 is the only sum of the first n > 1 cubes that is triangular
+PASS  but 1^3 + 3^3 = 28 and 3^3 + 4^3 = 91 are triangular: 'the first n cubes' matters
+PASS  3x+1: exactly one n drops onto each multiple of 3 up to 30000 (mean multiplicity 1.6898)
+PASS  3x-1: exactly one n drops onto each multiple of 3 up to 30000 (mean multiplicity 1.6910)
+
+0 failure(s); 5 s

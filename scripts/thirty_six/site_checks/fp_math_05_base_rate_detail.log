@@ -1,0 +1,8 @@
+d =  2: ord(d+1) = 18, m = 2, t =  7, idx = 1 | eigenvalue +1 of A: forced by Theorem C 0, geometric 2, algebraic 2
+d =  2: ord(d+1) = 18, m = 2, t =  7, idx = 1 | eigenvalue -1 of A: forced by Theorem C 0, geometric 2, algebraic 2
+d = 12: ord(d+1) = 36, m = 1, t = 32, idx = 1 | eigenvalue +1 of A: forced by Theorem C 0, geometric 0, algebraic 0
+d = 12: ord(d+1) = 36, m = 1, t = 32, idx = 1 | eigenvalue -1 of A: forced by Theorem C 1, geometric 2, algebraic 3
+d = 14: ord(d+1) = 36, m = 1, t = 33, idx = 1 | eigenvalue +1 of A: forced by Theorem C 1, geometric 1, algebraic 2
+d = 14: ord(d+1) = 36, m = 1, t = 33, idx = 1 | eigenvalue -1 of A: forced by Theorem C 0, geometric 0, algebraic 0
+d = 34: ord(d+1) = 36, m = 1, t =  8, idx = 1 | eigenvalue +1 of A: forced by Theorem C 0, geometric 0, algebraic 0
+d = 34: ord(d+1) = 36, m = 1, t =  8, idx = 1 | eigenvalue -1 of A: forced by Theorem C 1, geometric 2, algebraic 3

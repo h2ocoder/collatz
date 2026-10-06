@@ -1,0 +1,95 @@
+== 1. pairs, unit cells, cycles
+ok    consecutive 3-smooth pairs below 10^200: [(1, 2), (2, 3), (3, 4), (8, 9)]
+ok    3-smooth triangular numbers T_n, n < 10^6: [1, 3, 6, 36]
+ok    table row pair (1, 2): T_1 = 1, cell (1, 0), 2^k-3^s = 1, cycle [0]
+ok    table row pair (2, 3): T_2 = 3, cell (1, 1), 2^k-3^s = -1, cycle [-1]
+ok    table row pair (3, 4): T_3 = 6, cell (2, 1), 2^k-3^s = 1, cycle [1, 2]
+ok    table row pair (8, 9): T_8 = 36, cell (3, 2), 2^k-3^s = -1, cycle [-5, -7, -10]
+ok    cycles of T reached from |n| <= 3000 (by least |element|): [-17, -5, -1, 0, 1]
+ok    -17 cycle: cell (11,7), 2^11 - 3^7 = -139, 3^7/2^11 = 2187/2048
+ok    1^a 0 closes on an integer / 2^(a+1),3^a consecutive / 6^a triangular, a <= 300: [(0, [0]), (1, [1, 2]), (2, [-5, -7, -10])]
+ok    v = n+1: -4 -> -6 -> -9 by x3/2, (v+1)/2 sends -9 to -4, (-4)(-9) = (-6)^2 = 36 = T_8
+ok    3x-1: 5 -> 7 -> 10 -> 5, v = n-1 = 4, 6, 9
+ok    |2^k - q^s| = 1, odd q <= 4001: four cells only q=3; two cells for [5, 7, 9, 15, 17, 31].. (19); s>=2 only [(3, (3, 2))]
+
+== 2. figurate families against the site's dropping sets (K = 16, actual orbits)
+      natural class sizes mod 2^16 by site index: 1:32768, 3:16384, 6:4096, 8:4096, 11:1536, 13:1792, 16:768, 19:480, 21:680, 24:346, 26:476, undetermined:2114
+ok    natural shares: 1/2 in Dset_1, 1/4 in Dset_3, 1/16 in Dset_6, 1/16 in Dset_8
+ok    site indices reachable at level <= 16: 1, 3, 6, 8, 11, 13, 16, 19, 21, 24, 26
+      triangular: actual-minus-natural by set (non-zero only): {1: -1, 3: -1}; values 0/1 not filed: 2
+ok    triangular: exactly natural in every set of index <= 26, except that the values 0 and 1 do not drop
+      cubes: actual-minus-natural by set (non-zero only): {1: -1, 3: -1}; values 0/1 not filed: 2
+ok    cubes: exactly natural in every set of index <= 26, except that the values 0 and 1 do not drop
+ok    squares under 3x+1: {None: 2, 1: 32767, 3: 32767}
+      squares under 3x-1, first sets: 1:32767, 3:0, 6:0, 8:8192, 11:4096, 13:5120, 16:2304, 19:1472, 21:2112, 24:1088, 26:1508
+ok    squares under 3x-1: half in Dset_1, none in Dset_3 or Dset_6, something in every later set shown
+ok    figure JSON 'triangular_3x+1' = my recount (with 0 and 1 filed by residue, as the script says)
+ok    figure JSON 'cubes_3x+1' = my recount (with 0 and 1 filed by residue, as the script says)
+ok    figure JSON 'squares_3x+1' = my recount (with 0 and 1 filed by residue, as the script says)
+ok    figure JSON 'squares_3x-1' = my recount (with 0 and 1 filed by residue, as the script says)
+ok    figure JSON 'natural' = my residue count
+      last bucket (29+): natural 0.0323, squares under 3x-1 0.1049
+ok    squares of 2..200000 under 3x+1: site dropping times [1, 3]
+ok    squares of 2..200000 under 3x-1: 103 distinct Terras stopping times
+      ... and 103 distinct SITE dropping times (un-shortcut steps)
+ok    the page's '103 different dropping times' also holds in the site's step convention
+ok    sums of cubes T_n^2, n = 2..20000: [1, 3] under 3x+1, 68 distinct under 3x-1
+ok    squares mod 2^10: 172 residues = 0.16797 of all (limit 1/6 = 0.16667)
+ok    squares mod 2^16: 10924 residues = 0.16669 of all (limit 1/6 = 0.16667)
+ok    odd squares are 1 mod 8
+ok    cubing permutes the odd residues mod 2^14
+ok    v_2(a^3 - b^3) = v_2(a - b) for odd a != b below 400 (isometry)
+ok    T_0..T_(2^k-1) is a complete residue system mod 2^k, k = 1..16
+ok    T_n = T_(-1-n)
+      T_1..T_8 mod 8 = [1, 2, 3, 4, 4, 5, 6, 7] (not a complete system; counting must start at T_0, but class counts are unaffected: 0 and 4 are both even)
+ok    polygonal numbers, sides 3..40, mod 2^9: fold / collapse / permutation according to v_2(sides - 2) = 0 / 1 / >= 2
+ok    NOT o T o NOT is the 3x-1 shortcut map in the coordinate m+1 (|m| < 500)
+
+== 3. Theorem 2' (which rules give the squares two classes)
+ok    class level: odd squares in ONE class iff q=3, d=1 mod 4 or q in {5,7}, q+d=0 mod 8 (480 rules, level 12); mismatches: []
+      rule (3x+1)/2, squares of 2..3000 by ACTUAL dropping time: Dset_1: 1500, Dset_3: 1499
+      rule (3x+5)/2, squares of 2..3000 by ACTUAL dropping time: Dset_1: 1500, Dset_3: 1499
+      rule (3x+37)/2, squares of 2..3000 by ACTUAL dropping time: Dset_1: 1500, Dset_3: 1497, Dset_4: 2 [9, 25]
+      rule (3x+101)/2, squares of 2..3000 by ACTUAL dropping time: Dset_1: 1500, Dset_3: 1495, Dset_4: 3 [25, 49, 81], Dset_5: 1 [9]
+      rule (7x+1)/2, squares of 2..3000 by ACTUAL dropping time: Dset_1: 1500, Dset_4: 1499
+      rule (5x+3)/2, squares of 2..3000 by ACTUAL dropping time: Dset_1: 1500, Dset_4: 1499
+      rule (3x-3)/2, squares of 2..3000 by ACTUAL dropping time: Dset_1: 1500, Dset_3: 1499
+ok    INTEGER level: under 3x+37 (q = 3, d = 1 mod 4) the squares > 1 meet 3 dropping sets, not two (9 and 25 lie below the threshold 37): the page's general 'iff' is a statement about classes, not about sets
+
+== 4. phi(x) = 36
+ok    solutions of phi(x) = 36 (x <= 3000; phi(x) >= sqrt(x/2) rules out more): [37, 57, 63, 74, 76, 108, 114, 126]
+ok    36 is the least n with exactly eight solutions
+      Pierpont points with i, j <= 2: [((1, 1), 7), ((1, 2), 19), ((2, 0), 5), ((2, 1), 13), ((2, 2), 37)]
+ok    coefficient of X^2 Y^2 in the generating function = 8
+ok    table of the eight solutions: factorisations and lattice parts add up to (2,2); counts 1 + 2 + 3 + 2
+ok    deg Q(cos 2pi/n) = phi(n)/2 = 2^1 3^2 for the eight n (one square root, two cubic steps); phi(10) = 2^2
+
+== 5. F(n) = sum_{d|n} tau(d)
+ok    product formula F(p^a) = T_(a+1) agrees with the definition for n < 400
+ok    72 -> 60 -> 54 -> 30 -> 27 -> 10 -> 9 -> 6 -> 9 -> 6
+ok    fixed points of F up to 10^6: 1, 3, 18, 36
+ok    F(n) > n exactly at 2, 4, 6, 8, 12, 24 (n <= 10^6): six integers
+ok    F(n) = 3n/2 exactly at 2, 4, 6, 12 (n <= 10^6): four integers
+ok    every orbit from n <= 10^6 ends in 1, 3, 18, 36 or {6, 9}
+ok    Liouville at 36: sum tau(d)^3 = 1296 = 36^2
+ok    tau_k(p^2 q^2) = T_k^2 = 1^3+..+k^3
+      k <= 60 with tau_k(T_k^2) = T_k^2: [1, 3, 4, 5, 6, 10, 13, 22, 37, 46, 58]
+ok    k = 3, 4, 5, 6, 10, 13, ... giving 36, 100, 225, 441
+ok    EDGE: k = 1 also satisfies tau_1(T_1^2) = T_1^2 (tau_1 = 1) although T_1 = 1 is not a product of two primes: the README's Theorem 3 says k >= 2, the page drops it
+
+== 6. dropping-word counts N(s)
+ok    N(1..13) = [1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045] (A100982)
+ok    N(10) = 476, N(36) = 38088111350198
+ok    Bizley closed forms: N(10) = F2 - F1^2/2 = 1001/2 - 49/2;  N(36) = F3 + F1 F2 + F1^3/6 with F1 = 2652
+ok    Winkler sandwich holds for s <= 60; equality orders lower [1, 2, 7, 12, 53], upper [1, 3, 5, 17, 29, 41]
+ok    REMARK: every positive integer m is the rational Catalan number Cat(2, 2m-1) = C(2m+1,2)/(2m+1); e.g. N(4) = 3 = Cat(2,5). So 'N(s) is a rational Catalan number exactly at ...' is not literally an 'exactly'; the exact statement is about meeting the bounds
+      1 + sum_(s<=60) N(s)/3^s = 1.68993728
+ok    partial sum to 60 terms is 1.6899 (terms decay like 0.946^s; part B sums 700 terms)
+
+== 7. Ljunggren; 'triangular sum of cubes'
+ok    triangular numbers T_n (n < 10^6) whose square is triangular: [0, 1, 6]
+      triangular numbers that are a sum of two distinct positive cubes: [28, 91, 351, 2926] (28 = 1^3 + 3^3 = T_7, 91 = 3^3 + 4^3 = T_13)
+ok    so 'the only triangular sum of cubes' needs 'of the FIRST n cubes, n > 1'
+ok    and 1 = 1^3 = T_1 is a triangular sum of the first n = 1 cubes (README: 'n > 1')
+
+0 wrong

@@ -24,7 +24,7 @@ This matches a simple bookkeeping identity: $s \cdot \log_2 6 = T - \log_2 n + \
 
 Watch an orbit with many points (set points to 200+). You'll notice a subtle pattern: the orbit almost returns to its starting position after **44 steps**. This is because $27/44 = 0.6136 \approx \log_6 3 = 0.6131$ — after 44 rotations by $\log_6 3$, you've gone around the circle almost exactly 27 times.
 
-$27/44$ is a good rational approximation of $\log_6 3$ (an intermediate fraction between the convergents $8/13$ and $19/31$ of its continued fraction). The quasi-period 44 is a fingerprint of the irrational rotation structure.
+$27/44$ is a good rational approximation of $\log_6 3$ (an intermediate fraction between the convergents $8/13$ and $19/31$ of its continued fraction). The quasi-period 44 is a fingerprint of the irrational rotation structure. Why the eye picks out 44 and not the better approximation 31 is taken apart in [The Wobble](../explore/log6-wobble).
 
 ## The destruction landscape
 

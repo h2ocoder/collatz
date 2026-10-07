@@ -1,6 +1,6 @@
 # Terminology Map
 
-Two independent lines of research arrived at the same structural decomposition of the Collatz problem. Paper 1 frames everything through *dropping times* and affine orbits, while Paper 2 uses *stopping times* and geometric correspondence. The underlying mathematics is identical; only the names differ.
+My two earlier papers (see [Prior Work](/publications)) describe the same objects under two sets of names. Paper 1 (2024) speaks of *dropping* times and sets, Paper 2 (2023) of *stopping* times and classes. Neither introduced the objects: both use the classification of the integers by stopping time, which goes back to Terras (1976). For the most part only the names differ.
 
 The table below maps equivalent concepts between the two papers.
 
@@ -15,5 +15,5 @@ The table below maps equivalent concepts between the two papers.
 | Orbital Oddity | — | Paper 1 only |
 
 ::: info Convention
-This site primarily uses Paper 1 (dropping) terminology, as the affine orbit framework was developed in that context.
+This site primarily uses Paper 1 (dropping) terminology.
 :::

@@ -1,0 +1,305 @@
+==============================================================================
+A. T_0 .. T_(2^k - 1) is a complete residue system mod 2^k   (theorem 1)
+   B. over a full period n mod 2^(k+1) every residue mod 2^k is hit exactly twice,
+      and the two preimages are n and NOT(n) = 2^(k+1) - 1 - n            (fold)
+==============================================================================
+  k= 1  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  k= 2  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  k= 3  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  k= 4  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  k= 5  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  k= 6  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  k= 8  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  k=12  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  k=16  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  k=20  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  k=22  CRS on [0,2^k): True   every residue twice on [0,2^(k+1)): True   T_n = T_NOT(n): True
+  all k = 1..22: True
+
+==============================================================================
+C. Squares: collapse.  #squares mod 2^k (OEIS A023105) and the odd squares
+==============================================================================
+  k= 1  #squares=       2  formula=       2  ratio=1.000000   odd squares all = 1 mod 8: None, #=1 (2^k/8=None), each hit 4x by odd n: None
+  k= 2  #squares=       2  formula=       2  ratio=0.500000   odd squares all = 1 mod 8: None, #=1 (2^k/8=None), each hit 4x by odd n: None
+  k= 3  #squares=       3  formula=       3  ratio=0.375000   odd squares all = 1 mod 8: True, #=1 (2^k/8=1), each hit 4x by odd n: True
+  k= 4  #squares=       4  formula=       4  ratio=0.250000   odd squares all = 1 mod 8: True, #=2 (2^k/8=2), each hit 4x by odd n: True
+  k= 5  #squares=       7  formula=       7  ratio=0.218750   odd squares all = 1 mod 8: True, #=4 (2^k/8=4), each hit 4x by odd n: True
+  k= 6  #squares=      12  formula=      12  ratio=0.187500   odd squares all = 1 mod 8: True, #=8 (2^k/8=8), each hit 4x by odd n: True
+  k= 7  #squares=      23  formula=      23  ratio=0.179688   odd squares all = 1 mod 8: True, #=16 (2^k/8=16), each hit 4x by odd n: True
+  k= 8  #squares=      44  formula=      44  ratio=0.171875   odd squares all = 1 mod 8: True, #=32 (2^k/8=32), each hit 4x by odd n: True
+  k=12  #squares=     684  formula=     684  ratio=0.166992   odd squares all = 1 mod 8: True, #=512 (2^k/8=512), each hit 4x by odd n: True
+  k=16  #squares=   10924  formula=   10924  ratio=0.166687   odd squares all = 1 mod 8: True, #=8192 (2^k/8=8192), each hit 4x by odd n: True
+  k=20  #squares=  174764  formula=  174764  ratio=0.166668   odd squares all = 1 mod 8: True, #=131072 (2^k/8=131072), each hit 4x by odd n: True
+  k=22  #squares=  699052  formula=  699052  ratio=0.166667   odd squares all = 1 mod 8: True, #=524288 (2^k/8=524288), each hit 4x by odd n: True
+  formula matches for k=1..22: True    odd-square statement k=3..22: True    limit ratio 1/6 = 0.16666666666666666
+
+==============================================================================
+D. Cubes: x -> x^3 permutes the odd residues mod 2^k and is a 2-adic isometry on units
+==============================================================================
+  k= 1  odd cubes distinct mod 2^k: True  (1 of 1)
+  k= 2  odd cubes distinct mod 2^k: True  (2 of 2)
+  k= 3  odd cubes distinct mod 2^k: True  (4 of 4)
+  k= 4  odd cubes distinct mod 2^k: True  (8 of 8)
+  k= 5  odd cubes distinct mod 2^k: True  (16 of 16)
+  k=10  odd cubes distinct mod 2^k: True  (512 of 512)
+  k=15  odd cubes distinct mod 2^k: True  (16384 of 16384)
+  k=20  odd cubes distinct mod 2^k: True  (524288 of 524288)
+  permutation for k=1..20: True    v2(a^3-b^3) = v2(a-b) on 200000 random odd 80-bit pairs: True
+
+==============================================================================
+E. Dropping classes as residue classes: N(k) = #{r mod 2^k : cst(r) = k}
+   Terras stopping time k (shortcut map).  s = number of odd steps.  repo Set index = k+s
+==============================================================================
+   s   k=A020914(s)  k+s(repo)   N(k)   A100982(s)   density N(k)/2^k
+   0     1            1           1        1       0.50000000
+   1     2            3           1        1       0.25000000
+   2     4            6           1        1       0.06250000
+   3     5            8           2        2       0.06250000
+   4     7           11           3        3       0.02343750
+   5     8           13           7        7       0.02734375
+   6    10           16          12       12       0.01171875
+   7    12           19          30       30       0.00732422
+   8    13           21          85       85       0.01037598
+   9    15           24         173      173       0.00527954
+  10    16           26         476      476       0.00726318
+  11    18           29         961      961       0.00366592
+  12    20           32        2652     2652       0.00252914
+  residues mod 2^20 with cst > 20 (undetermined at this level): 27328  = 0.026062
+  N(k) equals A100982 (with the s=0 class 'even' prepended) and k = A020914(s): True
+
+==============================================================================
+F. Exact class counts among the first 2^K terms (residue level, cst of value mod 2^K)
+   families: T_n, n^2, n^3, T_n^2 = 1^3+...+n^3 (Nicomachus), for n = 0 .. 2^K - 1
+==============================================================================
+  --- K = 8:  natural count N(k)*2^(K-k) versus count of family values in class k (k=0: cst > K)
+     k    natural        T_n       n^2       n^3     T_n^2
+     0         19         19         0        19         0
+     1        128        128       128       128       128
+     2         64         64       128        64       128
+     4         16         16         0        16         0
+     5         16         16         0        16         0
+     7          6          6         0         6         0
+     8          7          7         0         7         0
+     T_n exactly natural: True   n^3 exactly natural: True   n^2 half/half on k=1,2: True   T_n^2 half/half on k=1,2: True
+  --- K = 12:  natural count N(k)*2^(K-k) versus count of family values in class k (k=0: cst > K)
+     k    natural        T_n       n^2       n^3     T_n^2
+     0        226        226         0       226         0
+     1       2048       2048      2048      2048      2048
+     2       1024       1024      2048      1024      2048
+     4        256        256         0       256         0
+     5        256        256         0       256         0
+     7         96         96         0        96         0
+     8        112        112         0       112         0
+    10         48         48         0        48         0
+    12         30         30         0        30         0
+     T_n exactly natural: True   n^3 exactly natural: True   n^2 half/half on k=1,2: True   T_n^2 half/half on k=1,2: True
+  --- K = 16:  natural count N(k)*2^(K-k) versus count of family values in class k (k=0: cst > K)
+     k    natural        T_n       n^2       n^3     T_n^2
+     0       2114       2114         0      2114         0
+     1      32768      32768     32768     32768     32768
+     2      16384      16384     32768     16384     32768
+     4       4096       4096         0      4096         0
+     5       4096       4096         0      4096         0
+     7       1536       1536         0      1536         0
+     8       1792       1792         0      1792         0
+    10        768        768         0       768         0
+    12        480        480         0       480         0
+    13        680        680         0       680         0
+    15        346        346         0       346         0
+    16        476        476         0       476         0
+     T_n exactly natural: True   n^3 exactly natural: True   n^2 half/half on k=1,2: True   T_n^2 half/half on k=1,2: True
+  --- K = 20:  natural count N(k)*2^(K-k) versus count of family values in class k (k=0: cst > K)
+     k    natural        T_n       n^2       n^3     T_n^2
+     0      27328      27328         0     27328         0
+     1     524288     524288    524288    524288    524288
+     2     262144     262144    524288    262144    524288
+     4      65536      65536         0     65536         0
+     5      65536      65536         0     65536         0
+     7      24576      24576         0     24576         0
+     8      28672      28672         0     28672         0
+    10      12288      12288         0     12288         0
+    12       7680       7680         0      7680         0
+    13      10880      10880         0     10880         0
+    15       5536       5536         0      5536         0
+    16       7616       7616         0      7616         0
+    18       3844       3844         0      3844         0
+    20       2652       2652         0      2652         0
+     T_n exactly natural: True   n^3 exactly natural: True   n^2 half/half on k=1,2: True   T_n^2 half/half on k=1,2: True
+
+==============================================================================
+G. Actual stopping times of the integers T_n, n^2, n^3, T_n^2 for 2 <= n < 2^20 = 1048576
+   (Terras stopping time k of the VALUE; column 'natural' = all integers m in [2, 2^20))
+   also the same for 2 <= n <= 10^6 in the json file
+==============================================================================
+     k   k+s   density      natural        T_n        n^2        n^3      T_n^2    exact N(k)2^(20-k)
+     1     1  0.5000000      524287     524287     524287     524287     524287    524288
+     2     3  0.2500000      262143     262143     524287     262143     524287    262144
+     4     6  0.0625000       65536      65536          0      65536          0    65536
+     5     8  0.0625000       65536      65536          0      65536          0    65536
+     7    11  0.0234375       24576      24576          0      24576          0    24576
+     8    13  0.0273438       28672      28672          0      28672          0    28672
+    10    16  0.0117188       12288      12288          0      12288          0    12288
+    12    19  0.0073242        7680       7680          0       7680          0    7680
+    13    21  0.0103760       10880      10880          0      10880          0    10880
+    15    24  0.0052795        5536       5536          0       5536          0    5536
+    16    26  0.0072632        7616       7616          0       7616          0    7616
+    18    29  0.0036659        3844       3844          0       3844          0    3844
+    20    32  0.0025291        2652       2652          0       2652          0    2652
+    21        nan        4013       4080          0       3983          0    
+    23        nan        2230       2208          0       2223          0    
+    24        nan        3166       3190          0       3182          0    
+    26        nan        1699       1755          0       1666          0    
+    27        nan        2454       2396          0       2457          0    
+    29        nan        1338       1275          0       1308          0    
+    31        nan         944        933          0        900          0    
+    32        nan        1467       1412          0       1476          0    
+    34        nan         835        821          0        858          0    
+    35        nan        1290       1196          0       1192          0    
+    37        nan         663        706          0        683          0    
+    39        nan         509        514          0        454          0    
+    40        nan         802        775          0        765          0    
+    42        nan         429        420          0        449          0    
+    43        nan         696        665          0        681          0    
+    45        nan         367        388          0        383          0    
+    46        nan         568        629          0        605          0    
+    48        nan         316        299          0        305          0    
+    50        nan         221        207          0        254          0    
+    51        nan         371        371          0        392          0    
+    53        nan         226        192          0        238          0    
+    54        nan         321        351          0        308          0    
+    56        nan         185        176          0        175          0    
+    58        nan         141        149          0        116          0    
+    59        nan         195        206          0        225          0    
+    61        nan         115        132          0        131          0    
+    62        nan         185        204          0        206          0    
+    64        nan          99         95          0        117          0    
+    65        nan         151        200          0        181          0    
+    67        nan          89        100          0        103          0    
+    69        nan          80         76          0         77          0    
+    70        nan         131        123          0        119          0    
+    72        nan          72         54          0         77          0    
+    73        nan         105        117          0        107          0    
+    75        nan          56         75          0         49          0    
+    77        nan          47         39          0         33          0    
+    78        nan          73         76          0         72          0    
+    80        nan          32         49          0         42          0    
+    81        nan          70         71          0         73          0    
+    83        nan          39         51          0         44          0    
+    85        nan          33         30          0         36          0    
+    86        nan          53         41          0         38          0    
+    88        nan          27         27          0         51          0    
+    89        nan          37         40          0         36          0    
+    91        nan          22         25          0         32          0    
+    92        nan          43         33          0         46          0    
+    94        nan          27         22          0         22          0    
+    96        nan          19         18          0         12          0    
+    97        nan          29         27          0         30          0    
+    99        nan          19         19          0         13          0    
+   100        nan          30         26          0         32          0    
+   102        nan          14         15          0         13          0    
+   104        nan           7          9          0         17          0    
+   105        nan          23         23          0         19          0    
+   107        nan           8         11          0         13          0    
+   108        nan          20         21          0         23          0    
+   110        nan          12         10          0         14          0    
+   111        nan           9         25          0         18          0    
+   113        nan           7         10          0          8          0    
+   115        nan           4          1          0          9          0    
+   116        nan          10          5          0         10          0    
+   118        nan           4          9          0          8          0    
+   119        nan           5         11          0          6          0    
+   121        nan           7         10          0          8          0    
+   123        nan           4          2          0          4          0    
+   124        nan           6          3          0         11          0    
+   126        nan           5          4          0          8          0    
+   127        nan           4          9          0          5          0    
+   129        nan           2          2          0          1          0    
+   130        nan           2          2          0          9          0    
+   132        nan           3          6          0          3          0    
+   134        nan           0          2          0          2          0    
+   135        nan           6          3          0          6          0    
+   137        nan           1          4          0          3          0    
+   138        nan           3          5          0          5          0    
+   140        nan           2          3          0          2          0    
+   142        nan           0          2          0          0          0    
+   143        nan           1          3          0          5          0    
+   145        nan           2          0          0          4          0    
+   146        nan           4          4          0          2          0    
+   148        nan           0          1          0          3          0    
+   149        nan           2          6          0          1          0    
+   151        nan           2          0          0          1          0    
+   153        nan           2          1          0          1          0    
+   154        nan           2          2          0          2          0    
+   156        nan           0          0          0          1          0    
+   157        nan           1          2          0          3          0    
+   159        nan           1          2          0          1          0    
+   161        nan           0          0          0          1          0    
+   162        nan           4          2          0          2          0    
+   164        nan           1          0          0          0          0    
+   165        nan           2          4          0          3          0    
+   167        nan           1          0          0          1          0    
+   170        nan           1          1          0          0          0    
+   172        nan           0          0          0          1          0    
+   173        nan           2          0          0          0          0    
+   175        nan           1          0          0          2          0    
+   176        nan           1          0          0          1          0    
+   178        nan           0          1          0          0          0    
+   180        nan           0          0          0          1          0    
+   181        nan           0          2          0          0          0    
+   183        nan           1          0          0          1          0    
+   184        nan           0          1          0          1          0    
+   188        nan           0          0          0          1          0    
+   189        nan           0          1          0          0          0    
+   194        nan           0          0          0          1          0    
+   195        nan           0          1          0          1          0    
+   197        nan           0          0          0          1          0    
+   202        nan           0          0          0          1          0    
+   205        nan           0          1          0          0          0    
+   208        nan           0          1          0          0          0    
+   211        nan           0          0          0          1          0    
+   214        nan           0          0          0          1          0    
+   227        nan           0          1          0          0          0    
+   232        nan           0          0          0          1          0    
+   totals: {'natural': 1048574, 'T_n': 1048574, 'n^2': 1048574, 'n^3': 1048574, 'T_n^2': 1048574}
+   T_n counts equal N(k)*2^(20-k) for every k <= 20 (minus the two non-dropping values T_0=0, T_1=1): True
+   natural column exact in the same sense: True    n^3 column exact in the same sense: True
+   n <= 10^6: max |freq(T_n) - density| over k <= 16: 1.7176347742753686e-05
+   n <= 10^6: max |freq(n^3) - density| over k <= 16: 1.1823681257274767e-05
+   n <= 10^6: squares  k=1: 500000  k=2: 499999  other: 0
+   n <= 10^6: T_n^2    k=1: 500000  k=2: 499999  other: 0
+
+==============================================================================
+H. Check with the repo's own functions (collatz.dropping.dropping_time), modulus 2^16
+   repo dropping time = k + s (un-shortcut steps).  T_n for 2 <= n < 2^16.
+==============================================================================
+   repo dropping_time(T_n) == k+s from common.stop for all n: True
+   Set index j=k+s   #T_n (2<=n<2^16)   #integers m (2<=m<2^16)   N(k)*2^(16-k)
+         1             32767               32767            32768
+         3             16383               16383            16384
+         6              4096                4096            4096
+         8              4096                4096            4096
+        11              1536                1536            1536
+        13              1792                1792            1792
+        16               768                 768            768
+        19               480                 480            480
+        21               680                 680            680
+        24               346                 346            346
+        26               476                 476            476
+        29               234                 250            
+        32               156                 188            
+        34               252                 250            
+        37               143                 132            
+        39               191                 196            
+   for every class of modulus <= 2^16 the two repo counts agree with N(k)*2^(16-k) (minus T=0,1): True
+
+==============================================================================
+I. Mirror test: the same count for the rules 3x-1 and 5x+1 (K = 16)
+   If T_n is 'natural' for every rule, the statement cannot see the rule at all.
+==============================================================================
+   rule 3x+1: classes k = [1, 2, 4, 5, 7, 8, 10, 12]..., N(k) = [1, 1, 1, 2, 3, 7, 12, 30]..., undetermined 2114;  T_n natural: True;  n^3 natural: True
+   rule 3x-1: classes k = [1, 2, 4, 5, 7, 8, 10, 12]..., N(k) = [1, 1, 1, 2, 3, 7, 12, 30]..., undetermined 2114;  T_n natural: True;  n^3 natural: True
+   rule 5x+1: classes k = [1, 3, 5, 7, 10, 12, 14]..., N(k) = [1, 1, 2, 5, 14, 56, 202]..., undetermined 15320;  T_n natural: True;  n^3 natural: True
+   rule 5x-1: classes k = [1, 3, 5, 7, 10, 12, 14]..., N(k) = [1, 1, 2, 5, 14, 56, 202]..., undetermined 15320;  T_n natural: True;  n^3 natural: True
+   rule 7x+1: classes k = [1, 3, 6, 9, 12, 15]..., N(k) = [1, 1, 2, 7, 30, 143]..., undetermined 20866;  T_n natural: True;  n^3 natural: True
+
+done in 12.8 s

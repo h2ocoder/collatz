@@ -1,0 +1,33 @@
+1. totient values <= 10^6: 180184  (researcher / Ford's table: 180184);  preimages: 1943930;  mean fibre size 10.789   [0 s]
+   3-smooth m <= 10^6: 142;  totient values among them: 130;  mean fibre size over those: 115.462
+   sieve count equals the table A(a,b) for all 142 of them: mismatches 0
+   least m with exactly k solutions, k = 2..36 (sieve): [1, 2, 4, 8, 12, 32, 36, 40, 24, 48, 160, 396, 2268, 704, 312, 72, 336, 216, 936, 144, 624, 1056, 1760, 360, 2560, 384, 288, 1320, 3696, 240, 768, 9000, 432, 7128, 4200]
+   equals the 35 terms of OEIS A007374 fetched today: True
+
+2. level sets a + b = n: argmax of A(a, n - a)
+   n =  40: a* = 22, b* = 18, b*/a* = 0.818
+   n =  80: a* = 45, b* = 35, b*/a* = 0.778
+   n = 120: a* = 68, b* = 52, b*/a* = 0.765
+   n = 160: a* = 91, b* = 69, b*/a* = 0.758
+   n = 200: a* = 114, b* = 86, b*/a* = 0.754
+   n = 240: a* = 137, b* = 103, b*/a* = 0.752
+   n = 280: a* = 160, b* = 120, b*/a* = 0.750
+
+3. equal-multiplier saddle, Pierpont part only: theta(s) = sum i ln2 w / sum ln(p-1) w, w = 1/(1 + (p-1)^s)
+   L =  60 (s = 0.2214): theta = 0.515;  sum ln(p-1) w = 52.6  (should be close to L minus the absorption part)
+   L = 100 (s = 0.1719): theta = 0.519;  sum ln(p-1) w = 90.0  (should be close to L minus the absorption part)
+   L = 140 (s = 0.1455): theta = 0.523;  sum ln(p-1) w = 127.9  (should be close to L minus the absorption part)
+   L = 180 (s = 0.1284): theta = 0.526;  sum ln(p-1) w = 166.3  (should be close to L minus the absorption part)
+   L = 220 (s = 0.1163): theta = 0.528;  sum ln(p-1) w = 204.7  (should be close to L minus the absorption part)
+   L = 260 (s = 0.1071): theta = 0.530;  sum ln(p-1) w = 243.2  (should be close to L minus the absorption part)
+   L = 300 (s = 0.0998): theta = 0.531;  sum ln(p-1) w = 281.7  (should be close to L minus the absorption part)
+   L = 320 (s = 0.0966): theta = 0.531;  sum ln(p-1) w = 301.4  (should be close to L minus the absorption part)
+
+4. CONTROL for 'phi(x) = 36 has eight solutions because 7, 19, 37 are all prime':
+   3-smooth m = 2^a 3^b with a, b >= 1, m <= 10^6, for which m/6 + 1, m/2 + 1 and m + 1 are all prime:
+     [(12, (2, 1), (3, 7, 13)), (36, (2, 2), (7, 19, 37)), (72, (3, 2), (13, 37, 73)), (1152, (7, 2), (193, 577, 1153)), (2592, (5, 4), (433, 1297, 2593)), (2916, (2, 6), (487, 1459, 2917))]
+   (the triple of primes is a statement at every lattice point; it decides the count 8 only at (2,2),
+    because only there are (a-1,b-1), (a-1,b), (a,b) the ONLY usable Pierpont points.)
+   A(a,b) at these points: [(12, 6), (36, 8), (72, 17), (1152, 54), (2592, 64), (2916, 18)]
+
+done in 0 s

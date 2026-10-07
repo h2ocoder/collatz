@@ -1,0 +1,71 @@
+N = 40000000: F built [1 s]
+sigma, dest, sig_inf built [7 s];  max sigma 486, max sig_inf 744
+agree with collatz.dropping.dropping_time / dropping_destination / core.total_stopping_time on 1500 values
+
+A. PAIRED DIFFERENCES.  pairs (n, n + 2^k), n odd, bit k of n equal to 0, both in (10^7, 4*10^7].
+   corr = Pearson correlation of (X(n') - X(n), Y(n') - Y(n));  s.e. = 1/sqrt(pairs)
+     k      pairs      s.e.    | F(n),sigma      z | F(n),sig_inf    z | F(n+1),sigma    z | F(n+1),sig_inf  z
+     2    7500000  0.00037  | +0.00305   +8.4 | +0.00106   +2.9 | +0.06403 +175.3 | +0.02215  +60.7
+     4    7500000  0.00037  | +0.00088   +2.4 | +0.00058   +1.6 | +0.02406  +65.9 | +0.00523  +14.3
+     8    7499968  0.00037  | -0.00025   -0.7 | -0.00066   -1.8 | +0.00207   +5.7 | +0.00002   +0.1
+    12    7499008  0.00037  | +0.00056   +1.5 | -0.00024   -0.7 | +0.00017   +0.5 | +0.00067   +1.8
+    16    7484608  0.00037  | +0.00032   +0.9 | +0.00020   +0.5 | +0.00012   +0.3 | +0.00025   +0.7
+         (k = 16: fraction of pairs with different sigma: 0.0611; with different sig_inf: 0.9228)
+    20    7340032  0.00037  | +0.00005   +0.1 | -0.00021   -0.6 | -0.00010   -0.3 | +0.00058   +1.6
+   k = 16, n in (10000000, 20000000]: 2476864 pairs, s.e. 0.00064;  F,sigma +0.00082;  F,sig_inf +0.00082
+   k = 16, n in (20000000, 30000000]: 2482624 pairs, s.e. 0.00063;  F,sigma +0.00060;  F,sig_inf +0.00008
+   k = 16, n in (30000000, 40000000]: 2490368 pairs, s.e. 0.00063;  F,sigma -0.00059;  F,sig_inf -0.00025
+   positive control (sig_inf + (F - 19) on a random 2% of n): corr +0.00051, z = +1.4
+
+B. MUTUAL INFORMATION against within-stratum shuffles, odd n in (10^7, 2*10^7]  (strata: 256 size bins x n mod 2^k)
+     k    pair             I observed    shuffled mean    sd         excess        z
+     4    F,sigma          0.000380      0.000379      3.2e-06   +9.21e-07    +0.29
+     4    F,sig_inf        0.046586      0.046507      4.6e-05   +7.87e-05    +1.71
+     4    F(n+1),sigma     0.027737      0.026204      3.5e-05   +1.53e-03   +44.08
+     4    F(n+1),sig_inf   0.048167      0.047893      4.6e-05   +2.73e-04    +6.01
+         [36 s]
+     8    F,sigma          0.000380      0.000383      3.1e-06   -2.69e-06    -0.85
+     8    F,sig_inf        0.046586      0.046531      3.9e-05   +5.55e-05    +1.44
+     8    F(n+1),sigma     0.027737      0.027656      1.5e-05   +8.11e-05    +5.30
+     8    F(n+1),sig_inf   0.048167      0.047993      5.2e-05   +1.73e-04    +3.35
+         [56 s]
+    12    F,sigma          0.000380      0.000382      3.7e-06   -1.69e-06    -0.45
+    12    F,sig_inf        0.046586      0.046511      2.6e-05   +7.50e-05    +2.84
+    12    F(n+1),sigma     0.027737      0.027732      9.5e-06   +5.01e-06    +0.53
+    12    F(n+1),sig_inf   0.048167      0.048003      3.5e-05   +1.64e-04    +4.74
+         [77 s]
+
+C. FIBRES phi^-1(m), m <= 10^5 (complete below 10^6 since x <= 5.539 phi(x))
+   totient values <= 100000: 20254;  preimages: 194429;  phi^-1(36) = [37, 57, 63, 74, 76, 108, 114, 126]
+   odd members x >= 3 in fibres with at least two: 52863 in 8301 fibres, 533373 pairs
+   Pr[sigma(x) = sigma(x')] over pairs of fibre-mates: 0.30760
+     shuffle of sigma within x mod 2^k:    k    mean      sd       z of observed
+                                           1   0.30294  0.00310   +1.51
+                                           2   0.30745  0.00053   +0.29
+                                           3   0.30820  0.00044   -1.35
+                                           4   0.30788  0.00034   -0.81
+                                           8   0.30766  0.00007   -0.89
+                                          12   0.30766  0.00005   -1.22
+   MECHANISM.  v_2(x - x') for pairs of odd fibre-mates (independent odd numbers: 1/2, 1/4, 1/8, 1/16, 1/16):
+     v_2 = 1, 2, 3, 4, >= 5: 0.4685, 0.2532, 0.1419, 0.0695, 0.0668
+     most frequent reduced ratios x : x' among fibre-mates (fibres with <= 12 odd members): 7:9 (2492), 13:21 (1014), 19:27 (712), 25:33 (596), 43:49 (445), 13:15 (392), 41:55 (338), 35:39 (320), 19:21 (299), 11:15 (287), 41:75 (246), 37:57 (236)
+     => fibre-mates are p*y and q*y with phi(p) = phi(q) (7:9, 13:21, 19:27, 35:39:45, ...); x - x' = (q - p) y has a
+        forced 2-adic valuation (9 - 7 = 2, 21 - 13 = 8, 27 - 19 = 8, 39 - 35 = 4), which is the whole residue effect.
+
+D. COLLATZ ARROWS INSIDE FIBRES.  odd x <= 10^6 with phi(T(x)) = phi(x), T(x) = (3x+1)/2
+   count: 59   (note T(x) = 2 mod 3 always; a fair null must keep y = 2 mod 3 and the parity of T(x))
+   null y = T(x) + 6t, t = -25..25, t != 0: mean 62.0, sd 7.9, min 42, max 82;  z of the real count: -0.38
+   cruder null y = T(x) + t (any residue): mean 363.2, sd 1025.6
+
+E. THE FIBRE OF 36, from the repo functions (sigma = standard steps; k = halvings; s = odd steps)
+      x   sigma   k   s   dest   sig_inf   orbit max
+     37      3   2   1     28       21        112
+     57      3   2   1     43       32        196
+     63     88  54  34     61      107       9232
+     74      1   1   0     37       22        112
+     76      1   1   0     38       22         88
+    108      1   1   0     54      113       9232
+    114      1   1   0     57       33        196
+    126      1   1   0     63      108       9232
+
+done in 86 s

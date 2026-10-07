@@ -1,0 +1,76 @@
+N = 10000000.  H = A003434 (iterations of phi to reach 1), F = A064415.   [5 s]
+H(1..40) = [0, 1, 2, 2, 3, 2, 3, 3, 3, 3, 4, 3, 4, 3, 4, 4, 5, 3, 4, 4, 4, 4, 5, 4, 5, 4, 4, 4, 5, 4, 5, 5, 5, 5, 5, 4, 5, 4, 5, 5]
+F(1..40) = [0, 1, 1, 2, 2, 2, 2, 3, 2, 3, 3, 3, 3, 3, 3, 4, 4, 3, 3, 4, 3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 5, 4, 5, 4, 4, 4, 4, 4, 5]
+  both agree with the OEIS data for n = 1..40
+
+(P) CLASS BOUNDS.  class h = {n : H(n) = h}.  Claim: 2^(h-1) < n <= 2*3^(h-1).
+   h    min n        max n <= N     2^(h-1)     2*3^(h-1)    min>2^(h-1)   max = 2*3^(h-1)?
+   1          2             2           1             2      True        yes
+   2          3             6           2             6      True        yes
+   3          5            18           4            18      True        yes
+   4         11            54           8            54      True        yes
+   5         17           162          16           162      True        yes
+   6         41           486          32           486      True        yes
+   7         83          1458          64          1458      True        yes
+   8        137          4374         128          4374      True        yes
+   9        257         13122         256         13122      True        yes
+  10        641         39366         512         39366      True        yes
+  11       1097        118098        1024        118098      True        yes
+  12       2329        354294        2048        354294      True        yes
+  13       4369       1062882        4096       1062882      True        yes
+  14      10537       3188646        8192       3188646      True        yes
+  15      17477       9565938       16384       9565938      True        yes
+  16      35209       9999218       32768      28697814      True        (2*3^(h-1) > N)
+  17      65537       9999207       65536      86093442      True        (2*3^(h-1) > N)
+  18     140417       9999990      131072     258280326      True        (2*3^(h-1) > N)
+  19     281929       9999998      262144     774840978      True        (2*3^(h-1) > N)
+  20     557057       9999994      524288    2324522934      True        (2*3^(h-1) > N)
+  21    1114129      10000000     1048576    6973568802      True        (2*3^(h-1) > N)
+  22    2384897       9999979     2097152   20920706406      True        (2*3^(h-1) > N)
+  23    4227137       9999767     4194304   62762119218      True        (2*3^(h-1) > N)
+  24    8978569       9577397     8388608  188286357654      True        (2*3^(h-1) > N)
+  all classes inside (2^(h-1), 2*3^(h-1)]: True
+  least element of each class: [1, 2, 3, 5, 11, 17, 41, 83, 137, 257, 641, 1097, 2329, 4369, 10537, 17477, 35209, 65537, 140417, 281929, 557057, 1114129, 2384897, 4227137, 8978569]
+  OEIS A007755                : [1, 2, 3, 5, 11, 17, 41, 83, 137, 257, 641, 1097, 2329, 4369, 10537, 17477, 35209, 65537, 140417, 281929, 557057, 1114129, 2384897, 4227137, 8978569]
+  pointwise 2^(H-1) < n <= 2*3^(H-1), 2 <= n <= N: violations = 0
+
+(S) ADDITIVITY.
+  F(n) = F(p) + F(n/p), p = least prime factor, all 2 <= n <= N: failures = 0
+  F(p) = F(p-1) for all 664578 odd primes p <= N: failures = 0
+  => F is completely additive on [1, N] (induction on the number of prime factors).
+  Shapiro's form C(mk) = C(m) + C(k) + [m, k both even], 2*10^6 random pairs, mk < 10^7: failures = 0
+
+(F) SANDWICH  2^F(n) <= n <= 3^F(n).
+  violations of 2^F <= n: 0;  violations of n <= 3^F: 0   (1 <= n <= N)
+  equality 2^F = n exactly for n = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608]
+  equality 3^F = n exactly for n = [1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683, 59049, 177147, 531441, 1594323, 4782969]
+  F(n)/ln n over 2 <= n <= N: min 0.9102 (1/ln 3 = 0.9102), max 1.4427 (1/ln 2 = 1.4427), mean 1.2156
+    mean F(n)/ln n on [1000, 10000): 1.2119   sd 0.0797
+    mean F(n)/ln n on [10000, 100000): 1.2138   sd 0.0699
+    mean F(n)/ln n on [100000, 1000000): 1.2150   sd 0.0630
+    mean F(n)/ln n on [1000000, 10000000): 1.2157   sd 0.0579
+  (Erdos-Granville-Pomerance-Spiro 1990 conjecture H(n) ~ alpha ln n for almost all n;
+   the mean ratio drifts slowly and sits strictly between 1/ln 3 and 1/ln 2.)
+
+(L) ON THE 3-SMOOTH LATTICE.
+  3-smooth x <= N: 190; failures of F = a+b, H = a+b (a>=1) / b+1 (a=0), and of the chain shape: 0
+  totient chain of 36 = 2^2 3^2: 36 -> 12 -> 4 -> 2 -> 1   i.e. (2,2) -> (2,1) -> (2,0) -> (1,0) -> (0,0);  H(36) = 4 = 2 + 2
+  sandwich on the lattice:  a log_3(2) + b = log_3 m  <=  a + b  <=  a + b log_2(3) = log_2 m.
+  dictionary: sigma(n) = k + s = H(2^k 3^s) for 2 <= n <= 20000 (sigma = standard steps to drop,
+    repo convention; H by explicit totient chain of the 3-smooth number): failures = 0
+    dropping times that occur below 20000: [1, 3, 6, 8, 11, 13, 16, 19, 21, 24, 26, 29, 32, 34] ...  (= L1 norms of the staircase
+    points (floor(s log2 3) + 1, s); OEIS A122437 gives this spectrum)
+
+(I) INVARIANCE UNDER THE ODD COLLATZ STEP.  v = n + 1,  T(n) + 1 = 3 v / 2  (n odd).
+  3x+1:  F(T(n)+1) = F(n+1) for all 3333333 odd n with T(n)+1 <= N: failures = 0
+  3x-1:  F(T'(n)-1) = F(n-1), T'(n) = (3n-1)/2, all 3333332 odd n >= 3 in range: failures = 0
+  5x+1:  F(3 T5(n) + 1) - F(3n + 1), T5(n) = (5n+1)/2, 666666 odd n: values = [1]   (always +1 = F(5) - F(2))
+  odd primes q with F(q) = F(2) = 1: [3]  (F(q) = F(q-1) = 1 forces q - 1 = 2)
+  n with F(n) = 1 below N: [2, 3]
+  example n = 35: v = 36 = 2^2 3^2 -> 54 = 2 3^3 -> 81 = 3^4 (n: 35 -> 53 -> 80); F(v) = 4 throughout.
+
+  at an EVEN step n -> n/2 the coordinate moves v -> (v+1)/2 and F is not conserved:
+    F(n/2 + 1) - F(n + 1) over even n < N:  mean -0.6915, sd 1.2668, range [-7, 5]
+    distribution: {-7: 5, -6: 181, -5: 4818, -4: 53057, -3: 301355, -2: 906210, -1: 1560482, 0: 1332451, 1: 650645, 2: 167483, 3: 21916, 4: 1354, 5: 42}
+
+done in 8 s

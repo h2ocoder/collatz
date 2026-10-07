@@ -1,0 +1,65 @@
+p =   5: sporadic d  0 of   2 | F1 roots [2] F2 roots [] | sporadic and not a root of F1 F2: 0: {}
+p =   7: sporadic d  0 of   4 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 0: {}
+p =  11: sporadic d  4 of   8 | F1 roots [3, 7] F2 roots [2, 6] | sporadic and not a root of F1 F2: 0: {}
+p =  13: sporadic d  0 of  10 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 0: {}
+p =  17: sporadic d 10 of  14 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 10: {3: {1: 1, -1: 1}, 4: {1: 1}, 5: {-1: 1}, 6: {1: 1, -1: 1}, 7: {1: 1, -1: 1}, 10: {-1: 1}, 11: {-1: 1}, 12: {1: 1, -1: 1}, 13: {1: 1}, 14: {1: 1, -1: 1}}
+p =  19: sporadic d  4 of  16 | F1 roots [4, 14] F2 roots [3, 13] | sporadic and not a root of F1 F2: 0: {}
+p =  23: sporadic d  9 of  20 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 9: {3: {1: 2, -1: 2}, 4: {1: 1, -1: 1}, 6: {1: 1, -1: 1}, 7: {1: 1, -1: 1}, 8: {-1: 2}, 9: {1: 1}, 10: {-1: 1}, 12: {1: 2}, 18: {1: 1}}
+p =  29: sporadic d  7 of  26 | F1 roots [5, 23] F2 roots [4, 22] | sporadic and not a root of F1 F2: 3: {7: {1: 1}, 10: {1: 1}, 25: {1: 1}}
+p =  31: sporadic d 10 of  28 | F1 roots [12, 18] F2 roots [11, 17] | sporadic and not a root of F1 F2: 6: {2: {1: 1}, 14: {1: 1}, 16: {1: 1}, 20: {1: 1}, 23: {-1: 1}, 27: {1: 1, -1: 1}}   <- Collatz d = 2
+p =  37: sporadic d  9 of  34 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 9: {2: {1: 2, -1: 2}, 4: {1: 1}, 12: {-1: 1}, 17: {-1: 1}, 19: {-1: 2}, 22: {1: 1}, 24: {1: 1, -1: 1}, 28: {1: 1}, 34: {-1: 1}}   <- Collatz d = 2
+p =  41: sporadic d  8 of  38 | F1 roots [6, 34] F2 roots [5, 33] | sporadic and not a root of F1 F2: 6: {10: {1: 1}, 23: {-1: 1}, 25: {-1: 1}, 27: {-1: 1}, 37: {1: 1}, 38: {1: 1, -1: 1}}
+p =  43: sporadic d  9 of  40 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 9: {3: {1: 1, -1: 1}, 4: {1: 1}, 7: {-1: 1}, 11: {1: 1}, 24: {1: 2}, 29: {-1: 1}, 30: {1: 2, -1: 2}, 33: {1: 1, -1: 2}, 37: {1: 1, -1: 1}}
+p =  47: sporadic d  6 of  44 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 6: {11: {1: 1, -1: 1}, 18: {1: 1}, 25: {1: 1}, 30: {-1: 1}, 32: {1: 1}, 34: {1: 1}}
+p =  53: sporadic d  7 of  50 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 7: {10: {-1: 2}, 16: {-1: 2}, 28: {1: 2}, 33: {1: 1}, 36: {1: 2}, 37: {-1: 2}, 43: {1: 2, -1: 2}}
+p =  59: sporadic d  6 of  56 | F1 roots [25, 33] F2 roots [24, 32] | sporadic and not a root of F1 F2: 2: {45: {1: 2}, 54: {1: 2}}
+p =  61: sporadic d  2 of  58 | F1 roots [17, 43] F2 roots [16, 42] | sporadic and not a root of F1 F2: 0: {}
+p =  67: sporadic d  2 of  64 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 2: {27: {1: 1}, 45: {1: 1}}
+p =  71: sporadic d  5 of  68 | F1 roots [8, 62] F2 roots [7, 61] | sporadic and not a root of F1 F2: 1: {19: {1: 2}}
+p =  73: sporadic d  8 of  70 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 8: {12: {-1: 1}, 13: {-1: 1}, 19: {1: 1}, 26: {1: 1, -1: 1}, 45: {1: 1, -1: 1}, 50: {1: 1}, 59: {-1: 1}, 67: {-1: 1}}
+p =  79: sporadic d  6 of  76 | F1 roots [29, 49] F2 roots [28, 48] | sporadic and not a root of F1 F2: 2: {38: {1: 1}, 52: {1: 1}}
+p =  83: sporadic d  0 of  80 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 0: {}
+p =  89: sporadic d  6 of  86 | F1 roots [9, 79] F2 roots [8, 78] | sporadic and not a root of F1 F2: 4: {27: {-1: 1}, 33: {1: 1, -1: 1}, 54: {1: 1, -1: 1}, 61: {-1: 1}}
+p =  97: sporadic d  4 of  94 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 4: {21: {1: 1, -1: 1}, 37: {-1: 1}, 59: {1: 1, -1: 1}, 74: {1: 1, -1: 1}}
+p = 101: sporadic d  6 of  98 | F1 roots [22, 78] F2 roots [21, 77] | sporadic and not a root of F1 F2: 2: {7: {1: 1}, 11: {1: 1}}
+p = 103: sporadic d  0 of 100 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 0: {}
+p = 107: sporadic d  1 of 104 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 1: {77: {1: 1}}
+p = 109: sporadic d  3 of 106 | F1 roots [10, 98] F2 roots [9, 97] | sporadic and not a root of F1 F2: 1: {39: {1: 1}}
+p = 113: sporadic d  2 of 110 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 2: {77: {-1: 1}, 91: {-1: 1}}
+p = 127: sporadic d  2 of 124 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 2: {74: {-1: 1}, 115: {-1: 1}}
+p = 131: sporadic d  4 of 128 | F1 roots [11, 119] F2 roots [10, 118] | sporadic and not a root of F1 F2: 0: {}
+p = 137: sporadic d  1 of 134 | F1 roots [] F2 roots [] | sporadic and not a root of F1 F2: 1: {128: {1: 2}}
+p = 139: sporadic d  4 of 136 | F1 roots [63, 75] F2 roots [62, 74] | sporadic and not a root of F1 F2: 0: {}
+p = 149: sporadic d  1 of 146 | F1 roots [40, 108] F2 roots [39, 107] | sporadic and not a root of F1 F2: 1: {91: {1: 1}}
+p = 151: sporadic d  6 of 148 | F1 roots [27, 123] F2 roots [26, 122] | sporadic and not a root of F1 F2: 2: {34: {-1: 1}, 40: {-1: 1}}
+
+--- B. the two golden conditions ---
+F1(d) = d^2 + d - 1: 33 roots (p, d) with 5 <= p <= 151; eigenvalue +1 present at every one (asserted).
+F2(d) = d^2 + 3d + 1: 32 roots; eigenvalue -1 present at every one (asserted).
+   roots over Q(sqrt5): F1: [-1/2 + sqrt(5)/2, -sqrt(5)/2 - 1/2] = 1/phi, -phi;   F2: [-3/2 - sqrt(5)/2, -3/2 + sqrt(5)/2] = -phi^-2, -phi^2
+   d = 2:  F1(2) = 5 (2 = -phi = 1/phi mod 5, phi = 3),   F2(2) = 11 (phi = 8 mod 11, phi^2 = 9, 2 = -phi^2).
+   symbolic check of the two configurations (d a free symbol, q = d + 1; e^-1 a = d a, o^-1 a = (d a - 1)/q):
+      F1: A(delta_-1 - delta_0) = delta_{-d} + delta_{-1} - delta_{0} - delta_{-1/(d + 1)};  closes iff -d = -1/(d+1): numerator -d**2 - d + 1
+      F2: x0 = 1/(d^2-d-1), x1 = d x0 form the 2-cycle (o x0 = x1, e x1 = x0); A(delta_x1 - delta_x0) = -(delta_x1 - delta_x0) + delta_{d x1} - delta_{o^-1 x0};
+          closes iff d x1 = o^-1(x0): numerator (d - 1)*(d**2 + 3*d + 1)
+
+--- C. search for further universal polynomials F(d) (roots mod p always carry the eigenvalue v), primes 13..151 ---
+   degree 2, |coefficients| <= 12, leading coefficient in (1, 2, 3): 9 polynomials pass; irreducible of full degree: [(-1, 'd**2 + 3*d + 1', 30), (-1, 'd**2 + d + 1', 30), (1, 'd**2 + d - 1', 30)]
+   degree 3, |coefficients| <= 7, leading coefficient in (1, 2, 3): 24 polynomials pass; irreducible of full degree: []
+   degree 4, |coefficients| <= 4, leading coefficient in (1,): 19 polynomials pass; irreducible of full degree: []
+   reading: d^2+d-1 (v = +1) and d^2+3d+1 (v = -1) are F1, F2;  d^2+d+1 (d a cube root of unity: q = -d^2, m = 1, t = 2) is the theorem.
+   No other irreducible quadratic, cubic or quartic in the search box is universal: there is no third low-degree condition.
+
+--- D. what F1, F2 do not explain ---
+primes 5..151: 2320 kernels (d+1, d); 152 have a sporadic +-1; 52 of those are roots of F1 or F2; 100 are not
+     5 <= p <=  41: 11 primes; sporadic d per prime 5.55; not explained by F1, F2 per prime 3.91 = 21.5 % of the kernels
+    43 <= p <=  79:  9 primes; sporadic d per prime 5.67; not explained by F1, F2 per prime 4.11 = 7.0 % of the kernels
+    83 <= p <= 113:  8 primes; sporadic d per prime 2.75; not explained by F1, F2 per prime 1.75 = 1.8 % of the kernels
+   127 <= p <= 151:  6 primes; sporadic d per prime 3.00; not explained by F1, F2 per prime 1.00 = 0.7 % of the kernels
+Collatz column d = 2: sporadic at [(11, {'1': 1, '-1': 1}, 'root of F2'), (31, {'1': 1}, 'unexplained'), (37, {'1': 2, '-1': 2}, 'unexplained')]
+   p = 11: both sporadic eigenvalues come from F2(2) = 11 (the trivial cycle {1, 2}): -1 directly, +1 because the spectrum is invariant under x -> -x (m = 2).
+   p = 37: the orbit of d = 2 under d -> 1/d, d -> -1-d is [2, 12, 17, 19, 24, 34]; sporadic among them: [2, 12, 17, 19, 24, 34] (all sporadic d at 37: [2, 4, 12, 17, 19, 22, 24, 28, 34])
+   p = 31: same orbit of d = 2: [2, 10, 14, 16, 20, 28]; sporadic among them: [2, 14, 16, 20]
+   p = 41: same orbit of d = 2: [2, 13, 19, 21, 27, 38]; sporadic among them: [27, 38]
+   p = 43: same orbit of d = 2: [2, 14, 20, 22, 28, 40]; sporadic among them: []
+total time 21 s

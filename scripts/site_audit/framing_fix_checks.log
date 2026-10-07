@@ -1,0 +1,25 @@
+definitions.md
+  [OK] alpha sequence of 7 is [1, 1, 2, 3, 4] -- [1, 1, 2, 3, 4]
+  [OK] drop(5) = 3 steps to 4, one odd step
+  [OK] drop(3) = 6 steps to 2, two odd steps
+  [OK] 1 never drops below itself (1 -> 4 -> 2 -> 1)
+  [OK] Dset_3 = {n > 1 : n = 1 mod 4} for n < 10^5
+  [OK] every Dset_k met for 2 <= n < 2^18 has a single orbital oddity (81 sets)
+  [OK] for k - s <= 12: Dset_k equals a union of residue classes mod 2^(k-s), restricted to n > 1
+  [OK] stopping time = coefficient stopping time for 2 <= n <= 10^6 (Terras's conjecture, small range) -- 0 violations
+  [OK] n = 1 is the reason for 'n > 1': coefficient 3/4 < 1 after 2 shortcut steps, yet 1 -> 2 -> 1 never drops
+  [OK] 3n+1 adds one or two binary digits (odd n < 10^6) -- [1, 2]
+  [OK] halving removes exactly one binary digit (even n < 10^6)
+how-to-read.md / index.md
+  [OK] -1 lies on a cycle of the same rule (length 2)
+  [OK] -5 lies on a cycle of the same rule (length 5)
+  [OK] -17 lies on a cycle of the same rule (length 18)
+publications.md
+  [OK] 44 radians is almost exactly 7 full turns -- 7.0028 turns
+  [OK] 44 * log_6 3 is about 26.98 -- 26.9785
+  [OK] 31 radians is not close to a whole number of turns -- 4.9338 turns
+  [OK] for x > 100 every step rotates frac(log_6 x) by log_6 3 to within 0.002 of a turn -- max 0.00184
+  [OK] Euclid: (n^2 - d^2, 2nd, n^2 + d^2) is a Pythagorean triple for arbitrary integer pairs
+  [OK] Re(((n-d) + d i)/(n + n i)) = 1/2 exactly for arbitrary pairs (n, d), n != 0
+
+FAILURES: 0

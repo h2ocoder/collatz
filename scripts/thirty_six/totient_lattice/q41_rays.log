@@ -1,0 +1,228 @@
+box: 1 <= a <= 480, 0 <= b <= 300;  X_max = 332.7, Y_max = 329.6
+Pierpont points in the box (primality proved, Lucas): 1625   [21 s]
+
+DENSITY OF PIERPONT POINTS.  N(L) = #{(i,j) in P : ln(2^i 3^j) <= L}; heuristic N(L) ~ kappa L
+    L      N(L)   N(L)/L    per decade = N(L)/L * ln 10
+     25      75    3.000     6.908
+     50     172    3.440     7.921
+    100     329    3.290     7.576
+    150     512    3.413     7.859
+    200     674    3.370     7.760
+    250     870    3.480     8.013
+    300    1034    3.447     7.936
+    329    1138    3.459     7.965
+  kappa (empirical, L <= 330) = 3.4650;  naive 3/(ln2 ln3) = 3.9396  (Gleason: 'about 9 per decade' = kappa 3.909)
+  refined constant C = 3 * prod_{q >= 5} (1 - f_q)/(1 - 1/q),  f_q = Pr[q | 2^i 3^j + 1]:
+     q <=    100:  C = 2.8038,  kappa = C/(ln2 ln3) = 3.6820,  per decade = 8.478
+     q <=   1000:  C = 2.7670,  kappa = C/(ln2 ln3) = 3.6336,  per decade = 8.367
+     q <=  10000:  C = 2.6189,  kappa = C/(ln2 ln3) = 3.4391,  per decade = 7.919
+     q <= 100000:  C = 2.4605,  kappa = C/(ln2 ln3) = 3.2311,  per decade = 7.440
+     q <= 300000:  C = 2.3819,  kappa = C/(ln2 ln3) = 3.1280,  per decade = 7.202
+     observed: kappa = 3.4650 +- 0.1025 (Poisson),  per decade = 7.978
+     DEAD END: the partial products keep falling; they do not converge.  f_q = index/(q-1) for the
+     primes where <2,3> has even order and index > 1 in (Z/q)*, and those have positive density,
+     so sum (f_q - 1/q) diverges.  No constant is claimed; only the empirical kappa is used below.
+  angular distribution of the points with L <= Lcap (heuristic: uniform in theta):
+   theta bin : 0.0-0.1  0.1-0.2  0.2-0.3  0.3-0.4  0.4-0.5  0.5-0.6  0.6-0.7  0.7-0.8  0.8-0.9  0.9-1.0
+   count     :     113      136      106      104      118       88      125      125      109      118
+   chi^2 against uniform, 9 d.o.f.: 14.22   (5% critical value 16.92)
+   theta < 1/2 (3-heavy): 577;  theta > 1/2 (2-heavy): 565;  z = -0.36
+
+CENTRE OF MASS of the Pierpont points with ln(p-1) <= U:
+  theta_cm(U) = sum_p i_p ln2 / sum_p ln(p-1).   On the critical line iff theta_cm = 1/2.
+  sd = standard deviation of theta_cm if each theta_p were independent uniform on [0,1].
+      U   points   sum i ln2   sum j ln3   theta_cm      sd     z
+     10      27        82.5        79.1    0.5105   0.0599  +0.17
+     20      62       338.3       357.0    0.4865   0.0405  -0.33
+     40     139      1741.2      1371.1    0.5595   0.0275  +2.16
+     80     270      5316.4      5644.7    0.4850   0.0200  -0.75
+    160     541     21617.9     21988.7    0.4957   0.0143  -0.30
+    240     819     48509.2     50943.8    0.4878   0.0116  -1.05
+    329    1138     94742.8     94884.9    0.4996   0.0098  -0.04
+
+float64 table agrees with the exact table on 0<=a,b<=40: max relative error 0.00e+00
+largest entry: ln A(480,300) = 76.75
+
+TABLE 2.  GROWTH ALONG RAYS b = r a.   ln A(a, round(r a)) and ln A / sqrt(L),  L = ln(2^a 3^b)
+  heuristic leading term: ln A ~ h(theta) sqrt(L), h = 2 sqrt(c m(theta)), c = kappa_emp pi^2/12
+
+  r = 0.1000   theta = 0.8632   heuristic h(theta) = 2.535
+    fit over L >= 40:  ln A = 2.687 sqrt(L) -2.041 ln L +0.733
+    a=  10 b=   1  L=   8.03  ln A=   3.761  ln A/sqrt(L)= 1.327
+    a=  20 b=   2  L=  16.06  ln A=   5.820  ln A/sqrt(L)= 1.452
+    a=  40 b=   4  L=  32.12  ln A=   8.955  ln A/sqrt(L)= 1.580
+    a=  80 b=   8  L=  64.24  ln A=  13.776  ln A/sqrt(L)= 1.719
+    a= 160 b=  16  L= 128.48  ln A=  21.278  ln A/sqrt(L)= 1.877
+    a= 320 b=  32  L= 256.96  ln A=  32.489  ln A/sqrt(L)= 2.027
+    a= 480 b=  48  L= 385.44  ln A=  41.329  ln A/sqrt(L)= 2.105
+
+  r = 0.2500   theta = 0.7162   heuristic h(theta) = 3.123
+    fit over L >= 40:  ln A = 3.315 sqrt(L) -1.840 ln L -1.286
+    a=  10 b=   2  L=   9.13  ln A=   4.575  ln A/sqrt(L)= 1.514
+    a=  20 b=   5  L=  19.36  ln A=   7.966  ln A/sqrt(L)= 1.811
+    a=  40 b=  10  L=  38.71  ln A=  12.700  ln A/sqrt(L)= 2.041
+    a=  80 b=  20  L=  77.42  ln A=  19.864  ln A/sqrt(L)= 2.257
+    a= 160 b=  40  L= 154.85  ln A=  30.666  ln A/sqrt(L)= 2.464
+    a= 320 b=  80  L= 309.70  ln A=  46.526  ln A/sqrt(L)= 2.644
+    a= 480 b= 120  L= 464.54  ln A=  58.807  ln A/sqrt(L)= 2.728
+
+  r = 0.3981   theta = 0.6131   heuristic h(theta) = 3.310
+    fit over L >= 40:  ln A = 3.441 sqrt(L) -1.610 ln L -2.070
+    a=  10 b=   4  L=  11.33  ln A=   5.730  ln A/sqrt(L)= 1.703
+    a=  20 b=   8  L=  22.65  ln A=   9.356  ln A/sqrt(L)= 1.966
+    a=  40 b=  16  L=  45.30  ln A=  14.993  ln A/sqrt(L)= 2.228
+    a=  80 b=  32  L=  90.61  ln A=  23.424  ln A/sqrt(L)= 2.461
+    a= 160 b=  64  L= 181.21  ln A=  35.881  ln A/sqrt(L)= 2.665
+    a= 320 b= 127  L= 361.33  ln A=  53.858  ln A/sqrt(L)= 2.833
+    a= 480 b= 191  L= 542.55  ln A=  67.901  ln A/sqrt(L)= 2.915
+
+  r = 0.5000   theta = 0.5579   heuristic h(theta) = 3.359
+    fit over L >= 40:  ln A = 3.465 sqrt(L) -1.596 ln L -2.045
+    a=  10 b=   5  L=  12.42  ln A=   6.131  ln A/sqrt(L)= 1.739
+    a=  20 b=  10  L=  24.85  ln A=  10.085  ln A/sqrt(L)= 2.023
+    a=  40 b=  20  L=  49.70  ln A=  16.148  ln A/sqrt(L)= 2.291
+    a=  80 b=  40  L=  99.40  ln A=  25.158  ln A/sqrt(L)= 2.523
+    a= 160 b=  80  L= 198.79  ln A=  38.358  ln A/sqrt(L)= 2.721
+    a= 320 b= 160  L= 397.59  ln A=  57.492  ln A/sqrt(L)= 2.883
+    a= 480 b= 240  L= 596.38  ln A=  72.361  ln A/sqrt(L)= 2.963
+
+  r = 0.6309   theta = 0.5000   heuristic h(theta) = 3.376  <-- critical slope ln2/ln3
+    fit over L >= 40:  ln A = 3.479 sqrt(L) -1.741 ln L -1.510
+    a=  10 b=   6  L=  13.52  ln A=   6.480  ln A/sqrt(L)= 1.762
+    a=  20 b=  13  L=  28.14  ln A=  10.991  ln A/sqrt(L)= 2.072
+    a=  40 b=  25  L=  55.19  ln A=  17.327  ln A/sqrt(L)= 2.332
+    a=  80 b=  50  L= 110.38  ln A=  26.886  ln A/sqrt(L)= 2.559
+    a= 160 b= 101  L= 221.86  ln A=  40.906  ln A/sqrt(L)= 2.746
+    a= 320 b= 202  L= 443.73  ln A=  61.153  ln A/sqrt(L)= 2.903
+    a= 476 b= 300  L= 659.52  ln A=  76.554  ln A/sqrt(L)= 2.981
+
+  r = 0.7960   theta = 0.4422   heuristic h(theta) = 3.359
+    fit over L >= 40:  ln A = 3.459 sqrt(L) -1.876 ln L -1.006
+    a=  10 b=   8  L=  15.72  ln A=   7.098  ln A/sqrt(L)= 1.790
+    a=  20 b=  16  L=  31.44  ln A=  11.725  ln A/sqrt(L)= 2.091
+    a=  40 b=  32  L=  62.88  ln A=  18.636  ln A/sqrt(L)= 2.350
+    a=  80 b=  64  L= 125.76  ln A=  28.756  ln A/sqrt(L)= 2.564
+    a= 160 b= 127  L= 250.43  ln A=  43.373  ln A/sqrt(L)= 2.741
+    a= 320 b= 255  L= 501.95  ln A=  64.841  ln A/sqrt(L)= 2.894
+    a= 377 b= 300  L= 590.90  ln A=  71.160  ln A/sqrt(L)= 2.927
+
+  r = 1.0000   theta = 0.3869   heuristic h(theta) = 3.310
+    fit over L >= 40:  ln A = 3.409 sqrt(L) -1.986 ln L -0.589
+    a=  10 b=  10  L=  17.92  ln A=   7.616  ln A/sqrt(L)= 1.799
+    a=  20 b=  20  L=  35.84  ln A=  12.518  ln A/sqrt(L)= 2.091
+    a=  40 b=  40  L=  71.67  ln A=  19.800  ln A/sqrt(L)= 2.339
+    a=  80 b=  80  L= 143.34  ln A=  30.395  ln A/sqrt(L)= 2.539
+    a= 160 b= 160  L= 286.68  ln A=  45.855  ln A/sqrt(L)= 2.708
+    a= 300 b= 300  L= 537.53  ln A=  65.997  ln A/sqrt(L)= 2.847
+
+  r = 1.5923   theta = 0.2838   heuristic h(theta) = 3.123
+    fit over L >= 40:  ln A = 3.215 sqrt(L) -2.096 ln L -0.130
+    a=  10 b=  16  L=  24.51  ln A=   8.654  ln A/sqrt(L)= 1.748
+    a=  20 b=  32  L=  49.02  ln A=  14.140  ln A/sqrt(L)= 2.020
+    a=  40 b=  64  L=  98.04  ln A=  22.117  ln A/sqrt(L)= 2.234
+    a=  80 b= 127  L= 194.98  ln A=  33.720  ln A/sqrt(L)= 2.415
+    a= 160 b= 255  L= 391.05  ln A=  50.935  ln A/sqrt(L)= 2.576
+    a= 188 b= 299  L= 458.80  ln A=  55.942  ln A/sqrt(L)= 2.612
+
+  r = 2.5000   theta = 0.2015   heuristic h(theta) = 2.857
+    fit over L >= 40:  ln A = 2.923 sqrt(L) -1.964 ln L -0.409
+    a=  10 b=  25  L=  34.40  ln A=   9.612  ln A/sqrt(L)= 1.639
+    a=  20 b=  50  L=  68.79  ln A=  15.554  ln A/sqrt(L)= 1.875
+    a=  40 b= 100  L= 137.59  ln A=  24.209  ln A/sqrt(L)= 2.064
+    a=  80 b= 200  L= 275.17  ln A=  37.037  ln A/sqrt(L)= 2.233
+    a= 120 b= 300  L= 412.76  ln A=  47.171  ln A/sqrt(L)= 2.322
+
+  summary:   slope r   theta   heuristic h   fitted sqrt(L) coefficient   fitted ln L coefficient
+             0.1000  0.8632      2.535             2.687                  -2.041
+             0.2500  0.7162      3.123             3.315                  -1.840
+             0.3981  0.6131      3.310             3.441                  -1.610
+             0.5000  0.5579      3.359             3.465                  -1.596
+             0.6309  0.5000      3.376             3.479                  -1.741
+             0.7960  0.4422      3.359             3.459                  -1.876
+             1.0000  0.3869      3.310             3.409                  -1.986
+             1.5923  0.2838      3.123             3.215                  -2.096
+             2.5000  0.2015      2.857             2.923                  -1.964
+
+SMOOTHNESS ACROSS THE CRITICAL LINE.  second difference of ln A in theta on level sets
+  (a kink or jump at theta = 1/2 would show as an outlier in the theta = 0.50 column)
+      L    d2@0.35  d2@0.40  d2@0.45  d2@0.50  d2@0.55  d2@0.60  d2@0.65
+    100     -111.9   -103.2    -99.4    -97.6    -99.9   -104.3   -115.2
+    150     -133.2   -124.8   -121.8   -122.1   -125.6   -133.4   -148.2
+    200     -151.2   -140.1   -137.3   -139.7   -146.2   -157.9   -177.8
+    250     -168.9   -154.5   -150.2   -153.5   -162.9   -179.0   -203.9
+    300     -185.9   -168.7   -162.6   -165.8   -177.4   -197.1   -227.2
+
+RIDGE TEST.  ridge of ln A on SIZE level sets L = ln m, exact data, against the
+  equal-multiplier saddle of the exact generating function (see module docstring).
+      L   theta* measured   slope b/a   theta saddle   theta saddle, Pierpont part only    s      ln A measured   s L + Phi
+     60       0.522          0.579        0.522               0.515                0.2214       18.305       25.523
+    100       0.523          0.575        0.522               0.519                0.1719       25.310       33.264
+    140       0.528          0.565        0.525               0.523                0.1455       31.116       39.566
+    180       0.531          0.557        0.527               0.526                0.1284       36.197       45.023
+    220       0.534          0.552        0.529               0.528                0.1163       40.778       49.906
+    260       0.535          0.549        0.530               0.530                0.1071       44.986       54.367
+    300       0.536          0.547        0.531               0.531                0.0998       48.903       58.500
+    320       0.536          0.546        0.531               0.531                0.0966       50.770       60.464
+  (s L + Phi is the saddle exponent without the Gaussian prefactor -(1/2) ln det, hence larger)
+
+SYMMETRY TEST on level sets.  S = (E(theta)+E(1-theta))/2 - E(1/2)   (symmetric drop)
+                              AS = (E(theta)-E(1-theta))/2            (antisymmetric part)
+  E = ln A.  theta > 1/2 is the 2-heavy side.  perfect symmetry: AS = 0.
+      L   theta   E(theta)  E(1-theta)       S        AS     AS/|S|
+    100   0.60     25.017     24.572    -0.493     0.222     0.451
+    100   0.70     23.687     22.812    -2.038     0.437     0.215
+    100   0.80     20.991     19.739    -4.923     0.626     0.127
+    200   0.60     38.203     37.340    -0.704     0.432     0.614
+    200   0.70     36.332     34.783    -2.918     0.775     0.265
+    200   0.80     32.288     30.431    -7.115     0.929     0.131
+    300   0.60     48.532     47.397    -0.840     0.568     0.676
+    300   0.70     46.264     44.275    -3.535     0.994     0.281
+    300   0.80     41.182     38.906    -8.760     1.138     0.130
+
+FOR COMPARISON: level sets a + b = n (not size).  argmax of A(a, n-a):
+      n    a*    b*    b*/a*
+     40    22    18    0.818
+     80    45    35    0.778
+    120    68    52    0.765
+    160    91    69    0.758
+    200   114    86    0.754
+    240   137   103    0.752
+    280   160   120    0.750
+  (so 'where is A largest' depends on which level set one uses)
+
+CONTROL.  200 random point sets with inclusion probability kappa_emp ln2 ln3 / (i ln2 + j ln3)
+  on i >= 1, j >= 1, plus the real j = 0 (Fermat) points; same DP, same ridge estimator.
+      L   theta* exact   control mean   control sd   z of exact   fraction of controls >= exact
+     60      0.522         0.528        0.027      -0.25          0.575
+    100      0.523         0.519        0.025      +0.17          0.430
+    140      0.528         0.514        0.023      +0.58          0.285
+    180      0.531         0.511        0.021      +0.92          0.185
+    220      0.534         0.509        0.021      +1.18          0.105
+    260      0.535         0.508        0.020      +1.38          0.080
+    300      0.536         0.507        0.019      +1.52          0.065
+    320      0.536         0.506        0.019      +1.58          0.060
+
+MIRROR CONTROL.  reflect the real Pierpont set across the critical line, (X,Y) -> (Y,X),
+  rounding to the nearest lattice point with i >= 1 (duplicates merged), and recompute the ridge.
+  mirrored set: 1605 points (real: 1625)
+      L   theta* real   theta* mirrored   mean    half-difference
+     60      0.522         0.519        0.520      +0.001
+    100      0.523         0.502        0.513      +0.011
+    140      0.528         0.491        0.509      +0.018
+    180      0.531         0.483        0.507      +0.024
+    220      0.534         0.479        0.506      +0.027
+    260      0.535         0.476        0.505      +0.030
+    300      0.536         0.474        0.505      +0.031
+    320      0.536         0.473        0.504      +0.032
+  mean - 1/2 is the part of the offset that does not flip (lattice/absorption asymmetry and
+  rounding); the half-difference is the part carried by the actual positions of the primes.
+
+LEADING TERM ON THE CRITICAL LINE.  ln A(L, 1/2) against 2 sqrt(c L), c = kappa_emp pi^2/12
+  L=  50  ln A =   16.236   2 sqrt(cL) =   23.874   ratio = 0.680
+  L= 100  ln A =   25.288   2 sqrt(cL) =   33.763   ratio = 0.749
+  L= 200  ln A =   38.475   2 sqrt(cL) =   47.748   ratio = 0.806
+  L= 300  ln A =   48.804   2 sqrt(cL) =   58.479   ratio = 0.835
+  (the ratio is below 1 and rises slowly: the corrections are of order -ln L, cf. the fitted
+   ln L coefficients of about -1.6 to -2.1 in Table 2)
+
+done in 43 s

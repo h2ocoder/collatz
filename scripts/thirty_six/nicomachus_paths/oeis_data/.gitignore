@@ -1,0 +1,4 @@
+# OEIS b-files are downloaded data, not ours to redistribute here.
+# Fetch them from https://oeis.org/A100982/b100982.txt (likewise A047749, A174795, A174796);
+# the scripts skip the OEIS comparison when a file is missing.
+b*.txt

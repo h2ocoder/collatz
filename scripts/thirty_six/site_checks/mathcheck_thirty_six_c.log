@@ -1,0 +1,17 @@
+lattice script imported: all top-level assertions passed
+  pairs: [(1, 2), (2, 3), (3, 4), (8, 9)]
+  cycle v: [-4, -6, -9]  anti-diagonal: [4, 6, 9]
+  Pierpont: [((1, 1), 7), ((1, 2), 19), ((2, 2), 37)]
+  slope of the grey line b = a*log_3(2): 0.6309 -> at a = 3 the line is at b = 1.893 (below the node 72 at b = 2: 8 < 9)
+figurate compute() equals the saved JSON: True
+  labels: ['1', '3', '6', '8', '11', '13', '16', '19', '21', '24', '26', '29+']
+numbers on the page that check_thirty_six_page.py does not recompute:
+  MISSING  classes modulo 2^24 (actual dropping times)
+  MISSING  M(d) = 1 when 3 divides d (destination multiplicity)
+  MISSING  F(n) = 3n/2 at four integers
+  MISSING  squares cover a sixth of the 2-adic integers
+  MISSING  Ljunggren: T^2 triangular only for 0, 1, 6
+  MISSING  NOT conjugacy n -> -1-n to the 3x-1 map
+  collatz_thirty_six_lattice.png: 1802 x 1754 px
+  collatz_thirty_six_figurate.png: 1802 x 1563 px
+page facts: lines = 120 | 'Dset' mentions = 6 | '{{' present: False | '}}' present: False

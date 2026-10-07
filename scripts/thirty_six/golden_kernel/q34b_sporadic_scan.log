@@ -1,0 +1,28 @@
+p =   5 (m,t,idx) = (1,3,1) ord3   4 | K: {'Psi_5': 1} | K^-: {'Psi_10': 1}  [0.0s, total 0s]
+p =  11 (m,t,idx) = (2,4,1) ord3   5 | K: {'x-1': 1, 'x+1': 1} | K^-: -  [0.0s, total 0s]
+p =  13 (m,t,idx) = (4,1,1) ord3   3 | K: - | K^-: {'x^4=3': 1}  [0.0s, total 0s]
+p =  23 (m,t,idx) = (1,7,2) ord3  11 | K: - | K^-: {'x-1': 2}  [0.0s, total 0s]
+p =  31 (m,t,idx) = (1,24,1) ord3  30 | K: {'x-1': 1} | K^-: {'x-1': 1}  [0.0s, total 0s]
+p =  37 (m,t,idx) = (2,7,1) ord3  18 | K: {'x-1': 2, 'x+1': 2} | K^-: {'Phi_4': 2}  [0.0s, total 0s]
+p =  41 (m,t,idx) = (5,6,1) ord3   8 | K: {'x^5=-3': 1} | K^-: {'x^5=-3': 1}  [0.0s, total 0s]
+p =  53 (m,t,idx) = (1,49,1) ord3  52 | K: - | K^-: -  [0.1s, total 0s]
+p = 101 (m,t,idx) = (1,29,1) ord3 100 | K: - | K^-: -  [0.1s, total 1s]
+p = 103 (m,t,idx) = (3,6,1) ord3  34 | K: - | K^-: -  [0.1s, total 1s]
+p = 151 (m,t,idx) = (3,10,1) ord3  50 | K: - | K^-: -  [0.2s, total 3s]
+p = 251 (m,t,idx) = (2,45,1) ord3 125 | K: - | K^-: -  [0.5s, total 9s]
+p = 353 (m,t,idx) = (1,164,1) ord3 352 | K: - | K^-: -  [1.0s, total 23s]
+p = 401 (m,t,idx) = (1,26,1) ord3 400 | K: - | K^-: -  [1.4s, total 33s]
+p = 503 (m,t,idx) = (1,56,2) ord3 251 | K: - | K^-: -  [3.6s, total 73s]
+p = 601 (m,t,idx) = (1,33,8) ord3  75 | K: - | K^-: -  [5.6s, total 135s]
+p = 653 (m,t,idx) = (1,287,1) ord3 652 | K: - | K^-: -  [5.4s, total 185s]
+p = 701 (m,t,idx) = (1,669,1) ord3 700 | K: - | K^-: -  [6.7s, total 230s]
+p = 751 (m,t,idx) = (1,416,1) ord3 750 | K: - | K^-: -  [10.9s, total 286s]
+
+================ SUMMARY ================
+primes 5 <= p <= 800: 137; candidates beyond the forced factors: x, x-+1, Phi_k (k <= 60), Psi_j (j <= 60), x^m = c (2 <= |c| <= min(2^m - 1, 400))
+events for the Terras kernel K   (p, extra factors of charpoly(2K)): [(5, {'Psi_5': 1}), (11, {'x-1': 1, 'x+1': 1}), (31, {'x-1': 1}), (37, {'x-1': 2, 'x+1': 2}), (41, {'x^5=-3': 1})]
+events for the signed kernel K^- (p, extra factors of charpoly(2K^-)): [(5, {'Psi_10': 1}), (13, {'x^4=3': 1}), (23, {'x-1': 2}), (31, {'x-1': 1}), (37, {'Phi_4': 2}), (41, {'x^5=-3': 1})]
+   (for ord_p(3) even, K^- is a character twist of K, spec K = chi(2) spec K^-, so its events are the same ones rotated; new information only for ord_p(3) odd)
+   K^- events at primes with ord_p(3) odd: [(13, {'x^4=3': 1}), (23, {'x-1': 2})]
+largest prime with any event: 41;  primes above it scanned without any event: 126
+total time 337 s

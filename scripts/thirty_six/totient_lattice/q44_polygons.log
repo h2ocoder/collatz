@@ -1,0 +1,78 @@
+1. THE EIGHT POLYGONS WITH phi(n) = 36 = 2^2 3^2
+   (Z/n)* = Gal(Q(zeta_n)/Q), order 36;  G+ = (Z/n)*/{+-1} = Gal(Q(cos 2pi/n)/Q), order 18.
+     n    lattice parts of (2,2)        (Z/n)*              G+ (real field)     trisections   the two cubic steps
+     37   37:(2,2)                      C4 x C9             C2 x C9                  2        nested (cyclic C9)
+     57   3^1:(1,0) + 19:(1,2)          C2 x C2 x C9        C2 x C9                  2        nested (cyclic C9)
+     63   3^2:(1,1) + 7:(1,1)           C2 x C2 x C3 x C3   C2 x C3 x C3             2        independent (C3 x C3)
+     74   37:(2,2)                      C4 x C9             C2 x C9                  2        nested (cyclic C9)
+     76   2^2:(1,0) + 19:(1,2)          C2 x C2 x C9        C2 x C9                  2        nested (cyclic C9)
+    108   2^2:(1,0) + 3^3:(1,2)         C2 x C2 x C9        C2 x C9                  2        nested (cyclic C9)
+    114   3^1:(1,0) + 19:(1,2)          C2 x C2 x C9        C2 x C9                  2        nested (cyclic C9)
+    126   3^2:(1,1) + 7:(1,1)           C2 x C2 x C3 x C3   C2 x C3 x C3             2        independent (C3 x C3)
+   group types of order 36: C4xC9, C2xC2xC9, C4xC3xC3, C2xC2xC3xC3;  realised: all but C4 x C3 x C3.
+
+2. THE DECOMPOSITION RULE, checked by brute force for every n <= 20000 with phi(n) 3-smooth
+   n checked: 1472; mismatches: 0
+
+3. HOW MANY GROUP TYPES OF ORDER 2^a 3^b OCCUR AS (Z/n)* ?   entry: realised / p(a) p(b)   [A(a,b)]
+        b=               0               1               2               3               4               5
+   a= 0            1/1 [2]         0/1 [0]         0/2 [0]         0/3 [0]         0/5 [0]         0/7 [0]
+   a= 1            1/1 [3]         1/1 [4]         1/2 [4]         1/3 [2]         1/5 [4]         1/7 [4]
+   a= 2            2/2 [4]         2/2 [6]         3/4 [8]         3/6 [9]        3/10 [8]       3/14 [12]
+   a= 3            2/3 [5]        2/3 [10]        5/6 [17]        4/9 [19]       7/15 [21]       7/21 [25]
+   a= 4            3/5 [6]        3/5 [11]       6/10 [21]       8/15 [34]      11/25 [39]      12/35 [48]
+   a= 5            4/7 [7]        5/7 [17]       7/14 [28]      10/21 [45]      15/35 [64]      19/49 [82]
+   a= 6           5/11 [8]       8/11 [21]      12/22 [38]      13/33 [62]      22/55 [87]     27/77 [125]
+   a= 7           5/15 [9]       8/15 [27]      17/30 [54]      20/45 [86]     29/75 [124]    38/105 [175]
+   a= 8          6/22 [10]      11/22 [32]      22/44 [66]     30/66 [119]    42/110 [173]    52/154 [245]
+   (the 3-part can be any partition of b only if enough Pierpont points with the right j exist;
+    the 2-part always contains a C2 unless n = 1, 2, so a cyclic 2-part needs a single prime factor)
+
+4. AGAINST THE COLLATZ COUNTS ON THE SAME LATTICE
+   N(s) = number of dropping classes (residue classes mod 2^k) with s odd steps, k = floor(s log2 3) + 1:
+      [1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045, 17637, 51033, 108950, 312455, 663535, 1900470, 5936673, 13472296, 39993895, 87986917, 257978502, 820236724]
+   equals OEIS A100982: True
+   A(a,a)  diagonal          : [2, 4, 8, 19, 39, 82, 166, 322, 610, 1126, 2031, 3561, 6120, 10309, 17064, 27932, 45074, 71903, 113365, 176850, 273209, 418032, 634256, 954358, 1425236, 2112831]
+   A(a,1)  row b = 1         : [0, 4, 6, 10, 11, 17, 21, 27, 32, 39, 43, 50, 56, 64, 69, 77, 82, 90, 97, 106, 112, 121, 127, 136, 142, 151]
+   A(2,b)  column a = 2      : [4, 6, 8, 9, 8, 12, 18, 15, 13, 16, 17, 17, 13, 15, 17, 17, 16, 20, 21, 19, 19, 21, 21, 19, 17, 19]
+   anti-diagonal sums a+b = n: [2, 3, 8, 15, 26, 48, 77, 129, 204, 322, 495, 749, 1115, 1644, 2386, 3433, 4895, 6903, 9679, 13437, 18537, 25384, 34554, 46737, 62881, 84127]
+   A on the Collatz staircase (k(s), s), s = 1..20: [6, 21, 45, 124, 245, 652, 1570, 2799, 6198, 10630, 22148, 44866, 72725, 141064, 222300, 415936, 640902, 1165091, 2085362, 3121214]
+   A100982, s = 1..20                             : [1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045, 17637, 51033, 108950, 312455, 663535, 1900470, 5936673]
+   ratios of consecutive terms:
+     A100982 : 1.71 2.50 2.83 2.04 2.75 2.02 2.76 3.03 2.19 2.89 2.13 2.87 2.12 2.86 3.12 2.27 2.97 2.20 2.93 3.18
+     A(a,a)  : 2.10 2.02 1.94 1.89 1.85 1.80 1.75 1.72 1.68 1.66 1.64 1.61 1.60 1.58 1.56 1.54 1.53 1.52 1.50 1.49 1.48
+   A100982 grows exponentially: paths hugging the critical slope, limiting ratio 2^(h(log_3 2) log_2 3) = 2.840
+   (h = binary entropy, h(log_3 2) = 0.9500); geometric mean of the ratios shown: 2.532.  A(a,a) has ratio -> 1 (growth exp(c sqrt)).
+   exact matches of 6 consecutive terms between A100982 and A(a,a) / rows / columns / staircase,
+   their first differences or partial sums, at any shift 0..5: none
+
+   SUPPORT.  dropping classes sit only on the staircase k = floor(s log2 3) + 1, one cell per s;
+   not-yet-dropped words W(j,s) live strictly on the side 3^s > 2^j;  A(a,b) > 0 on the whole
+   quadrant a >= 1.  W(j,s) for j = 0..12 (rows), s = 0..8 (columns):
+     j= 0      1     0     0     0     0     0     0     0     0
+     j= 1      0     1     0     0     0     0     0     0     0
+     j= 2      0     0     1     0     0     0     0     0     0
+     j= 3      0     0     1     1     0     0     0     0     0
+     j= 4      0     0     0     2     1     0     0     0     0
+     j= 5      0     0     0     0     3     1     0     0     0
+     j= 6      0     0     0     0     3     4     1     0     0
+     j= 7      0     0     0     0     0     7     5     1     0
+     j= 8      0     0     0     0     0     0    12     6     1
+     j= 9      0     0     0     0     0     0    12    18     7
+     j=10      0     0     0     0     0     0     0    30    25
+     j=11      0     0     0     0     0     0     0    30    55
+     j=12      0     0     0     0     0     0     0     0    85
+   A(a,b) on the same cells, a = 0..12 (rows), b = 0..8 (columns):
+     a= 0      2     0     0     0     0     0     0     0     0
+     a= 1      3     4     4     2     4     4     4     2     2
+     a= 2      4     6     8     9     8    12    18    15    13
+     a= 3      5    10    17    19    21    25    34    42    41
+     a= 4      6    11    21    34    39    48    64    81    94
+     a= 5      7    17    28    45    64    82   101   133   167
+     a= 6      8    21    38    62    87   125   166   207   263
+     a= 7      9    27    54    86   124   175   241   322   400
+     a= 8     10    32    66   119   173   245   346   470   610
+     a= 9     11    39    84   153   238   339   469   655   876
+     a=10     12    43    97   187   308   460   652   892  1210
+     a=11     13    50   119   225   377   586   857  1198  1623
+     a=12     14    56   133   272   466   730  1101  1570  2154

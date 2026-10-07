@@ -1,0 +1,99 @@
+====================================================================================================
+A. Triangular numbers mod 2^k: CRS on [0,2^k), fibres, windows, negative indices
+====================================================================================================
+  T_0..T_(2^k-1) is a CRS mod 2^k for k = 0..24 (cumsum generation): True
+  Z/2^(k+1) -> Z/2^k is onto, exactly 2-to-1, fibres {n, 2^(k+1)-1-n}, k = 0..13: True
+  window [a, a+2^k) is a CRS mod 2^k  <=>  a = 0 mod 2^k   (k = 1..9, -2^(k+1) <= a <= 2^(k+1)): True
+     e.g. T_1..T_8 mod 8 = [1, 2, 3, 4, 4, 5, 6, 7]  (not a CRS: the count must start at T_0 = 0)
+  T_(-1-n) = T_n for -5000 <= n < 5000: True
+
+====================================================================================================
+B. Class counts N(k): residue iteration (K = 20) versus word DP versus OEIS A100982
+====================================================================================================
+  k (A020914): [1, 2, 4, 5, 7, 8, 10, 12, 13, 15, 16, 18, 20]
+  N(k)       : [1, 1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652]
+  residue count = DP count = [1] + A100982 : True   counts divisible by 2^(K-k): True
+  undetermined residues mod 2^20: 27328
+  each class k is a union of exactly N(k) residue classes mod 2^k: True
+
+====================================================================================================
+C. Residue-level class counts along the families, one full period, for FIVE rules
+   'natural' means: counts equal (period / 2^K) * (natural counts) for EVERY class incl. undetermined
+   '#classes' = number of distinct determined classes (k <= K) met by the family
+====================================================================================================
+  rule 3x+1:  classes k = [1, 2, 4, 5, 7, 8, 10, 12]..., undetermined at K=16: 2114 (0.0323)
+     T_n                natural: True   #classes met: 11   undetermined share 0.0323   largest shares (share, k): [(0.5, 1), (0.25, 2), (0.0625, 5), (0.0625, 4)]
+     n^2                natural: False  #classes met:  2   undetermined share 0.0000   largest shares (share, k): [(0.5, 2), (0.5, 1)]
+     n^3                natural: True   #classes met: 11   undetermined share 0.0323   largest shares (share, k): [(0.5, 1), (0.25, 2), (0.0625, 5), (0.0625, 4)]
+     T_n^2              natural: False  #classes met:  2   undetermined share 0.0000   largest shares (share, k): [(0.5, 2), (0.5, 1)]
+     pentagonal s=5     natural: True   #classes met: 11   undetermined share 0.0323   largest shares (share, k): [(0.5, 1), (0.25, 2), (0.0625, 5), (0.0625, 4)]
+     hexagonal s=6      natural: True   #classes met: 11   undetermined share 0.0323   largest shares (share, k): [(0.5, 1), (0.25, 2), (0.0625, 5), (0.0625, 4)]
+     octagonal s=8      natural: False  #classes met:  2   undetermined share 0.0000   largest shares (share, k): [(0.5, 2), (0.5, 1)]
+     dodecagonal s=12   natural: False  #classes met:  2   undetermined share 0.0000   largest shares (share, k): [(0.5, 2), (0.5, 1)]
+  rule 3x-1:  classes k = [1, 2, 4, 5, 7, 8, 10, 12]..., undetermined at K=16: 2114 (0.0323)
+     T_n                natural: True   #classes met: 11   undetermined share 0.0323   largest shares (share, k): [(0.5, 1), (0.25, 2), (0.0625, 5), (0.0625, 4)]
+     n^2                natural: False  #classes met:  9   undetermined share 0.1049   largest shares (share, k): [(0.5, 1), (0.125, 5), (0.0781, 8), (0.0625, 7)]
+     n^3                natural: True   #classes met: 11   undetermined share 0.0323   largest shares (share, k): [(0.5, 1), (0.25, 2), (0.0625, 5), (0.0625, 4)]
+     T_n^2              natural: False  #classes met:  9   undetermined share 0.1049   largest shares (share, k): [(0.5, 1), (0.125, 5), (0.0781, 8), (0.0625, 7)]
+     pentagonal s=5     natural: True   #classes met: 11   undetermined share 0.0323   largest shares (share, k): [(0.5, 1), (0.25, 2), (0.0625, 5), (0.0625, 4)]
+     hexagonal s=6      natural: True   #classes met: 11   undetermined share 0.0323   largest shares (share, k): [(0.5, 1), (0.25, 2), (0.0625, 5), (0.0625, 4)]
+     octagonal s=8      natural: False  #classes met:  8   undetermined share 0.1327   largest shares (share, k): [(0.5, 1), (0.125, 5), (0.0938, 8), (0.0391, 10)]
+     dodecagonal s=12   natural: False  #classes met:  9   undetermined share 0.1049   largest shares (share, k): [(0.5, 1), (0.125, 5), (0.0781, 8), (0.0625, 7)]
+  rule 5x+1:  classes k = [1, 3, 5, 7, 10, 12, 14]..., undetermined at K=16: 15320 (0.2338)
+     T_n                natural: True   #classes met:  7   undetermined share 0.2338   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0625, 5), (0.0391, 7)]
+     n^2                natural: False  #classes met:  6   undetermined share 0.2583   largest shares (share, k): [(0.5, 1), (0.125, 5), (0.0625, 7), (0.0195, 10)]
+     n^3                natural: True   #classes met:  7   undetermined share 0.2338   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0625, 5), (0.0391, 7)]
+     T_n^2              natural: False  #classes met:  6   undetermined share 0.2583   largest shares (share, k): [(0.5, 1), (0.125, 5), (0.0625, 7), (0.0195, 10)]
+     pentagonal s=5     natural: True   #classes met:  7   undetermined share 0.2338   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0625, 5), (0.0391, 7)]
+     hexagonal s=6      natural: True   #classes met:  7   undetermined share 0.2338   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0625, 5), (0.0391, 7)]
+     octagonal s=8      natural: False  #classes met:  5   undetermined share 0.2119   largest shares (share, k): [(0.5, 1), (0.25, 5), (0.0156, 10), (0.0117, 12)]
+     dodecagonal s=12   natural: False  #classes met:  6   undetermined share 0.2583   largest shares (share, k): [(0.5, 1), (0.125, 5), (0.0625, 7), (0.0195, 10)]
+  rule 5x-1:  classes k = [1, 3, 5, 7, 10, 12, 14]..., undetermined at K=16: 15320 (0.2338)
+     T_n                natural: True   #classes met:  7   undetermined share 0.2338   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0625, 5), (0.0391, 7)]
+     n^2                natural: False  #classes met:  6   undetermined share 0.2583   largest shares (share, k): [(0.5, 1), (0.125, 5), (0.0625, 7), (0.0195, 10)]
+     n^3                natural: True   #classes met:  7   undetermined share 0.2338   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0625, 5), (0.0391, 7)]
+     T_n^2              natural: False  #classes met:  6   undetermined share 0.2583   largest shares (share, k): [(0.5, 1), (0.125, 5), (0.0625, 7), (0.0195, 10)]
+     pentagonal s=5     natural: True   #classes met:  7   undetermined share 0.2338   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0625, 5), (0.0391, 7)]
+     hexagonal s=6      natural: True   #classes met:  7   undetermined share 0.2338   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0625, 5), (0.0391, 7)]
+     octagonal s=8      natural: False  #classes met:  6   undetermined share 0.1470   largest shares (share, k): [(0.5, 1), (0.25, 3), (0.0625, 7), (0.0156, 10)]
+     dodecagonal s=12   natural: False  #classes met:  6   undetermined share 0.2583   largest shares (share, k): [(0.5, 1), (0.125, 5), (0.0625, 7), (0.0195, 10)]
+  rule 7x+1:  classes k = [1, 3, 6, 9, 12, 15]..., undetermined at K=16: 20866 (0.3184)
+     T_n                natural: True   #classes met:  6   undetermined share 0.3184   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0312, 6), (0.0137, 9)]
+     n^2                natural: False  #classes met:  2   undetermined share 0.0000   largest shares (share, k): [(0.5, 3), (0.5, 1)]
+     n^3                natural: True   #classes met:  6   undetermined share 0.3184   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0312, 6), (0.0137, 9)]
+     T_n^2              natural: False  #classes met:  2   undetermined share 0.0000   largest shares (share, k): [(0.5, 3), (0.5, 1)]
+     pentagonal s=5     natural: True   #classes met:  6   undetermined share 0.3184   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0312, 6), (0.0137, 9)]
+     hexagonal s=6      natural: True   #classes met:  6   undetermined share 0.3184   largest shares (share, k): [(0.5, 1), (0.125, 3), (0.0312, 6), (0.0137, 9)]
+     octagonal s=8      natural: False  #classes met:  5   undetermined share 0.0967   largest shares (share, k): [(0.5, 1), (0.25, 3), (0.125, 6), (0.0234, 12)]
+     dodecagonal s=12   natural: False  #classes met:  2   undetermined share 0.0000   largest shares (share, k): [(0.5, 3), (0.5, 1)]
+  READ THIS: for 3x+1 the collapsed families (n^2, T_n^2, s = 0 mod 4) meet exactly 2 classes;
+  for 3x-1, 5x+-1, 7x+1 they do NOT: the two-class statement is rule- and sign-dependent.
+
+  the class of odd numbers that drops first, per rule (residues mod 2^k with k the 2nd Terras time):
+     3x+1: k = 2, residues mod 2^2: [1]   (odd squares are 1 mod 8)
+     3x-1: k = 2, residues mod 2^2: [3]   (odd squares are 1 mod 8)
+     5x+1: k = 3, residues mod 2^3: [3]   (odd squares are 1 mod 8)
+     5x-1: k = 3, residues mod 2^3: [5]   (odd squares are 1 mod 8)
+     7x+1: k = 3, residues mod 2^3: [1]   (odd squares are 1 mod 8)
+
+====================================================================================================
+D. Actual integers, 3x+1: Terras stopping time of T_n, n^2, n^3, T_n^2 for 0 <= n < 2^21
+   (wider than the researcher's 2^20; pure Python integers)
+====================================================================================================
+  T_n    non-dropping indices [0, 1];  count(k) = N(k) 2^(21-k) for all k <= 21 (minus the values 0, 1): True;  mass with k > 21: 46611
+  n^2    non-dropping indices [0, 1];  histogram {1: 1048575, 2: 1048575}
+  n^3    non-dropping indices [0, 1];  count(k) = N(k) 2^(21-k) for all k <= 21 (minus the values 0, 1): True;  mass with k > 21: 46611
+  T_n^2  non-dropping indices [0, 1];  histogram {1: 1048575, 2: 1048575}
+
+  Same families as seeds of the MIRROR map 3x-1 (actual integers, 2 <= n <= 200000):
+  3x-1, n^2   : 103 distinct stopping times, non-dropping 0; most common (k, count): [(1, 100000), (5, 25000), (8, 15625), (7, 12500), (10, 7031), (13, 6446), (16, 4613), (12, 4492)]
+  3x-1, T_n^2 : 101 distinct stopping times, non-dropping 0; most common (k, count): [(1, 100000), (5, 25000), (8, 15625), (7, 12500), (10, 7029), (13, 6447), (16, 4615), (12, 4492)]
+
+====================================================================================================
+E. Squares and cubes mod 2^k
+====================================================================================================
+  #squares mod 2^k = A023105(k) = (2^(k-1)+4)/3 | (2^(k-1)+5)/3 for k = 0(1)..24: True
+  odd squares mod 2^k are exactly the residues 1 mod 8, each hit 4 times (k = 3..20): True
+  v2(a^3 - b^3) = v2(a - b) for ALL pairs of distinct odd a, b < 2^11 (exhaustive): True
+
+done in 11.2 s

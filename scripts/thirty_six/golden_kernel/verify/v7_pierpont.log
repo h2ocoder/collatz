@@ -1,0 +1,22 @@
+=== 1. rung classes, all primes 5 <= p < 10^6 ===
+   primes: 78496;  Pierpont: 40
+   [ok] 78496 primes, 40 Pierpont
+   observed {'none': 6, '<0': 14, '0': 11, '1': 5, '>=2': 4};  expected {none: 5.21, <0: 19.75, 0: 8.61, 1: 4.41, >=2: 2.03};  chi^2 = 4.46 on 4 d.o.f.
+   [ok] observed {none 6, <0 14, 0 11, 1: 5, >=2: 4}, chi^2 = 4.46
+   CAVEAT: three of the five expected counts are near or below 5 (5.2, 4.4, 2.0), so the chi^2 approximation is rough; the null is
+   supported by the counts themselves, not by the p-value.
+   rung 1: first primes [(37, 'P'), (61, '-'), (157, '-'), (193, 'P'), (349, '-')]
+   rung 2: first primes [(1297, 'P'), (7057, '-'), (8017, '-'), (12097, '-'), (12289, 'P')]
+   rung 3: first primes [(769, 'P'), (8737, '-'), (15937, '-'), (64513, '-'), (90529, '-')]
+   rung 4: first primes [(37441, '-'), (76801, '-'), (175873, '-'), (208129, '-'), (236737, '-')]
+   rung 5: first primes [(202753, '-'), (284161, '-'), (461569, '-'), (616321, '-'), (794113, '-')]
+   [ok] 769 is the smallest prime of rung 3 and 1297 the smallest of rung 2
+
+=== 2. |lambda_2| (float) ===
+   p = 5: 0.8090, p = 7: 0.7139, p = 11: 0.6692, p = 13: 0.6693, p = 37: 0.6735
+   [ok] seed values 0.8090, 0.7139, 0.6692, 0.6693, 0.6735
+   paired difference Pierpont - mean of nearest non-Pierpont neighbours (all 19, n = 19): mean +0.0089, t = +1.22
+   paired difference Pierpont - mean of nearest non-Pierpont neighbours (p >= 97, n = 12): mean +0.0024, t = +0.64
+   [ok] paired differences +0.0089 (t = 1.22) and +0.0024 (t = 0.64)
+
+0 failures;  total time 19 s

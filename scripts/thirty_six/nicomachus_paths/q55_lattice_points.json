@@ -1,0 +1,33 @@
+{
+ "beatty_identity_ok": true,
+ "A": {
+  "has36": [],
+  "n_tri": 6,
+  "exp_tri": 6.54,
+  "n_sq": 6,
+  "exp_sq": 4.62
+ },
+ "B": {
+  "has36": [],
+  "n_tri": 6,
+  "exp_tri": 4.63,
+  "n_sq": 5,
+  "exp_sq": 3.27
+ },
+ "G": {
+  "has36": [
+   6
+  ],
+  "n_tri": 4,
+  "exp_tri": 4.06,
+  "n_sq": 3,
+  "exp_sq": 2.87
+ },
+ "H": {
+  "has36": [],
+  "n_tri": 5,
+  "exp_tri": 6.69,
+  "n_sq": 5,
+  "exp_sq": 4.73
+ }
+}

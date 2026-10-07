@@ -1,0 +1,12 @@
+====================================================================================================
+rank of tst(x_j) among 300 matched random controls, j = 5..160
+====================================================================================================
+  Pell u_j all           terms 156   mean rank 0.484   outer-decile share 0.269 (expected 0.200 +- 0.032)   KS D = 0.067, p = 0.467
+  Pell u_j j even        terms  78   mean rank 0.489   outer-decile share 0.295 (expected 0.200 +- 0.045)   KS D = 0.099, p = 0.407
+  Pell u_j j odd         terms  78   mean rank 0.479   outer-decile share 0.244 (expected 0.200 +- 0.045)   KS D = 0.100, p = 0.392
+  Pell n_j all           terms 156   mean rank 0.512   outer-decile share 0.218 (expected 0.200 +- 0.032)   KS D = 0.060, p = 0.617
+  Pell n_j j even        terms  78   mean rank 0.534   outer-decile share 0.179 (expected 0.200 +- 0.045)   KS D = 0.117, p = 0.220
+  Pell n_j j odd         terms  78   mean rank 0.491   outer-decile share 0.256 (expected 0.200 +- 0.045)   KS D = 0.090, p = 0.536
+  null (u_j sizes)       terms 156   mean rank 0.472   outer-decile share 0.218 (expected 0.200 +- 0.032)   KS D = 0.085, p = 0.195
+
+done in 20.6 s

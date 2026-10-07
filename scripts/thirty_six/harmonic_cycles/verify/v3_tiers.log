@@ -1,0 +1,112 @@
+==============================================================================
+1. Repeated values of D and of |D| among cells 1 <= s < k <= 400 (their range: k <= 60)
+==============================================================================
+signed D attained twice: {5: [(3, 1), (5, 3)], 13: [(4, 1), (8, 5)]}
+|D| attained twice     : {1: [(2, 1, 1), (3, 2, -1)], 5: [(3, 1, 1), (5, 3, 1)], 13: [(4, 1, 1), (8, 5, 1)]}
+  -> signed: D = 5, 13.  In absolute value ALSO |D| = 1 ((2,1) with D = +1 and (3,2) with D = -1).
+
+  Pillai / Stroeker-Tijdeman is a statement about the SIGNED equation 3^x - 2^y = c.  With
+  absolute values and no restriction x < y it is false for c > 13:
+     |3^x - 2^y| = 1: (x, y, signed value) = [(0, 1, -1), (1, 1, 1), (1, 2, -1), (2, 3, 1)]
+     |3^x - 2^y| = 5: (x, y, signed value) = [(1, 3, -5), (2, 2, 5), (3, 5, -5)]
+     |3^x - 2^y| = 7: (x, y, signed value) = [(0, 3, -7), (2, 1, 7), (2, 4, -7)]
+     |3^x - 2^y| = 13: (x, y, signed value) = [(1, 4, -13), (5, 8, -13)]
+     |3^x - 2^y| = 23: (x, y, signed value) = [(2, 5, -23), (3, 2, 23)]
+  e.g. 3^3 - 2^2 = 23 = 2^5 - 3^2.  Inside Collatz cells (s < k) the second sign never occurs for
+  c > 1, which is why the researcher's table is right although the citation was mis-stated.
+
+==============================================================================
+2. Circuits 1^a 0^b: (2^(a+b) - 3^a) | (2^b - 1), a, b >= 1.  Wider range: a <= 12000, every b
+   that passes the necessary size test |D| <= 2^b - 1 (their range: a + b <= 700)
+==============================================================================
+candidates passing the size test: 2;  solutions (a, b, D, n_min): [(1, 1, 1, 1), (2, 1, -1, -5)]
+  (window check a < 400: every admissible b lies in the tested window.)
+  mirror: the divisibility is unchanged for 3x-1 (the circuits are n = -1 and n = +5); the
+  statement is sign-symmetric.  Cousins 5x+1, 7x+1: see the direct search in check 1.
+
+==============================================================================
+3. Independent census of primitive necklaces (Lyndon words, Duval), k <= 24
+==============================================================================
+Lyndon words of length <= 24: 1465020
+necklace count of every cell agrees with the Moebius formula.
+integer cycles of 3x+1 (k, s, D, x of the Lyndon rotation):
+   (1, 0, 1, 0)  min|n| = 0
+   (1, 1, -1, -1)  min|n| = -1
+   (2, 1, 1, 2)  min|n| = 1
+   (3, 2, -1, -10)  min|n| = -5
+   (11, 7, -139, -136)  min|n| = -17
+comparison with q13_tiers.json for every c <= 199: 166 cycles, 0 values of c disagree
+
+mirror / cousin: integer cycles with k <= 20 of 3x-1 and 5x+1 from the same Lyndon enumeration
+   3x-1: [(1, 0, 1, 0), (1, 1, -1, 1), (2, 1, 1, -1), (3, 2, -1, 5), (11, 7, -139, 17)]
+   5x+1: [(1, 0, 1, 0), (2, 1, -1, -1), (5, 2, 7, 1), (7, 3, 3, 13), (7, 3, 3, 17)]
+   5x-1: [(1, 0, 1, 0), (2, 1, -1, 1), (5, 2, 7, -1), (7, 3, 3, -17), (7, 3, 3, -13)]
+   7x+1: [(1, 0, 1, 0), (3, 1, 1, 1)]
+   -> 3x-1: the negated 3x+1 list (same cells, same D).  5x+1: unit cells (1,0), (2,1) only;
+      its other cycles (1; 13; 17) are 'accidents' with D = 7, 3, 3.
+
+==============================================================================
+4. Is '3x+5 and 3x+13 are cycle-rich BECAUSE 5 and 13 are the repeated denominators' right?
+   Free cycles of 3x+c (cells with |D| = c, gcd(C, D) = 1), k <= 24, by c:
+==============================================================================
+   c =  139:  29 free cycles in cells {(11, 7): 29}
+   c =   13:   8 free cycles in cells {(4, 1): 1, (8, 5): 7}
+   c =  101:   5 free cycles in cells {(7, 3): 5}
+   c =  175:   5 free cycles in cells {(8, 4): 5}
+   c =   47:   5 free cycles in cells {(7, 4): 5}
+   c =   37:   3 free cycles in cells {(6, 3): 3}
+   c =    5:   3 free cycles in cells {(3, 1): 1, (5, 3): 2}
+   c =  115:   3 free cycles in cells {(7, 5): 3}
+   c =  119:   2 free cycles in cells {(7, 2): 2}
+   c =   17:   2 free cycles in cells {(6, 4): 2}
+   c =   23:   2 free cycles in cells {(5, 2): 2}
+   c =   55:   1 free cycles in cells {(6, 2): 1}
+   c =  125:   1 free cycles in cells {(7, 1): 1}
+   c =   61:   1 free cycles in cells {(6, 1): 1}
+   -> 3x+13 owes 7 of its 8 free cycles to the single cell (8,5); 3x+5 owes 2 of 3 to (5,3).
+      3x+37 has 3 and 3x+47 has 5 free cycles from ONE cell each; 3x+139 has 29.  The number of
+      free cycles is the necklace count of the cell(s), which is large when |D| is small for the
+      size of the cell (record cells).  The repetition of D adds exactly one cycle (the cells
+      (3,1) and (4,1) have one necklace).  So the README's causal sentence is an overstatement.
+
+==============================================================================
+5. Multiples of unit cells.  Doubled: D(2k,2s)^2 = 8 T_n + 1.  Tripled: |D(3k,3s)| = 6 T_n + 1
+   (centered hexagonal number), where T_n = 2^(k-1) 3^s is the cell's triangular number.
+==============================================================================
+   cell (1,0): T_1 = 1;  D(2k,2s) = 3, D^2 = 9 = 8*1+1;  D(3k,3s) = 7, |D| = 6*1+1
+   cell (1,1): T_2 = 3;  D(2k,2s) = -5, D^2 = 25 = 8*3+1;  D(3k,3s) = -19, |D| = 6*3+1
+   cell (2,1): T_3 = 6;  D(2k,2s) = 7, D^2 = 49 = 8*6+1;  D(3k,3s) = 37, |D| = 6*6+1
+   cell (3,2): T_8 = 36;  D(2k,2s) = -17, D^2 = 289 = 8*36+1;  D(3k,3s) = -217, |D| = 6*36+1
+   -> 37 = 2^6 - 3^3 = 6*T_3 + 1 comes from the cell (2,1), whose triangular number is 6;
+      the '36' in 37 = 36 + 1 is 6*T_3, not T_8.  The cell (3,2) that owns 36 = T_8 gives
+      17 = sqrt(8*36 + 1) and 217 = 6*36 + 1 instead.  That 6*T_3 = T_8 is the coincidence
+      6 * 6 = 36; no further mechanism was found.  Control: the same recipe gives 7 = 6*1+1
+      and 19 = 6*3+1 for the other two unit cells.
+
+==============================================================================
+6. Family 1^a 0 for 3x + c, c = |2^(a+1) - 3^a| (Q1.3-e), a <= 60, by plain iteration
+==============================================================================
+   OK for a <= 60: cycle closes, v_bot*v_top = 6^a, primitive (gcd(x, c) = 1), 6^a triangular iff a <= 2.
+
+==============================================================================
+7. NEW (skeptic): the lattice point (2,2) itself lies on the -17 cycle.
+   v = n + 1; a run of odd steps starting at v = lam*2^a is lam*2^a, lam*2^(a-1)*3, ..., lam*3^a.
+==============================================================================
+   cycle of 1: n = [1, 2]
+        v = n+1 = [2, 3]
+        |v| = lam * 2^a * 3^b, (a, b, lam): [(1, 0, 1), (0, 1, 1)]
+   cycle of -5: n = [-5, -7, -10]
+        v = n+1 = [-4, -6, -9]
+        |v| = lam * 2^a * 3^b, (a, b, lam): [(2, 0, 1), (1, 1, 1), (0, 2, 1)]
+   cycle of -17: n = [-17, -25, -37, -55, -82, -41, -61, -91, -136, -68, -34]
+        v = n+1 = [-16, -24, -36, -54, -81, -40, -60, -90, -135, -67, -33]
+        |v| = lam * 2^a * 3^b, (a, b, lam): [(4, 0, 1), (3, 1, 1), (2, 2, 1), (1, 3, 1), (0, 4, 1), (3, 0, 5), (2, 1, 5), (1, 2, 5), (0, 3, 5), (0, 0, 67), (0, 1, 11)]
+   -> first circuit of the -17 cycle: v = -(2^4, 2^3*3, 2^2*3^2, 2*3^3, 3^4): the whole
+      anti-diagonal a + b = 4 with lam = -1, passing through -(2^2 * 3^2) = -36 at n = -37.
+      The three non-trivial known cycles contain unit-lam runs of height 1 ({1,2}), 2 (-5)
+      and 4 (-17), because their minima are 2 - 1, -(2^2 + 1), -(2^4 + 1).
+      Exits of those runs are consecutive pairs (v_top, 2v'): (3,4), (8,9), (80,81).
+   Control (is this special to 36?): which v-values of small cycles of 3x+c are 3-smooth with
+   lam = +-1 and a = b?  (v = n + c for 3x+c.)
+   odd cycle elements n with |n + c| = 6^a, a >= 1, c <= 199: {1: [(-7, -6, 1), (-37, -36, 2)], 5: [(1, 6, 1), (31, 36, 2)], 11: [(25, 36, 2)], 13: [(203, 216, 3)], 19: [(17, 36, 2), (-235, -216, 3)], 23: [(193, 216, 3)], 25: [(11, 36, 2), (-241, -216, 3)], 31: [(-247, -216, 3)], 47: [(169, 216, 3)], 49: [(-85, -36, 2)], 55: [(161, 216, 3)], 65: [(151, 216, 3)], 73: [(143, 216, 3)], 79: [(137, 216, 3)], 95: [(121, 216, 3)], 107: [(1189, 1296, 4)], 115: [(-331, -216, 3)], 119: [(1177, 1296, 4)], 121: [(95, 216, 3), (-7897, -7776, 5)], 125: [(1171, 1296, 4), (7651, 7776, 5)], 131: [(85, 216, 3)], 133: [(83, 216, 3)], 137: [(1159, 1296, 4)], 139: [(1157, 1296, 4)], 143: [(1153, 1296, 4), (7633, 7776, 5)], 145: [(-361, -216, 3), (-1441, -1296, 4)], 149: [(7627, 7776, 5)], 179: [(37, 216, 3)], 197: [(19, 216, 3), (1099, 1296, 4)]}
+   (for c = 1: n = -7 (v = -6) in the -5 cycle and n = -37 (v = -36) in the -17 cycle.)

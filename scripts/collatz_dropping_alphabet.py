@@ -203,7 +203,7 @@ def main() -> None:
     ax.set_xlabel("levels included (up to $s$)")
     ax.set_ylabel("cumulative measure")
     ax.set_title("2. Same alphabet, same scale "
-                 r"($2^{e_s}\!\in[3^s,2\cdot3^s)$)" "\n"
+                 r"($2^{e_s}\!\in(3^s,2\cdot3^s]$)" "\n"
                  "2-adic packs it disjointly · 3-adic overlaps",
                  fontsize=10)
     ax.legend(fontsize=8, loc="center right")

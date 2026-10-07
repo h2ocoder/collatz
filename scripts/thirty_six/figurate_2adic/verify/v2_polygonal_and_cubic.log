@@ -1,0 +1,42 @@
+====================================================================================================
+1. Polygonal trichotomy by v2(s-2), s = -7 .. 40 (s = 2 is the identity), k = 1 .. 11
+====================================================================================================
+  every (s, k) agrees with: s odd -> free fold with fibres {x, (s-4)/(s-2) - x};
+  s = 0 mod 4 -> b(n+c)^2 - bc^2, #values = A023105(k), odd values 1 mod 4;  s = 2 mod 4 -> isometry: True
+
+  CRS criterion for odd s (first 2^k terms a CRS mod 2^k  <=>  s = 3 mod 2^k), tested from k = 1.
+  First failing k should be v2(s-3) + 1:
+     s=5: k=2, s=7: k=3, s=9: k=2, s=11: k=4, s=13: k=2, s=19: k=5, s=27: k=4, s=35: k=6    all equal v2(s-3)+1: True
+     pentagonal numbers 0, 1, 5, 12 mod 4 = [0, 1, 1, 0]  -> s = 5 already fails at k = 2 (the README said k = 3; q22 only started at k = 3)
+
+====================================================================================================
+2. Rules q x + d (q, d odd, gcd = 1) whose centre reflection x -> -2d/(q-1) - x is integral: (q-1) | 2d
+   The README said this is 'where triangular is tied to the multiplier 3'.  Counter-examples with q != 3:
+====================================================================================================
+  all (q, d) found with q <= 39, |d| <= 15:  q = 3 with every odd d not divisible by 3, and: [(7, -15, 5), (7, -9, 3), (7, -3, 1), (7, 3, -1), (7, 9, -3), (7, 15, -5), (11, -15, 3), (11, -5, 1), (11, 5, -1), (11, 15, -3), (15, -7, 1), (15, 7, -1), (19, -9, 1), (19, 9, -1), (23, -11, 1), (23, 11, -1), (27, -13, 1), (27, 13, -1), (31, -15, 1), (31, 15, -1)]
+  every one of them commutes with its reflection (checked |x| < 200): True
+  7x+3: centre -3/6 = -1/2, so NOT(x) = -1-x commutes with x -> 7x+3 exactly as with x -> 3x+1: True
+  general solution: q = 2d' + 1 with d' | d (so q = 3 mod 4);  for |d| = 1 this forces q = 3.
+
+====================================================================================================
+3. Cubic figurate families (the README had these as 'computed, no proofs').  Proof sketches in README;
+   here: exhaustive fibre structure mod 2^k, k = 2 .. 13, period 2^(k+1)
+====================================================================================================
+  square pyramidal: every residue mod 2^k has exactly one even and one odd preimage mod 2^(k+1): True
+  tetrahedral: odd n -> every residue once; n = 0 mod 4 and n = 2 mod 4 -> each residue = 0 mod 4 twice
+               (so multiplicity 5 on 4Z, 1 elsewhere): True
+  octahedral, stella octangula: permutations of Z/2^k: True True
+  valuation laws on 200000 random signed 70-bit pairs:
+     pyramidal, x = y mod 2:        v2(f(x)-f(y)) = v2(x-y) - 1 : True
+     tetrahedral, x, y odd:         v2(f(x)-f(y)) = v2(x-y) - 1 : True
+     tetrahedral, x = y mod 4 even: v2(f(x)-f(y)) = v2(x-y), value in 4Z : True
+     octahedral, stella octangula:  v2(f(x)-f(y)) = v2(x-y) : True True
+     pyramidal is ODD under NOT:    f(-1-n) = -f(n)  (no fold along NOT) : True
+
+====================================================================================================
+4. The 'matched' families F_q(n) = n((q-2)n+1)/2 of the first-run law: 2-adic type
+====================================================================================================
+  for q = 3, 5, ..., 13 and k = 1..10: F_q is a free 2-to-1 fold with fibres {x, -1/(q-2) - x}: True
+  (F_q(x) - F_q(y) = (x-y)((q-2)(x+y)+1)/2; same proof as Theorem 3 case 1.  Polygonal only for q = 3, 5.)
+
+done in 1.6 s

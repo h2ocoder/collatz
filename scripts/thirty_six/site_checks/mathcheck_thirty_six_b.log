@@ -1,0 +1,45 @@
+== 1. cycles of 3x + c and record cells
+      record cells of log2 3, s <= 700: 19; first [(1, 0), (1, 1), (2, 1), (3, 2), (5, 3), (8, 5), (11, 7), (19, 12), (27, 17)]
+ok    record ladder (1,0), (1,1), (2,1), (3,2), (5,3), (8,5), (11,7), (19,12), ...; 19 cells with s <= 700
+ok    the cells of the five known cycles of T are all record cells
+      primitive cycles of 3x+c, c odd, 5 <= c <= 199, meeting [-20000, 20000]: 257
+      in record cells: 55 = 21.4 %
+      |min| >= 5c: 53 of 89 = 59.6 %;  |min| <= 3c: 0 of 151
+ok    257 primitive cycles (c odd, 5..199, window +-20000)
+ok    21 % in record cells
+ok    size-matched: 53 of 89 = 59.6 % ('about 60 %')
+      (these 257 cycles belong to 66 of the 98 maps; '257 cycles of the maps 3x+c' = primitive ones met in the window)
+ok    5x+1: cycles through 0, -1, 1, 13, 17 sit in cells [(1, 0), (2, 1), (5, 2), (7, 3), (7, 3)], all record cells of log2 5 (not of log2 3)
+
+== 2. every coefficient class of level <= 24: does the least residue (hence every member) drop on time?
+      classes by level: {1: 1, 2: 1, 4: 1, 5: 2, 7: 3, 8: 7, 10: 12, 12: 30, 13: 85, 15: 173, 16: 476, 18: 961, 20: 2652, 21: 8045, 23: 17637, 24: 51033}
+      total classes of level <= 24: 81119; nodes visited: 367699
+      least residues that do NOT satisfy T^k(r) < r: [(0, 1, 0, 0), (1, 2, 1, 1)]
+ok    81,119 classes of level <= 24 (README figure)
+ok    the only least residues that fail to drop at their class level are 0 and 1
+ok    levels 1, 2, 4, 5, 7, 8, 10, 12, 13, 15, 16, 18, 20, 21, 23, 24
+
+== 3. how many integers drop onto d
+      3x+1: d <= 10^6 (all n <= 2*10^6): mean M = 1.69029, min M = 1, max M = 17, M on multiples of 3: [1], never dropping n: []
+ok    3x+1: M(d) = 1 for every multiple of 3 up to 10^6
+ok    3x+1: mean of M(d) over d <= 10^6 is 1.6903 (the page's 1.69)
+ok    3x+1: every d >= 1 is a destination (2d drops onto d)
+      3x-1: d <= 10^6 (all n <= 2*10^6): mean M = 1.69033, min M = 1, max M = 18, M on multiples of 3: [1], never dropping n: [5, 17]
+ok    3x-1: M(d) = 1 for every multiple of 3 up to 10^6
+ok    3x-1: mean of M(d) over d <= 10^6 is 1.6903 (the page's 1.69)
+
+== 4. sum N(s)/3^s
+      N(0..12) = [1, 1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652];  sum_(s<=700) N(s)/3^s = 1.6903605922
+ok    N(10), N(36) and the mean 1.6903605922
+ok    sum N(s)/2^level(s) = 1: the classes partition the integers (density)
+
+== 5. triangular numbers under other rules, integer level, K = 14
+      rule (3x+1)/2: natural shares of the first classes L1: 1/2, L2: 1/4, L4: 1/16, L5: 1/16; residue law exact: True; actual-minus-natural: {1: -1, 2: -1}; never drop within cap: 2
+ok    (3x+1)/2: at RESIDUE level the first 2^14 triangular numbers carry the rule's natural law exactly
+      rule (3x-1)/2: natural shares of the first classes L1: 1/2, L2: 1/4, L4: 1/16, L5: 1/16; residue law exact: True; actual-minus-natural: {1: -1}; never drop within cap: 2
+ok    (3x-1)/2: at RESIDUE level the first 2^14 triangular numbers carry the rule's natural law exactly
+      rule (5x+1)/2: natural shares of the first classes L1: 1/2, L3: 1/8, L5: 1/16, L7: 5/128; residue law exact: True; actual-minus-natural: {1: -1, 5: -1}; never drop within cap: 2888
+ok    (5x+1)/2: at RESIDUE level the first 2^14 triangular numbers carry the rule's natural law exactly
+      (for 5x+1 the shares are 1/2, 1/8, ... : 'the same shares as all integers' is rule by rule, not '1/2, 1/4, 1/16, 1/16')
+
+0 wrong

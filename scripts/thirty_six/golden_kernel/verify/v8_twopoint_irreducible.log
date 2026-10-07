@@ -1,0 +1,53 @@
+=== (a) support <= 2, primes 5 <= p < 300, eps = +1 (K) and -1 (K^-), both sides ===
+   eps = +1 right support ('0', '-1') coefficients ('1', '-1') eigenvalue 1: p in [5]
+   eps = +1 right support ('1', '2') coefficients ('1', '-1') eigenvalue -1: p in [11]
+   eps = -1  left support ('-1/2',) coefficients ('1',) eigenvalue 0: p in [13, 17, 19, 23, ..., 293] (57 primes)
+   eps = -1  left support ('2',) coefficients ('1',) eigenvalue 0: p in [5]
+   eps = -1  left support ('3',) coefficients ('1',) eigenvalue 0: p in [7]
+   eps = -1  left support ('5',) coefficients ('1',) eigenvalue 0: p in [11]
+   eps = -1  left support ('-1/2', '-1') coefficients ('1', '-1') eigenvalue -1: p in [13, 17, 19, 23, ..., 293] (57 primes)
+   eps = -1  left support ('2', '-1') coefficients ('1', '-1') eigenvalue -1: p in [5]
+   eps = -1  left support ('3', '-1') coefficients ('1', '-1') eigenvalue -1: p in [7]
+   eps = -1  left support ('5', '-1') coefficients ('1', '-1') eigenvalue -1: p in [11]
+   eps = -1 right support ('-1/4',) coefficients ('1',) eigenvalue 0: p in [29, 31, 37, 41, ..., 293] (53 primes)
+   eps = -1 right support ('1',) coefficients ('1',) eigenvalue 0: p in [5]
+   eps = -1 right support ('-2',) coefficients ('1',) eigenvalue 0: p in [7]
+   eps = -1 right support ('-3',) coefficients ('1',) eigenvalue 0: p in [11]
+   eps = -1 right support ('3',) coefficients ('1',) eigenvalue 0: p in [13]
+   eps = -1 right support ('4',) coefficients ('1',) eigenvalue 0: p in [17]
+   eps = -1 right support ('-5',) coefficients ('1',) eigenvalue 0: p in [19]
+   eps = -1 right support ('5/3',) coefficients ('1',) eigenvalue 0: p in [23]
+   eps = -1 right support ('-2', '-1') coefficients ('1', '-1') eigenvalue -1: p in [7]
+   K (eps = +1) complete list: [('right', ('0', '-1'), Fraction(1, 1), (5,)), ('right', ('1', '2'), Fraction(-1, 1), (11,))]
+   (rational names are chosen per prime, so one configuration can appear under several names at small p)
+
+=== (b) irreducibility of the generic factor of g_N by degree patterns modulo primes, levels N <= 79 ===
+   N =  5: m = 1, linear factors of g removed: 2, generic degree 2: irreducible (certified) using primes [7]
+   N =  7: m = 1, linear factors of g removed: 2, generic degree 4: irreducible (certified) using primes [5, 11, 13]
+   N = 11: m = 2, linear factors of g removed: 1, generic degree 4: irreducible (certified) using primes [5]
+   N = 13: m = 4, linear factors of g removed: 0, generic degree 3: irreducible (certified) using primes [5, 7]
+   N = 17: m = 1, linear factors of g removed: 2, generic degree 14: irreducible (certified) using primes [5, 7]
+   N = 19: m = 1, linear factors of g removed: 2, generic degree 16: irreducible (certified) using primes [7, 11]
+   N = 23: m = 1, linear factors of g removed: 0, generic degree 22: irreducible (certified) using primes [5, 7, 11, 19]
+   N = 25: m = 1, linear factors of g removed: 3, generic degree 17: irreducible (certified) using primes [7, 11]
+   N = 29: m = 1, linear factors of g removed: 2, generic degree 26: irreducible (certified) using primes [5, 7, 11, 13, 17]
+   N = 31: m = 1, linear factors of g removed: 3, generic degree 27: irreducible (certified) using primes [5]
+   N = 35: m = 2, linear factors of g removed: 2, generic degree 10: irreducible (certified) using primes [11]
+   N = 37: m = 2, linear factors of g removed: 4, generic degree 14: irreducible (certified) using primes [7, 11, 13, 17, 19, 23]
+   N = 41: m = 5, linear factors of g removed: 3, generic degree 5: irreducible (certified) using primes [5, 7]
+   N = 43: m = 1, linear factors of g removed: 2, generic degree 40: irreducible (certified) using primes [5, 7, 11, 13, 17, 19]...
+   N = 47: m = 1, linear factors of g removed: 0, generic degree 46: irreducible (certified) using primes [5, 7, 11, 13, 17, 19]
+   N = 49: m = 1, linear factors of g removed: 3, generic degree 39: irreducible (certified) using primes [11, 13, 17]
+   N = 53: m = 1, linear factors of g removed: 2, generic degree 50: irreducible (certified) using primes [5, 7]
+   N = 55: m = 2, linear factors of g removed: 2, generic degree 18: irreducible (certified) using primes [7, 13]
+   N = 59: m = 2, linear factors of g removed: 0, generic degree 29: irreducible (certified) using primes [7, 11, 13]
+   N = 61: m = 6, linear factors of g removed: 2, generic degree 8: irreducible (certified) using primes [7]
+   N = 65: m = 4, linear factors of g removed: 2, generic degree 10: irreducible (certified) using primes [7]
+   N = 67: m = 3, linear factors of g removed: 2, generic degree 20: irreducible (certified) using primes [7, 11, 13, 17]
+   N = 71: m = 1, linear factors of g removed: 0, generic degree 70: irreducible (certified) using primes [7, 11, 19, 23, 29, 31]...
+   N = 73: m = 3, linear factors of g removed: 4, generic degree 20: irreducible (certified) using primes [5, 7]
+   N = 77: m = 2, linear factors of g removed: 2, generic degree 28: irreducible (certified) using primes [5, 13, 17, 19, 23]
+   N = 79: m = 1, linear factors of g removed: 2, generic degree 76: irreducible (certified) using primes [5, 7, 11, 13]
+   levels checked: 26;  not certified irreducible: []
+
+total time 7 s

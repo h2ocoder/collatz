@@ -1,0 +1,125 @@
+==============================================================================
+A. Continued fraction of log2(3) and the 'record cells'
+==============================================================================
+log2(3) = [1; 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1, 1, 55, 1, 4, 3, 1, 1, 15, 1, 9, 2, 5, 7, ...]
+record cells with s <= 700 (exact integer comparison): 19
+convergents + semiconvergents of log2(3) with s <= 700: 19
+the two lists coincide: True
+
+The ladder of record cells (k <= 110).  mediant = sum of two earlier record cells.
+  (k,s)     type            side   D = 2^k - 3^s          cents     necklaces N   N/|D|        name
+  (1,0)    convergent      +     1                     -1200.000  1             1            octave 2/1 (desc.)  
+  (1,1)    convergent      -     -1                      701.955  1             1            perfect fifth 3/2 (asc.)  
+  (2,1)    convergent      +     1                      -498.045  1             1            perfect fourth 4/3 (desc.)  = (1,0) + (1,1)
+  (3,2)    convergent      -     -1                      203.910  1             1            major whole tone 9/8 (asc.)  = (1,1) + (2,1)
+  (5,3)    semiconvergent  +     5                      -294.135  2             0.4          Pyth. minor third 32/27 (desc.)  = (2,1) + (3,2)
+  (8,5)    convergent      +     13                      -90.225  7             0.5385       limma (diatonic semitone) 256/243 (desc.)  = (3,2) + (5,3)
+  (11,7)   semiconvergent  -     -139                    113.685  30            0.2158       apotome (chromatic semitone) 2187/2048 (asc.)  = (3,2) + (8,5)
+  (19,12)  convergent      -     -7153                    23.460  2652          0.3708       Pythagorean comma 531441/524288 (asc.)  = (8,5) + (11,7)
+  (27,17)  semiconvergent  +     5077565                 -66.765  312455        0.06154        = (8,5) + (19,12)
+  (46,29)  semiconvergent  +     1.7384e+12              -43.305  3.80368e+10   0.02188        = (19,12) + (27,17)
+  (65,41)  convergent      +     4.2049e+17              -19.845  6.11339e+15   0.01454        = (19,12) + (46,29)
+  (84,53)  convergent      -     -4.0433e+22               3.615  1.12243e+21   0.02776      Mercator's comma 3^53/2^84 (asc.)  = (19,12) + (65,41)
+
+==============================================================================
+B. The five known cycles of 3x+1 on Z
+==============================================================================
+ min   (k,s)    D     3^s/2^k        cents     CF type          odd elements; harmonic check; name
+    0  (1,0)       1  1/2            -1200.000  convergent       odd = []
+        name: octave 2/1 (desc.)
+        2^k/3^s = prod(1 + 1/(3x)) over odd x: True
+   -1  (1,1)      -1  3/2              701.955  convergent       odd = [-1]
+        name: perfect fifth 3/2 (asc.)
+        2^k/3^s = prod(1 + 1/(3x)) over odd x: True
+    1  (2,1)       1  3/4             -498.045  convergent       odd = [1]
+        name: perfect fourth 4/3 (desc.)
+        2^k/3^s = prod(1 + 1/(3x)) over odd x: True
+        superparticular form 3^s/2^k = (3/2)(1/2)
+   -5  (3,2)      -1  9/8              203.910  convergent       odd = [-5, -7]
+        name: major whole tone 9/8 (asc.)
+        2^k/3^s = prod(1 + 1/(3x)) over odd x: True
+        superparticular form 3^s/2^k = (9/10)(5/4)
+  -17  (11,7)   -139  2187/2048        113.685  semiconvergent   odd = [-17, -25, -37, -55, -41, -61, -91]
+        name: apotome (chromatic semitone) 2187/2048 (asc.)
+        2^k/3^s = prod(1 + 1/(3x)) over odd x: True
+        superparticular form 3^s/2^k = (81/82)(17/16) * (135/136)(41/40)
+
+==============================================================================
+C. Which cells can hold a cycle of 3x+1 at all?  (archimedean constraint)
+   negative cycle other than {-1}: odd elements <= -5, so 1 < 3^s/2^k <= (15/14)^s
+   positive cycle other than {1,2}: odd elements >= 3,  so 1 < 2^k/3^s <= (10/9)^s
+==============================================================================
+  s   negative side: allowed k (cents) [record?]        positive side: allowed k (cents) [record?]
+   1  none                                              none
+   2  (3,2) +203.9c [R]                                 none
+   3  none                                              (5,3) -294.1c [R]
+   4  (6,4) +407.8c                                     none
+   5  none                                              (8,5) -90.2c [R]
+   6  (9,6) +611.7c                                     (10,6) -588.3c
+   7  (11,7) +113.7c [R]                                (12,7) -1086.3c
+   8  (12,8) +815.6c                                    (13,8) -384.4c
+   9  (14,9) +317.6c                                    (15,9) -882.4c
+  10  (15,10) +1019.6c                                  (16,10) -180.4c, (17,10) -1380.4c
+  11  (17,11) +521.5c                                   (18,11) -678.5c, (19,11) -1878.5c
+  12  (18,12) +1223.5c, (19,12) +23.5c [R]              (20,12) -1176.5c
+  13  (20,13) +725.4c                                   (21,13) -474.6c, (22,13) -1674.6c
+  14  (21,14) +1427.4c, (22,14) +227.4c                 (23,14) -972.6c, (24,14) -2172.6c
+  15  (23,15) +929.3c                                   (24,15) -270.7c, (25,15) -1470.7c, (26,15) -2670.7c
+  16  (24,16) +1631.3c, (25,16) +431.3c                 (26,16) -768.7c, (27,16) -1968.7c
+  17  (26,17) +1133.2c                                  (27,17) -66.8c [R], (28,17) -1266.8c, (29,17) -2466.8c
+  18  (27,18) +1835.2c, (28,18) +635.2c                 (29,18) -564.8c, (30,18) -1764.8c, (31,18) -2964.8c
+  19  (29,19) +1337.1c, (30,19) +137.1c                 (31,19) -1062.9c, (32,19) -2262.9c, (33,19) -3462.9c
+  20  (30,20) +2039.1c, (31,20) +839.1c                 (32,20) -360.9c, (33,20) -1560.9c, (34,20) -2760.9c
+
+  heuristic weight N/|D| of the allowed NON-unit cells with s <= 12, and the share on record cells
+   negative side: (6,4) 0.1176, (9,6) 0.0415, (11,7)[R] 0.2158, (12,8) 0.0162, (14,9) 0.0433, (15,10) 0.0076, (17,11) 0.0158, (18,12) 0.0038, (19,12)[R] 0.3708
+      total 0.8325, on record cells 0.5866 (70.5%)
+   positive side: (5,3)[R] 0.4000, (8,5)[R] 0.5385, (10,6) 0.0678, (12,7) 0.0346, (13,8) 0.0607, (15,9) 0.0254, (16,10) 0.0766, (17,10) 0.0159, (18,11) 0.0208, (19,11) 0.0115, (20,12) 0.0122
+      total 1.2639, on record cells 0.9385 (74.3%)
+
+==============================================================================
+D. Control family: all primitive cycles of 3x+c meeting [-20000, 20000],
+   c coprime to 6, c <= 199.  Is the cell a record cell (= (semi)convergent)?
+==============================================================================
+  cross-check with the q13 census (every primitive cycle of length <= 24, c <= 199): 166 cycles compared, 0 values of c disagree
+  c   #prim.cycles  cells (k,s)[*=record cell]{count}
+    1    4   (1,1)*{1}  (2,1)*{1}  (3,2)*{1}  (11,7)*{1}
+    5    5   (3,1){1}  (5,3)*{2}  (27,17)*{2}
+    7    1   (4,2){1}
+   11    3   (4,3){1}  (6,2){1}  (14,8){1}
+   13    9   (4,1){1}  (8,5)*{7}  (24,15){1}
+   17    4   (6,4){2}  (7,2){1}  (31,18){1}
+   19    2   (11,5){1}  (17,11){1}
+   23   11   (5,2){2}  (19,12)*{8}  (43,26){1}
+   25    3   (8,4){1}  (16,8){1}  (34,22){1}
+   29    5   (5,1){1}  (12,8){1}  (17,9){1}  (65,41)*{2}
+   31    2   (9,6){1}  (23,12){1}
+   35    2   (8,4){2}
+   37    3   (6,3){3}
+   41    1   (20,8){1}
+   43    1   (11,3){1}
+   47    7   (7,4){5}  (18,7){1}  (28,16){1}
+   49    2   (5,4){1}  (38,22){1}
+
+  c = 1 (non-zero cycles): 4 cycles; in record cells 4 (100.0%); interval within an octave of unison 4 (100.0%)
+  5 <= c <= 199, all: 257 cycles; in record cells 55 (21.4%); interval within an octave of unison 120 (46.7%)
+  5 <= c <= 199, positive side: 175 cycles; in record cells 18 (10.3%); interval within an octave of unison 42 (24.0%)
+  5 <= c <= 199, negative side: 82 cycles; in record cells 37 (45.1%); interval within an octave of unison 78 (95.1%)
+  5 <= c <= 199, 'free' cycles (|D| = c): 75 cycles; in record cells 38 (50.7%); interval within an octave of unison 50 (66.7%)
+  5 <= c <= 199, 'accident' cycles (|D| = c*g, g > 1): 182 cycles; in record cells 17 (9.3%); interval within an octave of unison 70 (38.5%)
+  5 <= c <= 199, cycles with |min| > 3c: 106 cycles; in record cells 55 (51.9%); interval within an octave of unison 105 (99.1%)
+  5 <= c <= 199, cycles with |min| <= 3c: 151 cycles; in record cells 0 (0.0%); interval within an octave of unison 15 (9.9%)
+  distinct cells occupied by 3x+c cycles (c > 1): 124, of which record cells: 6
+  ten most populated cells (cell, #cycles, record?, name):
+      (11,7)    29  record  apotome (chromatic semitone) 2187/2048 (asc.)
+      (19,12)     8  record  Pythagorean comma 531441/524288 (asc.)
+      (8,4)     8  no      (compound: more than an octave)
+      (22,14)     8  no      
+      (27,17)     7  record  
+      (8,5)     7  record  limma (diatonic semitone) 256/243 (desc.)
+      (10,6)     6  no      Pyth. diminished fifth 1024/729 (desc.)
+      (30,19)     6  no      
+      (7,4)     5  no      Pyth. minor sixth 128/81 (desc.)
+      (7,3)     5  no      (compound: more than an octave)
+
+wrote q15_intervals.json

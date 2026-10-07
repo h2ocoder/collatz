@@ -1,0 +1,353 @@
+{
+ "A": {
+  "crs": true,
+  "fibres": true,
+  "windows": true,
+  "neg": true
+ },
+ "B": {
+  "N": {
+   "1": 1,
+   "2": 1,
+   "4": 1,
+   "5": 2,
+   "7": 3,
+   "8": 7,
+   "10": 12,
+   "12": 30,
+   "13": 85,
+   "15": 173,
+   "16": 476,
+   "18": 961,
+   "20": 2652
+  },
+  "ok": true
+ },
+ "C": {
+  "3x+1": {
+   "T_n": {
+    "natural": true,
+    "n_classes": 11,
+    "undetermined_share": 0.032257080078125
+   },
+   "n^2": {
+    "natural": false,
+    "n_classes": 2,
+    "undetermined_share": 0.0
+   },
+   "n^3": {
+    "natural": true,
+    "n_classes": 11,
+    "undetermined_share": 0.032257080078125
+   },
+   "T_n^2": {
+    "natural": false,
+    "n_classes": 2,
+    "undetermined_share": 0.0
+   },
+   "pentagonal s=5": {
+    "natural": true,
+    "n_classes": 11,
+    "undetermined_share": 0.032257080078125
+   },
+   "hexagonal s=6": {
+    "natural": true,
+    "n_classes": 11,
+    "undetermined_share": 0.032257080078125
+   },
+   "octagonal s=8": {
+    "natural": false,
+    "n_classes": 2,
+    "undetermined_share": 0.0
+   },
+   "dodecagonal s=12": {
+    "natural": false,
+    "n_classes": 2,
+    "undetermined_share": 0.0
+   }
+  },
+  "3x-1": {
+   "T_n": {
+    "natural": true,
+    "n_classes": 11,
+    "undetermined_share": 0.032257080078125
+   },
+   "n^2": {
+    "natural": false,
+    "n_classes": 9,
+    "undetermined_share": 0.10491943359375
+   },
+   "n^3": {
+    "natural": true,
+    "n_classes": 11,
+    "undetermined_share": 0.032257080078125
+   },
+   "T_n^2": {
+    "natural": false,
+    "n_classes": 9,
+    "undetermined_share": 0.10491943359375
+   },
+   "pentagonal s=5": {
+    "natural": true,
+    "n_classes": 11,
+    "undetermined_share": 0.032257080078125
+   },
+   "hexagonal s=6": {
+    "natural": true,
+    "n_classes": 11,
+    "undetermined_share": 0.032257080078125
+   },
+   "octagonal s=8": {
+    "natural": false,
+    "n_classes": 8,
+    "undetermined_share": 0.1326904296875
+   },
+   "dodecagonal s=12": {
+    "natural": false,
+    "n_classes": 9,
+    "undetermined_share": 0.10491943359375
+   }
+  },
+  "5x+1": {
+   "T_n": {
+    "natural": true,
+    "n_classes": 7,
+    "undetermined_share": 0.2337646484375
+   },
+   "n^2": {
+    "natural": false,
+    "n_classes": 6,
+    "undetermined_share": 0.25830078125
+   },
+   "n^3": {
+    "natural": true,
+    "n_classes": 7,
+    "undetermined_share": 0.2337646484375
+   },
+   "T_n^2": {
+    "natural": false,
+    "n_classes": 6,
+    "undetermined_share": 0.25830078125
+   },
+   "pentagonal s=5": {
+    "natural": true,
+    "n_classes": 7,
+    "undetermined_share": 0.2337646484375
+   },
+   "hexagonal s=6": {
+    "natural": true,
+    "n_classes": 7,
+    "undetermined_share": 0.2337646484375
+   },
+   "octagonal s=8": {
+    "natural": false,
+    "n_classes": 5,
+    "undetermined_share": 0.2119140625
+   },
+   "dodecagonal s=12": {
+    "natural": false,
+    "n_classes": 6,
+    "undetermined_share": 0.25830078125
+   }
+  },
+  "5x-1": {
+   "T_n": {
+    "natural": true,
+    "n_classes": 7,
+    "undetermined_share": 0.2337646484375
+   },
+   "n^2": {
+    "natural": false,
+    "n_classes": 6,
+    "undetermined_share": 0.25830078125
+   },
+   "n^3": {
+    "natural": true,
+    "n_classes": 7,
+    "undetermined_share": 0.2337646484375
+   },
+   "T_n^2": {
+    "natural": false,
+    "n_classes": 6,
+    "undetermined_share": 0.25830078125
+   },
+   "pentagonal s=5": {
+    "natural": true,
+    "n_classes": 7,
+    "undetermined_share": 0.2337646484375
+   },
+   "hexagonal s=6": {
+    "natural": true,
+    "n_classes": 7,
+    "undetermined_share": 0.2337646484375
+   },
+   "octagonal s=8": {
+    "natural": false,
+    "n_classes": 6,
+    "undetermined_share": 0.14697265625
+   },
+   "dodecagonal s=12": {
+    "natural": false,
+    "n_classes": 6,
+    "undetermined_share": 0.25830078125
+   }
+  },
+  "7x+1": {
+   "T_n": {
+    "natural": true,
+    "n_classes": 6,
+    "undetermined_share": 0.318389892578125
+   },
+   "n^2": {
+    "natural": false,
+    "n_classes": 2,
+    "undetermined_share": 0.0
+   },
+   "n^3": {
+    "natural": true,
+    "n_classes": 6,
+    "undetermined_share": 0.318389892578125
+   },
+   "T_n^2": {
+    "natural": false,
+    "n_classes": 2,
+    "undetermined_share": 0.0
+   },
+   "pentagonal s=5": {
+    "natural": true,
+    "n_classes": 6,
+    "undetermined_share": 0.318389892578125
+   },
+   "hexagonal s=6": {
+    "natural": true,
+    "n_classes": 6,
+    "undetermined_share": 0.318389892578125
+   },
+   "octagonal s=8": {
+    "natural": false,
+    "n_classes": 5,
+    "undetermined_share": 0.0966796875
+   },
+   "dodecagonal s=12": {
+    "natural": false,
+    "n_classes": 2,
+    "undetermined_share": 0.0
+   }
+  }
+ },
+ "D": {
+  "T_n": {
+   "nodrop": [
+    0,
+    1
+   ],
+   "exact": true
+  },
+  "n^2": {
+   "nodrop": [
+    0,
+    1
+   ],
+   "hist": {
+    "1": 1048575,
+    "2": 1048575
+   }
+  },
+  "n^3": {
+   "nodrop": [
+    0,
+    1
+   ],
+   "exact": true
+  },
+  "T_n^2": {
+   "nodrop": [
+    0,
+    1
+   ],
+   "hist": {
+    "1": 1048575,
+    "2": 1048575
+   }
+  },
+  "mirror n^2": {
+   "distinct": 103,
+   "top": [
+    [
+     1,
+     100000
+    ],
+    [
+     5,
+     25000
+    ],
+    [
+     8,
+     15625
+    ],
+    [
+     7,
+     12500
+    ],
+    [
+     10,
+     7031
+    ],
+    [
+     13,
+     6446
+    ],
+    [
+     16,
+     4613
+    ],
+    [
+     12,
+     4492
+    ]
+   ]
+  },
+  "mirror T_n^2": {
+   "distinct": 101,
+   "top": [
+    [
+     1,
+     100000
+    ],
+    [
+     5,
+     25000
+    ],
+    [
+     8,
+     15625
+    ],
+    [
+     7,
+     12500
+    ],
+    [
+     10,
+     7029
+    ],
+    [
+     13,
+     6447
+    ],
+    [
+     16,
+     4615
+    ],
+    [
+     12,
+     4492
+    ]
+   ]
+  }
+ },
+ "E": {
+  "squares": true,
+  "odd_squares": true,
+  "cube_isometry": true
+ }
+}

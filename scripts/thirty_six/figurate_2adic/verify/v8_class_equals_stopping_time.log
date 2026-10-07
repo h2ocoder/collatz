@@ -1,0 +1,12 @@
+  3x+1: classes with k <= 24: 81119;  least residues r with T^k(r) >= r (exceptions): [0, 1]
+         residues r < 2^24 that drop BEFORE their coefficient stopping time: []
+         residues with coefficient stopping time > 24 that nevertheless drop within 24 steps: 0
+  3x-1: classes with k <= 24: 81119;  least residues r with T^k(r) >= r (exceptions): [0]
+         residues r < 2^24 that drop BEFORE their coefficient stopping time: []
+         residues with coefficient stopping time > 24 that nevertheless drop within 24 steps: 0
+
+  Consequence (3x+1): for every integer n >= 2 whose class has level k <= 24, the Terras stopping time is exactly k.
+  The only exceptions among non-negative integers are n = 0 (class 'even') and n = 1 (class 1 mod 4), the two
+  non-negative cycles.  So Corollary 1 of the README holds for actual integers, for all K, for every k <= 24;
+  beyond that it is Terras's theorem up to 2593 and his Coefficient Stopping Time conjecture in general.
+done in 15.8 s

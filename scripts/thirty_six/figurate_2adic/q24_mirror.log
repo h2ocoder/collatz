@@ -1,0 +1,217 @@
+====================================================================================================
+A. Identities, checked for every integer -20000 <= n <= 20000
+====================================================================================================
+  True   NOT(3n+1) = 3 NOT(n) + 1            (3x+1 commutes with NOT)
+  True   NOT(NOT(m)/2) = (m-1)/2, m odd       (halving does NOT commute)
+  True   NOT o T o NOT = TN: m -> 3m/2 (m even), (m-1)/2 (m odd)
+  True   TN(m) = Tminus(m+1) - 1              (TN is 3x-1 shifted by one)
+  True   -T(-y) = Tminus(y)                   (negation: 3x+1 on Z_<0 = 3x-1 on Z_>0)
+  True   T_NOT(n) = T_n                       (triangular number is NOT-invariant)
+  True   T_(3n+1) = 9 T_n + 1                 (the odd step descends to t -> 9t+1)
+  True   u(3n+1) = 3 u(n),  u = 2n+1
+  True   u(n/2) = v(n) = n+1 for n even
+  True   v(T(n)) = 3v/2 (v even), (v+1)/2 (v odd),  v = n+1
+  True   T(NOT(e)) = NOT(3e/2) for e even     (mirror branch of an even point)
+  halving has no image in the t = T_n coordinate: T_n = T_NOT(n), but only one of n, NOT(n) is even.
+  The two branches at the even representative e of the pair {e, NOT(e)} are  e -> e/2  (3x+1 side)
+  and  e -> 3e/2  (mirror side): the quotient by NOT is a 2-valued correspondence, not a map.
+
+====================================================================================================
+B. Cycles of the shortcut map T on Z, exhaustive over starts -200000 <= n <= 200000
+====================================================================================================
+  coordinates:  n ;  v = n+1 ;  u = 2n+1 ;  NOT(n) = -1-n = -v ;  t = T_n = (u^2-1)/8
+  --- cycle with min |n| = 0:  length k=1, odd steps s=0, word 0, 2^k-3^s = 1, word constant n0*(2^k-3^s) = 0
+      n   : [0]
+      v   : [1]
+      u   : [1]
+      NOT : [-1]
+      T_n : [0]
+  --- cycle with min |n| = -1:  length k=1, odd steps s=1, word 1, 2^k-3^s = -1, word constant n0*(2^k-3^s) = 1
+      n   : [-1]
+      v   : [0]
+      u   : [-1]
+      NOT : [0]
+      T_n : [0]
+  --- cycle with min |n| = 1:  length k=2, odd steps s=1, word 10, 2^k-3^s = 1, word constant n0*(2^k-3^s) = 1
+      n   : [1, 2]
+      v   : [2, 3]
+      u   : [3, 5]
+      NOT : [-2, -3]
+      T_n : [1, 3]
+  --- cycle with min |n| = -5:  length k=3, odd steps s=2, word 110, 2^k-3^s = -1, word constant n0*(2^k-3^s) = 5
+      n   : [-5, -7, -10]
+      v   : [-4, -6, -9]
+      u   : [-9, -13, -19]
+      NOT : [4, 6, 9]
+      T_n : [10, 21, 45]
+  --- cycle with min |n| = -17:  length k=11, odd steps s=7, word 11110111000, 2^k-3^s = -139, word constant n0*(2^k-3^s) = 2363
+      n   : [-17, -25, -37, -55, -82, -41, -61, -91, -136, -68, -34]
+      v   : [-16, -24, -36, -54, -81, -40, -60, -90, -135, -67, -33]
+      u   : [-33, -49, -73, -109, -163, -81, -121, -181, -271, -135, -67]
+      NOT : [16, 24, 36, 54, 81, 40, 60, 90, 135, 67, 33]
+      T_n : [136, 300, 666, 1485, 3321, 820, 1830, 4095, 9180, 2278, 561]
+  number of cycles met from |n| <= 200000: 5  (the five known ones)
+
+  minimal elements in each coordinate:
+     n0    v0=n0+1   NOT(n0)   u0=2n0+1   T_n0   v2(v0)   v0/2^v2   3-smooth |v| along the cycle
+       0        1       -1        1        0    0           1     [1]
+      -1        0        0       -1        0    None        0     []
+       1        2       -2        3        1    1           1     [2, 3]
+      -5       -4        4       -9       10    2          -1     [4, 6, 9]
+     -17      -16       16      -33      136    4          -1     [16, 24, 36, 54, 81]
+
+  v-coordinate run decomposition (a run of j odd steps is v = c*2^j -> c*2^(j-1)*3 -> ... -> c*3^j):
+     n0=   0: no proper run (word 0)
+     n0=  -1: no proper run (word 1)
+     n0=   1: 1*antidiag(1) = [2, 3]
+     n0=  -5: -1*antidiag(2) = [-4, -6, -9]
+     n0= -17: -1*antidiag(4) = [-16, -24, -36, -54, -81] ; -5*antidiag(3) = [-40, -60, -90, -135]
+
+====================================================================================================
+C. Unit cells |2^k - 3^s| = 1 (k >= 1, s >= 0; searched s <= 3000)  <->  consecutive 3-smooth pairs
+   <->  3-smooth triangular numbers  <->  integer cycles forced by the cell
+====================================================================================================
+   (k,s)=(1,0)  2^k-3^s = +1   pair (1,2)   T_1 = 1   cycle(s) in this cell: [[0]]
+   (k,s)=(1,1)  2^k-3^s = -1   pair (2,3)   T_2 = 3   cycle(s) in this cell: [[-1]]
+   (k,s)=(2,1)  2^k-3^s = +1   pair (3,4)   T_3 = 6   cycle(s) in this cell: [[1, 2]]
+   (k,s)=(3,2)  2^k-3^s = -1   pair (8,9)   T_8 = 36   cycle(s) in this cell: [[-5, -7, -10]]
+   the remaining cycle (min -17) sits in the non-unit cell (11,7): 2^11 - 3^7 = -139 and 139 | word constant.
+
+   family 'one anti-diagonal + one halving' (word 1^j 0): rule 3x + d_j, d_j = 2^(j+1) - 3^j,
+   cycle minimum n0 = 3^j - 2^j, v0 = n0 + d_j = 2^j.  It is a 3x+-1 cycle iff |d_j| = 1.
+      j=0: d_j =     +1   n0 =     0   closes after j+1 steps: True   orbit [0]   <-- 3x+1
+      j=1: d_j =     +1   n0 =     1   closes after j+1 steps: True   orbit [1, 2]   <-- 3x+1
+      j=2: d_j =     -1   n0 =     5   closes after j+1 steps: True   orbit [5, 7, 10]   <-- 3x-1 (mirror)
+      j=3: d_j =    -11   n0 =    19   closes after j+1 steps: True   orbit [19, 23, 29, 38]
+      j=4: d_j =    -49   n0 =    65   closes after j+1 steps: True   orbit [65, 73, 85, 103, 130]
+      j=5: d_j =   -179   n0 =   211   closes after j+1 steps: True   orbit [211, 227, 251, 287, 341, 422]
+      j=6: d_j =   -601   n0 =   665   closes after j+1 steps: True   orbit [665, 697, 745, 817, 925, 1087, 1330]
+      j=7: d_j =  -1931   n0 =  2059   closes after j+1 steps: True   orbit [2059, 2123, 2219, 2363, 2579, 2903, 3389, 4118]
+      j=8: d_j =  -6049   n0 =  6305   closes after j+1 steps: True   orbit [6305, 6433, 6625, 6913, 7345, 7993, 8965, 10423, 12610]
+   1-circuits (j odd steps then e extra halvings), integer solutions for 1 <= j,e < 200: (j, e, c, n0) = [(1, 1, 1, 1), (2, 1, -1, -5)]
+
+====================================================================================================
+D. The mirror map TN (m -> 3m/2 | (m-1)/2) on m >= 0; m = NOT(n) = -(n+1) for n <= -1
+====================================================================================================
+   cycle through 0: [0]
+       3-smooth members: []
+   cycle through 4: [4, 6, 9]
+       3-smooth members: ['4=2^23^0', '6=2^13^1', '9=2^03^2']
+   cycle through 16: [16, 24, 36, 54, 81, 40, 60, 90, 135, 67, 33]
+       3-smooth members: ['16=2^43^0', '24=2^33^1', '36=2^23^2', '54=2^13^3', '81=2^03^4']
+   36 = 2^2 3^2 is the midpoint of the anti-diagonal a+b=4 inside the 11-cycle; NOT(36) = -37,
+   i.e. 37 = 36 + 1 lies on the 3x-1 cycle of 17.  35 (v = 36 for 3x+1) is not on a cycle.
+   3x-1 orbit of 37: [37, 55, 82, 41, 61, 91, 136, 68, 34, 17, 25]
+
+====================================================================================================
+E. Base rate.  For the rules 3x+d (d odd, 3 !| d, |d| <= 499) list the primitive positive cycles
+   (gcd(min, d) = 1), minimum n0 <= 100|d| + 2000.  v0 = n0 + d is the coordinate in which an odd
+   step is v -> 3v/2.  How often is v0 = 2^j exactly (c = 1), as for 1, 5 and 17?
+====================================================================================================
+   primitive positive cycles found: 797   starts captured by a cycle with larger minimum: 3173   unresolved starts (step cap hit): 0
+   with v0 = +-2^j (c = +-1): 18  = 0.023
+   by number of circuits (runs of odd steps):  circuits: (cycles, with c=+-1, fraction)
+       1: (  36,   6, 0.167)
+       2: (  95,   1, 0.011)
+       3: ( 121,   1, 0.008)
+       4: ( 104,   1, 0.010)
+       5: (  68,   0, 0.000)
+       6: (  53,   2, 0.038)
+       7: (  48,   2, 0.042)
+       8: (  51,   1, 0.020)
+       9: (  27,   0, 0.000)
+      10: (  25,   0, 0.000)
+      11: (  24,   1, 0.042)
+      12: (  11,   0, 0.000)
+      13: (  11,   0, 0.000)
+      14: (   6,   0, 0.000)
+      15: (  18,   0, 0.000)
+      16: (   6,   1, 0.167)
+      17: (  12,   0, 0.000)
+      18: (   7,   0, 0.000)
+      19: (   9,   0, 0.000)
+      20: (   4,   0, 0.000)
+      21: (   3,   1, 0.333)
+      22: (   3,   0, 0.000)
+      23: (   5,   0, 0.000)
+      24: (   2,   0, 0.000)
+      25: (   6,   1, 0.167)
+      26: (   5,   0, 0.000)
+      27: (   3,   0, 0.000)
+      28: (   3,   0, 0.000)
+      29: (   2,   0, 0.000)
+      30: (   2,   0, 0.000)
+      31: (   2,   0, 0.000)
+      32: (   4,   0, 0.000)
+      33: (   2,   0, 0.000)
+      34: (   2,   0, 0.000)
+      36: (   1,   0, 0.000)
+      38: (   2,   0, 0.000)
+      39: (   1,   0, 0.000)
+      40: (   2,   0, 0.000)
+      41: (   2,   0, 0.000)
+      42: (   1,   0, 0.000)
+      45: (   1,   0, 0.000)
+      47: (   1,   0, 0.000)
+      48: (   3,   0, 0.000)
+      54: (   1,   0, 0.000)
+      57: (   1,   0, 0.000)
+      60: (   1,   0, 0.000)
+   restricted to n0 <= 17|d| (the size range of 1, 5, 17): 18 of 668 = 0.027
+   all 2-circuit cycles with c = +-1 (the type of the 17-cycle):
+      d=   -1  n0=    17  (k,s)=(11,7)  v0=16 = +1*2^4
+   rows for d = +-1: [{'d': -1, 'n0': 1, 'k': 1, 's': 1, 'circuits': 1, 'v0': 0, 'j': None, 'c': 0}, {'d': -1, 'n0': 5, 'k': 3, 's': 2, 'circuits': 1, 'v0': 4, 'j': 2, 'c': 1}, {'d': -1, 'n0': 17, 'k': 11, 's': 7, 'circuits': 2, 'v0': 16, 'j': 4, 'c': 1}, {'d': 1, 'n0': 1, 'k': 2, 's': 1, 'circuits': 1, 'v0': 2, 'j': 1, 'c': 1}]
+   most common |c| = |v0|/2^v2(v0): [(3, 32), (15, 22), (7, 19), (1, 18), (31, 16), (51, 16), (33, 15), (21, 15), (9, 15), (69, 14)]
+   every cycle with c = +-1:
+      d= -491  n0=  1003  (k,s)=(30,20)  circuits= 6  v0=512 = +1*2^9
+      d= -179  n0=   211  (k,s)=(6,5)  circuits= 1  v0=32 = +1*2^5
+      d=  -49  n0=    65  (k,s)=(5,4)  circuits= 1  v0=16 = +1*2^4
+      d=  -31  n0=    95  (k,s)=(9,6)  circuits= 1  v0=64 = +1*2^6
+      d=  -11  n0=    19  (k,s)=(4,3)  circuits= 1  v0=8 = +1*2^3
+      d=   -1  n0=     5  (k,s)=(3,2)  circuits= 1  v0=4 = +1*2^2
+      d=   -1  n0=    17  (k,s)=(11,7)  circuits= 2  v0=16 = +1*2^4
+      d=   +1  n0=     1  (k,s)=(2,1)  circuits= 1  v0=2 = +1*2^1
+      d=  +23  n0=    41  (k,s)=(43,26)  circuits=11  v0=64 = +1*2^6
+      d=  +25  n0=     7  (k,s)=(16,8)  circuits= 3  v0=32 = +1*2^5
+      d= +109  n0=    19  (k,s)=(52,30)  circuits=16  v0=128 = +1*2^7
+      d= +115  n0=    13  (k,s)=(27,13)  circuits= 6  v0=128 = +1*2^7
+      d= +125  n0=   899  (k,s)=(118,74)  circuits=25  v0=1024 = +1*2^10
+      d= +127  n0=     1  (k,s)=(37,18)  circuits= 7  v0=128 = +1*2^7
+      d= +307  n0=   205  (k,s)=(33,19)  circuits= 7  v0=512 = +1*2^9
+      d= +431  n0=   593  (k,s)=(32,19)  circuits= 8  v0=1024 = +1*2^10
+      d= +437  n0=   587  (k,s)=(31,19)  circuits= 4  v0=1024 = +1*2^10
+      d= +499  n0=  1549  (k,s)=(80,50)  circuits=21  v0=2048 = +1*2^11
+   size-matched: |v0| <=  16:  5 of   9 cycles have |v0| = 2^j  (0.556);  share of powers of two among even numbers <= 16: 0.500
+   size-matched: |v0| <=  32:  7 of  19 cycles have |v0| = 2^j  (0.368);  share of powers of two among even numbers <= 32: 0.312
+   size-matched: |v0| <=  64:  9 of  38 cycles have |v0| = 2^j  (0.237);  share of powers of two among even numbers <= 64: 0.188
+   size-matched: |v0| <= 128: 12 of  85 cycles have |v0| = 2^j  (0.141);  share of powers of two among even numbers <= 128: 0.109
+   size-matched: |v0| <= 256: 12 of 187 cycles have |v0| = 2^j  (0.064);  share of powers of two among even numbers <= 256: 0.062
+
+====================================================================================================
+F. Two-circuit cycles of 3x-1 (positive y, v = y-1): runs (j1,e1,j2,e2), v = c1 2^j1 and c2 2^j2
+     3^j1 c1 + 1 = 2^e1 (2^j2 c2 + 1),   3^j2 c2 + 1 = 2^e2 (2^j1 c1 + 1)
+   => c1 = [(2^e1-1) 3^j2 + (2^e2-1) 2^(e1+j2)] / (3^(j1+j2) - 2^(j1+j2+e1+e2))
+====================================================================================================
+   17-cycle: (j1,e1,j2,e2) = (4,1,3,3): c1 = 139/139 = 1, c2 = 695/139 = 5
+   all integer solutions with odd c1, c2 and 1 <= j,e <= 24 (j1,e1,j2,e2,c1,c2,y1,y2): [(1, 1, 1, 1, -1, -1, -1, -1), (2, 1, 2, 1, 1, 1, 5, 5), (3, 3, 4, 1, 5, 1, 41, 17), (4, 1, 3, 3, 1, 5, 17, 41)]
+   (positive c: 3x-1 on positive integers; negative c: 3x+1 on positive integers, y = -(c 2^j + 1))
+
+====================================================================================================
+G. Anti-diagonal j of the 3-smooth lattice: {2^j, 2^(j-1) 3, ..., 3^j}.  In v = n+1 the Collatz map
+   walks it (v -> 3v/2) and leaves at 3^j by v -> (v+1)/2; the mirror leaves by m -> (m-1)/2.
+   The anti-diagonal closes into a cycle iff the exit lands on 2^j: 3^j + 1 = 2^(j+1) (Collatz)
+   or 3^j - 1 = 2^(j+1) (mirror).
+====================================================================================================
+   j=0: [1]   Collatz exit (3^j+1)/2 = 1  = 2^j: CYCLE   mirror exit (3^j-1)/2 = 0
+   j=1: [2, 3]   Collatz exit (3^j+1)/2 = 2  = 2^j: CYCLE   mirror exit (3^j-1)/2 = 1
+   j=2: [4, 6, 9]   Collatz exit (3^j+1)/2 = 5   mirror exit (3^j-1)/2 = 4  = 2^j: CYCLE
+   j=3: [8, 12, 18, 27]   Collatz exit (3^j+1)/2 = 14   mirror exit (3^j-1)/2 = 13
+   j=4: [16, 24, 36, 54, 81]   Collatz exit (3^j+1)/2 = 41   mirror exit (3^j-1)/2 = 40
+   j=5: [32, 48, 72, 108, 162, 243]   Collatz exit (3^j+1)/2 = 122   mirror exit (3^j-1)/2 = 121
+   j=6: [64, 96, 144, 216, 324, 486, 729]   Collatz exit (3^j+1)/2 = 365   mirror exit (3^j-1)/2 = 364
+   j=7: [128, 192, 288, 432, 648, 972, 1458, 2187]   Collatz exit (3^j+1)/2 = 1094   mirror exit (3^j-1)/2 = 1093
+   j=8: [256, 384, 576, 864, 1296, 1944, 2916, 4374, 6561]   Collatz exit (3^j+1)/2 = 3281   mirror exit (3^j-1)/2 = 3280
+   36 = 2^2 3^2 is on anti-diagonal 4.  Collatz: v = 36 -> 54 -> 81 -> 41 -> 21 -> 11 -> 6 -> 9 -> 5 -> 3 -> 2
+   (n = 35 -> ... -> 1).  Mirror: m = 36 -> 54 -> 81 -> 40 -> 60 -> 90 -> 135 -> 67 -> 33 -> 16 -> 24 -> 36.
+
+done in 5.4 s

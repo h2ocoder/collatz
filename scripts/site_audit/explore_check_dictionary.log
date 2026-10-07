@@ -1,0 +1,112 @@
+=== 1. counts ===
+N(0..13) = [1, 1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045]
+brute    = [1, 1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652]
+A100982 (offset 1) begins 1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045
+page list              = 1, 1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045
+ -> page list == [w_0=1] + A100982 : True
+
+=== 2. e_s: ceil vs floor+1 ===
+ s=0: ceil(s log2 3)=0  floor+1=1  3^s=1  2^(floor+1)=2  in [3^s,2*3^s)? False
+ s=1: ceil(s log2 3)=2  floor+1=2  3^s=3  2^(floor+1)=4  in [3^s,2*3^s)? True
+ s=2: ceil(s log2 3)=4  floor+1=4  3^s=9  2^(floor+1)=16  in [3^s,2*3^s)? True
+ s=3: ceil(s log2 3)=5  floor+1=5  3^s=27  2^(floor+1)=32  in [3^s,2*3^s)? True
+ s=4: ceil(s log2 3)=7  floor+1=7  3^s=81  2^(floor+1)=128  in [3^s,2*3^s)? True
+ s=5: ceil(s log2 3)=8  floor+1=8  3^s=243  2^(floor+1)=256  in [3^s,2*3^s)? True
+ every word of level s<=9 has e = floor(s log2 3)+1 (incl. s=0: e=1)
+
+=== 3. forward mass sum_s w_s / 2^{e_s} ===
+  e_0 = ceil(0) = 0 {13: '1.477774143', 28: '1.495623247', 50: '1.499335600', 100: '1.499982742', 200: '1.499999973', 500: '1.500000000', 1000: '1.500000000', 2000: '1.500000000', 2500: '1.500000000'}
+  e_0 = floor(0)+1 = 1 {13: '0.977774143', 28: '0.995623247', 50: '0.999335600', 100: '0.999982742', 200: '0.999999973', 500: '1.000000000', 1000: '1.000000000', 2000: '1.000000000', 2500: '1.000000000'}
+
+=== 4. backward mass sum_s w_s / 3^s ===
+  up to s=5: 1.584362140
+  up to s=13: 1.659807329
+  up to s=28: 1.684488524
+  up to s=50: 1.689438566
+  up to s=100: 1.690336228
+  up to s=200: 1.690360554
+  up to s=500: 1.690360592
+  up to s=1000: 1.690360592
+  up to s=2000: 1.690360592
+  up to s=2500: 1.690360592
+
+=== 5. growth ===
+ lambda = 2.839514; log3 lambda = 0.94996; lambda/3 = 0.94650
+  N(50)^(1/50) = 2.47928
+  N(100)^(1/100) = 2.62279
+  N(200)^(1/200) = 2.71698
+  N(500)^(1/500) = 2.78141
+  N(1000)^(1/1000) = 2.80785
+  N(2000)^(1/2000) = 2.82221
+  N(2500)^(1/2500) = 2.82512
+
+=== 6. residues mod 3^s reached at level s: distinct? nested? ===
+  s=1: words=1 distinct residues=1 all distinct=True contained in level s-1 set=None [1]
+  s=2: words=1 distinct residues=1 all distinct=True contained in level s-1 set=False [2]
+  s=3: words=2 distinct residues=2 all distinct=True contained in level s-1 set=False [10, 20]
+  s=4: words=3 distinct residues=3 all distinct=True contained in level s-1 set=False [5, 10, 38]
+  s=5: words=7 distinct residues=7 all distinct=True contained in level s-1 set=False [38, 76, 91, 118, 167, 190, 209]
+  s=6: words=12 distinct residues=12 all distinct=True contained in level s-1 set=False ...
+  s=7: words=30 distinct residues=30 all distinct=True contained in level s-1 set=False ...
+  s=8: words=85 distinct residues=85 all distinct=True contained in level s-1 set=False ...
+  s=9: words=173 distinct residues=173 all distinct=True contained in level s-1 set=False ...
+  s=10: words=476 distinct residues=476 all distinct=True contained in level s-1 set=False ...
+  s=11: words=961 distinct residues=961 all distinct=True contained in level s-1 set=False ...
+  s=12: words=2652 distinct residues=2652 all distinct=True contained in level s-1 set=False ...
+
+=== 7. d = 10 predecessors; dictionary examples ===
+  n = 11 -> (k, s, dest) = (8, 3, 10)
+  n = 13 -> (k, s, dest) = (3, 1, 10)
+  n = 15 -> (k, s, dest) = (11, 4, 10)
+  n = 20 -> (k, s, dest) = (1, 0, 10)
+
+=== 8. mean one-round predecessors per destination (direct, no dictionary) ===
+  d in [2,3000): mean #predecessors = 1.68879
+  d in [2,100000): mean #predecessors = 1.69060
+  d in [2,1000000): mean #predecessors = 1.69029
+
+=== 9. Beatty increments e_{s+1}-e_s, s = 0.. (with e_s=floor(s log2 3)+1) ===
+  floor version from s=0: [1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1]
+  ceil  version from s=0: [2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1]
+  page prints           : 2,1,2,1,2,2,1,2,1,2,2,1
+
+=== 10. continued fractions ===
+  log6 3 = 0.6131471927654585 CF [0, 1, 1, 1, 1, 2, 2, 3, 1, 5, 2]
+  convergents [(0, 1), (1, 1), (1, 2), (2, 3), (3, 5), (8, 13), (19, 31), (65, 106), (84, 137), (485, 791), (1054, 1719)]
+  log2 3 CF [1, 1, 1, 2, 2, 3, 1, 5, 2, 23]
+  convergents [(1, 1), (2, 1), (3, 2), (8, 5), (19, 12), (65, 41), (84, 53), (485, 306), (1054, 665), (24727, 15601)]
+   q=13: eps = -0.02909  (round = 8)
+   q=31: eps = +0.00756  (round = 19)
+   q=44: eps = -0.02152  (round = 27)
+   q=75: eps = -0.01396  (round = 46)
+   q=106: eps = -0.00640  (round = 65)
+   q=137: eps = +0.00117  (round = 84)
+   q=791: eps = -0.00057  (round = 485)
+
+=== 11. SturmianBridge RK_TABLE vs N(o)*2^o ===
+  o= 0 k= 1 N(o)=           1 N*2^o=               1 table=1
+  o= 1 k= 3 N(o)=           1 N*2^o=               2 table=2
+  o= 2 k= 6 N(o)=           1 N*2^o=               4 table=4
+  o= 3 k= 8 N(o)=           2 N*2^o=              16 table=16
+  o= 4 k=11 N(o)=           3 N*2^o=              48 table=48
+  o= 5 k=13 N(o)=           7 N*2^o=             224 table=224
+  o= 6 k=16 N(o)=          12 N*2^o=             768 table=768
+  o= 7 k=19 N(o)=          30 N*2^o=            3840 table=3840
+  o= 8 k=21 N(o)=          85 N*2^o=           21760 table=21760
+  o= 9 k=24 N(o)=         173 N*2^o=           88576 table=88576
+  o=10 k=26 N(o)=         476 N*2^o=          487424 table=487424
+  o=11 k=29 N(o)=         961 N*2^o=         1968128 table=1968128
+  o=12 k=32 N(o)=        2652 N*2^o=        10862592 table=10653696  <-- MISMATCH (table/2^o = 2601.0)
+  o=13 k=34 N(o)=        8045 N*2^o=        65904640 table=50855936  <-- MISMATCH (table/2^o = 6208.0)
+  o=14 k=37 N(o)=       17637 N*2^o=       288964608 table=261275648  <-- MISMATCH (table/2^o = 15947.0)
+  o=15 k=39 N(o)=       51033 N*2^o=      1672249344 table=1278242816  <-- MISMATCH (table/2^o = 39008.875)
+  o=16 k=42 N(o)=      108950 N*2^o=      7140147200 table=6571913216  <-- MISMATCH (table/2^o = 100279.4375)
+  o=17 k=44 N(o)=      312455 N*2^o=     40954101760 table=30811815936  <-- MISMATCH (table/2^o = 235075.5)
+  o=18 k=47 N(o)=      663535 N*2^o=    173941719040 table=154189103104  <-- MISMATCH (table/2^o = 588184.75)
+  o=19 k=50 N(o)=     1900470 N*2^o=    996393615360 table=755015057408  <-- MISMATCH (table/2^o = 1440076.9375)
+  o=20 k=52 N(o)=     5936673 N*2^o=   6225052827648 table=3445824487424  <-- MISMATCH (table/2^o = 3286194.3125)
+  o=21 k=55 N(o)=    13472296 N*2^o=  28253452500992 table=17035728519168  <-- MISMATCH (table/2^o = 8123268.375)
+  o=22 k=57 N(o)=    39993895 N*2^o= 167746553774080 table=None  <-- MISMATCH (table/2^o = None)
+
+=== 12. R_19: every representative r in [2, 2^19) of the class drops at step 19 ===
+  3840 residues, 0 not dropping at step 19

@@ -1,0 +1,61 @@
+=== 1. p = 37 ===
+   charpoly(2K_37) factors: (1: x - 2)^1, (1: x - 1)^2, (1: x)^2, (1: x + 1)^2, (2: x**2 + 1)^1, (28: deg 28)^1
+   [ok] (x-2) x^2 (x^2+1) (x-1)^2 (x+1)^2 times one irreducible factor of degree 28
+   [ok] the degree-28 factor is G(x^2) with G = y^14 + y^13 + 2y^12 - 7y^11 - 6y^10 - 15y^9 + 11y^8 + 3y^7 + 18y^6 - 13y^5 - 33y^4 - 26y^3 - 11y^2 + 26y + 9
+   largest |lambda| of K_37 below 1: 0.673523
+   [ok] |lambda_2(K_37)| = 0.673523
+   eigenvalue +1: dim 2; minimal support of an eigenfunction 24, of an eigenfunctional 26; det of left-right pairing 16/3
+   [ok] eigenvalue +1 of 2K_37 has geometric multiplicity 2 and is semisimple
+      compression of R_o to the eigenspace: charpoly 40*x**2 + 71*x - 293, discriminant 51921 = {3: 4, 641: 1}
+   eigenvalue -1: dim 2; minimal support of an eigenfunction 24, of an eigenfunctional 31; det of left-right pairing -80/3
+   [ok] eigenvalue -1 of 2K_37 has geometric multiplicity 2 and is semisimple
+      compression of R_o to the eigenspace: charpoly 40*x**2 - 71*x - 293, discriminant 51921 = {3: 4, 641: 1}
+   [ok] support claims at 37: (+1) 24 and 26, (-1) 24 and 31
+   NOTE: 'P, dP/dx, dP/dtheta vanish at (1,1)' is automatic for ANY eigenvalue of geometric multiplicity 2 (the adjugate of a
+   corank-2 matrix is 0), and the branch slopes are the eigenvalues of the 2x2 compression above.  The 'node' adds nothing beyond
+   'multiplicity 2, compression of R_o irreducible over Q'.
+
+=== 2. Proposition D: support of det(x - R_e - theta R_o) on the relation lattice, exact interpolation ===
+   p = 5: monomials of P_p: 5; off the lattice: []; lattice cells with 0 <= s <= k <= p-1: 5; missing: []
+   [ok] p = 5: P_p is supported on the lattice p | 2^k - 3^s
+   [ok] P_5 = (x^2 - theta^2)^2 + theta x - 1
+   p = 7: monomials of P_p: 6; off the lattice: []; lattice cells with 0 <= s <= k <= p-1: 6; missing: []
+   [ok] p = 7: P_p is supported on the lattice p | 2^k - 3^s
+   p = 11: monomials of P_p: 8; off the lattice: []; lattice cells with 0 <= s <= k <= p-1: 8; missing: []
+   [ok] p = 11: P_p is supported on the lattice p | 2^k - 3^s
+   p = 13: monomials of P_p: 11; off the lattice: []; lattice cells with 0 <= s <= k <= p-1: 11; missing: []
+   [ok] p = 13: P_p is supported on the lattice p | 2^k - 3^s
+   p = 37: monomials of P_p: 21; off the lattice: []; lattice cells with 0 <= s <= k <= p-1: 21; missing: []
+   [ok] p = 37: P_p is supported on the lattice p | 2^k - 3^s
+
+=== 3. p = 41, 31, 11 (K) and 13, 23 (K^-) ===
+   [ok] x^5 + 3 divides charpoly(2K_41) exactly
+   [ok] ... with multiplicity exactly 1
+   factor degrees of charpoly(2K_41): [(1, 1), (1, 1), (1, 5), (4, 1), (5, 1), (25, 1)]
+   |lambda| = 3^(1/5)/2 = 0.6229;  41 = 2^5 + 3^2, ord_41(2) = 20, ord_41(3) = 8
+   [ok] p = 31: eigenvalue +1 of 2K is simple; supports 19 (function) and 29 (functional)
+   factor degrees of charpoly(2K_31): [(1, 1), (1, 1), (1, 1), (1, 1), (27, 1)]
+   [ok] p = 11: (2K)(delta_1 - delta_2) = -(delta_1 - delta_2)   [the trivial cycle {1, 2}]
+   charpoly(2K_11) = (x - 2)*(x - 1)*(x + 1)*(x**8 + x**6 + 2*x**4 - x**2 + 4)
+   charpoly(2K^-_13) = x**5*(x - 1)*(x + 1)*(x**2 + 1)*(x**4 - 3)
+   charpoly(2K^-_23) = x**3*(x - 1)**2*(x + 1)**2*(x**16 + 2*x**14 + 3*x**12 + 2*x**11 + 4*x**10 + x**9 + 4*x**8 + x**7 + 27*x**6 + x**5 + 24*x**4 + 23*x**3 + 7*x**2 + 11*x + 6)
+   [ok] p = 23: eigenvalue +1 of 2K^- has geometric multiplicity 2
+
+=== 4. eigenvalue 0 at the non-squarefree level 275 = 5^2 * 11 ===
+   (nullities modulo 2^31 - 1; the exact algebraic multiplicities per level are in v2_census.log)
+   Z/25: dim ker A = 2, dim ker A^2 = 3, dim ker A^3 = 3
+   Z/49: dim ker A = 2, dim ker A^2 = 3, dim ker A^3 = 3
+   Z/175: dim ker A = 7, dim ker A^2 = 10, dim ker A^3 = 10
+   Z/245: dim ker A = 7, dim ker A^2 = 10, dim ker A^3 = 10
+   Z/275: dim ker A = 14, dim ker A^2 = 15, dim ker A^3 = 15
+   Z/325: dim ker A = 10, dim ker A^2 = 15, dim ker A^3 = 15
+   level 275 alone (census): algebraic multiplicity of 0 is 10 = number of even cycles of y -> 3y + 1/2: no doubling, although 275 is not squarefree.
+
+=== 5. control: how often does the characteristic-p shadow 'predict' +-1, and how often is it there? ===
+   primes 5 <= p <= 3000: 428;  some degree n in [1, p-2] has kappa_n = +1 (mod p): 306;  kappa_n = -1: 295
+   actual eigenvalue +1 of 2K_p beyond Theorem C in that range: p = 11, 31, 37 only;  -1: p = 11, 37 only  (v3_krylov_scan)
+   so a residue kappa_n = +-1 exists at about two primes in three and lifts at three primes: the 'dodecagon in characteristic 37'
+   locates residues, it is not a mechanism.
+   primes <= 3000 with ord_p(3/4) = k <= 12, as (p, k, r = ord(2^k), +1 among the polygon residues, -1 among them): [(5, 4, 1, False, False), (7, 2, 3, False, True), (11, 5, 2, False, False), (13, 6, 2, False, False), (23, 11, 1, False, False), (37, 3, 12, True, True), (71, 5, 7, False, False), (181, 10, 18, True, True), (193, 12, 8, False, False), (337, 8, 21, False, True)]
+
+0 failures;  total time 3 s

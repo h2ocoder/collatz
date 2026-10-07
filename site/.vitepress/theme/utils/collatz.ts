@@ -1,20 +1,21 @@
 /**
  * Shared Collatz computation utilities.
- * All functions work with standard numbers for small values
- * and BigInt where overflow is possible.
+ * All functions use plain numbers with % and / (never the bit operators,
+ * which truncate to 32 bits), so they are exact while every value stays
+ * below 2^53. The first start whose orbit passes 2^53 is 319,804,831.
  */
 
 /** 2-adic valuation: largest power of 2 dividing n */
 export function v2(n: number): number {
   if (n === 0) return Infinity
   let c = 0
-  while ((n & 1) === 0) { n >>= 1; c++ }
+  while (n % 2 === 0) { n /= 2; c++ }
   return c
 }
 
 /** Single Collatz step: n/2 if even, 3n+1 if odd */
 export function collatzStep(n: number): number {
-  return (n & 1) ? 3 * n + 1 : n >> 1
+  return n % 2 !== 0 ? 3 * n + 1 : n / 2
 }
 
 /** Full Collatz orbit from n down to 1 */
@@ -32,7 +33,7 @@ export function orbit(n: number, maxSteps = 10000): number[] {
 /** Syracuse step: odd → odd (skip even steps) */
 export function syracuseStep(m: number): number {
   let val = 3 * m + 1
-  while ((val & 1) === 0) val >>= 1
+  while (val % 2 === 0) val /= 2
   return val
 }
 
@@ -80,7 +81,7 @@ export function orbitalOddity(n: number): number {
   let count = 0
   let current = n
   while (current >= start) {
-    if (current & 1) count++
+    if (current % 2 !== 0) count++
     current = collatzStep(current)
   }
   return count
@@ -104,7 +105,7 @@ export function cycleGap(S: number, E: number): bigint {
 /** Count trailing 1-bits in binary representation */
 export function trailingOnes(n: number): number {
   let c = 0
-  while (n & 1) { c++; n >>= 1 }
+  while (n % 2 === 1) { c++; n = (n - 1) / 2 }
   return c
 }
 

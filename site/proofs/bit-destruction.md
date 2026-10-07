@@ -1,24 +1,28 @@
-# Bit Destruction Bound
+# Bit Destruction
+
+A way of measuring how big a drop is, in bits. It is an explainer: the fact that $\beta(s) > 0$ is just a restatement of "a drop is a decrease", and it is not a step toward proving convergence.
 
 ## Statement
 
 <div class="theorem">
 
-**Theorem (Bit Destruction Identity).** For any $\text{Dset}_k$ with orbital oddity $s$, the bits destroyed per drop are:
+**Identity.** A drop of $k$ steps, $s$ of them odd, has contraction ratio $3^s/2^{k-s}$, which removes $(k-s) - s \log_2 3$ bits. The ratio has to be below 1, so $k - s \geq \lfloor s \log_2 3 \rfloor + 1$, and with exactly that many halvings it removes
 
-$$\beta(s) = \lceil s \cdot \log_2 3 \rceil - s \cdot \log_2 3 = 1 - \{s \cdot \log_2 3\}$$
+$$\beta(s) = \lfloor s \cdot \log_2 3 \rfloor + 1 - s \cdot \log_2 3 = 1 - \{s \cdot \log_2 3\}$$
 
-where $\{x\}$ is the fractional part. This is always strictly positive because $\log_2 3$ is irrational.
+bits, where $\{x\}$ is the fractional part. So $\beta(s)$ is positive and at most 1, and it equals 1 only at $s = 0$, because $\log_2 3$ is irrational.
+
+Every dropping set with $k \le 39$, and every $n \le 10^7$, uses exactly this smallest number of halvings. It is not proved that every $n$ does (see [Affine Orbit Structure](/proofs/affine-orbit)).
 
 </div>
 
-## Significance
+## Why it is interesting
 
-Every single Collatz drop destroys a positive number of bits — there are no zero-progress drops. The minimum destruction rate is governed by how well $\log_2 3$ can be approximated by rationals, connecting Collatz dynamics to Diophantine approximation and Roth's theorem.
+A drop through a set with small $\beta(s)$ barely shrinks the number. How small $\beta(s)$ can get is governed by how well $\log_2 3$ can be approximated by rationals, which ties the size of drops to Diophantine approximation.
 
 ## The Bit Destruction Landscape
 
-Table of $\beta(s)$ for $s = 0$ through $29$ (include all values):
+Table of $\beta(s)$ for $s = 0$ through $29$:
 
 | $s$ | $s \cdot \log_2 3$ | $\beta(s)$ | Set$_k$ | Status |
 |-----|---------------------|-------------|---------|--------|
@@ -59,54 +63,36 @@ Pattern: slow sets occur when $s \cdot \log_2 3$ approaches an integer from belo
 
 <div class="proof">
 
-The contraction ratio for $\text{Dset}_k$ with oddity $s$ is $3^s / 2^{k-s}$. From the [Odd Stopping Time Spectrum](/foundations/definitions), $k = s + \lceil s \cdot \log_2 3 \rceil$, so $k - s = \lceil s \cdot \log_2 3 \rceil$.
+The contraction ratio for a drop of $k$ steps with $s$ odd steps is $3^s / 2^{k-s}$. With the smallest number of halvings that brings the ratio below 1, $k - s = \lfloor s \cdot \log_2 3 \rfloor + 1$ (these values of $k$ are OEIS A122437).
 
 The bits destroyed equal the negative log of the contraction ratio:
 
-$$\beta(s) = -\log_2\!\left(\frac{3^s}{2^{k-s}}\right) = (k-s) - s \cdot \log_2 3 = \lceil s \cdot \log_2 3 \rceil - s \cdot \log_2 3$$
+$$\beta(s) = -\log_2\!\left(\frac{3^s}{2^{k-s} }\right) = (k-s) - s \cdot \log_2 3 = \lfloor s \cdot \log_2 3 \rfloor + 1 - s \cdot \log_2 3$$
 
-Since $\log_2 3$ is irrational, $s \cdot \log_2 3$ is never an integer for $s > 0$, so $\beta(s) > 0$ always.
+A fractional part is always below 1, so $\beta(s) = 1 - \{s \cdot \log_2 3\} > 0$ always.
 
 </div>
 
-## Connection to Roth's Theorem
+## How small can $\beta(s)$ get?
 
-The slowest sets correspond to the best rational approximations $p/q$ to $\log_2 3$:
+The slowest sets come from rational approximations $p/s$ to $\log_2 3$ that lie just **above** it, so that $s \log_2 3$ falls just short of the integer $p$:
 
-| $p$ | $q = s$ | $p/q$ | $\beta(s)$ |
+| $p$ | $s$ | $p/s$ | $\beta(s)$ |
 |-----|---------|-------|-------------|
 | 8 | 5 | 1.600 | 0.075 |
-| 19 | 12 | 1.583 | 0.020 |
 | 65 | 41 | 1.585 | 0.017 |
-| 84 | 53 | 1.585 | 0.003 |
-| 485 | 306 | 1.585 | 0.001 |
+| 485 | 306 | 1.585 | 0.0015 |
 
-By **Roth's theorem**: for any $\varepsilon > 0$, there are finitely many rationals $p/q$ with $|\log_2 3 - p/q| < 1/q^{2+\varepsilon}$. This gives:
+(Convergents that lie just below $\log_2 3$, such as $19/12$ and $84/53$, give $\beta(s)$ close to 1 instead.)
 
-$$\beta(s) > \frac{c}{s} \quad \text{for some constant } c > 0$$
+Since $\log_2 3$ is transcendental, the lower bounds that are proved come from Baker's theory of linear forms in logarithms: $|E - S \log_2 3| > S^{-\kappa}$ for an effective constant $\kappa$ (Rhin: $\kappa \approx 13$). So $\beta(s)$ can shrink as $s$ grows, but not faster than a power of $s$.
 
-<div class="corollary">
+## What this does not say
 
-**Corollary (Conditional Convergence).** If every integer $> 1$ has a finite dropping time, then every orbit reaches 1 in at most $O(\log^2 n)$ drops.
+Knowing that every drop removes a positive number of bits says nothing about how many times an orbit drops, or whether it grows without bound between drops. It is a convenient scale for measuring drops, not an ingredient of a proof.
 
-*Proof.* A number with $B = \lfloor \log_2 n \rfloor$ bits can only visit sets with $s \leq B / \log_2 3$. Each drop destroys $\beta(s_i) > c/s_{\max} > c'/B$ bits. After $B/(c'/B) = O(B^2)$ drops, all bits are destroyed.
+## Related
 
-</div>
-
-## Numerical Verification
-
-| $B$ (bits) | Min $\beta$ among reachable sets | Worst-case drops | Avg drops (observed) |
-|-----------|----------------------------------|-----------------|---------------------|
-| 64 | 0.0196 | ~3,300 | ~90 |
-| 128 | 0.0030 | ~42,000 | ~180 |
-| 256 | 0.0030 | ~85,000 | ~360 |
-| 1024 | 0.0015 | ~694,000 | ~1,400 |
-
-The observed average (~$1.4B$) is far below the worst case (~$B^2/c$), confirming the [mixing property](/proofs/mixing) drives typical behavior.
-
-## Related Results
-
-- [Affine Orbit Structure](/proofs/affine-orbit) — the affine formula underlying bit destruction
-- [Logarithmic Escape](/proofs/logarithmic-escape) — bounds consecutive slow drops
-- [3-Adic Mixing](/proofs/mixing) — explains why average behavior dominates
-- [abc Conjecture Connection](/connections/abc-conjecture) — stronger bounds via Diophantine theory
+- [Affine Orbit Structure](/proofs/affine-orbit) — the contraction ratio $3^s/2^{k-s}$
+- [Mixing Modulo Powers of Two](/proofs/mixing) — how drops spread numbers over residue classes
+- [abc Conjecture Connection](/connections/abc-conjecture) — the size of $2^E - 3^S$

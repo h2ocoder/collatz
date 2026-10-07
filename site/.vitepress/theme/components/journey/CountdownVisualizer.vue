@@ -18,7 +18,7 @@ function init() {
     entries.push({ m, v2plus: vp, v2minus: vm, depth: d, isSet3 })
     // Syracuse step
     let next = 3 * m + 1
-    while (next % 2 === 0) next >>= 1
+    while (next % 2 === 0) next /= 2
     m = next
   }
   history.value = entries
@@ -48,7 +48,7 @@ init()
   <div class="countdown-viz">
     <div class="controls">
       <label>
-        Start (odd):
+        Start (odd, below 300 million):
         <input type="number" v-model.number="inputN" min="3" step="2" @keydown.enter="init" />
       </label>
       <button @click="init">Reset</button>
@@ -79,7 +79,7 @@ init()
           <div class="counter-bar">
             <div class="bar-fill minus" :style="{ width: Math.min(current.v2minus * 12, 100) + '%' }"></div>
           </div>
-          <div class="counter-hint">Counts down → forces deep drop</div>
+          <div class="counter-hint">Falls by 2 per weak drop → ends the run of weak drops</div>
         </div>
         <div class="counter">
           <div class="counter-label">Drop depth</div>

@@ -1,0 +1,82 @@
+==============================================================================
+Q5.3  Liouville on Collatz cells
+==============================================================================
+[1] sum_{i<=k, j<=s} ((i+1)(j+1))^3 = (T_(k+1) T_(s+1))^2 for 0 <= k,s <= 40: True
+    Liouville  sum_{d|n} tau(d)^3 = (sum_{d|n} tau(d))^2  for n <= 3000: True
+    at (k,s) = (2,2), n = 36: sum tau(d)^3 = 1296 = 36^2;  sum tau(d) = 36 = 36
+    n <= 3000 with sum_{d|n} tau(d)^3 = n^2 (equivalently F(n) = n): [1, 3, 18, 36]
+    tau_k(p^2 q^2) = C(k+1,2)^2 = 1^3 + ... + k^3 for k < 200: True
+
+[2] #intervals = (#maximal chains)^2, i.e. T_(k+1) T_(s+1) = C(k+s,k)^2, 0 <= k <= s < 400: [(0, 0), (2, 2)]
+    #intervals = n, i.e. T_(k+1) T_(s+1) = 2^k 3^s, 0 <= k,s < 200: [(0, 0), (0, 1), (1, 2), (2, 2)] -> n = [1, 3, 18, 36]
+    #maximal chains = n, i.e. C(k+s,k) = 2^k 3^s: [(0, 0)]
+
+[3] CS search:  sum x^3 = (sum x)^2  over families of path counts
+    admissible-prefix triangle A(e,s), rows s = 0..7:
+      s=0: [1]
+      s=1: [1]
+      s=2: [1, 1]
+      s=3: [1, 2]
+      s=4: [1, 3, 3]
+      s=5: [1, 4, 7]
+      s=6: [1, 5, 12, 12]
+      s=7: [1, 6, 18, 30, 30]
+    S(j) = #admissible prefixes of length j, j = 0..20: [1, 1, 1, 2, 3, 4, 8, 13, 19, 38, 64, 128, 226, 367, 734, 1295, 2114, 4228, 7495, 14990, 27328]
+
+    families tested (number of multisets):
+      all paths, rectangle                                   861
+      all paths, Pascal row                                  301
+      all paths, triangle i+j<=n                              81
+      admissible, row s                                      221
+      admissible, column e (first m cells)                  5973
+      admissible, antidiagonal j (words of length j)         201
+      admissible, all cells with s <= S                      120
+      admissible, all cells with j <= J                      120
+      admissible, divisor rectangle of 2^j 3^s              2400
+      A100982 window [a..b]                                24310
+      S(j) window [a..b]                                   20301
+
+    CS hits: 182   (grouped by family and shape; up to 3 examples each)
+      all paths, rectangle                               {1..n} (Nicomachus)      x1
+          label (0, 0): [1]
+      all paths, Pascal row                              {1..n} (Nicomachus)      x1
+          label 0: [1]
+      all paths, triangle i+j<=n                         {1..n} (Nicomachus)      x1
+          label 0: [1]
+      admissible, row s                                  {1..n} (Nicomachus)      x3
+          label 0: [1]
+          label 1: [1]
+          label 3: [1, 2]
+      admissible, column e (first m cells)               {1..n} (Nicomachus)      x61
+          label (0, 1): [1]
+          label (1, 1): [1]
+          label (1, 2): [1, 2]
+      admissible, antidiagonal j (words of length j)     {1..n} (Nicomachus)      x4
+          label 0: [1]
+          label 1: [1]
+          label 2: [1]
+      admissible, all cells with s <= S                  {1..n} (Nicomachus)      x1
+          label 0: [1]
+      admissible, all cells with j <= J                  {1..n} (Nicomachus)      x1
+          label 0: [1]
+      admissible, divisor rectangle of 2^j 3^s           {1..n} (Nicomachus)      x99
+          label (0, 0): [1]
+          label (0, 1): [1]
+          label (0, 2): [1]
+      A100982 window [a..b]                              {1..n} (Nicomachus)      x4
+          label (1, 1): [1]
+          label (2, 2): [1]
+          label (2, 3): [1, 2]
+      S(j) window [a..b]                                 {1..n} (Nicomachus)      x6
+          label (0, 0): [1]
+          label (1, 1): [1]
+          label (2, 2): [1]
+    non-trivial hits: 0
+    (column e = 1 of the admissible triangle is A(1,s) = s-1 for s >= 2: the single even step can
+     sit after any of the ones number 2..s.  Its initial segments are literally {1,...,m}.)
+
+[4] weaker test: is sum x^3 a perfect square? (rows of the admissible triangle, s <= 220)
+    rows s with sum of cubes a perfect square: [0, 1, 3]
+    windows [a..b] (a<b<80) of A100982 with sum of cubes a perfect square: [(2, 3), (2, 4)]
+
+wrote q53_liouville_cells.json

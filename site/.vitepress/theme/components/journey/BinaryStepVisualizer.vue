@@ -35,8 +35,8 @@ function toBits(n: number): { bit: number; pos: number }[] {
   let pos = 0
   let val = n
   while (val > 0) {
-    bits.push({ bit: val & 1, pos })
-    val >>= 1
+    bits.push({ bit: val % 2, pos })
+    val = Math.floor(val / 2)
     pos++
   }
   return bits.reverse() // MSB first
@@ -46,7 +46,7 @@ const currentValue = computed(() => history.value[currentIndex.value]?.value ?? 
 const currentOp = computed(() => history.value[currentIndex.value]?.op ?? '')
 const bits = computed(() => toBits(currentValue.value))
 const bitLength = computed(() => bits.value.length)
-const isOdd = computed(() => (currentValue.value & 1) === 1)
+const isOdd = computed(() => currentValue.value % 2 === 1)
 const isDone = computed(() => currentValue.value <= 1)
 
 const prevValue = computed(() => {
@@ -87,7 +87,7 @@ init()
   <div class="binary-viz">
     <div class="controls">
       <label>
-        Start:
+        Start (up to 99,999):
         <input type="number" v-model.number="inputN" min="2" max="99999" @keydown.enter="init" />
       </label>
       <button @click="init">Reset</button>
@@ -130,7 +130,7 @@ init()
         <div class="explain-box odd">
           <strong>×3+1</strong>: Multiply by 3 (= shift left + add), then +1.
           The carry chain propagates through consecutive 1-bits.
-          Bit length: {{ bitLength }} — grew by at most 1 bit.
+          Bit length: {{ bitLength }} — grew by 1 or 2 bits.
         </div>
       </template>
       <template v-else-if="currentOp === 'start'">

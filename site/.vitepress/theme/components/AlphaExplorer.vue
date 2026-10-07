@@ -138,7 +138,7 @@ const result = computed(() => {
           <td>{{ result.totalHalvings }}</td>
         </tr>
         <tr>
-          <td>Total Collatz steps</td>
+          <td>Rows in the trace above</td>
           <td>{{ result.totalSteps }}</td>
         </tr>
         <tr>

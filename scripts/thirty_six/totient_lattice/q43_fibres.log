@@ -1,0 +1,55 @@
+phi^-1(m) complete for all m <= 100000: x <= 5.539 m < 1000000.   [1 s]
+totient values m <= 100000: 20254;  preimages in total: 194429;  largest fibre: m = 80640 with 525 solutions
+
+1. STRUCTURE FORCED BY phi ALONE
+   odd members: 64816;  members 2*odd: 64816;  members divisible by 4: 64797
+   x odd  =>  phi(2x) = phi(x): verified for every odd member (so #odd = #(2*odd) exactly: True )
+   y coprime to 6  =>  phi(3y) = phi(4y) = phi(6y) = 2 phi(y): verified for 55555 values of y
+   in the fibre of 36: {37, 74} and {63, 126} are doubling pairs; {57, 76, 114} = {3, 4, 6} * 19;
+   108 = 4 * 27 stands alone.  Collatz reads these as halvings: 74 -> 37, 126 -> 63, 114 -> 57,
+   76 -> 38 -> 19, 108 -> 54 -> 27.  Every even x has sigma = 1.
+   fibres with no odd member: 0;  with exactly one: 11953;  with two or more: 8301
+
+2. DROPPING TIMES OF THE ODD MEMBERS OF A FIBRE   (sigma = standard steps, repo convention)
+   odd members x >= 3 lying in fibres with at least two of them: 52863, in 8301 fibres, 533373 pairs
+   observed:  Pr[sigma(x) = sigma(x')] = 0.30760;   eta^2 (between-fibre share of Var sigma) = 0.16252
+   control: sigma shuffled among these x within strata x mod 2^k (k = 1 is a global shuffle)
+   robust variant: eta^2 of ln(sigma) = 0.21023
+     k    Pr same: mean of 200   sd       z     | eta^2(sigma): mean    sd      z    frac<=obs | eta^2(ln sigma): mean   sd      z
+     1      0.30294        0.00255   +1.83   |      0.15740   0.00448   +1.15    0.890   |       0.15695   0.00239  +22.30
+     2      0.30742        0.00046   +0.39   |      0.16856   0.00421   -1.43    0.070   |       0.20917   0.00198   +0.54
+     3      0.30815        0.00045   -1.22   |      0.17362   0.00459   -2.42    0.000   |       0.21635   0.00194   -3.15
+     4      0.30788        0.00036   -0.77   |      0.16912   0.00418   -1.58    0.055   |       0.21072   0.00165   -0.30
+     6      0.30766        0.00014   -0.42   |      0.17035   0.00403   -1.94    0.030   |       0.21117   0.00110   -0.85
+     8      0.30766        0.00007   -0.93   |      0.16997   0.00406   -1.83    0.035   |       0.21042   0.00097   -0.19
+    10      0.30764        0.00005   -0.74   |      0.17058   0.00366   -2.20    0.005   |       0.21080   0.00076   -0.75
+    12      0.30766        0.00005   -1.22   |      0.17152   0.00379   -2.38    0.005   |       0.21114   0.00069   -1.30
+   residue content of fibres (why small k shows an excess):
+     Pr[x = x' mod 4] for two odd members of one fibre: 0.5315   (if independent: 0.5005)
+     Pr[x = x' mod 8] for two odd members of one fibre: 0.2783   (if independent: 0.2504)
+
+3. COLLATZ ARROWS INSIDE A FIBRE (beyond the forced 2x -> x)
+   odd x <= 1000000 with phi((3x+1)/2) = phi(x): 59:  [1, 5, 9, 33, 85, 261, 325, 909, 1085, 1729, 2013, 3333, 3905, 4053, 6633, 7645, 9417, 11349, 12033, 12261, 16405, 16445, 21845, 30513, 36297, 54725, 54897, 70821, 75609, 95665, 99813, 105633, 115413, 131733, 138425, 139893, 153729, 155217, 189605, 196469]
+     of these, with 3-smooth phi(x) (x, phi, T(x)): [(1, 1, 2), (5, 4, 8), (9, 6, 14), (85, 64, 128), (1729, 1296, 2594), (4053, 2304, 6080), (11349, 6912, 17024), (16405, 12288, 24608), (21845, 16384, 32768), (36297, 23328, 54446), (189605, 139968, 284408)]
+     e.g. the whole fibre phi^-1(6) = {7, 9, 14, 18} is one shortcut path 18 -> 9 -> 14 -> 7, and
+     1729 = 7*13*19 -> 2594 = 2*1297 -> 1297 stays in phi^-1(1296) = phi^-1(6^4) (1297 = 6^4 + 1 is prime).
+   odd x <= 1000000 with phi(3x+1) = phi(x): 2:  [75973, 301513]
+   odd x in [3, 1000000] with phi(dest(x)) = phi(x): 44:  [9, 33, 95, 183, 1729, 1991, 2103, 2735, 2795, 3905, 4075, 6633, 7111, 9417, 9723, 10395, 12033, 30513, 36297, 49875, 51359, 54897, 58347, 75609, 81067, 95665, 105633, 138425, 153729, 155217, 190247, 197577, 199155, 230879, 231849, 274575, 351595, 437817, 637371, 774479]
+   chance level for the first count (y uniform within 10% of (3x+1)/2, 20 draws): mean 92.8, sd 10.5
+
+4. THE FIBRE OF 36.   sigma = standard steps to drop (repo convention), k = shortcut steps = halvings,
+   s = odd steps, sigma = k + s; word = shortcut parity word up to the drop; sig_inf = standard steps to 1.
+     x   factorisation      (Z/x)* lattice parts          x mod 16  sigma  k  s  dest  word        sig_inf  max of orbit   x+1 = v        F(v)
+     37  37                (2,2)                             5       3  2  1    28  10              21         112       38 = 2 * 19       4
+     57  3 * 19            (1,0)+(1,2)                       9       3  2  1    43  10              32         196       58 = 2 * 29       5
+     63  3^2 * 7           (1,1)+(1,1)                      15      88 54 34    61  111111000110111011110100111011011111100111100010101000     107        9232       64 = 2^6          6
+     74  2 * 37            (2,2)                            10       1  1  0    37  0               22         112       75 = 3 * 5^2      5
+     76  2^2 * 19          (1,0)+(1,2)                      12       1  1  0    38  0               22          88       77 = 7 * 11       5
+    108  2^2 * 3^3         (1,0)+(1,2)                      12       1  1  0    54  0              113        9232      109 = 109          5
+    114  2 * 3 * 19        (1,0)+(1,2)                       2       1  1  0    57  0               33         196      115 = 5 * 23       6
+    126  2 * 3^2 * 7       (1,1)+(1,1)                      14       1  1  0    63  0              108        9232      127 = 127          5
+   dropping-time multiset of the fibre:  [1, 1, 1, 1, 1, 3, 3, 88]  odd members only: [3, 3, 88]
+   37 = 5 mod 8 drops in 3 steps (class n = 1 mod 4); 57 = 9 mod 16 likewise; 63 = 2^6 - 1 climbs six
+   odd steps first (v = 64 -> 729 = 3^6) and has sig_inf = 107.
+
+done in 22 s

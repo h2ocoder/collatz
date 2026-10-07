@@ -7,37 +7,37 @@ const rows = [
   {
     physics: 'Speed of light c',
     collatz: 'Carry propagation: 1.92 bits/bounce',
-    detail: 'The ×3 operation propagates carries through the binary representation at rate log₂(3) ≈ 1.58 bits per multiplication. Over a bounce cycle (~4 multiplications): the active bit window shifts by ≥ 1.92 positions. Nothing can outrun this speed.'
+    detail: 'In the picture a bounce is a weak drop followed by at least four climbing steps, which multiplies the number by at least 3⁵/2⁶ = 243/64. Its base-2 logarithm, 1.92, is used as the distance the active bit window moves per bounce. A bookkeeping constant, not a measurement.'
   },
   {
     physics: 'Particle velocity v < c',
     collatz: 'Orbit growth: 0.51 bits/bounce',
-    detail: 'The orbit grows at rate 9/8 per weak drop, adding ~0.17 bits per step. Over a bounce cycle: ~0.51 new bits. This is the "velocity" of information generation — always less than the "speed of light" (1.92).'
+    detail: 'A weak drop followed by one climbing step multiplies the number by 9/8, about 0.17 bits; the picture counts three of these per bounce, 0.51 bits. This is the "velocity" in the analogy, set against the 1.92 above. Neither figure is a measured average.'
   },
   {
     physics: 'Finite energy E = mc²',
     collatz: 'Finite binary expansion: B bits',
-    detail: 'A natural number like 76,827 has exactly 17 bits of information. Beyond bit 17: all zeros. This finite "energy" is what distinguishes natural numbers from 2-adic integers (which have infinite bits).'
+    detail: 'A natural number like 76,827 has exactly 17 bits of information. Beyond bit 17: all zeros. This finite "energy" is what distinguishes natural numbers from the other 2-adic integers (which have infinitely many 1-bits).'
   },
   {
     physics: 'Event horizon',
     collatz: 'Position B: all zeros beyond',
-    detail: 'At the edge of the number\'s binary expansion, all bits are 0. When the carry propagation\'s reading window crosses this boundary, it encounters only zeros. The bounce condition (which needs specific nonzero patterns) fails.'
+    detail: 'At the edge of the number\'s binary expansion, all bits are 0. When the carry propagation\'s reading window crosses this boundary, it encounters only zeros. The guess at the heart of the picture is that the bounce condition, which asks for particular bit patterns, then stops being met. That is not proved.'
   },
   {
     physics: 'Hawking radiation',
     collatz: '~0.51 new bits per bounce from growth',
-    detail: 'The orbit\'s growth generates a trickle of new bits — like Hawking radiation slowly leaking from a black hole. But the rate (0.51) is too slow to prevent the eventual exhaustion of the bit budget.'
+    detail: 'The orbit\'s growth generates a trickle of new bits — like Hawking radiation slowly leaking from a black hole. In the picture\'s bookkeeping the rate (0.51) is slower than the reading rate (1.92). Neither is measured, and whether anything like it holds along every orbit is open.'
   },
   {
     physics: 'Heat death of universe',
-    collatz: 'Bit budget exhausted → orbit collapses',
-    detail: 'When the reading window has consumed all B bits and the growth can\'t keep up: the bounce sequence terminates, a deep drop occurs, and the orbit begins its final descent to 1. Inevitable thermodynamic collapse.'
+    collatz: 'Bit budget exhausted → deep drop',
+    detail: 'The picture: when the reading window has consumed all B bits and the growth can\'t keep up, the bounce sequence stops and a deep drop follows. Every orbit tested does reach 1, but nothing shows that this is the reason.'
   },
   {
     physics: 'Trivial zeros of ζ(s)',
-    collatz: '2-adic cycles at negative integers',
-    detail: 'The 2-adic Collatz cycles (at -1, -1/3, etc.) are "trivial" solutions — they exist in the infinite-precision world of Z₂ but not among natural numbers. Like the trivial zeros of the Riemann zeta function at negative even integers, they\'re structurally forced by symmetry.'
+    collatz: 'Cycles at negative integers',
+    detail: 'The cycles through -1, -5 and -17 live in the infinite-precision world of Z₂ (negative integers have infinitely many 1-bits) but not among the positive integers. A loose parallel with the trivial zeros of the Riemann zeta function at the negative even integers.'
   },
 ]
 </script>

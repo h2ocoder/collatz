@@ -1,0 +1,151 @@
+====================================================================================================
+1. Residue-level classification, s = 3 .. 34, k = 3 .. 14
+   mult(2^(k+1)) = set of multiplicities of residues mod 2^k hit by P_s(n), n in [0, 2^(k+1))
+   CRS[0,2^k) = are the first 2^k terms a complete residue system mod 2^k (all k tested)
+   image = #distinct residues mod 2^14 / 2^14;  axis = fixed point (s-4)/(2(s-2)) of the reflection
+====================================================================================================
+   s  v2(s-2) predicted      Rivest  mult@2^(k+1)   CRS[0,2^k)  image@k=14  #sq(14)/2^14  axis        fold check
+   3    0     free fold      None    [2]            True         1.000000    0.166748     -1/2        True
+   4    1     ramified fold  False   [0, 4, 8, 16,  False(k=3)   0.166748    0.166748     0           None
+   5    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     1/6         True
+   6    2     isometry       True    [2]            True         1.000000    0.166748     1/4         None
+   7    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     3/10        True
+   8    1     ramified fold  False   [0, 4, 8, 16,  False(k=3)   0.166748    0.166748     1/3         None
+   9    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     5/14        True
+  10    3     isometry       True    [2]            True         1.000000    0.166748     3/8         None
+  11    0     free fold      None    [2]            False(k=4)   1.000000    0.166748     7/18        True
+  12    1     ramified fold  False   [0, 4, 8, 16,  False(k=3)   0.166748    0.166748     2/5         None
+  13    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     9/22        True
+  14    2     isometry       True    [2]            True         1.000000    0.166748     5/12        None
+  15    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     11/26       True
+  16    1     ramified fold  False   [0, 4, 8, 16,  False(k=3)   0.166748    0.166748     3/7         None
+  17    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     13/30       True
+  18    4     isometry       True    [2]            True         1.000000    0.166748     7/16        None
+  19    0     free fold      None    [2]            False(k=5)   1.000000    0.166748     15/34       True
+  20    1     ramified fold  False   [0, 4, 8, 16,  False(k=3)   0.166748    0.166748     4/9         None
+  21    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     17/38       True
+  22    2     isometry       True    [2]            True         1.000000    0.166748     9/20        None
+  23    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     19/42       True
+  24    1     ramified fold  False   [0, 4, 8, 16,  False(k=3)   0.166748    0.166748     5/11        None
+  25    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     21/46       True
+  26    3     isometry       True    [2]            True         1.000000    0.166748     11/24       None
+  27    0     free fold      None    [2]            False(k=4)   1.000000    0.166748     23/50       True
+  28    1     ramified fold  False   [0, 4, 8, 16,  False(k=3)   0.166748    0.166748     6/13        None
+  29    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     25/54       True
+  30    2     isometry       True    [2]            True         1.000000    0.166748     13/28       None
+  31    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     27/58       True
+  32    1     ramified fold  False   [0, 4, 8, 16,  False(k=3)   0.166748    0.166748     7/15        None
+  33    0     free fold      None    [2]            False(k=3)   1.000000    0.166748     29/62       True
+  34    5     isometry       True    [2]            True         1.000000    0.166748     15/32       None
+  every row agrees with the v2(s-2) trichotomy: True
+  (isometries show multiplicity [2] on [0,2^(k+1)) only because that window is two periods)
+
+====================================================================================================
+2. Metric behaviour: v2(P(x)-P(y)) - v2(x-y) on 50000 random 64-bit pairs (min, max)
+   free fold: +(-1) when x-y even ... precisely v2(x-y) - 1 + v2(2 + (s-2)(x+y-1));
+   isometry: always 0;  ramified fold: >= 1 when x = y mod 2, 0 otherwise
+====================================================================================================
+  s= 3 triangular    free fold       x=y mod 2: [-1,-1]   x!=y mod 2: [0,13]
+  s= 4 square        ramified fold   x=y mod 2: [1,14]   x!=y mod 2: [0,0]
+  s= 5 pentagonal    free fold       x=y mod 2: [-1,-1]   x!=y mod 2: [0,15]
+  s= 6 hexagonal     isometry        x=y mod 2: [0,0]   x!=y mod 2: [0,0]
+  s= 7 heptagonal    free fold       x=y mod 2: [-1,-1]   x!=y mod 2: [0,15]
+  s= 8 octagonal     ramified fold   x=y mod 2: [1,15]   x!=y mod 2: [0,0]
+  s= 9 nonagonal     free fold       x=y mod 2: [-1,-1]   x!=y mod 2: [0,13]
+  s=10 decagonal     isometry        x=y mod 2: [0,0]   x!=y mod 2: [0,0]
+  s=11 hendecagonal  free fold       x=y mod 2: [-1,-1]   x!=y mod 2: [0,18]
+  s=12 dodecagonal   ramified fold   x=y mod 2: [1,16]   x!=y mod 2: [0,0]
+  s=13               free fold       x=y mod 2: [-1,-1]   x!=y mod 2: [0,13]
+  s=14               isometry        x=y mod 2: [0,0]   x!=y mod 2: [0,0]
+
+====================================================================================================
+3. Dropping classes along each family, residue level, K = 16, n over one full period [0, 2^17)
+   count of n with cst(P_s(n) mod 2^16) = k, divided by 2 (two periods of the modulus).
+   'natural' = N(k) 2^(16-k).   Terras stopping time k of the VALUE; repo Set index = k+s.
+====================================================================================================
+     k   natural   s=3      s=4      s=5      s=6      s=7      s=8      s=9      s=10     s=11     s=12     s=13     s=14   
+     0      2114      2114        0     2114     2114     2114        0     2114     2114     2114        0     2114     2114
+     1     32768     32768    32768    32768    32768    32768    32768    32768    32768    32768    32768    32768    32768
+     2     16384     16384    32768    16384    16384    16384    32768    16384    16384    16384    32768    16384    16384
+     4      4096      4096        0     4096     4096     4096        0     4096     4096     4096        0     4096     4096
+     5      4096      4096        0     4096     4096     4096        0     4096     4096     4096        0     4096     4096
+     7      1536      1536        0     1536     1536     1536        0     1536     1536     1536        0     1536     1536
+     8      1792      1792        0     1792     1792     1792        0     1792     1792     1792        0     1792     1792
+    10       768       768        0      768      768      768        0      768      768      768        0      768      768
+    12       480       480        0      480      480      480        0      480      480      480        0      480      480
+    13       680       680        0      680      680      680        0      680      680      680        0      680      680
+    15       346       346        0      346      346      346        0      346      346      346        0      346      346
+    16       476       476        0      476      476      476        0      476      476      476        0      476      476
+   s= 3 triangular    free fold      prediction = natural, exactly: True
+   s= 4 square        ramified fold  prediction = half in k=1, half in k=2, nothing else: True
+   s= 5 pentagonal    free fold      prediction = natural, exactly: True
+   s= 6 hexagonal     isometry       prediction = natural, exactly: True
+   s= 7 heptagonal    free fold      prediction = natural, exactly: True
+   s= 8 octagonal     ramified fold  prediction = half in k=1, half in k=2, nothing else: True
+   s= 9 nonagonal     free fold      prediction = natural, exactly: True
+   s=10 decagonal     isometry       prediction = natural, exactly: True
+   s=11 hendecagonal  free fold      prediction = natural, exactly: True
+   s=12 dodecagonal   ramified fold  prediction = half in k=1, half in k=2, nothing else: True
+   s=13               free fold      prediction = natural, exactly: True
+   s=14               isometry       prediction = natural, exactly: True
+
+====================================================================================================
+4. Actual integers: Terras stopping time of P_s(n), 2 <= n <= 10^6  (frequency per class)
+   density row = N(k)/2^k.  Values that never drop (only P_s(1) = 1 is excluded by n >= 2).
+====================================================================================================
+   s  type               k=1        k=2        k=4        k=5        k=7        k=8        k=10       k=12       k>12
+      natural density   0.500000  0.250000  0.062500  0.062500  0.023438  0.027344  0.011719  0.007324  0.055176
+   3  free fold         0.500001  0.249999  0.062500  0.062500  0.023438  0.027344  0.011720  0.007323  0.055175
+   4  ramified fold     0.500001  0.499999  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000
+   5  free fold         0.500001  0.249999  0.062500  0.062500  0.023436  0.027345  0.011721  0.007324  0.055174
+   6  isometry          0.500001  0.249999  0.062500  0.062500  0.023438  0.027342  0.011718  0.007326  0.055176
+   7  free fold         0.500001  0.249999  0.062500  0.062500  0.023438  0.027343  0.011722  0.007325  0.055172
+   8  ramified fold     0.500001  0.499999  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000
+   9  free fold         0.500001  0.249999  0.062500  0.062500  0.023436  0.027344  0.011717  0.007323  0.055180
+  10  isometry          0.500001  0.249999  0.062500  0.062500  0.023437  0.027344  0.011720  0.007324  0.055175
+  11  free fold         0.500001  0.249999  0.062500  0.062500  0.023438  0.027344  0.011715  0.007323  0.055180
+  12  ramified fold     0.500001  0.499999  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000
+  13  free fold         0.500001  0.249999  0.062500  0.062500  0.023437  0.027342  0.011719  0.007325  0.055177
+  14  isometry          0.500001  0.249999  0.062500  0.062500  0.023438  0.027344  0.011719  0.007322  0.055177
+
+====================================================================================================
+5. Which reflections preserve Z?  iota_s(x) = (s-4)/(s-2) - x maps Z to Z iff (s-2) | 2
+====================================================================================================
+  s= 3  iota(x) = -1 - x   centre -1/2   integral: True   centre in Z_2: False   iota preserves Z_2: True
+  s= 4  iota(x) = 0 - x   centre 0   integral: True   centre in Z_2: True   iota preserves Z_2: True
+  s= 5  iota(x) = 1/3 - x   centre 1/6   integral: False   centre in Z_2: False   iota preserves Z_2: True
+  s= 6  iota(x) = 1/2 - x   centre 1/4   integral: False   centre in Z_2: False   iota preserves Z_2: False
+  s= 7  iota(x) = 3/5 - x   centre 3/10   integral: False   centre in Z_2: False   iota preserves Z_2: True
+  s= 8  iota(x) = 2/3 - x   centre 1/3   integral: False   centre in Z_2: True   iota preserves Z_2: True
+  s= 9  iota(x) = 5/7 - x   centre 5/14   integral: False   centre in Z_2: False   iota preserves Z_2: True
+  s=10  iota(x) = 3/4 - x   centre 3/8   integral: False   centre in Z_2: False   iota preserves Z_2: False
+  s=11  iota(x) = 7/9 - x   centre 7/18   integral: False   centre in Z_2: False   iota preserves Z_2: True
+  s=12  iota(x) = 4/5 - x   centre 2/5   integral: False   centre in Z_2: True   iota preserves Z_2: True
+  centres: s=3 -> -1/2 = fixed point of x -> 3x+1 ;  s=4 -> 0 = fixed point of x -> 3x
+  rule q x + d has centre -d/(q-1); its reflection x -> -2d/(q-1) - x preserves Z iff (q-1) | 2d:
+     3x+1: reflection x -> -1 - x   integral: True
+     3x-1: reflection x -> 1 - x   integral: True
+     5x+1: reflection x -> -1/2 - x   integral: False
+     5x-1: reflection x -> 1/2 - x   integral: False
+     7x+1: reflection x -> -1/3 - x   integral: False
+     5x+3: reflection x -> -3/2 - x   integral: False
+     9x+1: reflection x -> -1/4 - x   integral: False
+
+====================================================================================================
+6. Beyond polygons (computed only): other figurate families mod 2^14 over one full period
+   image = fraction of residues hit;  mults = multiplicities that occur (per period)
+====================================================================================================
+  pronic n(n+1)                      period 2^14: image 0.500000  mults [0, 2]                  dropping-class counts natural (K=16): False
+  centred square 2n(n+1)+1           period 2^14: image 0.250000  mults [0, 4]                  dropping-class counts natural (K=16): False
+  centred hexagonal 3n(n+1)+1        period 2^14: image 0.500000  mults [0, 2]                  dropping-class counts natural (K=16): False
+  tetrahedral C(n+2,3)               period 2^15: image 1.000000  mults [1, 5]                  dropping-class counts natural (K=16): False
+  square pyramidal n(n+1)(2n+1)/6    period 2^15: image 1.000000  mults [2]                     dropping-class counts natural (K=16): True
+  octahedral n(2n^2+1)/3             period 2^14: image 1.000000  mults [1]                     dropping-class counts natural (K=16): True
+  stella octangula n(2n^2-1)         period 2^14: image 1.000000  mults [1]                     dropping-class counts natural (K=16): True
+  cube n^3                           period 2^14: image 0.571472  mults [0, 1, 4, 16, 64, 256]  dropping-class counts natural (K=16): True
+  centred cube n^3+(n+1)^3           period 2^14: image 0.500000  mults [0, 2]                  dropping-class counts natural (K=16): False
+  sum of cubes T_n^2                 period 2^15: image 0.166748  mults [0, 8, 16, 32, 64, 128]  dropping-class counts natural (K=16): False
+  fourth power n^4                   period 2^14: image 0.066772  mults [0, 8, 64, 512, 1024]   dropping-class counts natural (K=16): False
+  fifth power n^5                    period 2^14: image 0.516174  mults [0, 1, 16, 256, 2048]   dropping-class counts natural (K=16): True
+
+done in 11.4 s

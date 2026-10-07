@@ -1,0 +1,36 @@
+=== (a) factor degrees of P_p(x, theta) at integer theta ===
+   p =  5: irreducible at theta = 2, -2, 3, -3, 5: True;  theta = 1: [(1, 1), (1, 1), (2, 1)];  theta = -1: [(1, 1), (1, 1), (2, 1)]
+   p =  7: irreducible at theta = 2, -2, 3, -3, 5: True;  theta = 1: [(1, 1), (1, 1), (4, 1)];  theta = -1: [(1, 1), (1, 1), (4, 1)]
+   p = 11: irreducible at theta = 2, -2, 3, -3, 5: True;  theta = 1: [(1, 1), (1, 1), (8, 1)];  theta = -1: [(1, 1), (1, 1), (1, 2), (6, 1)]
+   p = 13: irreducible at theta = 2, -2, 3, -3, 5: True;  theta = 1: [(12, 1)];  theta = -1: [(1, 1), (1, 1), (1, 4), (2, 1), (4, 1)]
+   p = 23: irreducible at theta = 2, -2, 3, -3, 5: True;  theta = 1: [(22, 1)];  theta = -1: [(1, 2), (1, 2), (1, 2), (16, 1)]
+   p = 29: irreducible at theta = 2, -2, 3, -3, 5: True;  theta = 1: [(1, 1), (1, 1), (26, 1)];  theta = -1: [(1, 1), (1, 1), (26, 1)]
+   p = 31: irreducible at theta = 2, -2, 3, -3, 5: True;  theta = 1: [(1, 1), (1, 1), (1, 1), (27, 1)];  theta = -1: [(1, 1), (1, 1), (1, 1), (27, 1)]
+   p = 37: irreducible at theta = 2, -2, 3, -3, 5: True;  theta = 1: [(1, 2), (1, 2), (1, 2), (2, 1), (28, 1)];  theta = -1: [(1, 1), (1, 1), (1, 2), (2, 2), (28, 1)]
+   p = 41: irreducible at theta = 2, -2, 3, -3, 5: True;  theta = 1: [(1, 1), (1, 5), (4, 1), (5, 1), (25, 1)];  theta = -1: [(1, 1), (1, 5), (4, 1), (5, 1), (25, 1)]
+   p = 43: irreducible at theta = 2, -2, 3, -3, 5: True;  theta = 1: [(1, 1), (1, 1), (40, 1)];  theta = -1: [(1, 1), (1, 1), (40, 1)]
+
+=== (b) p = 37: affine maps preserving a sporadic eigenspace ===
+   ('functions', 1): dimension 2; affine maps (of 1331) that could preserve it: []
+   ('measures', 1): dimension 2; affine maps (of 1331) that could preserve it: []
+   ('functions', -1): dimension 2; affine maps (of 1331) that could preserve it: []
+   ('measures', -1): dimension 2; affine maps (of 1331) that could preserve it: []
+   ('functions', '+-1'): dimension 4; affine maps (of 1331) that could preserve it: []
+   ('measures', '+-1'): dimension 4; affine maps (of 1331) that could preserve it: []
+
+=== (c) Terras kernel (multipliers 1/2, 3/2) against the kernel of the semigroup <2x, 3x+1> (multipliers 2, 3) ===
+   p =  7: Terras [('deg4', 1), ('x', 1), ('x + 1', 1)]
+           semigroup <2x, 3x+1> [('deg4', 1), ('x', 1), ('x + 1', 1)];  same polynomial as Terras: True;  transpose of Terras equals Terras: True
+   p = 11: Terras [('deg8', 1), ('x + 1', 1), ('x - 1', 1)]
+           semigroup <2x, 3x+1> [('deg7', 1), ('x', 1), ('x + 1', 1), ('x - 1', 1)];  same polynomial as Terras: False;  transpose of Terras equals Terras: True
+   p = 13: Terras [('deg12', 1)]
+           semigroup <2x, 3x+1> [('deg6', 1), ('x', 3), ('x - 1', 1), ('x**2 + x + 1', 1)];  same polynomial as Terras: False;  transpose of Terras equals Terras: True
+   p = 31: Terras [('deg27', 1), ('x', 1), ('x + 1', 1), ('x - 1', 1)]
+           semigroup <2x, 3x+1> [('deg27', 1), ('x', 1), ('x + 1', 1), ('x - 1', 1)];  same polynomial as Terras: False;  transpose of Terras equals Terras: True
+   p = 37: Terras [('deg28', 1), ('x', 2), ('x + 1', 2), ('x - 1', 2), ('x**2 + 1', 1)]
+           semigroup <2x, 3x+1> [('deg32', 1), ('x', 1), ('x + 1', 2), ('x - 1', 1)];  same polynomial as Terras: False;  transpose of Terras equals Terras: True
+
+=== (d) p = 37: compressions of R_e, R_o to the sporadic eigenspaces ===
+   eigenvalue +1: charpoly of compressed R_e: 40*x**2 - 151*x - 182;  of compressed R_o: 40*x**2 + 71*x - 293
+   eigenvalue -1: charpoly of compressed R_e: 40*x**2 + 151*x - 182;  of compressed R_o: 40*x**2 - 71*x - 293
+total time 2 s

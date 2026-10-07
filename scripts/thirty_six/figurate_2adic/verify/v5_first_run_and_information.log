@@ -1,0 +1,35 @@
+====================================================================================================
+A. First-run law: L1(n) = v2(n) + v2((q-2) n + d)   for the rule (q n + d)/2,   all 0 < |n| <= 300000
+   ((q-2) n + d vanishes at the fixed point -d/(q-2) of the odd branch; n vanishes at the fixed point of n/2)
+====================================================================================================
+  3x+1: law holds: True   excluded (branch fixed points in Z): [-1, 0]   quadratic n((q-2)n+1)/2 = T_n
+  3x-1: law holds: True   excluded (branch fixed points in Z): [0, 1]   quadratic n((q-2)n-1)/2 = T_(n-1)
+  5x+1: law holds: True   excluded (branch fixed points in Z): [0]   quadratic n((q-2)n+1)/2 = not triangular
+  5x-1: law holds: True   excluded (branch fixed points in Z): [0]   quadratic n((q-2)n-1)/2 = not triangular
+  7x+1: law holds: True   excluded (branch fixed points in Z): [0]   quadratic n((q-2)n+1)/2 = not triangular
+  7x+3: law holds: True   excluded (branch fixed points in Z): [0]   quadratic n((q-2)n+3)/2 = not triangular
+  9x+1: law holds: True   excluded (branch fixed points in Z): [0]   quadratic n((q-2)n+1)/2 = not triangular
+  -> every rule has a first-run law; what is special to 3x+-1 is only that the odd-branch fixed point (-+1)
+     is an integer, so the quadratic is n(n+-1)/2.  The law itself does not single out 3, nor the sign.
+
+====================================================================================================
+B. Mutual information I(class(n); class(F(n))) in bits, n uniform on Z/2^(K+1), 'undetermined at level K' = one class
+====================================================================================================
+   case                   K=8      K=10     K=12     K=14     K=16     K=18     K=20  
+   3x+1 | T_n            0.50000  0.50000  0.50000  0.50000  0.50000  0.50000  0.50000
+   3x-1 | T_(n-1)        0.50000  0.50000  0.50000  0.50000  0.50000  0.50000  0.50000
+   3x-1 | T_n            0.73735  0.74062  0.74179  0.74301  0.74414  0.74433  0.74441
+   5x+1 | n(3n+1)/2      0.26238  0.26461  0.26562  0.26605  0.26605  0.26620  0.26632
+   5x-1 | n(3n-1)/2      0.32072  0.32292  0.32378  0.32420  0.32420  0.32431  0.32440
+   5x+1 | T_n            0.20195  0.20400  0.20554  0.20603  0.20603  0.20616  0.20626
+  -> 0.5 is exact at every K for 3x+1 | T_n and 3x-1 | T_(n-1) (Theorem 7 holds level by level);
+     the 5x+-1 figures and 3x-1 | T_n drift with K: quote them only as 'K = 16' values, not as constants.
+  entropy of the natural class law at level K (3x+1): [2.0474, 2.0941, 2.1267, 2.1651, 2.2158, 2.2322, 2.2446]  (increasing; finite limit
+  because the undetermined mass decays geometrically, Terras 1976 / Everett 1977)
+
+====================================================================================================
+C. The two parabolas of the NOT-quotient correspondence (README, 'Leads'): even e, t = T_e
+====================================================================================================
+  (8t'+1-2t)^2 = 8t'+1 for t' = T_(e/2) and (18t-8t'+1)^2 = 8t'+1 for t' = T_(3e/2), all even |e| <= 200000: True
+
+done in 6.3 s

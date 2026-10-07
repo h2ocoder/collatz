@@ -14,7 +14,7 @@ const bitLength = computed(() => {
   return val ? Math.ceil(Math.log2(val + 1)) : 0
 })
 const currentValue = computed(() => currentOrbit.value[displayedSteps.value] ?? inputValue.value)
-const isOdd = computed(() => (currentValue.value & 1) === 1)
+const isOdd = computed(() => currentValue.value % 2 === 1)
 const isDone = computed(() => displayedSteps.value >= currentOrbit.value.length - 1)
 
 function startOrbit() {

@@ -1,0 +1,50 @@
+=== 1. exact characteristic polynomials of A_p = 2K_p at 5, 11, 31, 37, 41 (and 7, 13 as plain cases) ===
+   p =  5: ord 3 = 4, Theorem C (m, t, idx) = (1, 3, 1); factors of degree <= 5: (x - 2) * (x - 1) * (x) * (x**2 + x - 1); other degrees: []
+           multiplicity of +1 / -1: 1 / 0   forced by Theorem C: 1 / 0
+   p =  7: ord 3 = 6, Theorem C (m, t, idx) = (1, 2, 1); factors of degree <= 5: (x - 2) * (x) * (x + 1) * (x**4 - x**3 + x**2 - 3*x + 1); other degrees: []
+           multiplicity of +1 / -1: 0 / 1   forced by Theorem C: 0 / 1
+   p = 11: ord 3 = 5, Theorem C (m, t, idx) = None; factors of degree <= 5: (x - 2) * (x - 1) * (x + 1); other degrees: [8]
+           multiplicity of +1 / -1: 1 / 1   forced by Theorem C: 0 / 0
+   p = 13: ord 3 = 3, Theorem C (m, t, idx) = None; factors of degree <= 5: (x - 2); other degrees: [12]
+           multiplicity of +1 / -1: 0 / 0   forced by Theorem C: 0 / 0
+   p = 31: ord 3 = 30, Theorem C (m, t, idx) = (1, 24, 1); factors of degree <= 5: (x - 2) * (x - 1) * (x) * (x + 1); other degrees: [27]
+           multiplicity of +1 / -1: 1 / 1   forced by Theorem C: 0 / 1
+   p = 37: ord 3 = 18, Theorem C (m, t, idx) = (2, 7, 1); factors of degree <= 5: (x - 2) * (x - 1)^2 * (x)^2 * (x + 1)^2 * (x**2 + 1); other degrees: [28]
+           multiplicity of +1 / -1: 2 / 2   forced by Theorem C: 0 / 0
+   p = 41: ord 3 = 8, Theorem C (m, t, idx) = (5, 6, 1); factors of degree <= 5: (x - 2) * (x + 1) * (x)^5 * (x**4 - x**3 + x**2 - x + 1) * (x**5 + 3); other degrees: [25]
+           multiplicity of +1 / -1: 0 / 1   forced by Theorem C: 0 / 1
+   [ok] p = 5: x(x-1)(x-2)(x^2+x-1); the +1/2 at 5 is Theorem C's, the golden pair is the extra
+   [ok] p = 11: +1/2 and -1/2 once each, none forced (ord_11(3) = 5 is odd)
+   [ok] p = 31: exactly one extra +1/2, no extra -1/2
+   [ok] p = 37: +1/2 twice and -1/2 twice, none forced (Theorem C gives +-i/2)
+   [ok] p = 37: x^2 + 1 divides (Theorem C's +-i/2)
+   [ok] p = 41: x^5 + 3 divides, i.e. five eigenvalues with (2 lambda)^5 = -3
+   [ok] |lambda| at 41 is 3^(1/5)/2 = 0.6229, not 1/2: 'a stranger of another kind'
+   [ok] p = 41: no extra +-1/2
+   [ok] p = 7, 13: no +-1/2 beyond Theorem C
+=== 2. the two golden conditions, explicit eigenfunctions, every prime 5 <= p <= 400 and every d ===
+   [ok] delta_-1 - delta_0 is an eigenfunction for +1 (K: +1/2) exactly when p | d^2 + d - 1 (69 roots)
+   [ok] delta_x1 - delta_x0 on the 2-cycle is an eigenfunction for -1 (K: -1/2) exactly when p | d^2 + 3d + 1 (68 roots)
+   [ok] both quadratics have discriminant 5
+   [ok] at d = 2 they are 5 and 11
+   [ok] p = 5: the eigenfunction sits on the fixed points 0 and -1
+   [ok] p = 11: 1 -> 2 -> 1 is the trivial cycle (odd step then even step)
+   p = 11: preimages of 2: e^-1 = [4], o^-1 = [1];  preimages of 1: e^-1 = [2], o^-1 = [4]
+   [ok] p = 11: the two outside preimages, 4 (of 2) and 1/3 (of 1), coincide: 1/3 = 4 mod 11
+   [ok] 4 = 1/3 mod p only for p = 11
+   [ok] p = 11: delta_2 - delta_1 is an eigenfunction for -1
+   p = 11: level-11 polynomial = (x - 1)*(x + 1)*(x**8 + x**6 + 2*x**4 - x**2 + 4)
+   [ok] p = 11: the level-11 characteristic polynomial is even (spectrum symmetric under lambda -> -lambda), so -1/2 gives +1/2
+   [ok] p = 11: m = 2 (least m with 2^m in <3>)
+   F_5: roots of x^2 - x - 1 are [3]; phi = 3: 2 = -phi
+   [ok] 2 = -phi (mod 5) for a root phi of x^2 - x - 1
+   F_11: roots of x^2 - x - 1 are [4, 8]; phi = 4: 2 = -1/phi^2; phi = 8: 2 = -phi^2
+   [ok] 2 = -phi^2 (mod 11) for a root phi of x^2 - x - 1
+=== 3. base rate at p = 37: kernels (d+1, d), d = 2..35, with +-1/2 beyond Theorem C ===
+   geometric multiplicity above Theorem C (the thread's definition): {2: {1: 2, -1: 2}, 4: {1: 1}, 12: {-1: 1}, 17: {-1: 1}, 19: {-1: 2}, 22: {1: 1}, 24: {1: 1, -1: 1}, 28: {1: 1}, 34: {-1: 1}}
+   algebraic multiplicity above Theorem C:                          {2: {1: 2, -1: 2}, 4: {1: 1}, 12: {-1: 2}, 14: {1: 1}, 17: {-1: 1}, 19: {-1: 2}, 22: {1: 1}, 24: {1: 1, -1: 1}, 28: {1: 1}, 34: {-1: 2}}
+   [ok] 9 of 34 kernels at p = 37 carry a sporadic +-1/2 (extra eigenvectors), Collatz (d = 2) among them: the thread's list
+   NOTE by algebraic multiplicity the count is 10 of 34; kernels that differ: {12: ({-1: 2}, {-1: 1}), 14: ({1: 1}, None), 34: ({-1: 2}, {-1: 1})} (Jordan blocks at +-1)
+   [ok] neither golden condition has a root mod 37 (5 is not a square mod 37)
+
+0 failures

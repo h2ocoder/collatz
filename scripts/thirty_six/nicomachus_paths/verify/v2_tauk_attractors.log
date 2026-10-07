@@ -1,0 +1,78 @@
+
+ k = 2: |E_k| = 2, max E_k = 2, #ascents = 0  (0.0s)
+   fixed points: [1, 2]
+   cycles (len >= 2): lengths []
+   max tau_k(n)/n = 1/1 at n = [1, 2]
+   agrees with the researcher's table (|E_k|, fixed points, cycle lengths): True
+
+ k = 3: |E_k| = 10, max E_k = 36, #ascents = 6  (0.0s)
+   fixed points: [1, 3, 18, 36]
+   cycles (len >= 2): lengths [2]
+      [6, 9]
+   max tau_k(n)/n = 3/2 at n = [2, 4, 6, 12]
+   agrees with the researcher's table (|E_k|, fixed points, cycle lengths): True
+
+ k = 4: |E_k| = 100, max E_k = 5040, #ascents = 93  (0.0s)
+   fixed points: [1, 100, 200, 224, 560, 1344, 1920]
+   cycles (len >= 2): lengths [2, 2]
+      [16, 35]
+      [480, 896]
+   max tau_k(n)/n = 10/3 at n = [12, 24]
+   agrees with the researcher's table (|E_k|, fixed points, cycle lengths): True
+
+ k = 5: |E_k| = 1011, max E_k = 1330560, #ascents = 1007  (0.0s)
+   fixed points: [1, 5, 75, 225]
+   cycles (len >= 2): lengths [2]
+      [15, 25]
+   max tau_k(n)/n = 175/24 at n = [24, 48, 72, 120, 144, 240, 360, 720]
+   agrees with the researcher's table (|E_k|, fixed points, cycle lengths): True
+
+ k = 6: |E_k| = 12309, max E_k = 1037836800, #ascents = 12306  (0.0s)
+   fixed points: [1, 441, 19559232]
+   cycles (len >= 2): lengths [11]
+      [1596672, 5837832, 5588352, 12573792, 14669424, 10668672, 11176704, 20432412, 7334712, 4741632, 6278272]
+   max tau_k(n)/n = 441/20 at n = [720, 1440]
+   agrees with the researcher's table (|E_k|, fixed points, cycle lengths): True
+
+ k = 7: |E_k| = 159565, max E_k = 1852538688000, #ascents = 159559  (0.3s)
+   fixed points: [1, 7, 72030, 133111440, 399334320, 1944810000]
+   cycles (len >= 2): lengths [2, 2, 3, 2, 2, 3, 2]
+      [210, 2401]
+      [38723328, 38846808]
+      [76063680, 266222880, 292845168]
+      [116169984, 116540424]
+      [155387232, 212978304]
+      [228191040, 798668640, 878535504]
+      [466161696, 638934912]
+   max tau_k(n)/n = 3773/60 at n = [1440, 2880, 4320, 8640, 10080, 20160, 30240, 60480]
+   agrees with the researcher's table (|E_k|, fixed points, cycle lengths): True
+
+ k = 8: |E_k| = 2208054, max E_k = 3379030566912000, #ascents = 2208051  (8.5s)
+   fixed points: [1, 11859210000, 311203233792]
+   cycles (len >= 2): lengths [2, 2, 2, 5, 14, 2]
+      [170117038080, 236273664000]
+      [301532774400, 411769619712]
+      [377216040960, 649752576000]
+      [877165977600, 2121840230400, 5394189385728, 2105198346240, 2489625870336]
+      [1454948352000, 2551755571200, 2923886592000, 3857891328000, 4561263083520, 5658240614400, 7017327820800, 6710319728640, 8052569800704, 1620448727040, 3187475546112, 1491182161920, 2451904266240, 3742574837760]
+      [7401087936000, 10855179878400]
+   max tau_k(n)/n = 4576/21 at n = [60480, 120960]
+   agrees with the researcher's table (|E_k|, fixed points, cycle lengths): True
+
+ALL k agree with README table 3.5: True
+
+brute force tau_k = 1 * tau_(k-1) by additive divisor sieve, n <= 3000000
+   k = 2: #{n <= N : tau_k(n) >= n} = 2; equals DFS list restricted to n <= N: True   (6s)
+          fixed points <= N by brute force: [1, 2]
+   k = 3: #{n <= N : tau_k(n) >= n} = 10; equals DFS list restricted to n <= N: True   (13s)
+          fixed points <= N by brute force: [1, 3, 18, 36]
+   k = 4: #{n <= N : tau_k(n) >= n} = 100; equals DFS list restricted to n <= N: True   (20s)
+          fixed points <= N by brute force: [1, 100, 200, 224, 560, 1344, 1920]
+   k = 5: #{n <= N : tau_k(n) >= n} = 1011; equals DFS list restricted to n <= N: True   (26s)
+          fixed points <= N by brute force: [1, 5, 75, 225]
+   k = 6: #{n <= N : tau_k(n) >= n} = 8091; equals DFS list restricted to n <= N: True   (32s)
+          fixed points <= N by brute force: [1, 441]
+   k = 7: #{n <= N : tau_k(n) >= n} = 27525; equals DFS list restricted to n <= N: True   (39s)
+          fixed points <= N by brute force: [1, 7, 72030]
+   k = 8: #{n <= N : tau_k(n) >= n} = 60085; equals DFS list restricted to n <= N: True   (45s)
+          fixed points <= N by brute force: [1]

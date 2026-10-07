@@ -1,0 +1,17 @@
+{
+ "3x+1": {
+  "classes": 81119,
+  "exceptions": [
+   0,
+   1
+  ],
+  "early": []
+ },
+ "3x-1": {
+  "classes": 81119,
+  "exceptions": [
+   0
+  ],
+  "early": []
+ }
+}

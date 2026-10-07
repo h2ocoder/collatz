@@ -1,0 +1,6103 @@
+{
+"N_MAX": 400,
+"rows": [
+{
+"N": 5,
+"prime": true,
+"deg_prim": 4,
+"ord2": 4,
+"ord3": 4,
+"m": 1,
+"t": 3,
+"index_<2,3>": 1,
+"deg_g": 4,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"5": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {
+"5": 1
+},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+2,
+1
+]
+],
+"g_low_degree_factors": [
+[
+"y**2 + y - 1",
+1
+]
+],
+"deg_non_kronecker": 0,
+"all_cosines": true,
+"all_kronecker": true,
+"prim": "x^4 - 2x^2 + x"
+},
+{
+"N": 7,
+"prime": true,
+"deg_prim": 6,
+"ord2": 3,
+"ord3": 6,
+"m": 1,
+"t": 2,
+"index_<2,3>": 1,
+"deg_g": 6,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+4,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 4,
+"all_cosines": false,
+"all_kronecker": false,
+"prim": "x^6 - 2x^3 - 2x^2 + x"
+},
+{
+"N": 11,
+"prime": true,
+"deg_prim": 10,
+"ord2": 10,
+"ord3": 5,
+"m": 2,
+"t": 4,
+"index_<2,3>": 1,
+"deg_g": 5,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+4,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 8,
+"all_cosines": false,
+"all_kronecker": false,
+"prim": "x^10 + x^6 - 3x^4 + 5x^2 - 4"
+},
+{
+"N": 13,
+"prime": true,
+"deg_prim": 12,
+"ord2": 12,
+"ord3": 3,
+"m": 4,
+"t": 1,
+"index_<2,3>": 1,
+"deg_g": 3,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+3,
+1
+]
+],
+"g_low_degree_factors": [
+[
+"y**3 - 2*y**2 + 11*y - 16",
+1
+]
+],
+"deg_non_kronecker": 12,
+"all_cosines": false,
+"all_kronecker": false,
+"prim": "x^12 - 2x^8 + 11x^4 - 16"
+},
+{
+"N": 17,
+"prime": true,
+"deg_prim": 16,
+"ord2": 8,
+"ord3": 16,
+"m": 1,
+"t": 14,
+"index_<2,3>": 1,
+"deg_g": 16,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+14,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 14,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 19,
+"prime": true,
+"deg_prim": 18,
+"ord2": 18,
+"ord3": 18,
+"m": 1,
+"t": 7,
+"index_<2,3>": 1,
+"deg_g": 18,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+16,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 16,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 23,
+"prime": true,
+"deg_prim": 22,
+"ord2": 11,
+"ord3": 11,
+"m": 1,
+"t": 7,
+"index_<2,3>": 2,
+"deg_g": 22,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+22,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 22,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 25,
+"prime": false,
+"deg_prim": 20,
+"ord2": 20,
+"ord3": 20,
+"m": 1,
+"t": 3,
+"index_<2,3>": 1,
+"deg_g": 20,
+"zero_mult": 2,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+2
+],
+[
+17,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 17,
+"all_cosines": false,
+"all_kronecker": false,
+"prim": "x^20 - 5x^12 - 2x^10 + 10x^6 - 29x^5 + 15x^4 + 5x^3 + 5x^2"
+},
+{
+"N": 29,
+"prime": true,
+"deg_prim": 28,
+"ord2": 28,
+"ord3": 28,
+"m": 1,
+"t": 17,
+"index_<2,3>": 1,
+"deg_g": 28,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+26,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 26,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 31,
+"prime": true,
+"deg_prim": 30,
+"ord2": 5,
+"ord3": 30,
+"m": 1,
+"t": 24,
+"index_<2,3>": 1,
+"deg_g": 30,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {
+"Phi_1": 1
+},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+27,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 27,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 35,
+"prime": false,
+"deg_prim": 24,
+"ord2": 12,
+"ord3": 12,
+"m": 2,
+"t": 10,
+"index_<2,3>": 1,
+"deg_g": 12,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+10,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 20,
+"all_cosines": false,
+"all_kronecker": false,
+"prim": "x^24 - 4x^18 + 5x^16 - 4x^14 + 4x^12 - 28x^10 + 6x^8 + 5x^6 + 24x^4 - 9x^2"
+},
+{
+"N": 37,
+"prime": true,
+"deg_prim": 36,
+"ord2": 36,
+"ord3": 18,
+"m": 2,
+"t": 7,
+"index_<2,3>": 1,
+"deg_g": 18,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 2,
+"6": 2
+},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1,
+"Phi_1": 2,
+"Phi_2": 2
+},
+"circle_extra": {
+"Phi_1": 2,
+"Phi_2": 2
+},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+1,
+2
+],
+[
+14,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 28,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 41,
+"prime": true,
+"deg_prim": 40,
+"ord2": 20,
+"ord3": 8,
+"m": 5,
+"t": 6,
+"index_<2,3>": 1,
+"deg_g": 8,
+"zero_mult": 5,
+"zero_geo_pred": 5,
+"psi": {
+"3": 1
+},
+"phi": {
+"10": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1,
+"Phi_10": 1
+},
+"circle_obs": {
+"Phi_10": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-3": 1,
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {
+"-3": 1
+},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+5,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 30,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 43,
+"prime": true,
+"deg_prim": 42,
+"ord2": 14,
+"ord3": 42,
+"m": 1,
+"t": 27,
+"index_<2,3>": 1,
+"deg_g": 42,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+40,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 40,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 47,
+"prime": true,
+"deg_prim": 46,
+"ord2": 23,
+"ord3": 23,
+"m": 1,
+"t": 17,
+"index_<2,3>": 2,
+"deg_g": 46,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+46,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 46,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 49,
+"prime": false,
+"deg_prim": 42,
+"ord2": 21,
+"ord3": 42,
+"m": 1,
+"t": 26,
+"index_<2,3>": 1,
+"deg_g": 42,
+"zero_mult": 2,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+2
+],
+[
+39,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 39,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 53,
+"prime": true,
+"deg_prim": 52,
+"ord2": 52,
+"ord3": 52,
+"m": 1,
+"t": 49,
+"index_<2,3>": 1,
+"deg_g": 52,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+50,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 50,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 55,
+"prime": false,
+"deg_prim": 40,
+"ord2": 20,
+"ord3": 20,
+"m": 2,
+"t": 14,
+"index_<2,3>": 1,
+"deg_g": 20,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+18,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 36,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 59,
+"prime": true,
+"deg_prim": 58,
+"ord2": 58,
+"ord3": 29,
+"m": 2,
+"t": 7,
+"index_<2,3>": 1,
+"deg_g": 29,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+29,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 58,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 61,
+"prime": true,
+"deg_prim": 60,
+"ord2": 60,
+"ord3": 10,
+"m": 6,
+"t": 1,
+"index_<2,3>": 1,
+"deg_g": 10,
+"zero_mult": 6,
+"zero_geo_pred": 6,
+"psi": {},
+"phi": {
+"4": 1,
+"12": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_4": 1,
+"Phi_12": 1
+},
+"circle_obs": {
+"Phi_4": 1,
+"Phi_12": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+8,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 48,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 65,
+"prime": false,
+"deg_prim": 48,
+"ord2": 12,
+"ord3": 12,
+"m": 4,
+"t": 4,
+"index_<2,3>": 1,
+"deg_g": 12,
+"zero_mult": 4,
+"zero_geo_pred": 4,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+10,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 40,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 67,
+"prime": true,
+"deg_prim": 66,
+"ord2": 66,
+"ord3": 22,
+"m": 3,
+"t": 17,
+"index_<2,3>": 1,
+"deg_g": 22,
+"zero_mult": 3,
+"zero_geo_pred": 3,
+"psi": {
+"6": 1
+},
+"phi": {
+"3": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_3": 1
+},
+"circle_obs": {
+"Phi_3": 1,
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+20,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 60,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 71,
+"prime": true,
+"deg_prim": 70,
+"ord2": 35,
+"ord3": 35,
+"m": 1,
+"t": 11,
+"index_<2,3>": 2,
+"deg_g": 70,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+70,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 70,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 73,
+"prime": true,
+"deg_prim": 72,
+"ord2": 9,
+"ord3": 12,
+"m": 3,
+"t": 4,
+"index_<2,3>": 2,
+"deg_g": 24,
+"zero_mult": 6,
+"zero_geo_pred": 6,
+"psi": {
+"3": 2
+},
+"phi": {
+"6": 2
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 2,
+"Phi_6": 2
+},
+"circle_obs": {
+"Phi_6": 2,
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 2,
+"0": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+20,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 60,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 77,
+"prime": false,
+"deg_prim": 60,
+"ord2": 30,
+"ord3": 30,
+"m": 2,
+"t": 4,
+"index_<2,3>": 1,
+"deg_g": 30,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+28,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 56,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 79,
+"prime": true,
+"deg_prim": 78,
+"ord2": 39,
+"ord3": 78,
+"m": 1,
+"t": 4,
+"index_<2,3>": 1,
+"deg_g": 78,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+76,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 76,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 83,
+"prime": true,
+"deg_prim": 82,
+"ord2": 82,
+"ord3": 41,
+"m": 2,
+"t": 8,
+"index_<2,3>": 1,
+"deg_g": 41,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+41,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 82,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 85,
+"prime": false,
+"deg_prim": 64,
+"ord2": 8,
+"ord3": 16,
+"m": 4,
+"t": 8,
+"index_<2,3>": 1,
+"deg_g": 16,
+"zero_mult": 4,
+"zero_geo_pred": 4,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+14,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 56,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 89,
+"prime": true,
+"deg_prim": 88,
+"ord2": 11,
+"ord3": 88,
+"m": 1,
+"t": 16,
+"index_<2,3>": 1,
+"deg_g": 88,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+86,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 86,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 91,
+"prime": false,
+"deg_prim": 72,
+"ord2": 12,
+"ord3": 6,
+"m": 12,
+"t": 0,
+"index_<2,3>": 1,
+"deg_g": 6,
+"zero_mult": 12,
+"zero_geo_pred": 12,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"3": 1,
+"4": 1,
+"6": 1,
+"12": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_3": 1,
+"Phi_4": 1,
+"Phi_6": 1,
+"Phi_12": 1
+},
+"circle_obs": {
+"Phi_3": 1,
+"Phi_4": 1,
+"Phi_6": 1,
+"Phi_12": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+4,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 48,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 95,
+"prime": false,
+"deg_prim": 72,
+"ord2": 36,
+"ord3": 36,
+"m": 1,
+"t": 7,
+"index_<2,3>": 2,
+"deg_g": 72,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"6": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2
+},
+"circle_obs": {
+"Phi_1": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+68,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 68,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 97,
+"prime": true,
+"deg_prim": 96,
+"ord2": 48,
+"ord3": 48,
+"m": 1,
+"t": 43,
+"index_<2,3>": 2,
+"deg_g": 96,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"6": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2
+},
+"circle_obs": {
+"Phi_1": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+92,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 92,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 101,
+"prime": true,
+"deg_prim": 100,
+"ord2": 100,
+"ord3": 100,
+"m": 1,
+"t": 29,
+"index_<2,3>": 1,
+"deg_g": 100,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+98,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 98,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 103,
+"prime": true,
+"deg_prim": 102,
+"ord2": 51,
+"ord3": 34,
+"m": 3,
+"t": 6,
+"index_<2,3>": 1,
+"deg_g": 34,
+"zero_mult": 3,
+"zero_geo_pred": 3,
+"psi": {
+"3": 1
+},
+"phi": {
+"6": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1,
+"Phi_6": 1
+},
+"circle_obs": {
+"Phi_6": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+32,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 96,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 107,
+"prime": true,
+"deg_prim": 106,
+"ord2": 106,
+"ord3": 53,
+"m": 2,
+"t": 50,
+"index_<2,3>": 1,
+"deg_g": 53,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+53,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 106,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 109,
+"prime": true,
+"deg_prim": 108,
+"ord2": 36,
+"ord3": 27,
+"m": 4,
+"t": 21,
+"index_<2,3>": 1,
+"deg_g": 27,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+27,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 108,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 113,
+"prime": true,
+"deg_prim": 112,
+"ord2": 28,
+"ord3": 112,
+"m": 1,
+"t": 12,
+"index_<2,3>": 1,
+"deg_g": 112,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+110,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 110,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 115,
+"prime": false,
+"deg_prim": 88,
+"ord2": 44,
+"ord3": 44,
+"m": 1,
+"t": 7,
+"index_<2,3>": 2,
+"deg_g": 88,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"6": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2
+},
+"circle_obs": {
+"Phi_1": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+84,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 84,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 119,
+"prime": false,
+"deg_prim": 96,
+"ord2": 24,
+"ord3": 48,
+"m": 1,
+"t": 14,
+"index_<2,3>": 2,
+"deg_g": 96,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 2
+},
+"circle_obs": {
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 2,
+"0": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+92,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 92,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 121,
+"prime": false,
+"deg_prim": 110,
+"ord2": 110,
+"ord3": 5,
+"m": 22,
+"t": 4,
+"index_<2,3>": 1,
+"deg_g": 5,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+5,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 110,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 125,
+"prime": false,
+"deg_prim": 100,
+"ord2": 100,
+"ord3": 100,
+"m": 1,
+"t": 43,
+"index_<2,3>": 1,
+"deg_g": 100,
+"zero_mult": 2,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+2
+],
+[
+97,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 97,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 127,
+"prime": true,
+"deg_prim": 126,
+"ord2": 7,
+"ord3": 126,
+"m": 1,
+"t": 72,
+"index_<2,3>": 1,
+"deg_g": 126,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+124,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 124,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 131,
+"prime": true,
+"deg_prim": 130,
+"ord2": 130,
+"ord3": 65,
+"m": 2,
+"t": 56,
+"index_<2,3>": 1,
+"deg_g": 65,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+65,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 130,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 133,
+"prime": false,
+"deg_prim": 108,
+"ord2": 18,
+"ord3": 18,
+"m": 6,
+"t": 6,
+"index_<2,3>": 1,
+"deg_g": 18,
+"zero_mult": 6,
+"zero_geo_pred": 6,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"3": 1,
+"6": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_3": 1,
+"Phi_6": 1
+},
+"circle_obs": {
+"Phi_3": 1,
+"Phi_6": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+16,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 96,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 137,
+"prime": true,
+"deg_prim": 136,
+"ord2": 68,
+"ord3": 136,
+"m": 1,
+"t": 10,
+"index_<2,3>": 1,
+"deg_g": 136,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+134,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 134,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 139,
+"prime": true,
+"deg_prim": 138,
+"ord2": 138,
+"ord3": 138,
+"m": 1,
+"t": 101,
+"index_<2,3>": 1,
+"deg_g": 138,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+136,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 136,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 143,
+"prime": false,
+"deg_prim": 120,
+"ord2": 60,
+"ord3": 15,
+"m": 4,
+"t": 13,
+"index_<2,3>": 2,
+"deg_g": 30,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+30,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 120,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 145,
+"prime": false,
+"deg_prim": 112,
+"ord2": 28,
+"ord3": 28,
+"m": 2,
+"t": 6,
+"index_<2,3>": 2,
+"deg_g": 56,
+"zero_mult": 4,
+"zero_geo_pred": 4,
+"psi": {
+"3": 2,
+"6": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2,
+"Phi_2": 2
+},
+"circle_obs": {
+"Phi_1": 2,
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+52,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 104,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 149,
+"prime": true,
+"deg_prim": 148,
+"ord2": 148,
+"ord3": 148,
+"m": 1,
+"t": 131,
+"index_<2,3>": 1,
+"deg_g": 148,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+146,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 146,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 151,
+"prime": true,
+"deg_prim": 150,
+"ord2": 15,
+"ord3": 50,
+"m": 3,
+"t": 10,
+"index_<2,3>": 1,
+"deg_g": 50,
+"zero_mult": 3,
+"zero_geo_pred": 3,
+"psi": {
+"3": 1
+},
+"phi": {
+"6": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1,
+"Phi_6": 1
+},
+"circle_obs": {
+"Phi_6": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+48,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 144,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 155,
+"prime": false,
+"deg_prim": 120,
+"ord2": 20,
+"ord3": 60,
+"m": 2,
+"t": 18,
+"index_<2,3>": 1,
+"deg_g": 60,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+58,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 116,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 157,
+"prime": true,
+"deg_prim": 156,
+"ord2": 52,
+"ord3": 78,
+"m": 2,
+"t": 51,
+"index_<2,3>": 1,
+"deg_g": 78,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+76,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 152,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 161,
+"prime": false,
+"deg_prim": 132,
+"ord2": 33,
+"ord3": 66,
+"m": 1,
+"t": 62,
+"index_<2,3>": 2,
+"deg_g": 132,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 2
+},
+"circle_obs": {
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 2,
+"0": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+128,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 128,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 163,
+"prime": true,
+"deg_prim": 162,
+"ord2": 162,
+"ord3": 162,
+"m": 1,
+"t": 77,
+"index_<2,3>": 1,
+"deg_g": 162,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+160,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 160,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 167,
+"prime": true,
+"deg_prim": 166,
+"ord2": 83,
+"ord3": 83,
+"m": 1,
+"t": 64,
+"index_<2,3>": 2,
+"deg_g": 166,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+166,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 166,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 169,
+"prime": false,
+"deg_prim": 156,
+"ord2": 156,
+"ord3": 39,
+"m": 4,
+"t": 34,
+"index_<2,3>": 1,
+"deg_g": 39,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+39,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 156,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 173,
+"prime": true,
+"deg_prim": 172,
+"ord2": 172,
+"ord3": 172,
+"m": 1,
+"t": 51,
+"index_<2,3>": 1,
+"deg_g": 172,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+170,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 170,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 175,
+"prime": false,
+"deg_prim": 120,
+"ord2": 60,
+"ord3": 60,
+"m": 2,
+"t": 46,
+"index_<2,3>": 1,
+"deg_g": 60,
+"zero_mult": 4,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+2
+],
+[
+57,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 114,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 179,
+"prime": true,
+"deg_prim": 178,
+"ord2": 178,
+"ord3": 89,
+"m": 2,
+"t": 61,
+"index_<2,3>": 1,
+"deg_g": 89,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+89,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 178,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 181,
+"prime": true,
+"deg_prim": 180,
+"ord2": 180,
+"ord3": 45,
+"m": 4,
+"t": 29,
+"index_<2,3>": 1,
+"deg_g": 45,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+45,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 180,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 185,
+"prime": false,
+"deg_prim": 144,
+"ord2": 36,
+"ord3": 36,
+"m": 4,
+"t": 32,
+"index_<2,3>": 1,
+"deg_g": 36,
+"zero_mult": 4,
+"zero_geo_pred": 4,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+34,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 136,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 187,
+"prime": false,
+"deg_prim": 160,
+"ord2": 40,
+"ord3": 80,
+"m": 2,
+"t": 44,
+"index_<2,3>": 1,
+"deg_g": 80,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+78,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 156,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 191,
+"prime": true,
+"deg_prim": 190,
+"ord2": 95,
+"ord3": 95,
+"m": 1,
+"t": 79,
+"index_<2,3>": 2,
+"deg_g": 190,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+190,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 190,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 193,
+"prime": true,
+"deg_prim": 192,
+"ord2": 96,
+"ord3": 16,
+"m": 6,
+"t": 7,
+"index_<2,3>": 2,
+"deg_g": 32,
+"zero_mult": 12,
+"zero_geo_pred": 12,
+"psi": {},
+"phi": {
+"4": 2,
+"12": 2
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_4": 2,
+"Phi_12": 2
+},
+"circle_obs": {
+"Phi_4": 2,
+"Phi_12": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 2,
+"0": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+28,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 168,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 197,
+"prime": true,
+"deg_prim": 196,
+"ord2": 196,
+"ord3": 196,
+"m": 1,
+"t": 13,
+"index_<2,3>": 1,
+"deg_g": 196,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+194,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 194,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 199,
+"prime": true,
+"deg_prim": 198,
+"ord2": 99,
+"ord3": 198,
+"m": 1,
+"t": 106,
+"index_<2,3>": 1,
+"deg_g": 198,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+196,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 196,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 203,
+"prime": false,
+"deg_prim": 168,
+"ord2": 84,
+"ord3": 84,
+"m": 2,
+"t": 34,
+"index_<2,3>": 1,
+"deg_g": 84,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+82,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 164,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 205,
+"prime": false,
+"deg_prim": 160,
+"ord2": 20,
+"ord3": 8,
+"m": 20,
+"t": 0,
+"index_<2,3>": 1,
+"deg_g": 8,
+"zero_mult": 20,
+"zero_geo_pred": 20,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"4": 1,
+"5": 1,
+"10": 1,
+"20": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_4": 1,
+"Phi_5": 1,
+"Phi_10": 1,
+"Phi_20": 1
+},
+"circle_obs": {
+"Phi_4": 1,
+"Phi_5": 1,
+"Phi_10": 1,
+"Phi_20": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+6,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 120,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 209,
+"prime": false,
+"deg_prim": 180,
+"ord2": 90,
+"ord3": 90,
+"m": 2,
+"t": 14,
+"index_<2,3>": 1,
+"deg_g": 90,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+88,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 176,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 211,
+"prime": true,
+"deg_prim": 210,
+"ord2": 210,
+"ord3": 210,
+"m": 1,
+"t": 127,
+"index_<2,3>": 1,
+"deg_g": 210,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 208,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 215,
+"prime": false,
+"deg_prim": 168,
+"ord2": 28,
+"ord3": 84,
+"m": 1,
+"t": 27,
+"index_<2,3>": 2,
+"deg_g": 168,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"6": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2
+},
+"circle_obs": {
+"Phi_1": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+164,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 164,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 217,
+"prime": false,
+"deg_prim": 180,
+"ord2": 15,
+"ord3": 30,
+"m": 3,
+"t": 12,
+"index_<2,3>": 2,
+"deg_g": 60,
+"zero_mult": 6,
+"zero_geo_pred": 6,
+"psi": {
+"3": 2
+},
+"phi": {
+"6": 2
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 2,
+"Phi_6": 2
+},
+"circle_obs": {
+"Phi_6": 2,
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 2,
+"0": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+56,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 168,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 221,
+"prime": false,
+"deg_prim": 192,
+"ord2": 24,
+"ord3": 48,
+"m": 4,
+"t": 40,
+"index_<2,3>": 1,
+"deg_g": 48,
+"zero_mult": 4,
+"zero_geo_pred": 4,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+46,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 184,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 223,
+"prime": true,
+"deg_prim": 222,
+"ord2": 37,
+"ord3": 222,
+"m": 1,
+"t": 180,
+"index_<2,3>": 1,
+"deg_g": 222,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 220,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 227,
+"prime": true,
+"deg_prim": 226,
+"ord2": 226,
+"ord3": 113,
+"m": 2,
+"t": 59,
+"index_<2,3>": 1,
+"deg_g": 113,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+113,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 226,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 229,
+"prime": true,
+"deg_prim": 228,
+"ord2": 76,
+"ord3": 57,
+"m": 4,
+"t": 30,
+"index_<2,3>": 1,
+"deg_g": 57,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+57,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 228,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 233,
+"prime": true,
+"deg_prim": 232,
+"ord2": 29,
+"ord3": 232,
+"m": 1,
+"t": 72,
+"index_<2,3>": 1,
+"deg_g": 232,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 230,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 235,
+"prime": false,
+"deg_prim": 184,
+"ord2": 92,
+"ord3": 92,
+"m": 1,
+"t": 63,
+"index_<2,3>": 2,
+"deg_g": 184,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"6": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2
+},
+"circle_obs": {
+"Phi_1": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+180,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 180,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 239,
+"prime": true,
+"deg_prim": 238,
+"ord2": 119,
+"ord3": 119,
+"m": 1,
+"t": 62,
+"index_<2,3>": 2,
+"deg_g": 238,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 238,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 241,
+"prime": true,
+"deg_prim": 240,
+"ord2": 24,
+"ord3": 120,
+"m": 1,
+"t": 5,
+"index_<2,3>": 2,
+"deg_g": 240,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"6": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2
+},
+"circle_obs": {
+"Phi_1": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 236,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 245,
+"prime": false,
+"deg_prim": 168,
+"ord2": 84,
+"ord3": 84,
+"m": 2,
+"t": 10,
+"index_<2,3>": 1,
+"deg_g": 84,
+"zero_mult": 4,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+2
+],
+[
+81,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 162,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 247,
+"prime": false,
+"deg_prim": 216,
+"ord2": 36,
+"ord3": 18,
+"m": 4,
+"t": 10,
+"index_<2,3>": 3,
+"deg_g": 54,
+"zero_mult": 12,
+"zero_geo_pred": 12,
+"psi": {
+"3": 3,
+"6": 3
+},
+"phi": {
+"4": 3
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 3,
+"Phi_2": 3,
+"Phi_4": 3
+},
+"circle_obs": {
+"Phi_4": 3,
+"Phi_1": 3,
+"Phi_2": 3
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 3,
+"1": 3
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+3
+],
+[
+1,
+3
+],
+[
+48,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 192,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 251,
+"prime": true,
+"deg_prim": 250,
+"ord2": 50,
+"ord3": 125,
+"m": 2,
+"t": 45,
+"index_<2,3>": 1,
+"deg_g": 125,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+125,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 250,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 253,
+"prime": false,
+"deg_prim": 220,
+"ord2": 110,
+"ord3": 55,
+"m": 2,
+"t": 14,
+"index_<2,3>": 2,
+"deg_g": 110,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+110,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 220,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 257,
+"prime": true,
+"deg_prim": 256,
+"ord2": 16,
+"ord3": 256,
+"m": 1,
+"t": 48,
+"index_<2,3>": 1,
+"deg_g": 256,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 254,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 259,
+"prime": false,
+"deg_prim": 216,
+"ord2": 36,
+"ord3": 18,
+"m": 4,
+"t": 14,
+"index_<2,3>": 3,
+"deg_g": 54,
+"zero_mult": 12,
+"zero_geo_pred": 12,
+"psi": {
+"3": 3,
+"6": 3
+},
+"phi": {
+"4": 3
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 3,
+"Phi_2": 3,
+"Phi_4": 3
+},
+"circle_obs": {
+"Phi_4": 3,
+"Phi_1": 3,
+"Phi_2": 3
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 3,
+"1": 3
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+3
+],
+[
+1,
+3
+],
+[
+48,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 192,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 263,
+"prime": true,
+"deg_prim": 262,
+"ord2": 131,
+"ord3": 131,
+"m": 1,
+"t": 30,
+"index_<2,3>": 2,
+"deg_g": 262,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 262,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 265,
+"prime": false,
+"deg_prim": 208,
+"ord2": 52,
+"ord3": 52,
+"m": 2,
+"t": 46,
+"index_<2,3>": 2,
+"deg_g": 104,
+"zero_mult": 4,
+"zero_geo_pred": 4,
+"psi": {
+"3": 2,
+"6": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2,
+"Phi_2": 2
+},
+"circle_obs": {
+"Phi_1": 2,
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+100,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 200,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 269,
+"prime": true,
+"deg_prim": 268,
+"ord2": 268,
+"ord3": 268,
+"m": 1,
+"t": 209,
+"index_<2,3>": 1,
+"deg_g": 268,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 266,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 271,
+"prime": true,
+"deg_prim": 270,
+"ord2": 135,
+"ord3": 30,
+"m": 9,
+"t": 28,
+"index_<2,3>": 1,
+"deg_g": 30,
+"zero_mult": 9,
+"zero_geo_pred": 9,
+"psi": {
+"3": 1
+},
+"phi": {
+"6": 1,
+"18": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1,
+"Phi_6": 1,
+"Phi_18": 1
+},
+"circle_obs": {
+"Phi_6": 1,
+"Phi_18": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+28,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 252,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 275,
+"prime": false,
+"deg_prim": 200,
+"ord2": 20,
+"ord3": 20,
+"m": 10,
+"t": 10,
+"index_<2,3>": 1,
+"deg_g": 20,
+"zero_mult": 10,
+"zero_geo_pred": 10,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"5": 1,
+"10": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_5": 1,
+"Phi_10": 1
+},
+"circle_obs": {
+"Phi_5": 1,
+"Phi_10": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+18,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 180,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 277,
+"prime": true,
+"deg_prim": 276,
+"ord2": 92,
+"ord3": 69,
+"m": 4,
+"t": 9,
+"index_<2,3>": 1,
+"deg_g": 69,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+69,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 276,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 281,
+"prime": true,
+"deg_prim": 280,
+"ord2": 70,
+"ord3": 280,
+"m": 1,
+"t": 204,
+"index_<2,3>": 1,
+"deg_g": 280,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 278,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 283,
+"prime": true,
+"deg_prim": 282,
+"ord2": 94,
+"ord3": 282,
+"m": 1,
+"t": 159,
+"index_<2,3>": 1,
+"deg_g": 282,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 280,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 287,
+"prime": false,
+"deg_prim": 240,
+"ord2": 60,
+"ord3": 24,
+"m": 5,
+"t": 22,
+"index_<2,3>": 2,
+"deg_g": 48,
+"zero_mult": 10,
+"zero_geo_pred": 10,
+"psi": {
+"3": 2
+},
+"phi": {
+"10": 2
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 2,
+"Phi_10": 2
+},
+"circle_obs": {
+"Phi_10": 2,
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 2,
+"0": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+44,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 220,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 289,
+"prime": false,
+"deg_prim": 272,
+"ord2": 136,
+"ord3": 272,
+"m": 1,
+"t": 190,
+"index_<2,3>": 1,
+"deg_g": 272,
+"zero_mult": 2,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 269,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 293,
+"prime": true,
+"deg_prim": 292,
+"ord2": 292,
+"ord3": 292,
+"m": 1,
+"t": 93,
+"index_<2,3>": 1,
+"deg_g": 292,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 290,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 295,
+"prime": false,
+"deg_prim": 232,
+"ord2": 116,
+"ord3": 116,
+"m": 2,
+"t": 94,
+"index_<2,3>": 1,
+"deg_g": 116,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+114,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 228,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 299,
+"prime": false,
+"deg_prim": 264,
+"ord2": 132,
+"ord3": 33,
+"m": 4,
+"t": 28,
+"index_<2,3>": 2,
+"deg_g": 66,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+66,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 264,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 301,
+"prime": false,
+"deg_prim": 252,
+"ord2": 42,
+"ord3": 42,
+"m": 6,
+"t": 36,
+"index_<2,3>": 1,
+"deg_g": 42,
+"zero_mult": 6,
+"zero_geo_pred": 6,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"3": 1,
+"6": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_3": 1,
+"Phi_6": 1
+},
+"circle_obs": {
+"Phi_3": 1,
+"Phi_6": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+40,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 240,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 305,
+"prime": false,
+"deg_prim": 240,
+"ord2": 60,
+"ord3": 20,
+"m": 12,
+"t": 12,
+"index_<2,3>": 1,
+"deg_g": 20,
+"zero_mult": 12,
+"zero_geo_pred": 12,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"3": 1,
+"4": 1,
+"6": 1,
+"12": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_3": 1,
+"Phi_4": 1,
+"Phi_6": 1,
+"Phi_12": 1
+},
+"circle_obs": {
+"Phi_3": 1,
+"Phi_4": 1,
+"Phi_6": 1,
+"Phi_12": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+18,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 216,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 307,
+"prime": true,
+"deg_prim": 306,
+"ord2": 102,
+"ord3": 34,
+"m": 3,
+"t": 11,
+"index_<2,3>": 3,
+"deg_g": 102,
+"zero_mult": 9,
+"zero_geo_pred": 9,
+"psi": {
+"6": 3
+},
+"phi": {
+"3": 3
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 3,
+"Phi_3": 3
+},
+"circle_obs": {
+"Phi_3": 3,
+"Phi_1": 3
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 3,
+"1": 3
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+3
+],
+[
+1,
+3
+],
+[
+96,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 288,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 311,
+"prime": true,
+"deg_prim": 310,
+"ord2": 155,
+"ord3": 155,
+"m": 1,
+"t": 123,
+"index_<2,3>": 2,
+"deg_g": 310,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 310,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 313,
+"prime": true,
+"deg_prim": 312,
+"ord2": 156,
+"ord3": 39,
+"m": 4,
+"t": 14,
+"index_<2,3>": 2,
+"deg_g": 78,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+78,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 312,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 317,
+"prime": true,
+"deg_prim": 316,
+"ord2": 316,
+"ord3": 316,
+"m": 1,
+"t": 33,
+"index_<2,3>": 1,
+"deg_g": 316,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 314,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 319,
+"prime": false,
+"deg_prim": 280,
+"ord2": 140,
+"ord3": 140,
+"m": 2,
+"t": 34,
+"index_<2,3>": 1,
+"deg_g": 140,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+138,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 276,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 323,
+"prime": false,
+"deg_prim": 288,
+"ord2": 72,
+"ord3": 144,
+"m": 2,
+"t": 140,
+"index_<2,3>": 1,
+"deg_g": 144,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+142,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 284,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 325,
+"prime": false,
+"deg_prim": 240,
+"ord2": 60,
+"ord3": 60,
+"m": 4,
+"t": 52,
+"index_<2,3>": 1,
+"deg_g": 60,
+"zero_mult": 8,
+"zero_geo_pred": 4,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+2
+],
+[
+57,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 228,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 329,
+"prime": false,
+"deg_prim": 276,
+"ord2": 69,
+"ord3": 138,
+"m": 1,
+"t": 86,
+"index_<2,3>": 2,
+"deg_g": 276,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 2
+},
+"circle_obs": {
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 272,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 331,
+"prime": true,
+"deg_prim": 330,
+"ord2": 30,
+"ord3": 330,
+"m": 1,
+"t": 121,
+"index_<2,3>": 1,
+"deg_g": 330,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 328,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 335,
+"prime": false,
+"deg_prim": 264,
+"ord2": 132,
+"ord3": 44,
+"m": 3,
+"t": 17,
+"index_<2,3>": 2,
+"deg_g": 88,
+"zero_mult": 6,
+"zero_geo_pred": 6,
+"psi": {
+"6": 2
+},
+"phi": {
+"3": 2
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2,
+"Phi_3": 2
+},
+"circle_obs": {
+"Phi_3": 2,
+"Phi_1": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+84,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 252,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 337,
+"prime": true,
+"deg_prim": 336,
+"ord2": 21,
+"ord3": 168,
+"m": 1,
+"t": 32,
+"index_<2,3>": 2,
+"deg_g": 336,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 2
+},
+"circle_obs": {
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 332,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 341,
+"prime": false,
+"deg_prim": 300,
+"ord2": 10,
+"ord3": 30,
+"m": 10,
+"t": 0,
+"index_<2,3>": 1,
+"deg_g": 30,
+"zero_mult": 10,
+"zero_geo_pred": 10,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"5": 1,
+"10": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_5": 1,
+"Phi_10": 1
+},
+"circle_obs": {
+"Phi_5": 1,
+"Phi_10": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+28,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 280,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 343,
+"prime": false,
+"deg_prim": 294,
+"ord2": 147,
+"ord3": 294,
+"m": 1,
+"t": 194,
+"index_<2,3>": 1,
+"deg_g": 294,
+"zero_mult": 2,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 291,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 347,
+"prime": true,
+"deg_prim": 346,
+"ord2": 346,
+"ord3": 173,
+"m": 2,
+"t": 107,
+"index_<2,3>": 1,
+"deg_g": 173,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+173,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 346,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 349,
+"prime": true,
+"deg_prim": 348,
+"ord2": 348,
+"ord3": 174,
+"m": 2,
+"t": 67,
+"index_<2,3>": 1,
+"deg_g": 174,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+172,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 344,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 353,
+"prime": true,
+"deg_prim": 352,
+"ord2": 88,
+"ord3": 352,
+"m": 1,
+"t": 164,
+"index_<2,3>": 1,
+"deg_g": 352,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"3": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 350,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 355,
+"prime": false,
+"deg_prim": 280,
+"ord2": 140,
+"ord3": 140,
+"m": 1,
+"t": 11,
+"index_<2,3>": 2,
+"deg_g": 280,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"6": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2
+},
+"circle_obs": {
+"Phi_1": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 276,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 359,
+"prime": true,
+"deg_prim": 358,
+"ord2": 179,
+"ord3": 179,
+"m": 1,
+"t": 96,
+"index_<2,3>": 2,
+"deg_g": 358,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 358,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 361,
+"prime": false,
+"deg_prim": 342,
+"ord2": 342,
+"ord3": 342,
+"m": 1,
+"t": 187,
+"index_<2,3>": 1,
+"deg_g": 342,
+"zero_mult": 2,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 339,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 365,
+"prime": false,
+"deg_prim": 288,
+"ord2": 36,
+"ord3": 12,
+"m": 12,
+"t": 4,
+"index_<2,3>": 2,
+"deg_g": 24,
+"zero_mult": 24,
+"zero_geo_pred": 24,
+"psi": {
+"3": 2,
+"6": 2
+},
+"phi": {
+"3": 2,
+"4": 2,
+"6": 2,
+"12": 2
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2,
+"Phi_2": 2,
+"Phi_3": 2,
+"Phi_4": 2,
+"Phi_6": 2,
+"Phi_12": 2
+},
+"circle_obs": {
+"Phi_3": 2,
+"Phi_4": 2,
+"Phi_6": 2,
+"Phi_12": 2,
+"Phi_1": 2,
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+20,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 240,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 367,
+"prime": true,
+"deg_prim": 366,
+"ord2": 183,
+"ord3": 122,
+"m": 3,
+"t": 80,
+"index_<2,3>": 1,
+"deg_g": 122,
+"zero_mult": 3,
+"zero_geo_pred": 3,
+"psi": {
+"3": 1
+},
+"phi": {
+"6": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 1,
+"Phi_6": 1
+},
+"circle_obs": {
+"Phi_6": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+120,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 360,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 371,
+"prime": false,
+"deg_prim": 312,
+"ord2": 156,
+"ord3": 156,
+"m": 2,
+"t": 46,
+"index_<2,3>": 1,
+"deg_g": 156,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+154,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 308,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 373,
+"prime": true,
+"deg_prim": 372,
+"ord2": 372,
+"ord3": 186,
+"m": 2,
+"t": 161,
+"index_<2,3>": 1,
+"deg_g": 186,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+184,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 368,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 377,
+"prime": false,
+"deg_prim": 336,
+"ord2": 84,
+"ord3": 84,
+"m": 4,
+"t": 40,
+"index_<2,3>": 1,
+"deg_g": 84,
+"zero_mult": 4,
+"zero_geo_pred": 4,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1,
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1,
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+82,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 328,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 379,
+"prime": true,
+"deg_prim": 378,
+"ord2": 378,
+"ord3": 378,
+"m": 1,
+"t": 149,
+"index_<2,3>": 1,
+"deg_g": 378,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 376,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 383,
+"prime": true,
+"deg_prim": 382,
+"ord2": 191,
+"ord3": 191,
+"m": 1,
+"t": 109,
+"index_<2,3>": 2,
+"deg_g": 382,
+"zero_mult": 0,
+"zero_geo_pred": 0,
+"psi": {},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {},
+"circle_obs": {},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": null,
+"g_integer_roots": {},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 382,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 385,
+"prime": false,
+"deg_prim": 240,
+"ord2": 60,
+"ord3": 60,
+"m": 2,
+"t": 34,
+"index_<2,3>": 2,
+"deg_g": 120,
+"zero_mult": 4,
+"zero_geo_pred": 4,
+"psi": {
+"3": 2,
+"6": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 2,
+"Phi_2": 2
+},
+"circle_obs": {
+"Phi_1": 2,
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 2,
+"1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+2
+],
+[
+1,
+2
+],
+[
+116,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 232,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 389,
+"prime": true,
+"deg_prim": 388,
+"ord2": 388,
+"ord3": 388,
+"m": 1,
+"t": 63,
+"index_<2,3>": 1,
+"deg_g": 388,
+"zero_mult": 1,
+"zero_geo_pred": 1,
+"psi": {
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1
+},
+"circle_obs": {
+"Phi_1": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 386,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 391,
+"prime": false,
+"deg_prim": 352,
+"ord2": 88,
+"ord3": 176,
+"m": 1,
+"t": 62,
+"index_<2,3>": 2,
+"deg_g": 352,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 2
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_2": 2
+},
+"circle_obs": {
+"Phi_2": 2
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 2
+},
+"binomial_roots": {},
+"g_factor_degrees": null,
+"g_low_degree_factors": null,
+"deg_non_kronecker": 348,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 395,
+"prime": false,
+"deg_prim": 312,
+"ord2": 156,
+"ord3": 156,
+"m": 2,
+"t": 86,
+"index_<2,3>": 1,
+"deg_g": 156,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {
+"3": 1,
+"6": 1
+},
+"phi": {},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_obs": {
+"Phi_1": 1,
+"Phi_2": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"0": 1,
+"1": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+154,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 308,
+"all_cosines": false,
+"all_kronecker": false
+},
+{
+"N": 397,
+"prime": true,
+"deg_prim": 396,
+"ord2": 44,
+"ord3": 198,
+"m": 2,
+"t": 81,
+"index_<2,3>": 1,
+"deg_g": 198,
+"zero_mult": 2,
+"zero_geo_pred": 2,
+"psi": {},
+"phi": {
+"4": 1
+},
+"irrational_cosines_m": {},
+"circle_pred": {
+"Phi_4": 1
+},
+"circle_obs": {
+"Phi_4": 1
+},
+"circle_extra": {},
+"circle_missing": {},
+"theorem_divides": true,
+"g_integer_roots": {
+"-1": 1,
+"0": 1
+},
+"binomial_roots": {},
+"g_factor_degrees": [
+[
+1,
+1
+],
+[
+1,
+1
+],
+[
+196,
+1
+]
+],
+"g_low_degree_factors": [],
+"deg_non_kronecker": 392,
+"all_cosines": false,
+"all_kronecker": false
+}
+]
+}

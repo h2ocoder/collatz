@@ -33,7 +33,7 @@ function init() {
 
     // Syracuse step
     let next = 3 * m + 1
-    while (next % 2 === 0) next >>= 1
+    while (next % 2 === 0) next /= 2
     m = next
   }
   steps.value = entries
@@ -58,7 +58,7 @@ init()
   <div class="bounce-sim">
     <div class="controls">
       <label>
-        Start (try 76827):
+        Start (odd, below 300 million; try 76827):
         <input type="number" v-model.number="inputN" min="3" @keydown.enter="init" />
       </label>
       <button @click="init">Reset</button>
@@ -71,7 +71,7 @@ init()
       <div class="gauge-label">
         <span>Bit Budget: <strong>{{ initialBits }}</strong> bits</span>
         <span v-if="currentEntry">
-          Consumed: <strong>{{ currentEntry.constraintBits.toFixed(1) }}</strong> bits
+          Tally: <strong>{{ currentEntry.constraintBits.toFixed(1) }}</strong> bits
         </span>
       </div>
       <div class="gauge-bar">
@@ -90,7 +90,7 @@ init()
       </div>
       <div class="gauge-legend">
         <span><span class="dot budget-dot"></span> Available ({{ initialBits }} bits)</span>
-        <span><span class="dot consumed-dot"></span> Consumed (~1.92/bounce)</span>
+        <span><span class="dot consumed-dot"></span> Tally (1.92 per BOUNCE row, 0.5 per other row; bookkeeping, not a measurement)</span>
       </div>
     </div>
 
@@ -122,9 +122,9 @@ init()
     </div>
 
     <div class="insight" v-if="currentEntry && currentEntry.constraintBits > initialBits * 0.8">
-      <strong>Fuel running low!</strong> The constraint bits ({{ currentEntry.constraintBits.toFixed(1) }})
-      are approaching the bit budget ({{ initialBits }}). The event horizon is near.
-      Beyond it: all bits are zero, and the bounce sequence must terminate.
+      <strong>The tally has caught up with the budget.</strong> The tally ({{ currentEntry.constraintBits.toFixed(1) }})
+      is past four fifths of the {{ initialBits }} bits the number started with. The picture expects the bounces to die out around here.
+      The tally is bookkeeping, not a measurement, and orbits do not always oblige: from 27, a BOUNCE row appears after the tally has passed the budget.
     </div>
   </div>
 </template>

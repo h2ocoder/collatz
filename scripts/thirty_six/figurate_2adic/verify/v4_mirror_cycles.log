@@ -1,0 +1,92 @@
+====================================================================================================
+A. NOT identities on 10^5 random signed 200-bit integers and all |n| <= 10^5
+====================================================================================================
+  True  NOT(3x+1) = 3 NOT(x) + 1
+  True  NOT T NOT (m) = 3m/2 | (m-1)/2
+  True  NOT T NOT (m) = T_minus(m+1) - 1
+  True  T_(3n+1) = 9 T_n + 1
+  True  halving does not commute: NOT(x/2) != NOT(x)/2 always (NOT(x) is odd)
+  True  NOT commutes with x -> q x + (q-1)/2 for q = 3, 7, 11, 15 (3x+1, 7x+3, 11x+5, 15x+7)
+
+====================================================================================================
+B. Cycles of T on Z met from |n| <= 10^6 (first return before first drop in absolute value)
+====================================================================================================
+  3x+1: elements of minimal |n| in their cycle: [-17, -5, -1, 0, 1]  unresolved starts: 0
+     [-17, -25, -37, -55, -82, -41, -61, -91, -136, -68, -34]  cell (k,s) = (11,7), 2^k - 3^s = -139
+     [-5, -7, -10]  cell (k,s) = (3,2), 2^k - 3^s = -1
+     [-1]  cell (k,s) = (1,1), 2^k - 3^s = -1
+     [0]  cell (k,s) = (1,0), 2^k - 3^s = 1
+     [1, 2]  cell (k,s) = (2,1), 2^k - 3^s = 1
+  NOTE: this is a search, not a theorem.  'Every cycle of T on Z' in the README must read 'every KNOWN cycle'
+  (that there are no others is the finite-cycles conjecture, open).
+
+====================================================================================================
+C. Is the dictionary 'unit cell <-> consecutive pair <-> triangular number <-> cycle' special to 3x+1?
+   For q x + 1: unit cells |2^k - q^s| = 1 (k <= 400, s <= 250), every parity word of the cell is an integer cycle.
+====================================================================================================
+  3x+1: cell (1,0)  2^k - q^s = +1   pair (1,2)   T_1 = 1   periodic points of the cell: [0]  (all integral: True)
+  3x+1: cell (1,1)  2^k - q^s = -1   pair (2,3)   T_2 = 3   periodic points of the cell: [-1]  (all integral: True)
+  3x+1: cell (2,1)  2^k - q^s = +1   pair (3,4)   T_3 = 6   periodic points of the cell: [1, 2]  (all integral: True)
+  3x+1: cell (3,2)  2^k - q^s = -1   pair (8,9)   T_8 = 36   periodic points of the cell: [-10, -7, -5]  (all integral: True)
+  5x+1: cell (1,0)  2^k - q^s = +1   pair (1,2)   T_1 = 1   periodic points of the cell: [0]  (all integral: True)
+  5x+1: cell (2,1)  2^k - q^s = -1   pair (4,5)   T_4 = 10   periodic points of the cell: [-2, -1]  (all integral: True)
+  7x+1: cell (1,0)  2^k - q^s = +1   pair (1,2)   T_1 = 1   periodic points of the cell: [0]  (all integral: True)
+  7x+1: cell (3,1)  2^k - q^s = +1   pair (7,8)   T_7 = 28   periodic points of the cell: [1, 2, 4]  (all integral: True)
+  9x+1: cell (1,0)  2^k - q^s = +1   pair (1,2)   T_1 = 1   periodic points of the cell: [0]  (all integral: True)
+  9x+1: cell (3,1)  2^k - q^s = -1   pair (8,9)   T_8 = 36   periodic points of the cell: [-4, -2, -1]  (all integral: True)
+  15x+1: cell (1,0)  2^k - q^s = +1   pair (1,2)   T_1 = 1   periodic points of the cell: [0]  (all integral: True)
+  15x+1: cell (4,1)  2^k - q^s = +1   pair (15,16)   T_15 = 120   periodic points of the cell: [1, 2, 4, 8]  (all integral: True)
+  17x+1: cell (1,0)  2^k - q^s = +1   pair (1,2)   T_1 = 1   periodic points of the cell: [0]  (all integral: True)
+  17x+1: cell (4,1)  2^k - q^s = -1   pair (16,17)   T_16 = 136   periodic points of the cell: [-8, -4, -2, -1]  (all integral: True)
+  -> the dictionary exists for every q; the pair (8,9) is a unit cell twice: (3,2) for 3x+1 and (3,1) for 9x+1,
+     both times with T_8 = 36 and a NEGATIVE cycle.  It is Catalan's pair, not a Collatz phenomenon.
+  cell (11,7), 2^11 - 3^7 = -139: 330 words, integral periodic points: [-136, -91, -82, -68, -61, -55, -41, -37, -34, -25, -17]
+
+====================================================================================================
+D. Anti-diagonal family: word 1^j 0 is a cycle of 3x + d_j, d_j = 2^(j+1) - 3^j, minimum 3^j - 2^j  (j <= 80)
+====================================================================================================
+  closes after j+1 steps, parity word 1^j 0, minimum n0, gcd(n0, d_j) = 1, n0 + d_j = 2^j: True
+  |d_j| = 1 only for j = 0, 1, 2: [0, 1, 2]
+
+====================================================================================================
+E. Two-run cycles of 3x-1 on the positive integers: words 1^j1 0^e1 1^j2 0^e2, all run lengths <= 28
+   (exact fixed points of the word; the researcher solved a 2x2 linear system instead)
+====================================================================================================
+  positive integer cycles found (minimum, length): [(5, 3), (17, 11)]
+  -> only the fixed point 1 (doubled words), the 5-cycle (doubled) and the 17-cycle: agrees with q24 section F.
+
+====================================================================================================
+F. Census recount: primitive positive cycles of 3x+d, d odd, 3 !| d, |d| <= 499, minimum <= 100|d| + 2000
+====================================================================================================
+  primitive positive cycles: 797   with |v0| a power of two: 18   (researcher: 797 and 18)
+  two-run cycles: 95, of which |v0| = 2^j: 1   (researcher: 95 and 1)
+  size-matched (|v0| <= B: cycles, with |v0| = 2^j, share of powers of two among even numbers <= B):
+     B =  16:   9 cycles,  5 powers of two (0.556); chance share 0.500
+     B =  32:  19 cycles,  7 powers of two (0.368); chance share 0.312
+     B =  64:  38 cycles,  9 powers of two (0.237); chance share 0.188
+     B = 128:  85 cycles, 12 powers of two (0.141); chance share 0.109
+     B = 256: 187 cycles, 12 powers of two (0.064); chance share 0.062
+  rows with |v0| = 2^j: [(-491, 1003, 512), (-179, 211, 32), (-49, 65, 16), (-31, 95, 64), (-11, 19, 8), (-1, 5, 4), (-1, 17, 16), (1, 1, 2), (23, 41, 64), (25, 7, 32), (109, 19, 128), (115, 13, 128), (125, 899, 1024), (127, 1, 128), (307, 205, 512), (431, 593, 1024), (437, 587, 1024), (499, 1549, 2048)]
+
+====================================================================================================
+G. Q2.5: the numbers attached to 36, recomputed without the repo package; and controls
+   un-shortcut map f(n) = n/2 | 3n+1; dropping time = steps to the first value < n
+====================================================================================================
+  n = 36: dropping time 1, destination 18, steps to 1: 21
+  n = 35: dropping time 6, destination 20, steps to 1: 13
+  n =  8: dropping time 1, destination 4, steps to 1: 3
+  n = 17: dropping time 3, destination 13, steps to 1: 12
+  n =  6: dropping time 1, destination 3, steps to 1: 8
+  n = 37: dropping time 3, destination 28, steps to 1: 21
+  n =  9: dropping time 3, destination 7, steps to 1: 19
+  share of 1 <= n <= 1000 whose orbit passes through 17 (hence 8): 0.437
+  share of 1 <= n <= 10000 whose orbit passes through 17 (hence 8): 0.449
+  share of 1 <= n <= 100000 whose orbit passes through 17 (hence 8): 0.460
+  control: indices 2 <= n <= 2000 for which orbit(T_n) contains both n and u = 2n+1: 2 of 1999; first few [2, 8]
+           orbit(T_n) contains n: 61 of 1999.
+  reading: every orbit from n >= 3, n != 4 passes through 8, and about 45% pass through 17, so for T_8 = 36 the
+  event has probability about 0.45.  For larger n the targets n and 2n+1 are large and are almost never hit:
+  the 'coincidence' at n = 8 exists because 8 and 17 are small, not because of anything about 36.
+  every orbit from 3 <= n <= 20000, n != 4 contains 8: True
+
+done in 8.0 s

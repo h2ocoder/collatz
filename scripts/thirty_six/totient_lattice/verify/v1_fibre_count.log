@@ -1,0 +1,22 @@
+1. Pierpont points i,j <= 40: mine (sympy BPSW) 159, theirs 159, equal: True
+2. explicit (alpha, beta, S) enumeration vs q41_table.json on 0<=a,b<=40: mismatches A 0, D 0
+   A(2,2) = 8   A(0,0) = 2   A(0,b>0) all zero: True
+3. inverse-totient count vs formula for all 529 lattice points a,b <= 22 (m up to 2^22 3^22 = 1.316e+17): mismatches 0   [2 s]
+   phi^-1(36) by inverse totient: [37, 57, 63, 74, 76, 108, 114, 126]
+   every x with phi(x) = 2^a 3^b (a,b <= 6) is 2^alpha 3^beta * distinct Pierpont primes > 3: True
+4. A014197(1..40) = [2, 3, 0, 4, 0, 4, 0, 5, 0, 2, 0, 6, 0, 0, 0, 6, 0, 4, 0, 5, 0, 2, 0, 10, 0, 0, 0, 2, 0, 2, 0, 7, 0, 0, 0, 8, 0, 0, 0, 9]
+   least m <= 6000 with exactly k solutions, k = 2..31: [1, 2, 4, 8, 12, 32, 36, 40, 24, 48, 160, 396, 2268, 704, 312, 72, 336, 216, 936, 144, 624, 1056, 1760, 360, 2560, 384, 288, 1320, 3696, 240]
+   (this is only an upper bound for A007374(k) unless the least m is <= 6000; all 30 found)
+   m < 36 with exactly 8 solutions: [] ; A014197(36) = 8
+   neighbours (numerology control): A014197 at 24, 30, 32, 35, 36, 37, 40, 48, 64, 72 = [10, 2, 7, 0, 8, 0, 9, 11, 8, 17]
+   other m <= 6000 with exactly 8 solutions: [36, 64, 176, 200, 224, 280, 324, 464, 520, 888, 920, 1184, 1368, 1400, 1520, 1696, 1720, 1904, 1960, 2040, 2096, 2120, 2256, 2392, 2600]
+   lattice points a,b <= 40 with A(a,b) = 8: [(2, 2), (2, 4), (6, 0)]
+   k (2..31) whose least m is 3-smooth: [2, 3, 4, 5, 6, 7, 8, 10, 11, 17, 19, 21, 27, 28]
+5. row b = 0: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 32, 32, 32, 32, 32, 32, 32, 32, 32]
+   column a = 1: A(1,b) = 2 + 2[2*3^b+1 prime] for 1 <= b <= 40 and A(1,0) = 3: True
+   column a = 2 closed form, 1 <= b <= 40: mismatches 0 ; at b = 0 the formula gives 3 but A(2,0) = 4 (formula is for b >= 1 only, as stated)
+   diagonal A(a,a), a = 0..15: [2, 4, 8, 19, 39, 82, 166, 322, 610, 1126, 2031, 3561, 6120, 10309, 17064, 27932]
+   row b = 1, A(a,1), a = 0..15: [0, 4, 6, 10, 11, 17, 21, 27, 32, 39, 43, 50, 56, 64, 69, 77]
+   column a = 2, A(2,b), b = 0..15: [4, 6, 8, 9, 8, 12, 18, 15, 13, 16, 17, 17, 13, 15, 17, 17]
+   column a = 1, A(1,b), b = 0..20: [3, 4, 4, 2, 4, 4, 4, 2, 2, 4, 2, 2, 2, 2, 2, 2, 4, 4, 2, 2, 2]
+done in 2 s

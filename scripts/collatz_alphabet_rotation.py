@@ -95,7 +95,7 @@ def main() -> None:
     ax.set_ylabel(r"final-drop margin  $e_s - s\log_2 3$")
     ax.set_title("Alphabet block schedule = Beatty word of $\\log_2 3$\n"
                  "red = a $B$-block added (jump 2) · blue = none (jump 1)\n"
-                 "green = convergent levels $s$ (tightest ballot paths)",
+                 "green = convergent denominators $s$ of $\\log_2 3$",
                  fontsize=9.5)
     from matplotlib.lines import Line2D
     ax.legend(handles=[
@@ -129,21 +129,21 @@ def main() -> None:
     y -= 0.085
     ax.text(0.04, y, "13, 31, 137  →  the parastichy arms / near-return "
             "periods\nseen in the rotation (44 is the 27/44 semiconvergent).",
-            fontsize=8.5, color="0.3")
+            fontsize=8.5, color="0.3", va="top")
     y -= 0.135
-    ax.text(0.02, y, "same denominators are the alphabet's resonant levels:",
+    ax.text(0.02, y, r"convergent denominators of $\log_2 3$ = levels of the alphabet:",
             fontsize=9, fontweight="bold")
     y -= 0.075
     ax.text(0.04, y, "  ".join(str(q) for q in res_s),
             fontsize=10, color="seagreen")
     y -= 0.075
-    ax.text(0.04, y, "levels $s$ where $s\\log_2 3$ is nearest an integer —\n"
-            "the tightest letters, smallest final-drop margin (panel 1).",
-            fontsize=8.5, color="0.3")
+    ax.text(0.04, y, "levels $s$ where $s\\log_2 3$ is nearest an integer:\n"
+            "the final-drop margin is near 0 at $s = 5, 41$ and near 1 at $s = 12, 53$ (panel 1).",
+            fontsize=8.5, color="0.3", va="top")
     y -= 0.145
     ax.text(0.02, y, "Arithmetic (the alphabet) and multiplicity (the\n"
             "rotation) are two readings of one irrational, $\\log_2 3$.",
-            fontsize=9.5, style="italic")
+            fontsize=9.5, style="italic", va="top")
 
     fig.suptitle("The dropping alphabet and the log-6 rotation: "
                  "one continued fraction", fontsize=12, y=1.0)

@@ -1,0 +1,107 @@
+[0] N(s) three ways
+    DP to s = 2218 done (0s); N(1..14) = [1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045, 17637]
+    Zarubin recursion to s = 700 agrees with DP: True  (2s)
+    brute-force word enumeration s = 1..14 agrees (count and length L = floor(s log2 3)+1): True
+    researcher's copy of the OEIS b-file (2218 terms): mismatches for s <= 2218: []
+    32 data terms read by the skeptic from oeis.org/A100982 on 2026-10-06 agree: True
+
+[1] record orders: L_3 = [1, 2, 7, 12, 53, 359, 665]  U_3 = [1, 3, 5, 17, 29, 41, 94, 147, 200, 253, 306, 971, 1636]
+    sandwich violations s <= 2218: []; lower-equality set == L_3: True; upper == U_3: True
+    N(s) = C(m,s)/m on L_3 and C(m+1,s)/(m+1) on U_3 (s >= 2): True
+
+[2] windows: first s with c_s(a/b) != N(s), minus 1
+    cross-check of the three counters on rational boundaries (s <= 60 for Z, s <= 11 for W):
+      D == Z == W on 9 slopes x 2 conventions: True
+     slope 1/1       lower natural W = 2     other W = 1     predicted b+ = 2     first floor mismatch = 2     ok=True
+     slope 3/2       lower natural W = 7     other W = 2     predicted b+ = 7     first floor mismatch = 7     ok=True
+     slope 11/7      lower natural W = 12    other W = 7     predicted b+ = 12    first floor mismatch = 12    ok=True
+     slope 19/12     lower natural W = 53    other W = 12    predicted b+ = 53    first floor mismatch = 53    ok=True
+     slope 84/53     lower natural W = 359   other W = 53    predicted b+ = 359   first floor mismatch = 359   ok=True
+     slope 569/359   lower natural W = 665   other W = 359   predicted b+ = 665   first floor mismatch = 665   ok=True
+     slope 1054/665  lower natural W = None  other W = 665   predicted b+ = None  first floor mismatch = None  ok=True
+     slope 2/1       upper natural W = 3     other W = 1     predicted b+ = 3     first floor mismatch = 3     ok=True
+     slope 5/3       upper natural W = 5     other W = 3     predicted b+ = 5     first floor mismatch = 5     ok=True
+     slope 8/5       upper natural W = 17    other W = 5     predicted b+ = 17    first floor mismatch = 17    ok=True
+     slope 27/17     upper natural W = 29    other W = 17    predicted b+ = 29    first floor mismatch = 29    ok=True
+     slope 46/29     upper natural W = 41    other W = 29    predicted b+ = 41    first floor mismatch = 41    ok=True
+     slope 65/41     upper natural W = 94    other W = 41    predicted b+ = 94    first floor mismatch = 94    ok=True
+     slope 149/94    upper natural W = 147   other W = 94    predicted b+ = 147   first floor mismatch = 147   ok=True
+     slope 233/147   upper natural W = 200   other W = 147   predicted b+ = 200   first floor mismatch = 200   ok=True
+     slope 317/200   upper natural W = 253   other W = 200   predicted b+ = 253   first floor mismatch = 253   ok=True
+     slope 401/253   upper natural W = 306   other W = 253   predicted b+ = 306   first floor mismatch = 306   ok=True
+     slope 485/306   upper natural W = 971   other W = 306   predicted b+ = 971   first floor mismatch = 971   ok=True
+     slope 1539/971  upper natural W = 1636  other W = 971   predicted b+ = 1636  first floor mismatch = 1636  ok=True
+    all one-sided best approximations with b <= 1000, s <= 2218: True   (24s)
+     control slope 7/4: W weak = 3, W strict = 3
+     control slope 13/8: W weak = 5, W strict = 5
+     control slope 30/19: W weak = 12, W strict = 12
+     control slope 49/31: W weak = 12, W strict = 12
+     control slope 6/4: W weak = 7, W strict = 2
+     control slope 16/10: W weak = 5, W strict = 17
+    cell of alpha for prefix length s-1 is [best lower approx with b < s, best upper approx with b < s), s < 400: True
+
+[3] Bizley values N(kQ), k <= 1 + floor(Q'/Q)
+     2/1 upper k=1 s=1: paths = 1  == N(s): True  formula==paths: True  inside window: True
+     2/1 upper k=2 s=2: paths = 1  == N(s): True  formula==paths: True  inside window: True
+     2/1 upper k=3 s=3: paths = 2  == N(s): True  formula==paths: True  inside window: True
+     2/1 upper k=4 s=4: paths = 5  == N(s): False  formula==paths: True  inside window: False
+     3/2 lower k=1 s=2: paths = 1  == N(s): True  formula==paths: True  inside window: True
+     3/2 lower k=2 s=4: paths = 3  == N(s): True  formula==paths: True  inside window: True
+     3/2 lower k=3 s=6: paths = 12  == N(s): True  formula==paths: True  inside window: True
+     3/2 lower k=4 s=8: paths = 55  == N(s): False  formula==paths: True  inside window: False
+     8/5 upper k=1 s=5: paths = 7  == N(s): True  formula==paths: True  inside window: True
+     8/5 upper k=2 s=10: paths = 476  == N(s): True  formula==paths: True  inside window: True
+     8/5 upper k=3 s=15: paths = 51033  == N(s): True  formula==paths: True  inside window: True
+     8/5 upper k=4 s=20: paths = 6561583  == N(s): False  formula==paths: True  inside window: False
+     19/12 lower k=1 s=12: paths = 2652  == N(s): True  formula==paths: True  inside window: True
+     19/12 lower k=2 s=24: paths = 257978502  == N(s): True  formula==paths: True  inside window: True
+     19/12 lower k=3 s=36: paths = 38088111350198  == N(s): True  formula==paths: True  inside window: True
+     19/12 lower k=4 s=48: paths = 6687324379116300569  == N(s): True  formula==paths: True  inside window: True
+     19/12 lower k=5 s=60: paths = 1291765184032166459794074  == N(s): False  formula==paths: True  inside window: False
+     65/41 upper k=1 s=41: paths = 6113392816333320  == N(s): True  formula==paths: True  inside window: True
+     65/41 upper k=2 s=82: paths = 841105791458...(34 digits)  == N(s): True  formula==paths: True  inside window: True
+     65/41 upper k=3 s=123: paths = 178192804438...(53 digits)  == N(s): False  formula==paths: True  inside window: False
+     84/53 lower k=1 s=53: paths = 1122428422670255691408  == N(s): True  formula==paths: True  inside window: True
+     84/53 lower k=2 s=106: paths = 417451108431...(45 digits)  == N(s): True  formula==paths: True  inside window: True
+     84/53 lower k=3 s=159: paths = 238522316421...(69 digits)  == N(s): True  formula==paths: True  inside window: True
+     84/53 lower k=4 s=212: paths = 162540014725...(93 digits)  == N(s): True  formula==paths: True  inside window: True
+     84/53 lower k=5 s=265: paths = 121996738590...(117 digits)  == N(s): True  formula==paths: True  inside window: True
+     84/53 lower k=6 s=318: paths = 973389389774...(140 digits)  == N(s): True  formula==paths: True  inside window: True
+     84/53 lower k=7 s=371: paths = 810125828680...(164 digits)  == N(s): False  formula==paths: True  inside window: False
+     485/306 upper k=1 s=306: paths = 381768687590...(135 digits)  == N(s): True  formula==paths: True  inside window: True
+     485/306 upper k=2 s=612: paths = 666231099234...(273 digits)  == N(s): True  formula==paths: True  inside window: True
+     485/306 upper k=3 s=918: paths = 178981829806...(412 digits)  == N(s): True  formula==paths: True  inside window: True
+     485/306 upper k=4 s=1224: paths = 573731494143...(550 digits)  == N(s): False  formula==paths: True  inside window: False
+     1054/665 lower k=1 s=665: paths = 616887309787...(297 digits)  == N(s): True  formula==paths: True  inside window: True
+     1054/665 lower k=2 s=1330: paths = 557117830823...(598 digits)  == N(s): True  formula==paths: True  inside window: True
+     1054/665 lower k=3 s=1995: paths = 774547903264...(899 digits)  == N(s): True  formula==paths: True  inside window: True
+    in-window identities all hold and the first k outside each window fails: True (25s)
+    orders gaining a value (not equality orders), s <= 2218: [4, 6, 10, 15, 24, 36, 48, 82, 106, 159, 212, 265, 318, 612, 918, 1330, 1995]
+    N(10) = F2 - F1^2/2 = 476 ; N(15) = F3 - F1F2 + F1^3/6 = 51033 ; DP: 476 51033
+    N(24), N(36), N(48) from the spelled-out formulas: True True True ; N(36) = 38088111350198
+
+[4] slope 3/2
+    c_s(3/2 weak) == A047749(s) (formula) s <= 1000: True ; formula == b-file: True
+    ballot form (s-2h+1)/(s+h+1) C(s+h+1,h): True
+    N(s) == A047749(s) exactly for s in [1, 2, 3, 4, 5, 6, 7]
+    of these, Winkler equality orders: [1, 2, 3, 5, 7]  -> the extra orders are [4, 6]
+
+[5] cousins qx+1
+    q=5: first terms [1, 2, 5, 14, 56, 202, 715, 3244]; b-file mismatches []; equality sets == records: True; windows == next record: True
+    q=7: first terms [1, 2, 7, 30, 143, 728, 3148, 15986]; b-file mismatches []; equality sets == records: True; windows == next record: True
+    A100982 vs 5x+1 vs 7x+1 at s = 1..8: [1, 1, 2, 3, 7, 12, 30, 85] [1, 2, 5, 14, 56, 202, 715, 3244, 12945] [1, 2, 7, 30, 143, 728, 3148, 15986, 86009]
+
+[6] actual residue classes (own dropping-time code, not the repo's)
+    3x+1: #classes mod 2^L with Paper-1 dropping time L+s equals N(s), s = 1..11: True [1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961]
+    members n >= 2 (three smallest per class) that do NOT drop at L+s: [] (count 0 )
+    own paper1_time == collatz.dropping.dropping_time for 2 <= n < 20000: True ; dropping_time(3) = 6
+    3x-1: classes (shortcut stopping (L,s) on two large representatives) == negatives of the 3x+1 classes, s <= 10: True
+    5x+1: class counts [1, 2, 5, 14, 56, 202] == path counts: True ; A100982 would be [1, 1, 2, 3, 7, 12]
+
+[7] forced cells (Q5.x)
+    q=3: cells (j, s_j) visited by EVERY dropping word of order 3..8: [(1, 1), (2, 2)]
+    q=5: cells (j, s_j) visited by EVERY dropping word of order 3..8: [(1, 1)]
+    q=7: cells (j, s_j) visited by EVERY dropping word of order 3..8: [(1, 1)]
+    q=3: every word with s >= 2 starts with 11: True
+
+total 32s

@@ -48,7 +48,7 @@ const twoadicCycle = computed(() => {
           <span v-if="naturalOrbit[naturalOrbit.length-1] === 1" class="converged">✓ Converged!</span>
         </div>
         <div class="verdict good">
-          <strong>Finite fuel → bounces terminate → converges to 1</strong>
+          <strong>Finitely many 1-bits. In every case tested, it reaches 1</strong>
         </div>
       </div>
 
@@ -67,23 +67,23 @@ const twoadicCycle = computed(() => {
           <span class="cycle-indicator">↺ cycles forever</span>
         </div>
         <div class="verdict bad">
-          <strong>Infinite fuel → bounces never terminate → cycles forever</strong>
+          <strong>Infinitely many 1-bits. This one cycles forever</strong>
         </div>
       </div>
     </div>
 
     <div class="controls">
       <label>
-        Natural number:
+        Natural number (up to 9,999):
         <input type="number" v-model.number="naturalN" min="2" max="9999" />
       </label>
     </div>
 
     <div class="insight">
-      <strong>The ONLY difference:</strong> natural numbers have <em>finitely many</em> 1-bits.
-      2-adic integers can have <em>infinitely many</em>.
-      The carry propagation reads bits at 1.92/bounce but only 0.51 new bits appear.
-      Finite numbers run out. Infinite numbers don't.
+      <strong>The difference this picture points at:</strong> natural numbers have <em>finitely many</em> 1-bits.
+      Other 2-adic integers have <em>infinitely many</em>.
+      The picture charges 1.92 bits per bounce against 0.51 new ones, so a finite number should run out and an infinite one need not.
+      Whether every positive integer really does run out is not proved.
     </div>
   </div>
 </template>

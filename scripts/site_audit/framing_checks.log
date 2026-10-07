@@ -1,0 +1,110 @@
+
+==============================================================================
+1. how-to-read: the -1 test.  Cycles of 3n+1 on negative integers
+==============================================================================
+  -1: cycle of length 2: [-1, -2]
+  -5: cycle of length 5: [-5, -14, -7, -20, -10]
+  -17: cycle of length 18: [-17, -50, -25, -74, -37, -110, -55, -164, -82, -41, -122, -61, -182, -91, -272, -136, -68, -34]
+
+==============================================================================
+2. definitions.md worked examples
+==============================================================================
+  orbit(6)        = [6, 3, 10, 5, 16, 8, 4, 2, 1]
+  drop(5)         = (3, 4, [5, 16, 8], 1)
+  drop(3)         = (6, 2, [3, 10, 5, 16, 8, 4], 2)
+  alpha_seq(3)    = [1, 4]  (page: [1, 4])
+  alpha_seq(7)    = [1, 1, 2, 3, 4]  (page: [1, 1, 1, 3, 4])
+  orbit(7)        = [7, 22, 11, 34, 17, 52, 26, 13, 40, 20, 10, 5, 16, 8, 4, 2, 1]
+  halvings in orbit(7) = 11 ; sum of page's list = 10 ; sum of correct list = 11
+  v2(3*17+1) = 2 (17 is the third odd value in the orbit of 7)
+
+==============================================================================
+3. definitions.md: 'Each dropping set is a union of arithmetic progressions (a fact...)'
+==============================================================================
+  Terras: sigma(n) = stopping time (shortcut map T), omega(n) = coefficient stopping time
+  = first j with 3^(odd steps) < 2^j.  'Dset_k is exactly a union of residue classes'
+  holds iff sigma(n) = omega(n) for all n >= 2 (Coefficient Stopping Time conjecture).
+  n = 1: (sigma, omega) = (None, 2)  -> 1 lies in the class 1 mod 4 (omega = 2) but never drops: the reason for 'n > 1'
+  2 <= n <= 2000000: violations of sigma = omega: 0 []
+  Dset_k for 2 <= n < 2^18, k <= 16:  E = k - s, residues mod 2^E, exact union of classes?
+    k= 1  oddities=[0]  E= 1  #classes=  1  Dset_k == union of those classes (n>1): True
+    k= 3  oddities=[1]  E= 2  #classes=  1  Dset_k == union of those classes (n>1): True
+    k= 6  oddities=[2]  E= 4  #classes=  1  Dset_k == union of those classes (n>1): True
+    k= 8  oddities=[3]  E= 5  #classes=  2  Dset_k == union of those classes (n>1): True
+    k=11  oddities=[4]  E= 7  #classes=  3  Dset_k == union of those classes (n>1): True
+    k=13  oddities=[5]  E= 8  #classes=  7  Dset_k == union of those classes (n>1): True
+    k=16  oddities=[6]  E=10  #classes= 12  Dset_k == union of those classes (n>1): True
+  counts of classes above are A100982 with the class 'even' in front: 1,1,2,3,7,12
+  checked n <= 2000000 [this script]: exact for every s <= 4960, i.e. Dset_k for k <= 12822
+  checked n <= 10000000 [site_audit/explore_check_sturmian (F)]: exact for every s <= 10945, i.e. Dset_k for k <= 28293
+  checked n <= 2.8E+19 [Rozier-Terracol 2026, Cor. 5.4]: exact for every s <= 200000, i.e. Dset_k for k <= 516993 (at least; search capped)
+  Any nontrivial positive cycle would be a violator (its least element has omega finite,
+  sigma infinite), as n = 1 is: 'class = dropping set for every k' implies no nontrivial
+  cycle, so it cannot be 'a fact that follows from the affine orbit structure'.
+  Lagarias 1985 sec. 2: Coefficient Stopping Time Conjecture (Terras), open.
+
+==============================================================================
+4. publications.md: 27/44 and log_6 3
+==============================================================================
+  log_6 3 = 0.613147193
+  continued fraction: [0, 1, 1, 1, 1, 2, 2, 3, 1, 5, 2, 23]
+  convergents: [(0, 1), (1, 1), (1, 2), (2, 3), (3, 5), (8, 13), (19, 31), (65, 106), (84, 137), (485, 791)]
+  27/44 is a convergent: False ; mediant of 8/13 and 19/31: (27, 44)
+    q=  13: q*log_6(3) =    7.9709   miss = -0.0291 turns
+    q=  31: q*log_6(3) =   19.0076   miss = +0.0076 turns
+    q=  44: q*log_6(3) =   26.9785   miss = -0.0215 turns
+    q=  75: q*log_6(3) =   45.9860   miss = -0.0140 turns
+    q= 106: q*log_6(3) =   64.9936   miss = -0.0064 turns
+    q= 137: q*log_6(3) =   84.0012   miss = +0.0012 turns
+
+==============================================================================
+5. publications.md: where the 44 spokes of the Medium article's polar plots come from
+==============================================================================
+  The article plots theta = step index (matplotlib polar => radians), r = P(value, 6).
+      13 rad =   2.0690 turns   angular miss = +0.4336 rad =  +24.85 deg
+      22 rad =   3.5014 turns   angular miss = -3.1327 rad = -179.49 deg
+      31 rad =   4.9338 turns   angular miss = -0.4159 rad =  -23.83 deg
+      44 rad =   7.0028 turns   angular miss = +0.0177 rad =   +1.01 deg
+      75 rad =  11.9366 turns   angular miss = -0.3982 rad =  -22.82 deg
+      88 rad =  14.0056 turns   angular miss = +0.0354 rad =   +2.03 deg
+     106 rad =  16.8704 turns   angular miss = -0.8142 rad =  -46.65 deg
+     137 rad =  21.8042 turns   angular miss = -1.2301 rad =  -70.48 deg
+     355 rad =  56.5000 turns   angular miss = -3.1416 rad = -180.00 deg
+     710 rad = 113.0000 turns   angular miss = +0.0001 rad =   +0.00 deg
+  -> 44 rad = 7.0028 turns (22/7 ~ pi). Points 44 steps apart share an angle whatever is plotted;
+     points 31 steps apart are 24 degrees apart.
+  seed 27: 111 steps
+    lag  13: mean distance, theta=index rad: orbit 0.180 | radii shuffled 0.365 || mean |r_i+lag - r_i| alone: 0.051
+    lag  31: mean distance, theta=index rad: orbit 0.179 | radii shuffled 0.345 || mean |r_i+lag - r_i| alone: 0.055
+    lag  44: mean distance, theta=index rad: orbit 0.027 | radii shuffled 0.290 || mean |r_i+lag - r_i| alone: 0.024
+    lag  75: mean distance, theta=index rad: orbit 0.187 | radii shuffled 0.377 || mean |r_i+lag - r_i| alone: 0.066
+  seed 670617279: 986 steps
+    lag  13: mean distance, theta=index rad: orbit 0.180 | radii shuffled 0.363 || mean |r_i+lag - r_i| alone: 0.056
+    lag  31: mean distance, theta=index rad: orbit 0.156 | radii shuffled 0.359 || mean |r_i+lag - r_i| alone: 0.018
+    lag  44: mean distance, theta=index rad: orbit 0.043 | radii shuffled 0.316 || mean |r_i+lag - r_i| alone: 0.042
+    lag  75: mean distance, theta=index rad: orbit 0.155 | radii shuffled 0.342 || mean |r_i+lag - r_i| alone: 0.029
+  Reading: with theta = index in radians only lag 44 brings points back to the same angle;
+  the radius also nearly returns at lag 44 (27/44) and, better, at lag 31 (19/31), but lag 31
+  is invisible in that plot because 31 rad is not a whole number of turns.
+
+==============================================================================
+6. index.md card 3: 'a loop would need 2^E to sit absurdly close to 3^S'
+==============================================================================
+  cycle: prod over odd elements (3 + 1/n_i) = 2^E  =>  0 < E ln2 - S ln3 < S/(3 n_min).
+  With n_min > 2^68 (verified range):  2^E/3^S - 1 < S / (3 * 2^68) = S * 1.129e-21
+
+==============================================================================
+7. definitions.md: Dset_1, Dset_3, Dset_6 as stated
+==============================================================================
+  Dset_1 (n < 40): [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+  Dset_3 (n < 40): [5, 9, 13, 17, 21, 25, 29, 33, 37]  = 1 mod 4 with n > 1 (1 itself never drops)
+  Dset_6 (n < 80): [3, 19, 35, 51, 67]
+
+==============================================================================
+8. publications.md: what the two 'connections' of Paper 1 are
+==============================================================================
+  Orbital triple (collatz/geometry.py): (n^2 - d^2, 2nd, n^2 + d^2) = Euclid's formula on (n, d).
+  identity holds for 1000 random integer pairs with no relation to Collatz: True
+  'Riemann' link (paper sec. 5.2): z = n + n i, z' = (n - d) + d i, z0 = z'/z, 'Re z0 = 1/2'.
+  Re(z'/z) over 1000 random real pairs (n, d): min 0.500000000000 max 0.500000000000
+  -> ((n-d) + d i)/(n(1+i)) = 1/2 + i(2d-n)/(2n) identically: true for any two numbers.

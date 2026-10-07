@@ -1,0 +1,19 @@
+1. Widgets against exact arithmetic, every start below 100,000
+  [OK] OrbitPlayground / BinaryStepVisualizer (orbit, every n from 2)
+  [OK] Base6Circle / EisensteinWalk / AlphaPositionChart (Syracuse orbit, odd n from 3)
+  [OK] BounceSimulator rows (value, depth, BOUNCE flag)
+  [OK] CountdownVisualizer rows
+  [OK] DepthExplorer rows
+  [OK] DroppingSetExplorer (dropping time and destination, n from 2 to 100,100)
+2. First start at which each goes wrong (searched up to 400,000)
+    {"orbit":113383,"syracuse":113383,"bounce":113383,"countdown":113383,"depth":138367,"dropping":113383}
+  [OK] nothing goes wrong below 113,000; the full-orbit widgets first fail at 113,383 -- peak of 113383 is 2,482,111,348, 2^31 = 2,147,483,648
+  [OK] BounceSimulator shows 15 rows for 113383 where the true list has 39
+3. The examples named on Finite Fuel
+  [OK] 27: widget rows equal the exact rows -- BOUNCE rows [0,8], first depth>=3 at row 6, 17 rows
+  [OK] 76827: widget rows equal the exact rows -- BOUNCE rows [0,3], first depth>=3 at row 6, 23 rows
+  [OK] 1227079: widget rows equal the exact rows -- BOUNCE rows [1,4,15,36,44], first depth>=3 at row 14, 53 rows
+4. NaturalVs2Adic: first 30 values, n up to 9,999
+  [OK] first 30 orbit values exact for every n from 2 to 9,999
+
+ALL OK

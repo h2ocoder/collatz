@@ -1,0 +1,58 @@
+=== 1. Theorem A on Z/5 (3x+1) ===
+   e = [0, 3, 1, 4, 2], o = [3, 2, 1, 0, 4]
+   [ok] push(1_Y) = 1_Z
+   [ok] push(1_Z) = 2*1_Y + 1_X
+   [ok] push(1_X) = 1_X + 1_Z
+   charpoly(2K_5) = x*(x - 2)*(x - 1)*(x**2 + x - 1)
+   [ok] charpoly(2K_5) = x(x-1)(x-2)(x^2+x-1)
+   charpoly(pentagon adjacency) = (x - 2)*(x**2 + x - 1)**2
+   [ok] the 5-state residue chain is NOT isomorphic to the pentagon walk (different characteristic polynomials: 2K_5 has the extra eigenvalues 1 and 0, the pentagon has the golden pair twice)
+   [ok] no relabelling of residues turns 2K_5 into the pentagon adjacency matrix
+   [ok] 2K_5 is not symmetric (the chain is not reversible w.r.t. uniform measure)
+   images of 2: Y,Y;  images of 3: X,X
+   [ok] NOT strongly lumpable: the two points of Z have different cell-transition laws
+   starting residue r: is the law of the chain after k = 0..8 steps a pentagon-walk law under SOME labelling? {0: False, 1: True, 2: False, 3: False, 4: False}
+   [ok] only the start n = 1 (mod 5) gives a pentagon-walk law
+
+=== 2. control: ALL partitions of Z/N whose cell-uniform measures are preserved (exact lumpability) ===
+   N = 5 (3x+1): non-trivial exactly lumpable partitions: [[[0, 4], [1], [2], [3]], [[0, 4], [1], [2, 3]]]
+   [ok] (Y, Z, X) = {1},{2,3},{0,4} is among them
+   N = 7 (3x+1): non-trivial exactly lumpable partitions: 0  []
+   N = 11 (3x+1): non-trivial exactly lumpable partitions: 1  [[[0], [1, 2], [3], [4], [5], [6], [7], [8], [9], [10]]]
+
+=== 3. corollary on integers (the map T itself; window of 5*2^k consecutive integers containing negatives) ===
+   k =  0: counts by residue [0, 1, 0, 0, 0]; pentagon law x 2^k [0, 1, 0, 0, 0]; return prob 1
+   k =  1: counts by residue [0, 0, 1, 1, 0]; pentagon law x 2^k [0, 0, 1, 1, 0]; return prob 0
+   k =  2: counts by residue [1, 2, 0, 0, 1]; pentagon law x 2^k [1, 2, 0, 0, 1]; return prob 1/2
+   k =  8: counts by residue [57, 70, 36, 36, 57]; pentagon law x 2^k [57, 70, 36, 36, 57]; return prob 35/128
+   k = 16: counts by residue [13380, 13990, 12393, 12393, 13380]; pentagon law x 2^k [13380, 13990, 12393, 12393, 13380]; return prob 6995/32768
+   [ok] k = 0..16: law of T^k(n) mod 5 over n = 1 (mod 5) in a window of length 5*2^k = pentagon-walk law; return prob (2^k + 2(-1)^k L_k)/(5 2^k)
+   start n = 2 (mod 5), k = 1: counts [0, 2, 0, 0, 0]  (a pentagon walk from a neighbour would split 1/2, 1/2)
+
+=== 4. tr(A_5^n) = 2^n + 1 + (-1)^n L_n and the word count, with integer word constants ===
+   [ok] tr((2K_5)^n) = 2^n + 1 + (-1)^n L_n, n = 1..40 (n = 0 fails: tr = 5, formula gives 4, because of the eigenvalue 0)
+   [ok] #{w of length n: 5 | 2^n - 3^s and 5 | C(w)} = (A_n + 1 + (-1)^n L_n)/5 with integer C(w), n = 1..16;  A_n = sum_{s = -n mod 4} C(n, s)
+   A_n, n = 1..16: [0, 1, 3, 2, 10, 16, 28, 72, 120, 256, 528, 992, 2080, 4096, 8128, 16512]
+   B_n, n = 1..16: [0, 1, 0, 2, 0, 7, 0, 24, 9, 76, 66, 263, 312, 988, 1353, 3744]
+
+=== 5. mirror (3x-1) and cousins (3x+c, 5x+1, 7x+1) ===
+   [ok] 3x-1 mod 5: the SAME folded pentagon with cells negated [[4], [2, 3], [0, 1]]: the statement is sign-blind
+   [ok] 3x-1 and 3x+1 mod 5 have the same characteristic polynomial
+   [ok] 3x-1 on integers: T_-^k(n) mod 5 for n = 4 (mod 5) has the same pentagon law (k = 0..12)
+   3x+1 mod 5: charpoly(2K) = x*(x - 2)*(x - 1)*(x**2 + x - 1)   (same as 3x+1: True)
+   3x+2 mod 5: charpoly(2K) = x*(x - 2)*(x - 1)*(x**2 + x - 1)   (same as 3x+1: True)
+   3x+3 mod 5: charpoly(2K) = x*(x - 2)*(x - 1)*(x**2 + x - 1)   (same as 3x+1: True)
+   3x+4 mod 5: charpoly(2K) = x*(x - 2)*(x - 1)*(x**2 + x - 1)   (same as 3x+1: True)
+   3x+5 mod 5: charpoly(2K) = x*(x - 2)**2*(x**2 + 2*x + 2)   (same as 3x+1: False)
+   3x+7 mod 5: charpoly(2K) = x*(x - 2)*(x - 1)*(x**2 + x - 1)   (same as 3x+1: True)
+   3x+10 mod 5: charpoly(2K) = x*(x - 2)**2*(x**2 + 2*x + 2)   (same as 3x+1: False)
+   so 'the same chain for every 3x+c' needs c prime to the modulus: for 5 | c both branches fix 0 and the kernel is different.
+   5x+1, N <= 61 prime to 10: irreducible factors of degree >= 2 with all roots real in [-2, 2] (= irrational cosines by Kronecker): []
+   7x+1, N <= 61 prime to 14: irreducible factors of degree >= 2 with all roots real in [-2, 2] (= irrational cosines by Kronecker): []
+   5x+1 mod 7: odd branch o = [4, 3, 2, 1, 0, 6, 5] is an involution: True;  charpoly(2K) = x*(x - 2)*(x - 1)*(x**4 + x**3 - 2*x**2 - 4*x - 1)
+   5x+1 mod 3: e = [0, 2, 1] (reflection), o = [2, 0, 1] (translation);  charpoly(2K) = x*(x - 2)*(x + 1)
+
+=== 6. the geometric constants ===
+   [ok] cos 36 = phi/2 = apothem of the pentagon of circumradius 1; diagonal/side = phi = 2cos 36
+
+0 failures

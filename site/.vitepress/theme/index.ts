@@ -5,6 +5,7 @@ import AlphaExplorer from './components/AlphaExplorer.vue'
 import BinaryShortcut from './components/BinaryShortcut.vue'
 import SturmianFractal from './components/SturmianFractal.vue'
 import SturmianBridge from './components/SturmianBridge.vue'
+import PentagonWalk from './components/PentagonWalk.vue'
 import OrbitPlayground from './components/journey/OrbitPlayground.vue'
 import HailstoneChart from './components/journey/HailstoneChart.vue'
 import BinaryStepVisualizer from './components/journey/BinaryStepVisualizer.vue'
@@ -31,6 +32,7 @@ export default {
     app.component('BinaryShortcut', BinaryShortcut)
     app.component('SturmianFractal', SturmianFractal)
     app.component('SturmianBridge', SturmianBridge)
+    app.component('PentagonWalk', PentagonWalk)
     app.component('OrbitPlayground', OrbitPlayground)
     app.component('HailstoneChart', HailstoneChart)
     app.component('BinaryStepVisualizer', BinaryStepVisualizer)

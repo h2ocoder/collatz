@@ -1,0 +1,102 @@
+=== A. dropping-dictionary.md ===
+A1 N(0..13) DP    : [1, 1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652, 8045]
+   direct search  : [1, 1, 1, 2, 3, 7, 12, 30, 85, 173, 476, 961, 2652]
+   N(1..25) == A100982 data fetched from oeis.org: True
+   page list 1,1,1,2,3,7,... == [w_0 = 1] + A100982: True
+A2 every word of level s <= 10 has floor(s log2 3) + 1 halvings (E: 1): True
+   ceil(0 * log2 3) = 0 ; 2^e_s in (3^s, 2*3^s] for s = 0..200: True
+A3 s <=  13: forward sum = 0.9777741432   backward sum = 1.6598073289
+A3 s <=  50: forward sum = 0.9993356003   backward sum = 1.6894385659
+A3 s <= 100: forward sum = 0.9999827423   backward sum = 1.6903362282
+A3 s <= 200: forward sum = 0.9999999727   backward sum = 1.6903605544
+A3 s <= 500: forward sum = 1.0000000000   backward sum = 1.6903605922
+A3 s <= 520: forward sum = 1.0000000000   backward sum = 1.6903605922
+   with e_0 = ceil(0) = 0 the forward sum would be 1.500000
+A4 predecessors of 10: {11: (8, 3, 10), 13: (3, 1, 10), 15: (11, 4, 10), 20: (1, 0, 10)}
+A5 level 1: residues [1] mod 3
+A5 level 2: residues [2] mod 9
+   residues distinct at every level s <= 12: True ; some level contained in the one below: False
+A6 levels <= 8, 1 <= d < 3000: candidates 4876, genuine 4875, failures [(1, 'OEE', 1)], non-positive candidates 0, genuine <=> n > d: True
+A7 mean number of n with first value below n equal to d, over 2 <= d < 3000: 1.68879
+A7 mean number of n with first value below n equal to d, over 2 <= d < 1000000: 1.69029
+   same, counting only n with dropping time <= 22, 2 <= d < 3000: 1.6258
+A8 e_s, s = 0..14: [1, 2, 4, 5, 7, 8, 10, 12, 13, 15, 16, 18, 20, 21, 23]
+   increments from s = 0: [1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1]
+   increments from s = 1: [2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1]
+A9 CF log6 3: [0, 1, 1, 1, 1, 2, 2, 3, 1, 5, 2]  denominators: [1, 1, 2, 3, 5, 13, 31, 106, 137, 791, 1719]
+   CF log2 3: [1, 1, 1, 2, 2, 3, 1, 5, 2]  convergents: [(1, 1), (2, 1), (3, 2), (8, 5), (19, 12), (65, 41), (84, 53), (485, 306), (1054, 665)]
+   p/q = 3/2: p+q = 5; q*log2 3 = 3.1699; letter length at level q = 6 (p+q+1)
+   p/q = 8/5: p+q = 13; q*log2 3 = 7.9248; letter length at level q = 13 (p+q)
+   p/q = 19/12: p+q = 31; q*log2 3 = 19.0196; letter length at level q = 32 (p+q+1)
+   p/q = 65/41: p+q = 106; q*log2 3 = 64.9835; letter length at level q = 106 (p+q)
+   p/q = 84/53: p+q = 137; q*log2 3 = 84.0030; letter length at level q = 138 (p+q+1)
+   p/q = 485/306: p+q = 791; q*log2 3 = 484.9985; letter length at level q = 791 (p+q)
+   s = 13: s*log2 3 = 20.6045
+   s = 31: s*log2 3 = 49.1338
+   s = 137: s*log2 3 = 217.1399
+   27/44 between 8/13 and 19/31: True ; 44 = 13 + 31, 27 = 8 + 19
+A10 lambda = 2.839514; lambda/3 = 0.94650; N(s)^(1/s) at s = 100, 300, 520: 2.6228, 2.7503, 2.7841
+A13 shortcut map: T^j(2^j - 1) = 3^j - 1 for j < 40: True
+    distinct values of T^j(L), L < 2^j, j = 4, 6, ..., 14: [10, 28, 88, 295, 1024, 3626]
+A12 3x-1: integers in [2, 2^20) that have not dropped after 2000 steps: [5, 17]
+    3x-1: the class of each word (levels 1..6) is the negative of the 3x+1 class, dest = (3^s n - C)/2^e: True
+
+=== B. sturmian-bridge.md / SturmianBridge.vue / sturmian-fractals.md ===
+B1 corrected q = 3 table equals N(o) * 2^o for o = 0..21: True ; largest below 2^53: True
+   old component values that differ: 10 of 10
+   direct word count at level 12: 2652 -> |R_32| = 10862592
+   q = 5: component table matches N_q(o) * 2^o: True
+   q = 7: component table matches N_q(o) * 2^o: True
+   q = 9: component table matches N_q(o) * 2^o: True
+B2 q = 3: sum N_q(o)/2^(floor(o log2 q)+1): o<=20: 0.990373, o<=100: 0.999983, o<=200: 1.000000, o<=400: 1.000000
+B2 q = 5: sum N_q(o)/2^(floor(o log2 q)+1): o<=20: 0.807550, o<=100: 0.823472, o<=200: 0.823951, o<=400: 0.823974
+B2 q = 7: sum N_q(o)/2^(floor(o log2 q)+1): o<=20: 0.698538, o<=100: 0.699249, o<=200: 0.699249, o<=400: 0.699249
+B2 q = 9: sum N_q(o)/2^(floor(o log2 q)+1): o<=20: 0.613821, o<=100: 0.613870, o<=200: 0.613870, o<=400: 0.613870
+B3 R_19: 3840 residues below 2^19, 0 of them not dropping at exactly step 19
+B4 5x+1: 11467 of 65534 integers in [2, 2^16) have not dropped after 2000 steps (0.1750); on the known cycles: [13, 17]; known cycle elements 27
+B5 (o, gap, c2 - c1) for o <= 8: [(1, 2, -1), (2, 3, 1), (3, 2, 0), (4, 3, 1), (5, 2, -1), (6, 3, 4), (7, 3, 4), (8, 2, -13)]
+   o in 1..60 where sign(c2 - c1) differs from the gap rule: [(3, 2, 0)]
+B6 slope 3/2: gaps periodic with period 2 from the first symbol: True; floor(j p/q) = floor(j log2 3) for j = 1..6
+B6 slope 8/5: gaps periodic with period 5 from the first symbol: True; floor(j p/q) = floor(j log2 3) for j = 1..4
+B6 slope 19/12: gaps periodic with period 12 from the first symbol: True; floor(j p/q) = floor(j log2 3) for j = 1..52
+B6 slope 84/53: gaps periodic with period 53 from the first symbol: True; floor(j p/q) = floor(j log2 3) for j = 1..358
+   12*log2(3/2) = 7.0196 ; 53*log2(3/2) = 31.003
+B7 parity DP agrees with exact counts for o <= 40: True
+   share of 1s among the first 20000 terms: 0.47560; 6.9 standard errors from 1/2
+   distinct blocks of length 5: 32 of 32
+   distinct blocks of length 8: 256 of 256
+   distinct blocks of length 11: 2048 of 2048
+   distinct blocks of length 12: 4053 of 4096
+B8 2 <= n <= 10^7: steps at which 'coefficient below 1' and 'value below n' disagree: 0; longest shortcut stopping time 246; largest value met 30171305459816 (int64 safe: True)
+
+=== C. log6-wobble.md ===
+C1 orbit of 670617279: 987 points; W_total = 0.09399; 92.0% from odd values below 100; sigma_W = 0.0082
+   min D(m), m <= 150: 0.915 at m = 79; Gaussian of that sigma: half at m = 22.8, value at m = 60: 0.0083
+C2 m =  13 eps = -0.02909: rotation 0.0088, orbit 0.0059, ratio 0.67, D(m) = 0.975
+C2 m =  31 eps = +0.00756: rotation 0.0424, orbit 0.0220, ratio 0.52, D(m) = 0.962
+C2 m =  44 eps = -0.02152: rotation 0.0104, orbit 0.0331, ratio 3.18, D(m) = 0.945
+C2 m =  75 eps = -0.01396: rotation 0.0148, orbit 0.0253, ratio 1.71, D(m) = 0.929
+C2 m = 106 eps = -0.00640: rotation 0.0421, orbit 0.0385, ratio 0.91, D(m) = 0.941
+C2 m = 137 eps = +0.00117: rotation 0.1258, orbit 0.0970, ratio 0.77, D(m) = 0.956
+C3 share of points with W_k below a tenth of W_total: 0.978; number of odd steps: 370
+C4 q = 31: RMS 31-step miss = 0.0116; smallest |miss| = 0.00756
+C4 q = 44: RMS 44-step miss = 0.0219; smallest |miss| = 0.00596
+C5 500 orbits (odd seeds 1000007..1012901, at least 250 points): max | |miss| - |eps_q + dW| | = 1.6e-14; largest |eps_q + dW| = 0.128; largest W_total = 0.1259
+C6 rigid rotation by log6 3, 3450 points, start 0.0: modal index gap per band = [13, 31, 31, 31, 31, 31, 31, 31, 31, 31, 137, 137]
+C6 rigid rotation by log6 3, 3450 points, start 0.37: modal index gap per band = [13, 31, 31, 31, 31, 31, 31, 31, 31, 31, 137, 137]
+C6 rigid rotation by log6 3, 3450 points, start 0.81: modal index gap per band = [13, 31, 31, 31, 31, 31, 31, 31, 31, 31, 137, 137]
+C7 largest 2^E/(3^O n) over odd n < 10^5: 1.253142144 at n = 993; log6 of it = 0.125940
+C8 n = 27: s = 41, T = 111; eps := s*log2 6 - (T - log2 n) = -0.26165; -W_total*log2 6 = -0.26165
+   resonance dip altitudes 6.12, 4.62, 3.62, 2.38 as values: 57848, 3936, 656, 71
+
+=== D. alpha-sequence.md / binary-shortcut.md ===
+D1 n = 3: 2 odd steps, alphas [1, 4], distinct [1, 4]
+D1 n = 7: 5 odd steps, alphas [1, 1, 2, 3, 4], distinct [1, 2, 3, 4]
+D1 n = 27: 41 odd steps, alphas [1, 2, 1, 1, 1, 1]..., distinct [1, 2, 3, 4, 5]
+D1 n = 5461: 1 odd steps, alphas [14], distinct [14]
+D1 n = 7253: 2 odd steps, alphas [8, 8], distinct [8]
+   27: steps 111 peak 9232
+   highest quality among odd n < 10000: [(7253, 4.275), (4835, 4.08), (3223, 3.885)]
+D2 (4^k - 1)/3 has alpha sequence [2k] for k = 2..40: True ; quality at k = 8, 20, 38: [3.6, 7.22, 11.91]
+D3 odd n < 20000 with m trailing 1-bits: alphas start with m-1 ones, then one that is >= 2: True
+exit 0

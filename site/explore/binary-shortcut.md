@@ -1,8 +1,8 @@
 # The Binary Shortcut
 
-## The Discovery
+## The Shortcut
 
-There's a shortcut for computing Collatz steps using binary arithmetic, discovered through pattern exploration:
+There's a classical shortcut for computing Collatz steps using binary arithmetic: a number $n = 2^m c - 1$ with $c$ odd (so $n$ ends in exactly $m$ 1-bits) becomes $3^m c - 1$ after $m$ steps of $(3n+1)/2$. I found it by playing with binary patterns, but it is well known. Here it is as a recipe:
 
 1. Take an odd number $n$ and write it in binary
 2. Count the **trailing 1-bits** (from the right). Call this $m$.
@@ -18,7 +18,7 @@ $27 = 11011_2$
 
 Trailing 1-bits: **11** (two 1s, so $m = 2$)
 
-Split: $S_0 = $ "110" (decimal 6), $S_1 = $ "11"
+Split: $S_0 =$ "110" (decimal 6), $S_1 =$ "11"
 
 $k = 6 + 1 = 7$
 
@@ -75,9 +75,9 @@ By the inductive hypothesis, $m$ more steps give: $(q'+1) \times 3^m - 1 = 3(q+1
 
 This shortcut is a **special case** of the [Affine Orbit Structure](/proofs/affine-orbit) theorem:
 
-$$\text{dest}(n) = \frac{3^s}{2^{k-s}} \cdot n + C$$
+$$\text{dest}(n) = \frac{3^s}{2^{k-s} } \cdot n + C$$
 
-The shortcut handles the case where $s = m$ (odd steps) and $k - s = m$ (even steps), i.e., $k = 2m$. Each odd step has alpha value $\alpha = 1$ (exactly one halving), so the contraction ratio is $(3/2)^m$.
+The shortcut handles the case where $s = m$ (odd steps) and $k - s = m$ (even steps), i.e., $k = 2m$. Each odd step is followed by exactly one halving, so the slope is $(3/2)^m$: here the value grows, and the formula is the affine form for the parity word of those $2m$ steps, not a dropping destination.
 
 The general theorem allows *any* sequence of alpha values — some steps might halve once ($\alpha = 1$), others might halve many times ($\alpha = 4, 5, \ldots$). The binary shortcut handles the specific case where all the halvings are singles.
 
@@ -88,14 +88,14 @@ The trailing 1-bits in binary encode the **2-adic structure** of $n$:
 - Each trailing 1 means "the next $(3x+1)/2$ gives an odd result" (so we continue)
 - The first 0 means "the result will be even" (so we stop and halve)
 
-This is the **bit consumption** property from the affine orbit proof: the last $m$ bits of $n$ determine the first $m$ steps of the orbit. Trailing 1s = consecutive odd steps = consecutive $\alpha = 1$ values in the [alpha sequence](/explore/alpha-sequence).
+This is the **bit consumption** property from the affine orbit proof: the last $m$ bits of $n$ determine the first $m$ steps of the orbit. A run of $m$ trailing 1s gives $m$ consecutive odd steps: in the [alpha sequence](/explore/alpha-sequence), $m - 1$ values $\alpha = 1$ followed by one that is at least 2.
 
 | Trailing bits | Orbit behavior | Alpha values |
 |--------------|----------------|--------------|
-| ...0**1** | One odd step, then even | $[\alpha_1]$ where $\alpha_1 \geq 1$ |
-| ...0**11** | Two odd steps, then even | $[1, \alpha_2]$ where $\alpha_2 \geq 1$ |
-| ...0**111** | Three odd steps, then even | $[1, 1, \alpha_3]$ where $\alpha_3 \geq 1$ |
-| ...0**1111** | Four odd steps, then even | $[1, 1, 1, \alpha_4]$ |
+| ...0**1** | One odd step, then even | $[\alpha_1]$ where $\alpha_1 \geq 2$ |
+| ...0**11** | Two odd steps, then even | $[1, \alpha_2]$ where $\alpha_2 \geq 2$ |
+| ...0**111** | Three odd steps, then even | $[1, 1, \alpha_3]$ where $\alpha_3 \geq 2$ |
+| ...0**1111** | Four odd steps, then even | $[1, 1, 1, \alpha_4]$ where $\alpha_4 \geq 2$ |
 
 The binary shortcut processes the entire run of $\alpha = 1$ values in one shot. The general [affine structure](/proofs/affine-orbit) handles arbitrary alpha sequences.
 

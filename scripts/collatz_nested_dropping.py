@@ -214,8 +214,8 @@ def main() -> None:
     ax1.set_yticks([])
     ax1.set_xlabel(r"destination position on $\mathbb{Z}_3$  "
                    r"($d\,\mathrm{mod}\,3^s$)")
-    ax1.set_title("2. 3-adic nesting of destination reach\n"
-                  "each deeper drop pins $d$ into a thinner sliver",
+    ax1.set_title("2. 3-adic reach of destinations\n"
+                  "each deeper level reaches a thinner share",
                   fontsize=10)
 
     # ---- View 3: backward predecessor tree --------------------------------
@@ -251,7 +251,7 @@ def main() -> None:
                   "edge label = dropping time $k$ of that round",
                   fontsize=10)
 
-    fig.suptitle("Nested dropping sets: one dictionary, 2-adic forward / "
+    fig.suptitle("The dropping dictionary: 2-adic forward, "
                  "3-adic backward", fontsize=12, y=1.02)
     fig.savefig("data/collatz_nested_dropping.png", dpi=150,
                 bbox_inches="tight")

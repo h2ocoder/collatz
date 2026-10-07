@@ -1,0 +1,7 @@
+  o=1 k=3 gap=2: classes=1 c1=1 c2=0  sum=-0.000-3.464i  i*sqrt3*2^o*(c2-c1)=-3.464i  [OK]
+  o=2 k=6 gap=3: classes=1 c1=0 c2=1  sum=+0.000+6.928i  i*sqrt3*2^o*(c2-c1)=+6.928i  [OK]
+  o=3 k=8 gap=2: classes=2 c1=1 c2=1  sum=-0.000-0.000i  i*sqrt3*2^o*(c2-c1)=+0.000i  [OK]
+  o=4 k=11 gap=3: classes=3 c1=1 c2=2  sum=-0.000+27.713i  i*sqrt3*2^o*(c2-c1)=+27.713i  [OK]
+  o=5 k=13 gap=2: classes=7 c1=4 c2=3  sum=-0.000-55.426i  i*sqrt3*2^o*(c2-c1)=-55.426i  [OK]
+  o=6 k=16 gap=3: classes=12 c1=4 c2=8  sum=-0.000+443.405i  i*sqrt3*2^o*(c2-c1)=+443.405i  [OK]
+ALL OK

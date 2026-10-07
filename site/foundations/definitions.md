@@ -1,6 +1,6 @@
 # Core Definitions
 
-This page collects the formal definitions used throughout the site. Each definition includes a worked example. The notation follows Paper 1 (dropping) conventions; see the [Terminology Map](./terminology) for equivalences with Paper 2 (stopping).
+This page collects the formal definitions used throughout the site. Each definition includes a worked example. The notation follows Paper 1 (dropping) conventions; see the [Terminology Map](./terminology) for equivalences with Paper 2 (stopping). None of these objects is new: the dropping time is the *stopping time* of Terras (1976) counted in single steps, a dropping set is the set of integers with a given stopping time, and the Syracuse map is classical. Only the names differ.
 
 ## Collatz Step
 
@@ -20,11 +20,13 @@ $$
 
 <div class="theorem">
 
-**Definition 2 (Orbit).** The *orbit* of $n$ is the sequence obtained by iterating $f$ until reaching 1:
+**Definition 2 (Orbit).** The *orbit* of $n$ is the sequence $n,\; f(n),\; f^2(n),\; \ldots$ obtained by iterating $f$. From 1 it repeats $1 \to 4 \to 2 \to 1$ forever, so an orbit that reaches 1 is written up to its first 1:
 
 $$
 \text{orbit}(n) = [n,\; f(n),\; f^2(n),\; \ldots,\; 1]
 $$
+
+Whether every orbit reaches 1 is the Collatz conjecture.
 
 </div>
 
@@ -34,13 +36,13 @@ $$
 
 <div class="theorem">
 
-**Definition 3 (Dropping Time).** The *dropping time* of $n > 1$ is the smallest $k \geq 1$ such that $f^k(n) < n$:
+**Definition 3 (Dropping Time).** The *dropping time* of $n > 1$ is the smallest $k \geq 1$ such that $f^k(n) < n$, if there is one:
 
 $$
 \text{drop}(n) = \min\{k \geq 1 : f^k(n) < n\}
 $$
 
-This is identical to the *stopping time* in Paper 2.
+This is the *stopping time* of the literature (Terras, 1976, who counts an odd step and the halving after it as one step) and of Paper 2. The OEIS also calls it the dropping time (A060445).
 
 </div>
 
@@ -90,23 +92,23 @@ $$
 
 That is: the set of all integers whose first drop below themselves occurs at exactly step $k$.
 
-Each dropping set is a union of arithmetic progressions (a fact that follows from the [Affine Orbit Structure](/proofs/affine-orbit)).
-
 </div>
 
 ::: info Note on existence
-This is a **definition**, not a claim. We do not assert that every integer belongs to some $\text{Dset}_k$ — that assertion would be equivalent to the Collatz conjecture. We define $\text{Dset}_k$ as the set of integers with dropping time $k$, and the results on this site describe properties of these sets. An integer with no finite dropping time would simply not belong to any $\text{Dset}_k$.
+This is a **definition**, not a claim. We do not assert that every integer greater than 1 belongs to some $\text{Dset}_k$ — that assertion would be equivalent to the Collatz conjecture. We define $\text{Dset}_k$ as the set of integers with dropping time $k$, and the results on this site describe properties of these sets. An integer with no finite dropping time would simply not belong to any $\text{Dset}_k$.
 :::
 
 **Example.**
 - $\text{Dset}_1$ = all even numbers $\{2, 4, 6, 8, \ldots\}$, since one halving gives $n/2 < n$.
-- $\text{Dset}_3 = \{5, 9, 13, 17, \ldots\} = \{n : n \equiv 1 \pmod{4}\}$.
+- $\text{Dset}_3 = \{5, 9, 13, 17, \ldots\} = \{n > 1 : n \equiv 1 \pmod{4}\}$.
+
+Both examples are arithmetic progressions. For a general dropping set the [Affine Orbit Structure](/proofs/affine-orbit) gives this much: the pattern of odd and even steps in the first $k$ steps depends only on $n$ modulo a power of 2, and when a pattern's multiplier $3^s/2^{k-s}$ (with $s$ odd steps) first falls below 1 at step $k$, every large enough number with that pattern has dropping time exactly $k$. That every such number greater than 1 does, so that each $\text{Dset}_k$ is exactly a union of arithmetic progressions, is Terras's *coefficient stopping time conjecture* (so named by Lagarias, 1985). It is open, it would rule out nontrivial cycles, and it has been verified for all $n$ from 2 to $2.8 \times 10^{19}$ (Rozier and Terracol, 2026).
 
 ## Orbital Oddity
 
 <div class="theorem">
 
-**Definition 7 (Orbital Oddity).** The *orbital oddity* of $n$ is the count of odd numbers in its dropping orbit. All members of $\text{Dset}_k$ share the same orbital oddity $s$.
+**Definition 7 (Orbital Oddity).** The *orbital oddity* of $n$ is the count of odd numbers in its dropping orbit. Within the verified range above, all members of $\text{Dset}_k$ share the same orbital oddity $s$; that they always do would follow from the coefficient stopping time conjecture.
 
 </div>
 
@@ -116,17 +118,17 @@ This is a **definition**, not a claim. We do not assert that every integer belon
 
 <div class="theorem">
 
-**Definition 8 (Syracuse Map).** The *Syracuse map* $S : \mathbb{Z}_{\text{odd}}^+ \to \mathbb{Z}_{\text{odd}}^+$ compresses each $3n+1$ step and all subsequent halvings into a single operation:
+**Definition 8 (Syracuse Map).** The *Syracuse map* $S : \mathbb{Z}_{\text{odd} }^+ \to \mathbb{Z}_{\text{odd} }^+$ compresses each $3n+1$ step and all subsequent halvings into a single operation:
 
 $$
-S(n) = \frac{3n+1}{2^{v_2(3n+1)}}
+S(n) = \frac{3n+1}{2^{v_2(3n+1)} }
 $$
 
 where $v_2(m)$ is the 2-adic valuation of $m$ (the largest power of 2 dividing $m$).
 
 </div>
 
-**Example.** $S(7) = \frac{3(7)+1}{2^{v_2(22)}} = \frac{22}{2^1} = 11$, since $22 = 2 \cdot 11$.
+**Example.** $S(7) = \frac{3(7)+1}{2^{v_2(22)} } = \frac{22}{2^1} = 11$, since $22 = 2 \cdot 11$.
 
 ## Alpha Value
 
@@ -154,7 +156,7 @@ $$
 \alpha\text{-seq}(n) = [\alpha(n),\; \alpha(S(n)),\; \alpha(S^2(n)),\; \ldots]
 $$
 
-The sequence terminates when the Syracuse orbit reaches 1.
+The sequence terminates if and when the Syracuse orbit reaches 1.
 
 </div>
 
@@ -162,4 +164,4 @@ The sequence terminates when the Syracuse orbit reaches 1.
 - $S(3) = (3 \cdot 3 + 1)/2^1 = 5$, so $\alpha(3) = 1$
 - $S(5) = (3 \cdot 5 + 1)/2^4 = 1$, so $\alpha(5) = 4$
 
-The alpha sequence of 7 is $[1, 1, 1, 3, 4]$.
+The alpha sequence of 7 is $[1, 1, 2, 3, 4]$.

@@ -204,8 +204,8 @@ def plot_debye_waller(path: str) -> dict:
              label=rf"$e^{{-2\pi^2 m^2 \sigma_W^2}}$, $\sigma_W$ = {math.sqrt(var_w):.4f}")
     ax2.set_xlabel("harmonic $m$")
     ax2.set_ylabel("coherence $D(m)$")
-    ax2.set_title("Debye-Waller factor of the wobble: "
-                  "phase disorder damping high harmonics")
+    ax2.set_title("Coherence $D(m)$ of the wobble, against "
+                  "Gaussian phase noise of equal variance")
     ax2.legend()
     fig.tight_layout()
     fig.savefig(path, dpi=150)

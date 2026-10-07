@@ -6,7 +6,7 @@ Every time you hit an **odd number** in the Collatz sequence, two things happen:
 1. You compute $3n + 1$ (which always gives an even number)
 2. You keep **halving** until you reach the next odd number
 
-The **alpha value** is simply **how many times you halved**. The alpha sequence records this for every odd number you visit, all the way down to 1.
+The **alpha value** is simply **how many times you halved**. The alpha sequence records this for every odd number you visit, until the orbit reaches 1 (as it has for every number ever tried).
 
 ### Example: n = 7
 
@@ -27,7 +27,7 @@ The alpha sequence is the **DNA of the orbit** — it completely determines its 
 - **sum(alphas)** = total number of halvings (even steps) in the orbit
 - **len(alphas)** = total number of $3n+1$ steps (odd steps)
 - **Distinct alphas** = the "alphabet" the orbit uses
-- **Collatz radical** = product of distinct alpha values (like the [radical](/connections/abc-conjecture) in number theory)
+- **Collatz radical** = product of distinct alpha values (a name borrowed from the radical of the [abc conjecture](/connections/abc-conjecture); my own definition, not a standard one)
 - **Collatz quality** = $\log_2(n) / \log_2(\text{radical})$ — how much "size" $n$ has per unit of orbital complexity
 
 ### Smooth vs. Rough Orbits
@@ -36,7 +36,7 @@ A **smooth orbit** uses few distinct alpha values — the 3n+1 steps keep hittin
 
 A **rough orbit** uses many distinct alpha values — the 3n+1 steps produce varied results, and the orbit wanders.
 
-The connection to the [abc conjecture](/connections/abc-conjecture): in both cases, "quality" measures how well **addition** ($3n+1$) aligns with **multiplicative structure** (powers of 2). The abc conjecture says this alignment is fundamentally limited.
+The names are borrowed from the [abc conjecture](/connections/abc-conjecture), where quality measures how far a sum outruns the primes dividing its terms. Here the borrowing is an analogy in name only: nothing about alpha sequences follows from abc or bears on it, and unlike abc quality (conjecturally bounded) this one is unbounded: $(4^k - 1)/3$ has the one-step alpha sequence $[2k]$.
 
 ## Try It Yourself
 
@@ -47,8 +47,8 @@ Enter any odd number to see its alpha sequence, radical, and quality:
 ### Numbers to Try
 
 - **3** — Simple: alpha sequence $[1, 4]$, two steps
-- **7** — Classic: $[1, 1, 2, 3, 4]$, five distinct behaviors
+- **7** — Classic: $[1, 1, 2, 3, 4]$, five odd steps and four distinct alpha values
 - **27** — The famous slow number: 41 odd steps, reaches 9232 before descending
 - **5461** — Binary $1010101010101$: alpha sequence $[14]$, one step! $3(5461)+1 = 2^{14}$
-- **7253** — Highest quality under 10000: alpha $[8, 8]$, just two steps
+- **7253** — Highest quality of any odd number under 10000: alpha $[8, 8]$, just two steps
 - **1** — Trivial: already at 1, empty alpha sequence

@@ -1,4 +1,4 @@
-# Divisibility Obstruction
+# Cycles as a Divisibility Question
 
 This page states the no-cycles question as a divisibility problem and shows some computations. The statement below is **equivalent** to "there are no nontrivial Collatz cycles": it is just the Böhm–Sontacchi cycle equation written out term by term. So it is exactly as hard as the cycle problem, which is open.
 
@@ -43,9 +43,9 @@ For $(S=5, E=8, K=13)$, taking all 91 circular parity words (every starting poin
 
 Roughly uniform over $\{1, \ldots, 12\}$, with zero missing.
 
-### The ordering matters
+### Ordered versus unordered exponents
 
-For gap 13, assigning the five coefficients $[3^4, 3^3, 3^2, 3^1, 3^0]$ to five distinct exponents **in any order** gives $T \equiv 0$ for 7.7% of assignments, close to $1/13$. Restricting to the increasing assignment $q_0 < q_1 < \cdots < q_4$ removes every zero. The increasing order — larger 2-exponents paired with smaller 3-coefficients — is what the cycle equation actually requires, and it is where any proof would have to find its leverage.
+For gap 13, assigning the five coefficients $[3^4, 3^3, 3^2, 3^1, 3^0]$ to five distinct exponents from $0$ to $7$ **in any order** gives $T \equiv 0$ for 7.7% of the 6,720 assignments, close to $1/13$. None of the 56 increasing assignments $q_0 < q_1 < \cdots < q_4$ gives zero. That is a small sample: the 56 come from just 7 distinct cyclic words, and seven tries at a 1-in-13 chance all miss more than half the time. The increasing order — larger 2-exponents paired with smaller 3-coefficients — is what the cycle equation actually requires, but the order alone is not an obstruction: for the negative gap $2^{11} - 3^7 = -139$ there are increasing assignments with $g \mid T$, and they are the cycle through $-17$. An argument that ignores the sign of the gap cannot work.
 
 ## Ideas worth trying
 
@@ -57,6 +57,6 @@ None of these has produced a proof.
 
 ## Related
 
-- [Convergent Elimination](/cycles/convergent-elimination) — the cycle equation and the small cases
-- [No Loops?](/journey/no-loops) — the tour chapter on cycles, with playgrounds
+- [The Cycle Equation: Small Cases](/cycles/convergent-elimination) — the cycle equation and the first few cases
+- [No Loops?](/journey/no-loops) — the tour chapter on cycles
 - [abc Conjecture](/connections/abc-conjecture) — the number theory connection

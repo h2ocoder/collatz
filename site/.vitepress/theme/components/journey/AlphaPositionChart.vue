@@ -7,7 +7,7 @@ const canvasRef = ref<HTMLCanvasElement | null>(null)
 
 const BINS = 20
 const ALPHA_GROUPS = [
-  { label: '\u03B1 = 1 (neutral)', key: 1, color: '#94a3b8' },
+  { label: '\u03B1 = 1 (growth)', key: 1, color: '#94a3b8' },
   { label: '\u03B1 = 2', key: 2, color: '#6366f1' },
   { label: '\u03B1 = 3', key: 3, color: '#3b82f6' },
   { label: '\u03B1 \u2265 4', key: 4, color: '#ef4444' },
@@ -194,9 +194,10 @@ onUnmounted(() => window.removeEventListener('resize', draw))
   <div class="alpha-position">
     <canvas ref="canvasRef" style="width: 100%; height: 300px;" />
     <p class="caption">
-      Where each $\alpha$ value appears in orbits (odd numbers 3&ndash;5999).
-      <span style="color: #ef4444;">&alpha; &ge; 4</span> clusters at position 0.73 &mdash;
-      large contractive steps are forced to appear <strong>late</strong> in the orbit.
+      Where each &alpha; value appears in orbits (odd starts 3&ndash;5999).
+      <span style="color: #ef4444;">&alpha; &ge; 4</span> steps sit <strong>late</strong> on average
+      (mean position about 0.7 in this sample). About a quarter of them are the final step into 1,
+      which always has &alpha; &ge; 4; without those the mean is 0.60.
       Triangles mark the mean position of each group.
     </p>
   </div>

@@ -112,10 +112,10 @@ onUnmounted(() => window.removeEventListener('resize', draw))
     </div>
     <canvas ref="canvasRef" style="width: 100%; height: 300px;" />
     <p class="hint" v-if="!useLog">
-      <em>Try toggling log₂ scale — the chaos becomes a steady descent.</em>
+      <em>Try toggling log₂ scale — every halving becomes one step down, every tripling about 1.58 up.</em>
     </p>
     <p class="hint" v-else>
-      <em>In log scale, the orbit trends downward. The bits are shrinking.</em>
+      <em>In log scale a halving is one step down and a tripling about 1.58 up. Every orbit on this slider (n up to 1000) ends at 1; most climb above their start first.</em>
     </p>
   </div>
 </template>

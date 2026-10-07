@@ -59,7 +59,7 @@ const setDistribution = computed(() => {
   <div class="drop-explorer">
     <div class="controls">
       <label>
-        From:
+        From (up to 99,900):
         <input type="number" v-model.number="rangeStart" min="2" max="99900" />
       </label>
       <label>
@@ -111,7 +111,7 @@ const setDistribution = computed(() => {
             </td>
           </tr>
           <tr>
-            <td>Bits destroyed (β)</td>
+            <td>Bits removed by that ratio (β)</td>
             <td>{{ selectedInfo.beta.toFixed(4) }}</td>
           </tr>
         </table>

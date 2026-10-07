@@ -128,7 +128,7 @@ onUnmounted(() => window.removeEventListener('resize', draw))
   <div class="base6-circle">
     <div class="controls">
       <label>
-        n =
+        n (odd, up to 99,999) =
         <input type="number" v-model.number="startN" min="3" max="99999" />
       </label>
       <label>
@@ -143,10 +143,11 @@ onUnmounted(() => window.removeEventListener('resize', draw))
     </div>
     <canvas ref="canvasRef" style="width: 100%; height: 400px;" />
     <p class="caption">
-      Each Syracuse step maps to a point on the circle at position $\lbrace \log_6(\text{value}) \rbrace$.
+      Each odd value of the orbit is a point on the circle, at the fractional part of log₆(value).
       <template v-if="showIdeal">
-        <br/>Gray dots: ideal rotation by $\log_6 3 \approx 0.613$. Colored dots: actual orbit.
-        They're close — Collatz is a <strong>perturbed irrational rotation</strong>.
+        <br/>Gray dots: a pure rotation by log₆ 3 ≈ 0.613 per step. Colored dots: the odd values of the actual orbit.
+        They do not pair up dot for dot: between two odd values the orbit takes two or more steps,
+        each one a turn by log₆ 3 (an odd step by a touch more, because of the +1).
       </template>
     </p>
   </div>

@@ -1,0 +1,7 @@
+1. orbit() equals the BigInt orbit for 300027 starts (all n <= 300,000 and 24 path records up to 210,964,383)
+   113383: length 248 max 2482111348 (reaches 1: true )
+2. v2, trailingOnes, syracuseStep, collatzStep, stoppingTime agree with their definitions above 2^31
+3. first start whose orbit leaves the exact range (some odd value above (2^53 - 2)/3): 319804831 (24.6 s)
+   its largest value is 1414236446719942480 ; 2^53 = 9007199254740992
+
+0 failures

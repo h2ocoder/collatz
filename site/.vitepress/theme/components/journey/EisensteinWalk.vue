@@ -34,7 +34,7 @@ function draw() {
 
   ctx.clearRect(0, 0, W, H)
 
-  const n = Math.max(3, startN.value | 0)
+  const n = Math.max(3, Math.trunc(Number(startN.value)) || 0)
   if (n % 2 === 0) return // need odd
 
   const alphas = alphaSequence(n)
@@ -209,7 +209,7 @@ onUnmounted(() => window.removeEventListener('resize', draw))
 
 // Computed stats for display
 function getStats() {
-  const n = Math.max(3, startN.value | 0)
+  const n = Math.max(3, Math.trunc(Number(startN.value)) || 0)
   if (n % 2 === 0) return null
   const alphas = alphaSequence(n)
   const s = alphas.length
@@ -226,7 +226,7 @@ function getStats() {
   <div class="eisenstein-walk">
     <div class="controls">
       <label>
-        n =
+        n (odd, up to 99,999) =
         <input type="number" v-model.number="startN" min="3" max="99999" step="2" @keyup.enter="draw" />
       </label>
       <label class="toggle">
@@ -247,10 +247,11 @@ function getStats() {
       </span>
     </div>
     <p class="caption">
-      Each Syracuse step adds a vector $\alpha_i + \omega$ to the lattice walk.
-      <span style="color: #22c55e;">Green</span> segments are above the geodesic (contracting);
-      <span style="color: #ef4444;">red</span> segments are below (growing).
-      Dot size reflects $\alpha$ (halvings per tripling).
+      Each Syracuse step adds a vector &alpha;<sub>i</sub> + &omega; to the lattice walk.
+      <span style="color: #22c55e;">Green</span> segments end above the geodesic (the value is back at or
+      below its start, give or take the +1 corrections);
+      <span style="color: #ef4444;">red</span> segments end below it (the value is above its start).
+      Dot size reflects &alpha; (halvings per tripling).
     </p>
   </div>
 </template>

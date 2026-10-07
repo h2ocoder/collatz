@@ -56,7 +56,7 @@ init()
   <div class="depth-explorer">
     <div class="controls">
       <label>
-        Start (odd):
+        Start (odd, below 300 million):
         <input type="number" v-model.number="inputN" min="3" step="2" @keydown.enter="init" />
       </label>
       <button @click="init">Reset</button>

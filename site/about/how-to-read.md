@@ -4,15 +4,15 @@
 
 The name *Why Collatz Works* is a question I keep asking, not an answer I have.
 
-## What the labels mean
+## Five kinds of statement
 
-Every page is one of these. If a page is not labelled yet, assume the most cautious reading.
+Every statement on this site is meant to be one of these, and the pages say which as they go. Where a page does not say, assume the most cautious reading.
 
-| Label | Meaning |
+| Kind | Meaning |
 |---|---|
-| **Known mathematics** | An explainer of results from the literature, with references. Nothing here is mine. |
+| **Known mathematics** | A result from the literature, with a reference. Not mine. |
 | **Proved here** | A short, elementary proof given in full on this site. Not peer-reviewed. Possibly folklore. |
-| **Verified by computation** | Checked exhaustively up to a stated bound, with the code linked. Evidence, not proof. |
+| **Verified by computation** | Checked by computer up to a stated bound, with the code linked where I have published it. Evidence, not proof. |
 | **Conjecture / heuristic** | Looks true, fits the data, not proved. |
 | **Exploration / analogy** | A way of looking at the problem. Fun, sometimes illuminating, not a claim. |
 
@@ -22,7 +22,7 @@ Any proposed route to a proof has to pass one test: **it must fail for −1.** T
 
 ## What I think is actually worth your time
 
-- **The Sturmian sign rule** for a character sum over dropping sets, on [the Sturmian L-probe page](/connections/sturmian-l-probe).
+- **The Sturmian sign rule** for a character sum over dropping sets, on [the Sturmian L-probe page](/connections/sturmian-l-probe). It is supported by the computations shown there; the proof on that page is an outline, not a full proof.
 - **The playgrounds.** They are the best way to get a feel for the problem, whatever you make of the rest.
 
 More results from the current round of work are being written up and will appear here.
@@ -30,8 +30,8 @@ More results from the current round of work are being written up and will appear
 ## Who this is for
 
 - **Curious, no background needed:** start with [the puzzle](/journey/the-puzzle) and the playgrounds under *Explore*.
-- **Maths student:** read the [definitions](/foundations/definitions), then the *Structure* pages, which explain known mathematics with references.
-- **Number theorist:** the short list above is the whole claim. Everything else is exposition or play.
+- **Maths student:** read the [definitions](/foundations/definitions), then the *Structure* pages, which explain mostly known mathematics, with references.
+- **Number theorist:** start with the short list above. A few other pages carry short proofs, marked as such; everything else is exposition, computation or play.
 - **Fellow Collatz hobbyist:** the −1 test above is the most useful thing on the site. Apply it to every idea, including mine.
 
 Corrections are welcome: the source is on [GitHub](https://github.com/h2ocoder/collatz).

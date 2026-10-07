@@ -1,0 +1,101 @@
+==============================================================================
+A. classes of Terras level <= 24, by a tree walk over parity words
+==============================================================================
+  classes per level: [(1, 1), (2, 1), (4, 1), (5, 2), (7, 3), (8, 7), (10, 12), (12, 30), (13, 85), (15, 173), (16, 476), (18, 961), (20, 2652), (21, 8045), (23, 17637), (24, 51033)]
+  total classes: 81119  residues still undropped at level 24: 286581
+  un-shortcut dropping times k = level + s: [1, 3, 6, 8, 11, 13, 16, 19, 21, 24, 26, 29, 32, 34, 37, 39]
+  every level equals floor(s log2 3) + 1 (exact integer test): True
+  smallest s with 3^s >= 2^24: 16  => any n outside these classes has k >= 41
+  least member >= 2 of each class: dropping time != level + s for 0 classes []
+  members checked (4 per class): 324476
+  dest != slope*n + C, or wrong (k, s): 0
+  orbit sum not the affine function sum(a_i) n + sum(b_i): 0
+  least member's maximum not at the largest-slope step: 0
+  orbit max != (largest-slope affine map)(n) among the 4 members: 0
+  classes per dropping set: {1: 1, 3: 1, 6: 1, 8: 2, 11: 3, 13: 7, 16: 12}
+  residues excluded as < 2: [0, 1]
+  dest(5) = 4  formula 4
+  dest(3) = 2  formula 2
+  5 and 9 are both 1 mod 4: dest 4 7 (parities differ)
+  [21s]
+
+==============================================================================
+B. 2 <= n <= 10^7, pure Python
+==============================================================================
+  n with coefficient stopping time < stopping time: 0 []
+  distinct (Terras level, s) pairs: 140; not of the form level = floor(s log2 3)+1: []
+  dropping times seen (first 16): [1, 3, 6, 8, 11, 13, 16, 19, 21, 24, 26, 29, 32, 34, 37, 39]  largest: 401
+  all inside {floor(s log2 6) + 1}: True
+  [30s]
+
+==============================================================================
+C. mixing.md
+==============================================================================
+  2 <= n <    50,000: pairs    49,997  H(Set)=2.3595  H(cur)=2.3595  H(next)=2.3563  H(next|cur)=2.3431  I=0.01318 bits
+  2 <= n <   500,000: pairs   499,997  H(Set)=2.3622  H(cur)=2.3622  H(next)=2.3608  H(next|cur)=2.3579  I=0.00290 bits
+  2 <= n < 5,000,000: pairs 4,999,997  H(Set)=2.3622  H(cur)=2.3622  H(next)=2.3618  H(next|cur)=2.3612  I=0.00057 bits
+  dest over 2^B consecutive members of a class hits each residue mod 2^B once (all 15 classes of level <= 8, B = 1, 3, 6): True
+  destinations landing in the classes of level j' over 2^j' consecutive members: always exactly N(j') (largest deviation 0)
+  chain: [294583, 248555, 209719, 176951, 149303, 125975, 106292, 53146]  sets: [8, 8, 8, 8, 8, 8, 1]
+  ord(3 mod 2^B): {2: 2, 3: 2, 4: 4, 5: 8, 6: 16, 8: 64, 10: 256, 12: 1024, 16: 16384, 20: 262144}
+  v2(3^(2^j) - 1), j = 0..6: [1, 3, 4, 5, 6, 7, 8]
+  ord(3^s)/ord(3) mod 2^16, s = 1..8: ['1', '1/2', '1', '1/4', '1', '1/2', '1', '1/8']
+
+==============================================================================
+D. bit-destruction.md and the cycles pages
+==============================================================================
+  s, s*log2(3), floor+1-s*log2(3), k, ceil-form:
+    (0, '0.000', '1.000', 1, '0.000')
+    (1, '1.585', '0.415', 3, '0.415')
+    (2, '3.170', '0.830', 6, '0.830')
+    (3, '4.755', '0.245', 8, '0.245')
+    (4, '6.340', '0.660', 11, '0.660')
+    (5, '7.925', '0.075', 13, '0.075')
+    (6, '9.510', '0.490', 16, '0.490')
+    (7, '11.095', '0.905', 19, '0.905')
+    (8, '12.680', '0.320', 21, '0.320')
+    (9, '14.265', '0.735', 24, '0.735')
+    (10, '15.850', '0.150', 26, '0.150')
+    (11, '17.435', '0.565', 29, '0.565')
+    (12, '19.020', '0.980', 32, '0.980')
+    (13, '20.605', '0.395', 34, '0.395')
+    (14, '22.189', '0.811', 37, '0.811')
+    (15, '23.774', '0.226', 39, '0.226')
+    (16, '25.359', '0.641', 42, '0.641')
+    (17, '26.944', '0.056', 44, '0.056')
+    (18, '28.529', '0.471', 47, '0.471')
+    (19, '30.114', '0.886', 50, '0.886')
+    (20, '31.699', '0.301', 52, '0.301')
+    (21, '33.284', '0.716', 55, '0.716')
+    (22, '34.869', '0.131', 57, '0.131')
+    (23, '36.454', '0.546', 60, '0.546')
+    (24, '38.039', '0.961', 63, '0.961')
+    (25, '39.624', '0.376', 65, '0.376')
+    (26, '41.209', '0.791', 68, '0.791')
+    (27, '42.794', '0.206', 70, '0.206')
+    (28, '44.379', '0.621', 73, '0.621')
+    (29, '45.964', '0.036', 75, '0.036')
+  8/5: floor(s log2 3)+1 = 8  beta = 0.07519
+  65/41: floor(s log2 3)+1 = 65  beta = 0.01654
+  485/306: floor(s log2 3)+1 = 485  beta = 0.00147
+  19/12: floor(s log2 3)+1 = 20  beta = 0.98045
+  84/53: floor(s log2 3)+1 = 85  beta = 0.99699
+  E=1 S=1 K=2 gap=-1
+  E=2 S=1 K=3 gap=1
+  E=3 S=2 K=5 gap=-1
+  E=8 S=5 K=13 gap=13
+  E=19 S=12 K=31 gap=-7153
+  E=65 S=41 K=106 gap=4.20E+17
+  E=84 S=53 K=137 gap=-4.04E+22
+  E=485 S=306 K=791 gap=1.02E+143
+  circular words: 91  C*256 mod 13: [0, 7, 6, 9, 7, 6, 10, 7, 6, 10, 6, 8, 9]
+  distinct cyclic words: 7  (12/13)^7 = 0.571
+  word (1, 0, 0): C = 1/4, n = C*4/(4-3) = 1
+  word (0, 1, 0): C = 1/2, n = C*4/(4-3) = 2
+  word (0, 0, 1): C = 1, n = C*4/(4-3) = 4
+  gap 13, any order: 520 of 6720 = 7.7381%; increasing: 0 of 56
+  increasing assignments after dividing out 2^q0: 35  all with q_0 = 0 and q_4 <= 7: True
+  S=7, E=11, gap -139: increasing assignments with q_0 = 0 giving g | T: 7 of 210: [-91, -61, -55, -41, -37, -25, -17]
+  odd members of the cycle of -17: [-91, -61, -55, -41, -37, -25, -17]
+  K <= 30, 0 < gap < 10000: 53 pairs; solutions: [(1, 2, (0,), 1), (2, 4, (0, 2), 1), (3, 6, (0, 2, 4), 1), (4, 8, (0, 2, 4, 6), 1), (5, 10, (0, 2, 4, 6, 8), 1), (6, 12, (0, 2, 4, 6, 8, 10), 1)]
+  [31s]

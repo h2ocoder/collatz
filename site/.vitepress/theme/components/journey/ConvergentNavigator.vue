@@ -114,11 +114,11 @@ const zoomRange = computed(() => 0.5 / Math.pow(3, zoomLevel.value))
     <div v-if="selected" class="detail">
       <h4>Convergent {{ selected.p }}/{{ selected.q }}</h4>
       <table>
-        <tr><td>$E$ (even steps)</td><td>{{ selected.E }}</td></tr>
-        <tr><td>$S$ (odd steps)</td><td>{{ selected.S }}</td></tr>
-        <tr><td>$K = E + S$</td><td>{{ selected.K }}</td></tr>
-        <tr><td>$E/S$</td><td>{{ selected.ratio.toFixed(8) }}</td></tr>
-        <tr><td>$|\log_2 3 - E/S|$</td><td>{{ selected.error.toExponential(3) }}</td></tr>
+        <tr><td>E (even steps)</td><td>{{ selected.E }}</td></tr>
+        <tr><td>S (odd steps)</td><td>{{ selected.S }}</td></tr>
+        <tr><td>K = E + S</td><td>{{ selected.K }}</td></tr>
+        <tr><td>E/S</td><td>{{ selected.ratio.toFixed(8) }}</td></tr>
+        <tr><td>|log₂3 − E/S|</td><td>{{ selected.error.toExponential(3) }}</td></tr>
         <tr>
           <td>Type</td>
           <td :class="selected.isAscending ? 'asc-text' : 'desc-text'">

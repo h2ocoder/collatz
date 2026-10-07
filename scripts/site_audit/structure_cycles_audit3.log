@@ -1,0 +1,3 @@
+min distance of s*log2(3) to an integer, 1 <= s <= 400: 0.0014747793262586129
+2 <= n <= 10000000: max sigma = 246, max tau = 246
+n with tau(n) != sigma(n): []  count: 0

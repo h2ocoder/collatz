@@ -2,11 +2,6 @@
   <div class="spectrum-viz">
     <div class="controls">
       <label>
-        Multiplier <em>n</em>:
-        <input type="range" v-model.number="n" min="3" max="13" step="2" />
-        <span class="value">{{ n }}</span>
-      </label>
-      <label>
         Modulus <em>M</em>:
         <select v-model.number="modulus">
           <option v-for="m in modulusOptions" :key="m" :value="m">{{ m }}</option>
@@ -15,7 +10,7 @@
     </div>
 
     <div class="system-label">
-      Transfer operator for <strong>{{ n }}x+1, x/2</strong> on Z/{{ modulus }}Z
+      Transfer matrix for <strong>3x+1, x/2</strong> cut off at M = {{ modulus }}
     </div>
 
     <div class="viz-grid">
@@ -69,31 +64,19 @@
             <td>{{ nonZeroCount }}</td>
           </tr>
           <tr>
-            <td>λ₁ (trivial)</td>
+            <td>λ₁ (the fixed point 0)</td>
             <td>{{ trivialEig.toFixed(4) }}</td>
           </tr>
           <tr>
-            <td>Critical radius |λ₂|</td>
+            <td>Radius of the other three, ∛(4/3)</td>
             <td :class="criticalRadius > 1 ? 'good' : 'bad'">
               {{ criticalRadius.toFixed(6) }}
             </td>
           </tr>
           <tr>
-            <td>Predicted radius</td>
-            <td>({{ y }}²/{{ n }})^(1/{{ n }}) = {{ predictedRadius.toFixed(6) }}</td>
-          </tr>
-          <tr>
-            <td>|λ₂|ⁿ</td>
-            <td>{{ Math.pow(criticalRadius, n).toFixed(6) }}</td>
-          </tr>
-          <tr>
-            <td>y²/n = 4/{{ n }}</td>
-            <td>{{ (4/n).toFixed(6) }}</td>
-          </tr>
-          <tr>
-            <td>Eigenvalue eq.</td>
+            <td>Loop behind them</td>
             <td>
-              λ<sup>{{ n }}</sup> = {{ (4/n).toFixed(4) }}
+              1 → 4 → 2 → 1 (weights ⅓ · 2 · 2)
             </td>
           </tr>
         </table>
@@ -109,16 +92,9 @@
         </div>
 
         <div class="verdict">
-          <template v-if="criticalRadius > 1">
-            Critical circle radius > 1
-            <br />
-            <strong>⟹ Subcritical: orbits contract</strong>
-          </template>
-          <template v-else>
-            Critical circle radius &lt; 1
-            <br />
-            <strong>⟹ Supercritical: orbits grow</strong>
-          </template>
+          Radius above 1: the trivial cycle 1 → 4 → 2 → 1 has two halvings for one tripling.
+          <br />
+          <strong>This says nothing about other orbits.</strong>
         </div>
       </div>
     </div>
@@ -137,9 +113,12 @@ const modulusOptions = [6, 12, 24, 48, 96]
 const R = 120
 const scale = computed(() => R / 2.5)
 
-// Analytical eigenvalues of the transfer operator
-// For nx+1, x/2: non-trivial eigenvalues are n-th roots of y^2/n
-// Verified numerically via NumPy for n=3,5,7,9,11,13 (see collatz/zoo.py)
+// Closed-form eigenvalues of the cut-off transfer matrix for 3x+1, x/2:
+// 2 (the fixed point 0) and the three cube roots of 4/3 (the loop 1 -> 4 -> 2 -> 1).
+// Checked against NumPy for M = 6, 12, 24, 48, 96 only
+// (scripts/site_audit/conn_transfer_cycles.py). The formula below is NOT valid for
+// other multipliers, so n stays fixed at 3: for another n the non-zero eigenvalues are
+// the L-th roots of the weight product around each loop of that map, not n-th roots of 4/n.
 const eigenvalues = computed(() => {
   const M = modulus.value
   const nVal = n.value

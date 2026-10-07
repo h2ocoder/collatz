@@ -6,7 +6,7 @@ export default defineConfig({
   description: 'An amateur mathematician\'s interactive field notes on the Collatz conjecture. No proof is claimed.',
   head: [
     ['meta', { property: 'og:title', content: 'Why Collatz Works' }],
-    ['meta', { property: 'og:description', content: 'Interactive explorations of the 3n+1 problem: explainers, a few new results, and honest notes on what did not work. No proof is claimed.' }],
+    ['meta', { property: 'og:description', content: 'Interactive explorations of the 3n+1 problem: explainers, a few small results, and honest notes on what did not work. No proof is claimed.' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
   markdown: {
@@ -40,7 +40,7 @@ export default defineConfig({
         items: [
           { text: '1. The Puzzle', link: '/journey/the-puzzle' },
           { text: '2. The Binary Engine', link: '/journey/binary-engine' },
-          { text: '3. No Loops', link: '/journey/no-loops' },
+          { text: '3. No Loops?', link: '/journey/no-loops' },
           { text: '4. The Hidden Rotation', link: '/journey/the-rotation' },
           { text: '5. The Countdown', link: '/journey/the-countdown' },
           { text: '6. Finite Fuel', link: '/journey/finite-fuel' },
@@ -59,14 +59,14 @@ export default defineConfig({
         items: [
           { text: 'Affine Orbit Structure', link: '/proofs/affine-orbit' },
           { text: 'Bit Destruction', link: '/proofs/bit-destruction' },
-          { text: '3-Adic Mixing', link: '/proofs/mixing' }
+          { text: 'Mixing Modulo Powers of Two', link: '/proofs/mixing' }
         ]
       },
       {
         text: 'Cycle Analysis',
         items: [
-          { text: 'Convergent Elimination', link: '/cycles/convergent-elimination' },
-          { text: 'Divisibility Obstruction', link: '/cycles/divisibility-obstruction' }
+          { text: 'The Cycle Equation: Small Cases', link: '/cycles/convergent-elimination' },
+          { text: 'Cycles as a Divisibility Question', link: '/cycles/divisibility-obstruction' }
         ]
       },
       {
@@ -74,7 +74,7 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/connections/' },
           { text: 'abc Conjecture', link: '/connections/abc-conjecture' },
-          { text: 'Universal Dynamics', link: '/connections/universal-dynamics' },
+          { text: 'The Collatz Zoo', link: '/connections/universal-dynamics' },
           { text: 'The Transfer Operator', link: '/connections/hilbert-polya' },
           { text: 'Eisenstein Lattice', link: '/connections/eisenstein' },
           { text: 'The Sturmian L-Probe', link: '/connections/sturmian-l-probe' }

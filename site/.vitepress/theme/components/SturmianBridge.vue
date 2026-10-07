@@ -52,7 +52,7 @@
       <div class="panel">
         <h4>A. The cutting line — symbolic dynamics of slope α</h4>
         <p class="caption">
-          Walk along the line $y = \alpha x$ through a unit grid. Mark a
+          Walk along the line y = αx through a unit grid. Mark a
           <span class="dot-x"></span> at each vertical-line crossing,
           a <span class="dot-y"></span> at each horizontal-line crossing.
           The sequence of crossings <em>is</em> the Sturmian word.
@@ -218,32 +218,40 @@
       <div class="explain">
         <p v-if="qSystem === 3">
           <strong>3x+1 (Collatz):</strong> the cutting sequence of slope
-          log₂3 is the Collatz dropping schedule. At each o, the sign
-          {{ gapFor(focusO) === Math.floor(slope) + 2 ? '+1' : '−1' }} predicted by the
-          gap is exactly the sign of the χ<sub>6</sub> L-function partial
-          sum on <em>this</em> dropping class — by the
-          <a href="/connections/sturmian-l-probe">closed form</a>.
+          log₂3 spaces the dropping times that the residue classes allow.
+          At this o the gap predicts
+          the sign {{ gapFor(focusO) === Math.floor(slope) + 2 ? '+1' : '−1' }}.
+          For every o except 3 that is the sign of the χ<sub>6</sub>
+          character sum over the dropping class, taken over whole periods
+          (at o = 3 the sum is exactly 0), by the
+          <a href="/connections/sturmian-l-probe">closed form</a>, whose
+          argument is outlined on that page.
           The dropping class itself contains
           {{ knownRkSize(kFor(focusO), qSystem) ? knownRkSize(kFor(focusO), qSystem)!.toLocaleString() : 'many' }}
-          residues, every one of which traces a Collatz orbit that first
-          drops below its starting value at exactly step k = {{ kFor(focusO) }}.
+          residues; every large enough integer in one of these residue
+          classes first drops below its starting value at exactly step
+          k = {{ kFor(focusO) }} (Terras 1976).
         </p>
         <p v-else-if="qSystem !== null">
           <strong>{{ qSystem }}x+1 cousin:</strong> the Sturmian schedule
           extends — same Beatty machinery, slope log₂{{ qSystem }}, gaps in
           {<strong>{{ Math.floor(slope) + 1 }}, {{ Math.floor(slope) + 2 }}</strong>}.
-          What differs from Collatz is the Terras identity: for {{ qSystem }}x+1
-          the sum Σ |R_k|/2^k falls short of 1, and the gap is the
-          2-adic density of cycle-residues + divergent orbits. For 5x+1
-          there are known cycles starting at 13 and 17; verified by
-          <a href="https://github.com/h2ocoder/collatz/blob/main/docs/Explorations/Dropping%20Zeta%20Spectrum.md">Part 10</a>.
+          What differs from Collatz is the Terras sum: for 3x+1 it equals 1
+          (Terras 1976), while for {{ qSystem }}x+1 the sum Σ |R_k|/2^k
+          falls short of 1 (computed: about 0.82, 0.70 and 0.61 for
+          q = 5, 7, 9), so a positive share of residue classes never meets
+          the dropping condition. Cycles are not the cause: 5x+1 has known
+          cycles through 13 and 17, but finitely many integers carry no
+          weight in the sum. The class sizes are computed in
+          <a href="https://github.com/h2ocoder/collatz/blob/main/docs/Explorations/Dropping%20Zeta%20Spectrum.md">Part 10</a>
+          of the working notes.
         </p>
         <p v-else-if="isRational(slope)">
-          <strong>Rational slope</strong> ⟹ the gap sequence eventually
-          repeats with period q. This is the Cobham-automatic regime from
+          <strong>Rational slope</strong> ⟹ the gap sequence repeats with
+          period q, by arithmetic alone, so it is finite-state.
           <a href="https://github.com/h2ocoder/collatz/blob/main/docs/Explorations/Dropping%20Zeta%20Spectrum.md">Part 9</a>
-          — at q-th level the Beatty structure becomes finite-state.
-          Compare with α = log₂3 for the irrational case.
+          of the working notes uses such rational slopes as controls.
+          Compare with α = log₂3 for the irrational case, which never repeats.
         </p>
         <p v-else>
           <strong>This slope isn't directly Collatz</strong> — only α = log₂q
@@ -298,9 +306,9 @@ const RK_TABLE: Record<number, Record<number, number>> = {
   3: {
     1: 1, 3: 2, 6: 4, 8: 16, 11: 48, 13: 224, 16: 768, 19: 3840,
     21: 21760, 24: 88576, 26: 487424, 29: 1968128,
-    32: 10653696, 34: 50855936, 37: 261275648, 39: 1278242816,
-    42: 6571913216, 44: 30811815936, 47: 154189103104,
-    50: 755015057408, 52: 3445824487424, 55: 17035728519168,
+    32: 10862592, 34: 65904640, 37: 288964608, 39: 1672249344,
+    42: 7140147200, 44: 40954101760, 47: 173941719040,
+    50: 996393615360, 52: 6225052827648, 55: 28253452500992,
   },
   5: { 1: 1, 4: 2, 7: 8, 10: 40, 14: 224, 17: 1792 },
   7: { 1: 1, 4: 2, 8: 8, 12: 56, 16: 480 },

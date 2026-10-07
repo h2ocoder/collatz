@@ -1,4 +1,4 @@
-# Convergent Elimination
+# The Cycle Equation: Small Cases
 
 This page works through the small cases of the cycle equation by hand. It does not rule out cycles in general — that is open — and the cases here are already covered by the literature (Steiner 1977, Eliahou 1993, Simons and de Weger 2005, Hercher 2023). It is a worked example of how the equation behaves.
 
@@ -90,13 +90,13 @@ The distribution is roughly uniform over $\{1, \ldots, 12\}$, and zero is missin
 
 The convergent $(S=1, E=2, K=3)$ with gap $= 1$ produces the known cycle:
 
-- Parity word $(1, 0, 0)$: $C = 1$, $n = 1 \cdot 4 / 1 = 4$. The cycle $4 \to 2 \to 1 \to 4$. ✓
+- Parity word $(1, 0, 0)$: $C = 1/4$, $n = \tfrac14 \cdot 4 / 1 = 1$. The cycle $1 \to 4 \to 2 \to 1$. ✓
 - Parity word $(0, 1, 0)$: $n = 2$. The cycle $2 \to 1 \to 4 \to 2$. ✓
 - Parity word $(0, 0, 1)$: $n = 4$. Same cycle, different starting point.
 
 ## Related
 
-- [No Loops?](/journey/no-loops) — the tour chapter, with the CycleHunter playground
-- [Divisibility Obstruction](/cycles/divisibility-obstruction) — the cycle problem restated as a divisibility question
+- [No Loops?](/journey/no-loops) — the tour chapter, with the small cases and the convergent navigator
+- [Cycles as a Divisibility Question](/cycles/divisibility-obstruction) — the cycle problem restated term by term
 - [Affine Orbit Structure](/proofs/affine-orbit) — the affine maps underlying the cycle equation
 - [abc Conjecture](/connections/abc-conjecture) — the size of the gap $2^E - 3^S$

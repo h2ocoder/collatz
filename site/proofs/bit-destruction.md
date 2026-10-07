@@ -6,11 +6,13 @@ A way of measuring how big a drop is, in bits. It is an explainer: the fact that
 
 <div class="theorem">
 
-**Identity.** For any $\text{Dset}_k$ with orbital oddity $s$, the contraction ratio $3^s/2^{k-s}$ removes
+**Identity.** A drop of $k$ steps, $s$ of them odd, has contraction ratio $3^s/2^{k-s}$, which removes $(k-s) - s \log_2 3$ bits. The ratio has to be below 1, so $k - s \geq \lfloor s \log_2 3 \rfloor + 1$, and with exactly that many halvings it removes
 
-$$\beta(s) = \lceil s \cdot \log_2 3 \rceil - s \cdot \log_2 3 = 1 - \{s \cdot \log_2 3\}$$
+$$\beta(s) = \lfloor s \cdot \log_2 3 \rfloor + 1 - s \cdot \log_2 3 = 1 - \{s \cdot \log_2 3\}$$
 
-bits, where $\{x\}$ is the fractional part. It is strictly positive for $s > 0$ because $\log_2 3$ is irrational.
+bits, where $\{x\}$ is the fractional part. So $\beta(s)$ is positive and at most 1, and it equals 1 only at $s = 0$, because $\log_2 3$ is irrational.
+
+Every dropping set with $k \le 39$, and every $n \le 10^7$, uses exactly this smallest number of halvings. It is not proved that every $n$ does (see [Affine Orbit Structure](/proofs/affine-orbit)).
 
 </div>
 
@@ -61,13 +63,13 @@ Pattern: slow sets occur when $s \cdot \log_2 3$ approaches an integer from belo
 
 <div class="proof">
 
-The contraction ratio for $\text{Dset}_k$ with oddity $s$ is $3^s / 2^{k-s}$. From the [odd stopping time spectrum](/foundations/definitions) (OEIS A122437), $k = s + \lceil s \cdot \log_2 3 \rceil$, so $k - s = \lceil s \cdot \log_2 3 \rceil$.
+The contraction ratio for a drop of $k$ steps with $s$ odd steps is $3^s / 2^{k-s}$. With the smallest number of halvings that brings the ratio below 1, $k - s = \lfloor s \cdot \log_2 3 \rfloor + 1$ (these values of $k$ are OEIS A122437).
 
 The bits destroyed equal the negative log of the contraction ratio:
 
-$$\beta(s) = -\log_2\!\left(\frac{3^s}{2^{k-s}}\right) = (k-s) - s \cdot \log_2 3 = \lceil s \cdot \log_2 3 \rceil - s \cdot \log_2 3$$
+$$\beta(s) = -\log_2\!\left(\frac{3^s}{2^{k-s} }\right) = (k-s) - s \cdot \log_2 3 = \lfloor s \cdot \log_2 3 \rfloor + 1 - s \cdot \log_2 3$$
 
-Since $\log_2 3$ is irrational, $s \cdot \log_2 3$ is never an integer for $s > 0$, so $\beta(s) > 0$ always.
+A fractional part is always below 1, so $\beta(s) = 1 - \{s \cdot \log_2 3\} > 0$ always.
 
 </div>
 
@@ -83,7 +85,7 @@ The slowest sets come from rational approximations $p/s$ to $\log_2 3$ that lie 
 
 (Convergents that lie just below $\log_2 3$, such as $19/12$ and $84/53$, give $\beta(s)$ close to 1 instead.)
 
-Since $\log_2 3$ is transcendental, the sharpest general lower bound comes from Baker's theory of linear forms in logarithms: $|E - S \log_2 3| > S^{-\kappa}$ for an effective constant $\kappa$ (Rhin: $\kappa \approx 13$). So $\beta(s)$ can shrink as $s$ grows, but not faster than a power of $s$.
+Since $\log_2 3$ is transcendental, the lower bounds that are proved come from Baker's theory of linear forms in logarithms: $|E - S \log_2 3| > S^{-\kappa}$ for an effective constant $\kappa$ (Rhin: $\kappa \approx 13$). So $\beta(s)$ can shrink as $s$ grows, but not faster than a power of $s$.
 
 ## What this does not say
 
@@ -92,5 +94,5 @@ Knowing that every drop removes a positive number of bits says nothing about how
 ## Related
 
 - [Affine Orbit Structure](/proofs/affine-orbit) — the contraction ratio $3^s/2^{k-s}$
-- [3-Adic Mixing](/proofs/mixing) — how drops spread numbers over residue classes
+- [Mixing Modulo Powers of Two](/proofs/mixing) — how drops spread numbers over residue classes
 - [abc Conjecture Connection](/connections/abc-conjecture) — the size of $2^E - 3^S$

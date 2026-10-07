@@ -1,0 +1,42 @@
+=== 1. W_total = log_6 of Roosendaal's residue Res(n) = 2^E / (3^O n) ===
+  n=27: Res = 1.198849010, W_total = log6 Res = 0.1012200, sum of increments = 0.1012200
+  n=993: Res = 1.253142144, W_total = log6 Res = 0.1259400, sum of increments = 0.1259400
+  max W_total over odd n < 10^5: 0.1259400 at n = 993  (Res = 1.253142144)
+
+=== 2. orbit of 670617279: Weyl amplitudes with / without wobble, coherence D ===
+  points = 987, steps = 986, sigma_W = 0.0082, W_total = 0.09399
+  m= 13 eps=-0.02909: rigid 0.0088 -> orbit 0.0059  (ratio 0.67);  D(m) = 0.975;  rigid*D = 0.0086
+  m= 31 eps=+0.00756: rigid 0.0424 -> orbit 0.0220  (ratio 0.52);  D(m) = 0.962;  rigid*D = 0.0408
+  m= 44 eps=-0.02152: rigid 0.0104 -> orbit 0.0331  (ratio 3.18);  D(m) = 0.945;  rigid*D = 0.0098
+  m= 75 eps=-0.01396: rigid 0.0148 -> orbit 0.0253  (ratio 1.71);  D(m) = 0.929;  rigid*D = 0.0137
+  m=106 eps=-0.00640: rigid 0.0421 -> orbit 0.0385  (ratio 0.91);  D(m) = 0.941;  rigid*D = 0.0396
+  m=137 eps=+0.00117: rigid 0.1258 -> orbit 0.0970  (ratio 0.77);  D(m) = 0.956;  rigid*D = 0.1203
+  share of points with W_k < 0.1*W_total: 0.978; last 40 points carry 94.2% of W_total
+  q=31: RMS closure miss = 0.0116; min |miss| = 0.00756; identity check max| |eps+dW| - |miss| | = 3.78e-15
+  q=44: RMS closure miss = 0.0219; min |miss| = 0.00596; identity check max| |eps+dW| - |miss| | = 4.99e-15
+
+=== 3. closure miss is identically |eps_q + dW| (so the 'dip at r = 1' is algebra) ===
+  200 orbits, six q: max |miss - wrap(eps_q + dW)| = 1.57e-14
+
+=== 4. arm-count rule: argmin over ALL q <= 2000 of q^2 + (2 pi k eps_q)^2 ===
+  (first k, optimal q): [(1, 2), (3, 3), (5, 5), (33, 13), (160, 31), (2843, 137)]
+
+=== 5. the same 12-band parastichy measurement on the RIGID rotation ===
+  rigid rotation, 3450 points, (band centre, modal arm count): [(np.int64(143), 13), (np.int64(431), 31), (np.int64(718), 31), (np.int64(1006), 31), (np.int64(1293), 31), (np.int64(1581), 31), (np.int64(1868), 31), (np.int64(2156), 31), (np.int64(2443), 31), (np.int64(2731), 31), (np.int64(3018), 137), (np.int64(3306), 137)]
+
+=== 6. dictionary: congruence 2^e d = C (mod 3^s) versus genuine predecessor ===
+  levels s<=8, d<3000: congruence hits = 4876, genuine predecessors = 4875 (0.9998)
+  first non-genuine (d, word, candidate n): [(1, 'OEE', 1)]
+  genuine  <=>  congruence and d*(2^e - 3^s) > C : True
+
+=== 7. where s*log2 3 is nearest an integer; contraction 3^s / 2^e_s ===
+  s=  5: s*log2 3 = 7.9248 (distance to nearest integer 0.0752); e_s = 8, word length k = 13, 3^s/2^e_s = 0.94922
+  s= 12: s*log2 3 = 19.0196 (distance to nearest integer 0.0196); e_s = 20, word length k = 32, 3^s/2^e_s = 0.50682
+  s= 13: s*log2 3 = 20.6045 (distance to nearest integer 0.3955); e_s = 21, word length k = 34, 3^s/2^e_s = 0.76023
+  s= 31: s*log2 3 = 49.1338 (distance to nearest integer 0.1338); e_s = 50, word length k = 81, 3^s/2^e_s = 0.54860
+  s= 41: s*log2 3 = 64.9835 (distance to nearest integer 0.0165); e_s = 65, word length k = 106, 3^s/2^e_s = 0.98860
+  s= 53: s*log2 3 = 84.0030 (distance to nearest integer 0.0030); e_s = 85, word length k = 138, 3^s/2^e_s = 0.50105
+  s=106: s*log2 3 = 168.0060 (distance to nearest integer 0.0060); e_s = 169, word length k = 275, 3^s/2^e_s = 0.50209
+  s=137: s*log2 3 = 217.1399 (distance to nearest integer 0.1399); e_s = 218, word length k = 355, 3^s/2^e_s = 0.55090
+  s=306: s*log2 3 = 484.9985 (distance to nearest integer 0.0015); e_s = 485, word length k = 791, 3^s/2^e_s = 0.99898
+  convergents p/q of log2 3: 3/2, 8/5, 19/12, 65/41, 84/53, 485/306 ; p+q = [5, 13, 31, 106, 137, 791]

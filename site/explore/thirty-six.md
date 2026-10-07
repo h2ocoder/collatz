@@ -52,7 +52,7 @@ This is the one place in the run where 36 appears in a Collatz statement with a 
 
 ## Fold, collapse, rigid: how three shapes meet the dropping sets
 
-A [dropping set](../foundations/definitions) $\text{Dset}_j$ holds the integers whose orbit first falls below its start after exactly $j$ steps, counting $3n+1$ and $n/2$ separately, so $j$ runs through 1, 3, 6, 8, 11, 13, ... The classes behind these sets are residue classes modulo powers of 2 (Terras 1976), so the way a family of numbers meets them is decided by the family modulo $2^k$. Triangle, square and cube do three different things there, all classical and none involving a Collatz rule:
+A [dropping set](../foundations/definitions) $\text{Dset}_j$ holds the integers whose orbit first falls below its start after exactly $j$ steps, counting $3n+1$ and $n/2$ separately; the values of $j$ known to occur are 1, 3, 6, 8, 11, 13, ... The classes behind these sets are residue classes modulo powers of 2 (Terras 1976), so the way a family of numbers meets them is decided by the family modulo $2^k$. Triangle, square and cube do three different things there, all classical and none involving a Collatz rule:
 
 - **Triangular numbers fold.** $T_0, \dots, T_{2^k - 1}$ hit every residue modulo $2^k$ exactly once, and $n \mapsto T_n$ glues $n$ to $-1-n$. (It is why triangular probing visits every slot of a hash table of size $2^k$: Hopgood and Davenport 1972.)
 - **Cubes are rigid.** On the odd residues modulo $2^k$, cubing is a permutation that keeps every 2-adic distance: an isometry. (Even cubes stay even, in $\text{Dset}_1$.)

@@ -2,29 +2,29 @@
 
 In the right coordinates, the chaos looks much calmer.
 
-Plot every Collatz orbit value on a circle, where the position is the **fractional part of $\log_6(\text{value})$**. This picture is due to Shakibaei Asli (arXiv:2601.04289), who showed that in these coordinates the Collatz map is an irrational rotation plus a small perturbation. (I came to the same transformation independently through my proportional power ratios in base 6.)
+Plot every Collatz orbit value on a circle, where the position is the **fractional part of $\log_6(\text{value})$**. This picture is due to Shakibaei Asli (arXiv:2601.04289), who showed that with the slightly shifted coordinate $\{\log_6(x + 1/5)\}$ every Collatz step is a rotation by $\log_6 3$ plus a uniformly bounded error that shrinks like $1/x$. (I came to the base-6 logarithm independently, through my proportional power ratios; the shift and the error bound are his.)
 
 <Base6Circle />
 
-In the orbits you can try here, the points spread out around the circle. They don't visibly cluster, and they fill the circle more and more evenly as the orbit progresses.
+The widget plots the odd values of an orbit. In the orbits you can try here, the points spread out around the circle and don't visibly cluster.
 
-Turn on "ideal rotation" and compare: the gray dots show a **pure irrational rotation** by $\log_6 3 \approx 0.6131$ per step. The colored dots (actual Collatz orbit) follow nearly the same pattern. The difference — the perturbation from the "+1" in $3n+1$ — is small and shrinks for larger numbers.
+Turn on "ideal rotation" and compare: the gray dots show a **pure irrational rotation** by $\log_6 3 \approx 0.6131$ per step, from the same starting point. They do not pair up dot for dot with the colored ones, because the colored dots are only the odd values, and between one odd value and the next the orbit takes two or more steps. Counted step by step, an orbit does stay close to the pure rotation: for every start below 100,000 it has drifted by at most 0.13 of a turn by the time it reaches 1. The drift comes from the "+1" in $3n+1$, and each nudge is smaller the larger the number.
 
 ## Why base 6?
 
-Each Collatz step does two things:
+A Collatz step does one of two things:
 - **Multiplies by 3** (the odd step: $3n+1 \approx 3n$)
-- **Divides by 2** (the even steps)
+- **Divides by 2** (the even step)
 
-In **base 6 = 2 × 3**: these two operations combine into a single rotation. The $\times 3$ contributes $\log_6 3$, and the $\div 2$ subtracts $\log_6 2$. Net per Syracuse step: advance by $\log_6 3 \approx 0.613$ on the circle.
+In **base 6 = 2 × 3** the two operations become the same rotation. Multiplying by 3 moves the point forward by $\log_6 3$. Dividing by 2 moves it back by $\log_6 2 = 1 - \log_6 3$, and on a circle that is the same as moving forward by $\log_6 3$. So every step, odd or even, advances by $\log_6 3 \approx 0.613$ (an odd step by a touch more, because of the $+1$).
 
-This matches a simple bookkeeping identity: $s \cdot \log_2 6 = T - \log_2 n + \varepsilon$, where $s$ is odd steps, $T$ is total steps, and $\varepsilon$ is a small error from the "+1". Base 6 is a natural coordinate system for keeping track of the two operations at once.
+For an orbit that reaches 1 this matches a simple bookkeeping identity: $s \cdot \log_2 6 = T - \log_2 n + \varepsilon$, where $s$ is the number of odd steps, $T$ the total number of steps, and $\varepsilon$ a small error from the "+1". Because the two operations look the same on the base-6 circle, the position works as a step counter: it records how many steps the orbit has taken, not whether the number has grown or shrunk.
 
 ## The 44-step quasi-period
 
-Watch an orbit with many points (set points to 200+). You'll notice a subtle pattern: the orbit almost returns to its starting position after **44 steps**. This is because $27/44 = 0.6136 \approx \log_6 3 = 0.6131$ — after 44 rotations by $\log_6 3$, you've gone around the circle almost exactly 27 times.
+Count every step of an orbit, halvings and triplings alike, and a subtle pattern appears: after **44 steps** the point is almost back where it started. This is because $27/44 = 0.6136 \approx \log_6 3 = 0.6131$ — 44 rotations by $\log_6 3$ go around the circle almost exactly 27 times, falling short by about 0.02 of a turn. (The widget above plots only the odd values, so the 44 does not show up in it.)
 
-$27/44$ is a good rational approximation of $\log_6 3$ (an intermediate fraction between the convergents $8/13$ and $19/31$ of its continued fraction). The quasi-period 44 is a fingerprint of the irrational rotation structure. Why the eye picks out 44 and not the better approximation 31 is taken apart in [The Wobble](../explore/log6-wobble).
+$27/44$ is a good rational approximation of $\log_6 3$ (an intermediate fraction between the convergents $8/13$ and $19/31$ of its continued fraction). The quasi-period 44 is a fingerprint of the rotation by $\log_6 3$. How 44 compares on real orbits with the closer approximation 31 is the subject of [The Wobble](../explore/log6-wobble).
 
 ## The destruction landscape
 
@@ -36,11 +36,11 @@ The red bars are the **record-slow sets** — each one slower than every set bef
 
 ## What this does and doesn't say
 
-For an exact irrational rotation, **Weyl's equidistribution theorem** says every orbit spreads evenly around the circle. Collatz is not an exact rotation: the "+1" perturbs every step, so Weyl's theorem does not apply to it directly, and nothing here guarantees what an individual orbit does. The picture is suggestive, not a proof.
+For an exact irrational rotation, **Weyl's equidistribution theorem** says every orbit spreads evenly around the circle. Collatz is not an exact rotation: the "+1" nudges every odd step, so Weyl's theorem does not apply to it directly, and nothing here says what an individual orbit does. The picture is a way of seeing the step count; it is not evidence that orbits fall.
 
-There is a second gap. Even if an orbit visited every region of the circle, the drop type also depends on the **low bits** of the number, which the circle position does not see. Something else has to decide whether the orbit actually takes deep drops. The next chapter looks at one such mechanism: the **countdown**.
+There is a more basic limit. Because a halving and a tripling turn the circle by the same angle, the position records how many steps the orbit has taken and nothing about whether the number has grown or shrunk. The same picture can be drawn for $3x - 1$, which has loops through 5 and through 17, so it cannot be evidence that orbits of $3x + 1$ fall. Which kind of step comes next is decided by the **low bits** of the number, which the circle does not see. The next chapter looks at what the low bits do: the **countdown**.
 
 <div style="text-align: center; margin-top: 24px;">
-  <a href="./no-loops" class="vp-button medium">← No Loops</a>
+  <a href="./no-loops" class="vp-button medium">← No Loops?</a>
   <a href="./the-countdown" class="vp-button medium brand" style="margin-left: 12px;">Next: The Countdown →</a>
 </div>

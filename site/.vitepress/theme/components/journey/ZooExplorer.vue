@@ -38,22 +38,22 @@
       </div>
 
       <div class="survey-panel">
-        <h4>Survey (n=3..499, odd)</h4>
+        <h4>Survey (odd starts x = 3..499; an orbit is left unresolved past 10¹⁵ or after 2000 steps)</h4>
         <div class="bar-chart">
           <div class="bar converged" :style="{ width: convPct + '%' }">
-            <span v-if="convPct > 10">{{ convPct.toFixed(0) }}% converge</span>
+            <span v-if="convPct > 10">{{ convPct.toFixed(0) }}% pass through 1</span>
           </div>
           <div class="bar cycled" :style="{ width: cycPct + '%' }">
-            <span v-if="cycPct > 10">{{ cycPct.toFixed(0) }}% cycle</span>
+            <span v-if="cycPct > 10">{{ cycPct.toFixed(0) }}% cycle, not through 1</span>
           </div>
           <div class="bar diverged" :style="{ width: divPct + '%' }">
-            <span v-if="divPct > 10">{{ divPct.toFixed(0) }}% diverge</span>
+            <span v-if="divPct > 10">{{ divPct.toFixed(0) }}% unresolved</span>
           </div>
         </div>
         <div class="bar-labels">
-          <span class="converged-label">Conv: {{ surveyResults.converged }}</span>
-          <span class="cycled-label">Cycle: {{ surveyResults.cycled }}</span>
-          <span class="diverged-label">Div: {{ surveyResults.diverged }}</span>
+          <span class="converged-label">Pass through 1: {{ surveyResults.converged }}</span>
+          <span class="cycled-label">Cycle, not through 1: {{ surveyResults.cycled }}</span>
+          <span class="diverged-label">Unresolved: {{ surveyResults.diverged }}</span>
         </div>
       </div>
     </div>
@@ -72,8 +72,8 @@
                 stroke="#666" stroke-width="0.5" stroke-dasharray="4,4" />
         </svg>
         <div class="orbit-info">
-          {{ sampleOrbit.length }} steps, peak {{ samplePeak.toLocaleString() }},
-          {{ sampleStatus }}
+          {{ sampleOrbit.length }} values, peak {{ samplePeak.toLocaleString() }},
+          {{ STATUS_LABEL[sampleStatus] }}
         </div>
       </div>
     </div>
@@ -162,6 +162,15 @@ const sampleStart = computed(() => {
   }
   return 3
 })
+
+// Display strings for the internal status values. 'diverged' only means the orbit
+// passed the 1e15 cap: the widget does not decide divergence.
+const STATUS_LABEL = {
+  converged: 'reached 1 (stopped there)',
+  cycle: 'entered a cycle',
+  diverged: 'passed 10¹⁵ (stopped there)',
+  timeout: 'no result in 2000 steps'
+}
 
 const sampleOrbitData = computed(() => runOrbit(sampleStart.value))
 const sampleOrbit = computed(() => sampleOrbitData.value.seq)

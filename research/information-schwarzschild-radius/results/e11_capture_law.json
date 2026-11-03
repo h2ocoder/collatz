@@ -1,0 +1,6485 @@
+{
+ "cross_section": 1.813670330086895,
+ "bands": [
+  {
+   "from": 1,
+   "to": 25,
+   "maps": 12,
+   "mean_ratio": 2.0598059207360593,
+   "std_ratio": 0.6076620249024235,
+   "genuine": 1.1049225162497474,
+   "periodic": 0.4879982749884486,
+   "orbit_minima": 0.4668851294978635
+  },
+  {
+   "from": 25,
+   "to": 75,
+   "maps": 25,
+   "mean_ratio": 1.9173875256694075,
+   "std_ratio": 0.2154650153557422,
+   "genuine": 1.446991296048317,
+   "periodic": 0.1932318028579085,
+   "orbit_minima": 0.27716442676318187
+  },
+  {
+   "from": 75,
+   "to": 200,
+   "maps": 63,
+   "mean_ratio": 1.8489938179944507,
+   "std_ratio": 0.10858707541615772,
+   "genuine": 1.5717847652242698,
+   "periodic": 0.13653368687714476,
+   "orbit_minima": 0.14067536589303578
+  },
+  {
+   "from": 200,
+   "to": 500,
+   "maps": 150,
+   "mean_ratio": 1.8270256825548146,
+   "std_ratio": 0.06117920209603954,
+   "genuine": 1.6433302040995876,
+   "periodic": 0.09443453171662221,
+   "orbit_minima": 0.08926094673860478
+  },
+  {
+   "from": 500,
+   "to": 1000,
+   "maps": 250,
+   "mean_ratio": 1.82104601108542,
+   "std_ratio": 0.027700308807627336,
+   "genuine": 1.7037086355970408,
+   "periodic": 0.06325540260792607,
+   "orbit_minima": 0.054081972880453404
+  },
+  {
+   "from": 1000,
+   "to": 1402,
+   "maps": 201,
+   "mean_ratio": 1.8172080141950198,
+   "std_ratio": 0.029240525693698508,
+   "genuine": 1.7158504200260545,
+   "periodic": 0.056294756548830385,
+   "orbit_minima": 0.04506283762013452
+  }
+ ],
+ "clean": [
+  1
+ ],
+ "integer_first_moment": 1.138903,
+ "integer_first_moment_error": 0.003079251821104888,
+ "family": [
+  {
+   "map": "(1,4,4)/3",
+   "cross_section": 2.361981208170421,
+   "uncontracted_measure": 2.3421386580465565e-24,
+   "truncated": 2.268285706532387,
+   "truncated_error": 0.00591215193598177,
+   "by_mass": [
+    {
+     "m": 101,
+     "captured": 231,
+     "ratio": 2.287128712871287
+    },
+    {
+     "m": 202,
+     "captured": 459,
+     "ratio": 2.272277227722772
+    },
+    {
+     "m": 401,
+     "captured": 933,
+     "ratio": 2.3266832917705735
+    },
+    {
+     "m": 802,
+     "captured": 1858,
+     "ratio": 2.316708229426434
+    },
+    {
+     "m": 1201,
+     "captured": 2773,
+     "ratio": 2.308909242298085
+    }
+   ]
+  },
+  {
+   "map": "(1,2,5)/3",
+   "cross_section": 1.494198000257375,
+   "uncontracted_measure": 3.7348903204862386e-18,
+   "truncated": 1.492863348209182,
+   "truncated_error": 0.0027544098950549,
+   "by_mass": [
+    {
+     "m": 101,
+     "captured": 142,
+     "ratio": 1.4059405940594059
+    },
+    {
+     "m": 202,
+     "captured": 294,
+     "ratio": 1.4554455445544554
+    },
+    {
+     "m": 401,
+     "captured": 618,
+     "ratio": 1.541147132169576
+    },
+    {
+     "m": 802,
+     "captured": 1231,
+     "ratio": 1.5349127182044888
+    },
+    {
+     "m": 1201,
+     "captured": 1772,
+     "ratio": 1.4754371357202332
+    }
+   ]
+  },
+  {
+   "map": "(1,3,5,7)/4",
+   "cross_section": 3.8395768531674137,
+   "uncontracted_measure": 1.4460302289552557e-08,
+   "truncated": 3.756964819502388,
+   "truncated_error": 0.006689717072226035,
+   "by_mass": [
+    {
+     "m": 101,
+     "captured": 396,
+     "ratio": 3.9207920792079207
+    },
+    {
+     "m": 201,
+     "captured": 762,
+     "ratio": 3.791044776119403
+    },
+    {
+     "m": 401,
+     "captured": 1526,
+     "ratio": 3.8054862842892767
+    },
+    {
+     "m": 801,
+     "captured": 3004,
+     "ratio": 3.7503121098626715
+    },
+    {
+     "m": 1201,
+     "captured": 4477,
+     "ratio": 3.7277268942547876
+    }
+   ]
+  }
+ ],
+ "maps": [
+  {
+   "a": 1,
+   "captured": 1,
+   "genuine": 0,
+   "periodic": 1,
+   "orbit_minima": 0,
+   "largest": 1,
+   "ratio": 1.0
+  },
+  {
+   "a": 3,
+   "captured": 8,
+   "genuine": 6,
+   "periodic": 1,
+   "orbit_minima": 1,
+   "largest": 365,
+   "ratio": 2.6666666666666665
+  },
+  {
+   "a": 5,
+   "captured": 15,
+   "genuine": 3,
+   "periodic": 6,
+   "orbit_minima": 6,
+   "largest": 347,
+   "ratio": 3.0
+  },
+  {
+   "a": 7,
+   "captured": 11,
+   "genuine": 8,
+   "periodic": 2,
+   "orbit_minima": 1,
+   "largest": 113,
+   "ratio": 1.5714285714285714
+  },
+  {
+   "a": 9,
+   "captured": 18,
+   "genuine": 14,
+   "periodic": 1,
+   "orbit_minima": 3,
+   "largest": 1095,
+   "ratio": 2.0
+  },
+  {
+   "a": 11,
+   "captured": 20,
+   "genuine": 11,
+   "periodic": 6,
+   "orbit_minima": 3,
+   "largest": 453,
+   "ratio": 1.8181818181818181
+  },
+  {
+   "a": 13,
+   "captured": 37,
+   "genuine": 11,
+   "periodic": 10,
+   "orbit_minima": 16,
+   "largest": 319,
+   "ratio": 2.8461538461538463
+  },
+  {
+   "a": 15,
+   "captured": 43,
+   "genuine": 16,
+   "periodic": 6,
+   "orbit_minima": 21,
+   "largest": 1825,
+   "ratio": 2.8666666666666667
+  },
+  {
+   "a": 17,
+   "captured": 28,
+   "genuine": 17,
+   "periodic": 8,
+   "orbit_minima": 3,
+   "largest": 319,
+   "ratio": 1.6470588235294117
+  },
+  {
+   "a": 19,
+   "captured": 30,
+   "genuine": 24,
+   "periodic": 4,
+   "orbit_minima": 2,
+   "largest": 1133,
+   "ratio": 1.5789473684210527
+  },
+  {
+   "a": 21,
+   "captured": 38,
+   "genuine": 32,
+   "periodic": 2,
+   "orbit_minima": 4,
+   "largest": 2987,
+   "ratio": 1.8095238095238095
+  },
+  {
+   "a": 23,
+   "captured": 44,
+   "genuine": 29,
+   "periodic": 10,
+   "orbit_minima": 5,
+   "largest": 4841,
+   "ratio": 1.9130434782608696
+  },
+  {
+   "a": 25,
+   "captured": 54,
+   "genuine": 34,
+   "periodic": 12,
+   "orbit_minima": 8,
+   "largest": 1735,
+   "ratio": 2.16
+  },
+  {
+   "a": 27,
+   "captured": 58,
+   "genuine": 49,
+   "periodic": 1,
+   "orbit_minima": 8,
+   "largest": 3293,
+   "ratio": 2.1481481481481484
+  },
+  {
+   "a": 29,
+   "captured": 55,
+   "genuine": 42,
+   "periodic": 7,
+   "orbit_minima": 6,
+   "largest": 7695,
+   "ratio": 1.896551724137931
+  },
+  {
+   "a": 31,
+   "captured": 58,
+   "genuine": 48,
+   "periodic": 5,
+   "orbit_minima": 5,
+   "largest": 5153,
+   "ratio": 1.8709677419354838
+  },
+  {
+   "a": 33,
+   "captured": 62,
+   "genuine": 47,
+   "periodic": 6,
+   "orbit_minima": 9,
+   "largest": 5051,
+   "ratio": 1.878787878787879
+  },
+  {
+   "a": 35,
+   "captured": 68,
+   "genuine": 48,
+   "periodic": 10,
+   "orbit_minima": 10,
+   "largest": 2429,
+   "ratio": 1.9428571428571428
+  },
+  {
+   "a": 37,
+   "captured": 66,
+   "genuine": 56,
+   "periodic": 4,
+   "orbit_minima": 6,
+   "largest": 5611,
+   "ratio": 1.7837837837837838
+  },
+  {
+   "a": 39,
+   "captured": 99,
+   "genuine": 46,
+   "periodic": 10,
+   "orbit_minima": 43,
+   "largest": 4745,
+   "ratio": 2.5384615384615383
+  },
+  {
+   "a": 41,
+   "captured": 70,
+   "genuine": 64,
+   "periodic": 6,
+   "orbit_minima": 0,
+   "largest": 2387,
+   "ratio": 1.7073170731707317
+  },
+  {
+   "a": 43,
+   "captured": 73,
+   "genuine": 69,
+   "periodic": 4,
+   "orbit_minima": 0,
+   "largest": 1765,
+   "ratio": 1.697674418604651
+  },
+  {
+   "a": 45,
+   "captured": 110,
+   "genuine": 50,
+   "periodic": 6,
+   "orbit_minima": 54,
+   "largest": 5475,
+   "ratio": 2.4444444444444446
+  },
+  {
+   "a": 47,
+   "captured": 91,
+   "genuine": 60,
+   "periodic": 20,
+   "orbit_minima": 11,
+   "largest": 7697,
+   "ratio": 1.9361702127659575
+  },
+  {
+   "a": 49,
+   "captured": 84,
+   "genuine": 70,
+   "periodic": 8,
+   "orbit_minima": 6,
+   "largest": 9631,
+   "ratio": 1.7142857142857142
+  },
+  {
+   "a": 51,
+   "captured": 89,
+   "genuine": 67,
+   "periodic": 8,
+   "orbit_minima": 14,
+   "largest": 6205,
+   "ratio": 1.7450980392156863
+  },
+  {
+   "a": 53,
+   "captured": 93,
+   "genuine": 74,
+   "periodic": 5,
+   "orbit_minima": 14,
+   "largest": 40443,
+   "ratio": 1.7547169811320755
+  },
+  {
+   "a": 55,
+   "captured": 101,
+   "genuine": 71,
+   "periodic": 20,
+   "orbit_minima": 10,
+   "largest": 8137,
+   "ratio": 1.8363636363636364
+  },
+  {
+   "a": 57,
+   "captured": 98,
+   "genuine": 88,
+   "periodic": 4,
+   "orbit_minima": 6,
+   "largest": 6935,
+   "ratio": 1.719298245614035
+  },
+  {
+   "a": 59,
+   "captured": 112,
+   "genuine": 81,
+   "periodic": 16,
+   "orbit_minima": 15,
+   "largest": 15557,
+   "ratio": 1.8983050847457628
+  },
+  {
+   "a": 61,
+   "captured": 110,
+   "genuine": 103,
+   "periodic": 6,
+   "orbit_minima": 1,
+   "largest": 19887,
+   "ratio": 1.8032786885245902
+  },
+  {
+   "a": 63,
+   "captured": 115,
+   "genuine": 104,
+   "periodic": 2,
+   "orbit_minima": 9,
+   "largest": 11969,
+   "ratio": 1.8253968253968254
+  },
+  {
+   "a": 65,
+   "captured": 131,
+   "genuine": 83,
+   "periodic": 21,
+   "orbit_minima": 27,
+   "largest": 9563,
+   "ratio": 2.0153846153846153
+  },
+  {
+   "a": 67,
+   "captured": 125,
+   "genuine": 109,
+   "periodic": 9,
+   "orbit_minima": 7,
+   "largest": 9357,
+   "ratio": 1.8656716417910448
+  },
+  {
+   "a": 69,
+   "captured": 131,
+   "genuine": 105,
+   "periodic": 10,
+   "orbit_minima": 16,
+   "largest": 14523,
+   "ratio": 1.8985507246376812
+  },
+  {
+   "a": 71,
+   "captured": 152,
+   "genuine": 109,
+   "periodic": 11,
+   "orbit_minima": 32,
+   "largest": 4409,
+   "ratio": 2.140845070422535
+  },
+  {
+   "a": 73,
+   "captured": 125,
+   "genuine": 96,
+   "periodic": 20,
+   "orbit_minima": 9,
+   "largest": 6207,
+   "ratio": 1.7123287671232876
+  },
+  {
+   "a": 75,
+   "captured": 160,
+   "genuine": 117,
+   "periodic": 12,
+   "orbit_minima": 31,
+   "largest": 21077,
+   "ratio": 2.1333333333333333
+  },
+  {
+   "a": 77,
+   "captured": 140,
+   "genuine": 121,
+   "periodic": 15,
+   "orbit_minima": 4,
+   "largest": 12003,
+   "ratio": 1.8181818181818181
+  },
+  {
+   "a": 79,
+   "captured": 151,
+   "genuine": 120,
+   "periodic": 28,
+   "orbit_minima": 3,
+   "largest": 16769,
+   "ratio": 1.9113924050632911
+  },
+  {
+   "a": 81,
+   "captured": 160,
+   "genuine": 137,
+   "periodic": 1,
+   "orbit_minima": 22,
+   "largest": 9879,
+   "ratio": 1.9753086419753085
+  },
+  {
+   "a": 83,
+   "captured": 146,
+   "genuine": 122,
+   "periodic": 9,
+   "orbit_minima": 15,
+   "largest": 12141,
+   "ratio": 1.7590361445783131
+  },
+  {
+   "a": 85,
+   "captured": 152,
+   "genuine": 111,
+   "periodic": 30,
+   "orbit_minima": 11,
+   "largest": 12203,
+   "ratio": 1.7882352941176471
+  },
+  {
+   "a": 87,
+   "captured": 159,
+   "genuine": 130,
+   "periodic": 7,
+   "orbit_minima": 22,
+   "largest": 23085,
+   "ratio": 1.8275862068965518
+  },
+  {
+   "a": 89,
+   "captured": 159,
+   "genuine": 150,
+   "periodic": 5,
+   "orbit_minima": 4,
+   "largest": 22119,
+   "ratio": 1.7865168539325842
+  },
+  {
+   "a": 91,
+   "captured": 179,
+   "genuine": 133,
+   "periodic": 27,
+   "orbit_minima": 19,
+   "largest": 28293,
+   "ratio": 1.967032967032967
+  },
+  {
+   "a": 93,
+   "captured": 174,
+   "genuine": 158,
+   "periodic": 5,
+   "orbit_minima": 11,
+   "largest": 15459,
+   "ratio": 1.8709677419354838
+  },
+  {
+   "a": 95,
+   "captured": 168,
+   "genuine": 131,
+   "periodic": 28,
+   "orbit_minima": 9,
+   "largest": 17701,
+   "ratio": 1.768421052631579
+  },
+  {
+   "a": 97,
+   "captured": 176,
+   "genuine": 166,
+   "periodic": 8,
+   "orbit_minima": 2,
+   "largest": 38623,
+   "ratio": 1.8144329896907216
+  },
+  {
+   "a": 99,
+   "captured": 173,
+   "genuine": 138,
+   "periodic": 6,
+   "orbit_minima": 29,
+   "largest": 24029,
+   "ratio": 1.7474747474747474
+  },
+  {
+   "a": 101,
+   "captured": 183,
+   "genuine": 159,
+   "periodic": 20,
+   "orbit_minima": 4,
+   "largest": 13575,
+   "ratio": 1.811881188118812
+  },
+  {
+   "a": 103,
+   "captured": 194,
+   "genuine": 170,
+   "periodic": 17,
+   "orbit_minima": 7,
+   "largest": 23257,
+   "ratio": 1.883495145631068
+  },
+  {
+   "a": 105,
+   "captured": 197,
+   "genuine": 153,
+   "periodic": 10,
+   "orbit_minima": 34,
+   "largest": 24127,
+   "ratio": 1.8761904761904762
+  },
+  {
+   "a": 107,
+   "captured": 204,
+   "genuine": 185,
+   "periodic": 19,
+   "orbit_minima": 0,
+   "largest": 32461,
+   "ratio": 1.9065420560747663
+  },
+  {
+   "a": 109,
+   "captured": 190,
+   "genuine": 175,
+   "periodic": 11,
+   "orbit_minima": 4,
+   "largest": 26195,
+   "ratio": 1.7431192660550459
+  },
+  {
+   "a": 111,
+   "captured": 194,
+   "genuine": 167,
+   "periodic": 4,
+   "orbit_minima": 23,
+   "largest": 26641,
+   "ratio": 1.7477477477477477
+  },
+  {
+   "a": 113,
+   "captured": 210,
+   "genuine": 202,
+   "periodic": 8,
+   "orbit_minima": 0,
+   "largest": 27791,
+   "ratio": 1.8584070796460177
+  },
+  {
+   "a": 115,
+   "captured": 223,
+   "genuine": 179,
+   "periodic": 28,
+   "orbit_minima": 16,
+   "largest": 24205,
+   "ratio": 1.9391304347826086
+  },
+  {
+   "a": 117,
+   "captured": 253,
+   "genuine": 142,
+   "periodic": 10,
+   "orbit_minima": 101,
+   "largest": 30587,
+   "ratio": 2.1623931623931623
+  },
+  {
+   "a": 119,
+   "captured": 203,
+   "genuine": 161,
+   "periodic": 36,
+   "orbit_minima": 6,
+   "largest": 25997,
+   "ratio": 1.7058823529411764
+  },
+  {
+   "a": 121,
+   "captured": 221,
+   "genuine": 179,
+   "periodic": 37,
+   "orbit_minima": 5,
+   "largest": 39927,
+   "ratio": 1.8264462809917354
+  },
+  {
+   "a": 123,
+   "captured": 218,
+   "genuine": 210,
+   "periodic": 6,
+   "orbit_minima": 2,
+   "largest": 22813,
+   "ratio": 1.7723577235772359
+  },
+  {
+   "a": 125,
+   "captured": 250,
+   "genuine": 200,
+   "periodic": 27,
+   "orbit_minima": 23,
+   "largest": 49071,
+   "ratio": 2.0
+  },
+  {
+   "a": 127,
+   "captured": 232,
+   "genuine": 210,
+   "periodic": 15,
+   "orbit_minima": 7,
+   "largest": 21637,
+   "ratio": 1.8267716535433072
+  },
+  {
+   "a": 129,
+   "captured": 228,
+   "genuine": 222,
+   "periodic": 4,
+   "orbit_minima": 2,
+   "largest": 19327,
+   "ratio": 1.7674418604651163
+  },
+  {
+   "a": 131,
+   "captured": 235,
+   "genuine": 207,
+   "periodic": 24,
+   "orbit_minima": 4,
+   "largest": 54901,
+   "ratio": 1.7938931297709924
+  },
+  {
+   "a": 133,
+   "captured": 236,
+   "genuine": 208,
+   "periodic": 20,
+   "orbit_minima": 8,
+   "largest": 19591,
+   "ratio": 1.7744360902255638
+  },
+  {
+   "a": 135,
+   "captured": 317,
+   "genuine": 180,
+   "periodic": 6,
+   "orbit_minima": 131,
+   "largest": 16465,
+   "ratio": 2.348148148148148
+  },
+  {
+   "a": 137,
+   "captured": 243,
+   "genuine": 201,
+   "periodic": 23,
+   "orbit_minima": 19,
+   "largest": 29555,
+   "ratio": 1.7737226277372262
+  },
+  {
+   "a": 139,
+   "captured": 263,
+   "genuine": 232,
+   "periodic": 28,
+   "orbit_minima": 3,
+   "largest": 41321,
+   "ratio": 1.8920863309352518
+  },
+  {
+   "a": 141,
+   "captured": 260,
+   "genuine": 203,
+   "periodic": 20,
+   "orbit_minima": 37,
+   "largest": 30835,
+   "ratio": 1.8439716312056738
+  },
+  {
+   "a": 143,
+   "captured": 275,
+   "genuine": 210,
+   "periodic": 43,
+   "orbit_minima": 22,
+   "largest": 65193,
+   "ratio": 1.9230769230769231
+  },
+  {
+   "a": 145,
+   "captured": 268,
+   "genuine": 221,
+   "periodic": 27,
+   "orbit_minima": 20,
+   "largest": 38475,
+   "ratio": 1.8482758620689654
+  },
+  {
+   "a": 147,
+   "captured": 259,
+   "genuine": 234,
+   "periodic": 8,
+   "orbit_minima": 17,
+   "largest": 39869,
+   "ratio": 1.7619047619047619
+  },
+  {
+   "a": 149,
+   "captured": 266,
+   "genuine": 242,
+   "periodic": 15,
+   "orbit_minima": 9,
+   "largest": 56475,
+   "ratio": 1.7852348993288591
+  },
+  {
+   "a": 151,
+   "captured": 267,
+   "genuine": 238,
+   "periodic": 20,
+   "orbit_minima": 9,
+   "largest": 43257,
+   "ratio": 1.7682119205298013
+  },
+  {
+   "a": 153,
+   "captured": 263,
+   "genuine": 217,
+   "periodic": 8,
+   "orbit_minima": 38,
+   "largest": 44839,
+   "ratio": 1.7189542483660132
+  },
+  {
+   "a": 155,
+   "captured": 285,
+   "genuine": 254,
+   "periodic": 20,
+   "orbit_minima": 11,
+   "largest": 25765,
+   "ratio": 1.8387096774193548
+  },
+  {
+   "a": 157,
+   "captured": 279,
+   "genuine": 264,
+   "periodic": 9,
+   "orbit_minima": 6,
+   "largest": 35731,
+   "ratio": 1.7770700636942676
+  },
+  {
+   "a": 159,
+   "captured": 287,
+   "genuine": 247,
+   "periodic": 5,
+   "orbit_minima": 35,
+   "largest": 121329,
+   "ratio": 1.8050314465408805
+  },
+  {
+   "a": 161,
+   "captured": 287,
+   "genuine": 234,
+   "periodic": 38,
+   "orbit_minima": 15,
+   "largest": 38139,
+   "ratio": 1.7826086956521738
+  },
+  {
+   "a": 163,
+   "captured": 302,
+   "genuine": 268,
+   "periodic": 31,
+   "orbit_minima": 3,
+   "largest": 56989,
+   "ratio": 1.852760736196319
+  },
+  {
+   "a": 165,
+   "captured": 311,
+   "genuine": 250,
+   "periodic": 20,
+   "orbit_minima": 41,
+   "largest": 47867,
+   "ratio": 1.8848484848484848
+  },
+  {
+   "a": 167,
+   "captured": 304,
+   "genuine": 259,
+   "periodic": 22,
+   "orbit_minima": 23,
+   "largest": 72345,
+   "ratio": 1.8203592814371257
+  },
+  {
+   "a": 169,
+   "captured": 323,
+   "genuine": 276,
+   "periodic": 27,
+   "orbit_minima": 20,
+   "largest": 49363,
+   "ratio": 1.9112426035502958
+  },
+  {
+   "a": 171,
+   "captured": 294,
+   "genuine": 272,
+   "periodic": 4,
+   "orbit_minima": 18,
+   "largest": 35125,
+   "ratio": 1.719298245614035
+  },
+  {
+   "a": 173,
+   "captured": 311,
+   "genuine": 289,
+   "periodic": 17,
+   "orbit_minima": 5,
+   "largest": 43935,
+   "ratio": 1.7976878612716762
+  },
+  {
+   "a": 175,
+   "captured": 321,
+   "genuine": 260,
+   "periodic": 35,
+   "orbit_minima": 26,
+   "largest": 50153,
+   "ratio": 1.8342857142857143
+  },
+  {
+   "a": 177,
+   "captured": 325,
+   "genuine": 266,
+   "periodic": 16,
+   "orbit_minima": 43,
+   "largest": 60907,
+   "ratio": 1.8361581920903955
+  },
+  {
+   "a": 179,
+   "captured": 314,
+   "genuine": 298,
+   "periodic": 14,
+   "orbit_minima": 2,
+   "largest": 58785,
+   "ratio": 1.7541899441340782
+  },
+  {
+   "a": 181,
+   "captured": 329,
+   "genuine": 295,
+   "periodic": 26,
+   "orbit_minima": 8,
+   "largest": 67131,
+   "ratio": 1.8176795580110496
+  },
+  {
+   "a": 183,
+   "captured": 343,
+   "genuine": 330,
+   "periodic": 6,
+   "orbit_minima": 7,
+   "largest": 59661,
+   "ratio": 1.8743169398907105
+  },
+  {
+   "a": 185,
+   "captured": 353,
+   "genuine": 317,
+   "periodic": 24,
+   "orbit_minima": 12,
+   "largest": 66383,
+   "ratio": 1.9081081081081082
+  },
+  {
+   "a": 187,
+   "captured": 331,
+   "genuine": 290,
+   "periodic": 26,
+   "orbit_minima": 15,
+   "largest": 60565,
+   "ratio": 1.7700534759358288
+  },
+  {
+   "a": 189,
+   "captured": 338,
+   "genuine": 313,
+   "periodic": 2,
+   "orbit_minima": 23,
+   "largest": 35907,
+   "ratio": 1.7883597883597884
+  },
+  {
+   "a": 191,
+   "captured": 355,
+   "genuine": 315,
+   "periodic": 15,
+   "orbit_minima": 25,
+   "largest": 39105,
+   "ratio": 1.8586387434554974
+  },
+  {
+   "a": 193,
+   "captured": 354,
+   "genuine": 307,
+   "periodic": 35,
+   "orbit_minima": 12,
+   "largest": 45863,
+   "ratio": 1.83419689119171
+  },
+  {
+   "a": 195,
+   "captured": 395,
+   "genuine": 298,
+   "periodic": 21,
+   "orbit_minima": 76,
+   "largest": 51901,
+   "ratio": 2.0256410256410255
+  },
+  {
+   "a": 197,
+   "captured": 372,
+   "genuine": 338,
+   "periodic": 32,
+   "orbit_minima": 2,
+   "largest": 89659,
+   "ratio": 1.8883248730964468
+  },
+  {
+   "a": 199,
+   "captured": 374,
+   "genuine": 360,
+   "periodic": 10,
+   "orbit_minima": 4,
+   "largest": 56253,
+   "ratio": 1.879396984924623
+  },
+  {
+   "a": 201,
+   "captured": 365,
+   "genuine": 333,
+   "periodic": 9,
+   "orbit_minima": 23,
+   "largest": 59383,
+   "ratio": 1.8159203980099503
+  },
+  {
+   "a": 203,
+   "captured": 375,
+   "genuine": 333,
+   "periodic": 28,
+   "orbit_minima": 14,
+   "largest": 53865,
+   "ratio": 1.8472906403940887
+  },
+  {
+   "a": 205,
+   "captured": 368,
+   "genuine": 320,
+   "periodic": 29,
+   "orbit_minima": 19,
+   "largest": 86431,
+   "ratio": 1.7951219512195122
+  },
+  {
+   "a": 207,
+   "captured": 389,
+   "genuine": 334,
+   "periodic": 10,
+   "orbit_minima": 45,
+   "largest": 48017,
+   "ratio": 1.8792270531400965
+  },
+  {
+   "a": 209,
+   "captured": 380,
+   "genuine": 332,
+   "periodic": 31,
+   "orbit_minima": 17,
+   "largest": 45167,
+   "ratio": 1.8181818181818181
+  },
+  {
+   "a": 211,
+   "captured": 377,
+   "genuine": 347,
+   "periodic": 18,
+   "orbit_minima": 12,
+   "largest": 71069,
+   "ratio": 1.7867298578199051
+  },
+  {
+   "a": 213,
+   "captured": 427,
+   "genuine": 339,
+   "periodic": 11,
+   "orbit_minima": 77,
+   "largest": 49399,
+   "ratio": 2.004694835680751
+  },
+  {
+   "a": 215,
+   "captured": 378,
+   "genuine": 343,
+   "periodic": 25,
+   "orbit_minima": 10,
+   "largest": 47009,
+   "ratio": 1.758139534883721
+  },
+  {
+   "a": 217,
+   "captured": 379,
+   "genuine": 326,
+   "periodic": 34,
+   "orbit_minima": 19,
+   "largest": 48207,
+   "ratio": 1.7465437788018434
+  },
+  {
+   "a": 219,
+   "captured": 399,
+   "genuine": 353,
+   "periodic": 20,
+   "orbit_minima": 26,
+   "largest": 66265,
+   "ratio": 1.821917808219178
+  },
+  {
+   "a": 221,
+   "captured": 388,
+   "genuine": 347,
+   "periodic": 21,
+   "orbit_minima": 20,
+   "largest": 48463,
+   "ratio": 1.755656108597285
+  },
+  {
+   "a": 223,
+   "captured": 418,
+   "genuine": 386,
+   "periodic": 21,
+   "orbit_minima": 11,
+   "largest": 68737,
+   "ratio": 1.8744394618834082
+  },
+  {
+   "a": 225,
+   "captured": 452,
+   "genuine": 358,
+   "periodic": 12,
+   "orbit_minima": 82,
+   "largest": 63231,
+   "ratio": 2.008888888888889
+  },
+  {
+   "a": 227,
+   "captured": 408,
+   "genuine": 390,
+   "periodic": 17,
+   "orbit_minima": 1,
+   "largest": 87153,
+   "ratio": 1.7973568281938326
+  },
+  {
+   "a": 229,
+   "captured": 409,
+   "genuine": 381,
+   "periodic": 24,
+   "orbit_minima": 4,
+   "largest": 64331,
+   "ratio": 1.7860262008733625
+  },
+  {
+   "a": 231,
+   "captured": 412,
+   "genuine": 384,
+   "periodic": 15,
+   "orbit_minima": 13,
+   "largest": 69913,
+   "ratio": 1.7835497835497836
+  },
+  {
+   "a": 233,
+   "captured": 422,
+   "genuine": 316,
+   "periodic": 52,
+   "orbit_minima": 54,
+   "largest": 57247,
+   "ratio": 1.8111587982832618
+  },
+  {
+   "a": 235,
+   "captured": 441,
+   "genuine": 375,
+   "periodic": 45,
+   "orbit_minima": 21,
+   "largest": 65129,
+   "ratio": 1.876595744680851
+  },
+  {
+   "a": 237,
+   "captured": 444,
+   "genuine": 400,
+   "periodic": 28,
+   "orbit_minima": 16,
+   "largest": 50307,
+   "ratio": 1.8734177215189873
+  },
+  {
+   "a": 239,
+   "captured": 425,
+   "genuine": 384,
+   "periodic": 36,
+   "orbit_minima": 5,
+   "largest": 66613,
+   "ratio": 1.7782426778242677
+  },
+  {
+   "a": 241,
+   "captured": 443,
+   "genuine": 406,
+   "periodic": 28,
+   "orbit_minima": 9,
+   "largest": 99499,
+   "ratio": 1.838174273858921
+  },
+  {
+   "a": 243,
+   "captured": 451,
+   "genuine": 386,
+   "periodic": 1,
+   "orbit_minima": 64,
+   "largest": 29645,
+   "ratio": 1.8559670781893005
+  },
+  {
+   "a": 245,
+   "captured": 452,
+   "genuine": 396,
+   "periodic": 35,
+   "orbit_minima": 21,
+   "largest": 77307,
+   "ratio": 1.8448979591836734
+  },
+  {
+   "a": 247,
+   "captured": 446,
+   "genuine": 374,
+   "periodic": 41,
+   "orbit_minima": 31,
+   "largest": 48457,
+   "ratio": 1.805668016194332
+  },
+  {
+   "a": 249,
+   "captured": 444,
+   "genuine": 399,
+   "periodic": 9,
+   "orbit_minima": 36,
+   "largest": 73327,
+   "ratio": 1.783132530120482
+  },
+  {
+   "a": 251,
+   "captured": 460,
+   "genuine": 415,
+   "periodic": 17,
+   "orbit_minima": 28,
+   "largest": 69113,
+   "ratio": 1.8326693227091633
+  },
+  {
+   "a": 253,
+   "captured": 466,
+   "genuine": 405,
+   "periodic": 49,
+   "orbit_minima": 12,
+   "largest": 116143,
+   "ratio": 1.841897233201581
+  },
+  {
+   "a": 255,
+   "captured": 457,
+   "genuine": 387,
+   "periodic": 30,
+   "orbit_minima": 40,
+   "largest": 36609,
+   "ratio": 1.7921568627450981
+  },
+  {
+   "a": 257,
+   "captured": 471,
+   "genuine": 448,
+   "periodic": 22,
+   "orbit_minima": 1,
+   "largest": 96251,
+   "ratio": 1.8326848249027237
+  },
+  {
+   "a": 259,
+   "captured": 483,
+   "genuine": 422,
+   "periodic": 38,
+   "orbit_minima": 23,
+   "largest": 86413,
+   "ratio": 1.864864864864865
+  },
+  {
+   "a": 261,
+   "captured": 507,
+   "genuine": 440,
+   "periodic": 7,
+   "orbit_minima": 60,
+   "largest": 69371,
+   "ratio": 1.9425287356321839
+  },
+  {
+   "a": 263,
+   "captured": 476,
+   "genuine": 428,
+   "periodic": 44,
+   "orbit_minima": 4,
+   "largest": 36049,
+   "ratio": 1.8098859315589353
+  },
+  {
+   "a": 265,
+   "captured": 473,
+   "genuine": 405,
+   "periodic": 33,
+   "orbit_minima": 35,
+   "largest": 202215,
+   "ratio": 1.7849056603773585
+  },
+  {
+   "a": 267,
+   "captured": 492,
+   "genuine": 469,
+   "periodic": 5,
+   "orbit_minima": 18,
+   "largest": 85573,
+   "ratio": 1.8426966292134832
+  },
+  {
+   "a": 269,
+   "captured": 484,
+   "genuine": 398,
+   "periodic": 42,
+   "orbit_minima": 44,
+   "largest": 137763,
+   "ratio": 1.7992565055762082
+  },
+  {
+   "a": 271,
+   "captured": 495,
+   "genuine": 475,
+   "periodic": 12,
+   "orbit_minima": 8,
+   "largest": 72705,
+   "ratio": 1.8265682656826567
+  },
+  {
+   "a": 273,
+   "captured": 530,
+   "genuine": 443,
+   "periodic": 27,
+   "orbit_minima": 60,
+   "largest": 113263,
+   "ratio": 1.9413919413919414
+  },
+  {
+   "a": 275,
+   "captured": 511,
+   "genuine": 449,
+   "periodic": 50,
+   "orbit_minima": 12,
+   "largest": 107557,
+   "ratio": 1.8581818181818182
+  },
+  {
+   "a": 277,
+   "captured": 515,
+   "genuine": 484,
+   "periodic": 25,
+   "orbit_minima": 6,
+   "largest": 100603,
+   "ratio": 1.8592057761732852
+  },
+  {
+   "a": 279,
+   "captured": 516,
+   "genuine": 484,
+   "periodic": 5,
+   "orbit_minima": 27,
+   "largest": 73961,
+   "ratio": 1.8494623655913978
+  },
+  {
+   "a": 281,
+   "captured": 498,
+   "genuine": 456,
+   "periodic": 33,
+   "orbit_minima": 9,
+   "largest": 109295,
+   "ratio": 1.7722419928825623
+  },
+  {
+   "a": 283,
+   "captured": 499,
+   "genuine": 457,
+   "periodic": 24,
+   "orbit_minima": 18,
+   "largest": 98461,
+   "ratio": 1.7632508833922262
+  },
+  {
+   "a": 285,
+   "captured": 526,
+   "genuine": 463,
+   "periodic": 28,
+   "orbit_minima": 35,
+   "largest": 90283,
+   "ratio": 1.8456140350877193
+  },
+  {
+   "a": 287,
+   "captured": 514,
+   "genuine": 451,
+   "periodic": 42,
+   "orbit_minima": 21,
+   "largest": 81509,
+   "ratio": 1.7909407665505226
+  },
+  {
+   "a": 289,
+   "captured": 530,
+   "genuine": 501,
+   "periodic": 21,
+   "orbit_minima": 8,
+   "largest": 146119,
+   "ratio": 1.833910034602076
+  },
+  {
+   "a": 291,
+   "captured": 545,
+   "genuine": 526,
+   "periodic": 8,
+   "orbit_minima": 11,
+   "largest": 115869,
+   "ratio": 1.872852233676976
+  },
+  {
+   "a": 293,
+   "captured": 522,
+   "genuine": 507,
+   "periodic": 11,
+   "orbit_minima": 4,
+   "largest": 49019,
+   "ratio": 1.7815699658703072
+  },
+  {
+   "a": 295,
+   "captured": 545,
+   "genuine": 428,
+   "periodic": 49,
+   "orbit_minima": 68,
+   "largest": 89049,
+   "ratio": 1.847457627118644
+  },
+  {
+   "a": 297,
+   "captured": 537,
+   "genuine": 455,
+   "periodic": 6,
+   "orbit_minima": 76,
+   "largest": 72087,
+   "ratio": 1.8080808080808082
+  },
+  {
+   "a": 299,
+   "captured": 547,
+   "genuine": 471,
+   "periodic": 41,
+   "orbit_minima": 35,
+   "largest": 62933,
+   "ratio": 1.8294314381270902
+  },
+  {
+   "a": 301,
+   "captured": 540,
+   "genuine": 500,
+   "periodic": 31,
+   "orbit_minima": 9,
+   "largest": 119359,
+   "ratio": 1.7940199335548173
+  },
+  {
+   "a": 303,
+   "captured": 559,
+   "genuine": 517,
+   "periodic": 20,
+   "orbit_minima": 22,
+   "largest": 86705,
+   "ratio": 1.844884488448845
+  },
+  {
+   "a": 305,
+   "captured": 547,
+   "genuine": 502,
+   "periodic": 36,
+   "orbit_minima": 9,
+   "largest": 99435,
+   "ratio": 1.7934426229508196
+  },
+  {
+   "a": 307,
+   "captured": 536,
+   "genuine": 481,
+   "periodic": 41,
+   "orbit_minima": 14,
+   "largest": 107809,
+   "ratio": 1.745928338762215
+  },
+  {
+   "a": 309,
+   "captured": 565,
+   "genuine": 531,
+   "periodic": 17,
+   "orbit_minima": 17,
+   "largest": 101627,
+   "ratio": 1.8284789644012944
+  },
+  {
+   "a": 311,
+   "captured": 567,
+   "genuine": 528,
+   "periodic": 30,
+   "orbit_minima": 9,
+   "largest": 123481,
+   "ratio": 1.8231511254019293
+  },
+  {
+   "a": 313,
+   "captured": 557,
+   "genuine": 497,
+   "periodic": 48,
+   "orbit_minima": 12,
+   "largest": 92111,
+   "ratio": 1.779552715654952
+  },
+  {
+   "a": 315,
+   "captured": 601,
+   "genuine": 504,
+   "periodic": 10,
+   "orbit_minima": 87,
+   "largest": 91829,
+   "ratio": 1.907936507936508
+  },
+  {
+   "a": 317,
+   "captured": 565,
+   "genuine": 535,
+   "periodic": 19,
+   "orbit_minima": 11,
+   "largest": 84143,
+   "ratio": 1.7823343848580442
+  },
+  {
+   "a": 319,
+   "captured": 582,
+   "genuine": 527,
+   "periodic": 33,
+   "orbit_minima": 22,
+   "largest": 114401,
+   "ratio": 1.8244514106583072
+  },
+  {
+   "a": 321,
+   "captured": 593,
+   "genuine": 572,
+   "periodic": 19,
+   "orbit_minima": 2,
+   "largest": 97383,
+   "ratio": 1.8473520249221185
+  },
+  {
+   "a": 323,
+   "captured": 586,
+   "genuine": 556,
+   "periodic": 23,
+   "orbit_minima": 7,
+   "largest": 87933,
+   "ratio": 1.8142414860681115
+  },
+  {
+   "a": 325,
+   "captured": 598,
+   "genuine": 519,
+   "periodic": 37,
+   "orbit_minima": 42,
+   "largest": 74619,
+   "ratio": 1.84
+  },
+  {
+   "a": 327,
+   "captured": 601,
+   "genuine": 582,
+   "periodic": 11,
+   "orbit_minima": 8,
+   "largest": 95057,
+   "ratio": 1.837920489296636
+  },
+  {
+   "a": 329,
+   "captured": 588,
+   "genuine": 523,
+   "periodic": 46,
+   "orbit_minima": 19,
+   "largest": 90679,
+   "ratio": 1.7872340425531914
+  },
+  {
+   "a": 331,
+   "captured": 618,
+   "genuine": 581,
+   "periodic": 29,
+   "orbit_minima": 8,
+   "largest": 111605,
+   "ratio": 1.8670694864048338
+  },
+  {
+   "a": 333,
+   "captured": 592,
+   "genuine": 534,
+   "periodic": 4,
+   "orbit_minima": 54,
+   "largest": 79923,
+   "ratio": 1.7777777777777777
+  },
+  {
+   "a": 335,
+   "captured": 628,
+   "genuine": 566,
+   "periodic": 45,
+   "orbit_minima": 17,
+   "largest": 104277,
+   "ratio": 1.8746268656716418
+  },
+  {
+   "a": 337,
+   "captured": 592,
+   "genuine": 539,
+   "periodic": 38,
+   "orbit_minima": 15,
+   "largest": 122287,
+   "ratio": 1.7566765578635015
+  },
+  {
+   "a": 339,
+   "captured": 610,
+   "genuine": 600,
+   "periodic": 8,
+   "orbit_minima": 2,
+   "largest": 130829,
+   "ratio": 1.7994100294985251
+  },
+  {
+   "a": 341,
+   "captured": 624,
+   "genuine": 577,
+   "periodic": 24,
+   "orbit_minima": 23,
+   "largest": 109755,
+   "ratio": 1.8299120234604105
+  },
+  {
+   "a": 343,
+   "captured": 611,
+   "genuine": 568,
+   "periodic": 26,
+   "orbit_minima": 17,
+   "largest": 177337,
+   "ratio": 1.78134110787172
+  },
+  {
+   "a": 345,
+   "captured": 672,
+   "genuine": 596,
+   "periodic": 28,
+   "orbit_minima": 48,
+   "largest": 106447,
+   "ratio": 1.9478260869565218
+  },
+  {
+   "a": 347,
+   "captured": 635,
+   "genuine": 593,
+   "periodic": 40,
+   "orbit_minima": 2,
+   "largest": 123805,
+   "ratio": 1.8299711815561959
+  },
+  {
+   "a": 349,
+   "captured": 623,
+   "genuine": 572,
+   "periodic": 40,
+   "orbit_minima": 11,
+   "largest": 90019,
+   "ratio": 1.7851002865329513
+  },
+  {
+   "a": 351,
+   "captured": 728,
+   "genuine": 478,
+   "periodic": 10,
+   "orbit_minima": 240,
+   "largest": 91761,
+   "ratio": 2.074074074074074
+  },
+  {
+   "a": 353,
+   "captured": 641,
+   "genuine": 577,
+   "periodic": 41,
+   "orbit_minima": 23,
+   "largest": 106939,
+   "ratio": 1.8158640226628895
+  },
+  {
+   "a": 355,
+   "captured": 733,
+   "genuine": 601,
+   "periodic": 50,
+   "orbit_minima": 82,
+   "largest": 116717,
+   "ratio": 2.064788732394366
+  },
+  {
+   "a": 357,
+   "captured": 624,
+   "genuine": 549,
+   "periodic": 36,
+   "orbit_minima": 39,
+   "largest": 104107,
+   "ratio": 1.7478991596638656
+  },
+  {
+   "a": 359,
+   "captured": 656,
+   "genuine": 583,
+   "periodic": 42,
+   "orbit_minima": 31,
+   "largest": 108025,
+   "ratio": 1.8272980501392757
+  },
+  {
+   "a": 361,
+   "captured": 655,
+   "genuine": 586,
+   "periodic": 54,
+   "orbit_minima": 15,
+   "largest": 130707,
+   "ratio": 1.814404432132964
+  },
+  {
+   "a": 363,
+   "captured": 666,
+   "genuine": 604,
+   "periodic": 37,
+   "orbit_minima": 25,
+   "largest": 120077,
+   "ratio": 1.834710743801653
+  },
+  {
+   "a": 365,
+   "captured": 664,
+   "genuine": 594,
+   "periodic": 48,
+   "orbit_minima": 22,
+   "largest": 106179,
+   "ratio": 1.819178082191781
+  },
+  {
+   "a": 367,
+   "captured": 653,
+   "genuine": 618,
+   "periodic": 32,
+   "orbit_minima": 3,
+   "largest": 151201,
+   "ratio": 1.779291553133515
+  },
+  {
+   "a": 369,
+   "captured": 647,
+   "genuine": 635,
+   "periodic": 6,
+   "orbit_minima": 6,
+   "largest": 128855,
+   "ratio": 1.7533875338753389
+  },
+  {
+   "a": 371,
+   "captured": 648,
+   "genuine": 574,
+   "periodic": 51,
+   "orbit_minima": 23,
+   "largest": 283101,
+   "ratio": 1.7466307277628033
+  },
+  {
+   "a": 373,
+   "captured": 691,
+   "genuine": 641,
+   "periodic": 40,
+   "orbit_minima": 10,
+   "largest": 154227,
+   "ratio": 1.8525469168900803
+  },
+  {
+   "a": 375,
+   "captured": 723,
+   "genuine": 606,
+   "periodic": 27,
+   "orbit_minima": 90,
+   "largest": 147213,
+   "ratio": 1.928
+  },
+  {
+   "a": 377,
+   "captured": 694,
+   "genuine": 610,
+   "periodic": 53,
+   "orbit_minima": 31,
+   "largest": 100035,
+   "ratio": 1.8408488063660478
+  },
+  {
+   "a": 379,
+   "captured": 687,
+   "genuine": 652,
+   "periodic": 20,
+   "orbit_minima": 15,
+   "largest": 129177,
+   "ratio": 1.812664907651715
+  },
+  {
+   "a": 381,
+   "captured": 682,
+   "genuine": 643,
+   "periodic": 15,
+   "orbit_minima": 24,
+   "largest": 64911,
+   "ratio": 1.79002624671916
+  },
+  {
+   "a": 383,
+   "captured": 706,
+   "genuine": 666,
+   "periodic": 27,
+   "orbit_minima": 13,
+   "largest": 116281,
+   "ratio": 1.843342036553525
+  },
+  {
+   "a": 385,
+   "captured": 705,
+   "genuine": 619,
+   "periodic": 59,
+   "orbit_minima": 27,
+   "largest": 258971,
+   "ratio": 1.8311688311688312
+  },
+  {
+   "a": 387,
+   "captured": 697,
+   "genuine": 686,
+   "periodic": 4,
+   "orbit_minima": 7,
+   "largest": 90293,
+   "ratio": 1.801033591731266
+  },
+  {
+   "a": 389,
+   "captured": 699,
+   "genuine": 647,
+   "periodic": 41,
+   "orbit_minima": 11,
+   "largest": 153703,
+   "ratio": 1.7969151670951158
+  },
+  {
+   "a": 391,
+   "captured": 717,
+   "genuine": 647,
+   "periodic": 49,
+   "orbit_minima": 21,
+   "largest": 129465,
+   "ratio": 1.8337595907928388
+  },
+  {
+   "a": 393,
+   "captured": 703,
+   "genuine": 658,
+   "periodic": 24,
+   "orbit_minima": 21,
+   "largest": 164703,
+   "ratio": 1.7888040712468194
+  },
+  {
+   "a": 395,
+   "captured": 731,
+   "genuine": 643,
+   "periodic": 64,
+   "orbit_minima": 24,
+   "largest": 92277,
+   "ratio": 1.8506329113924052
+  },
+  {
+   "a": 397,
+   "captured": 723,
+   "genuine": 695,
+   "periodic": 27,
+   "orbit_minima": 1,
+   "largest": 159091,
+   "ratio": 1.8211586901763224
+  },
+  {
+   "a": 399,
+   "captured": 715,
+   "genuine": 669,
+   "periodic": 20,
+   "orbit_minima": 26,
+   "largest": 78497,
+   "ratio": 1.7919799498746867
+  },
+  {
+   "a": 401,
+   "captured": 715,
+   "genuine": 667,
+   "periodic": 46,
+   "orbit_minima": 2,
+   "largest": 89495,
+   "ratio": 1.7830423940149627
+  },
+  {
+   "a": 403,
+   "captured": 728,
+   "genuine": 666,
+   "periodic": 39,
+   "orbit_minima": 23,
+   "largest": 139557,
+   "ratio": 1.8064516129032258
+  },
+  {
+   "a": 405,
+   "captured": 883,
+   "genuine": 556,
+   "periodic": 6,
+   "orbit_minima": 321,
+   "largest": 84779,
+   "ratio": 2.180246913580247
+  },
+  {
+   "a": 407,
+   "captured": 725,
+   "genuine": 648,
+   "periodic": 56,
+   "orbit_minima": 21,
+   "largest": 124737,
+   "ratio": 1.7813267813267812
+  },
+  {
+   "a": 409,
+   "captured": 752,
+   "genuine": 711,
+   "periodic": 31,
+   "orbit_minima": 10,
+   "largest": 120835,
+   "ratio": 1.8386308068459658
+  },
+  {
+   "a": 411,
+   "captured": 736,
+   "genuine": 653,
+   "periodic": 23,
+   "orbit_minima": 60,
+   "largest": 132889,
+   "ratio": 1.7907542579075426
+  },
+  {
+   "a": 413,
+   "captured": 738,
+   "genuine": 678,
+   "periodic": 40,
+   "orbit_minima": 20,
+   "largest": 108899,
+   "ratio": 1.7869249394673123
+  },
+  {
+   "a": 415,
+   "captured": 756,
+   "genuine": 681,
+   "periodic": 46,
+   "orbit_minima": 29,
+   "largest": 126341,
+   "ratio": 1.8216867469879519
+  },
+  {
+   "a": 417,
+   "captured": 765,
+   "genuine": 724,
+   "periodic": 28,
+   "orbit_minima": 13,
+   "largest": 155599,
+   "ratio": 1.8345323741007193
+  },
+  {
+   "a": 419,
+   "captured": 768,
+   "genuine": 715,
+   "periodic": 38,
+   "orbit_minima": 15,
+   "largest": 121373,
+   "ratio": 1.8329355608591886
+  },
+  {
+   "a": 421,
+   "captured": 766,
+   "genuine": 718,
+   "periodic": 33,
+   "orbit_minima": 15,
+   "largest": 142155,
+   "ratio": 1.819477434679335
+  },
+  {
+   "a": 423,
+   "captured": 782,
+   "genuine": 665,
+   "periodic": 20,
+   "orbit_minima": 97,
+   "largest": 127313,
+   "ratio": 1.8486997635933806
+  },
+  {
+   "a": 425,
+   "captured": 758,
+   "genuine": 666,
+   "periodic": 66,
+   "orbit_minima": 26,
+   "largest": 122591,
+   "ratio": 1.7835294117647058
+  },
+  {
+   "a": 427,
+   "captured": 766,
+   "genuine": 705,
+   "periodic": 38,
+   "orbit_minima": 23,
+   "largest": 139209,
+   "ratio": 1.7939110070257611
+  },
+  {
+   "a": 429,
+   "captured": 795,
+   "genuine": 689,
+   "periodic": 43,
+   "orbit_minima": 63,
+   "largest": 195579,
+   "ratio": 1.8531468531468531
+  },
+  {
+   "a": 431,
+   "captured": 772,
+   "genuine": 652,
+   "periodic": 90,
+   "orbit_minima": 30,
+   "largest": 173877,
+   "ratio": 1.791183294663573
+  },
+  {
+   "a": 433,
+   "captured": 802,
+   "genuine": 706,
+   "periodic": 81,
+   "orbit_minima": 15,
+   "largest": 131903,
+   "ratio": 1.8521939953810624
+  },
+  {
+   "a": 435,
+   "captured": 806,
+   "genuine": 710,
+   "periodic": 27,
+   "orbit_minima": 69,
+   "largest": 118957,
+   "ratio": 1.8528735632183908
+  },
+  {
+   "a": 437,
+   "captured": 778,
+   "genuine": 718,
+   "periodic": 50,
+   "orbit_minima": 10,
+   "largest": 140311,
+   "ratio": 1.7803203661327232
+  },
+  {
+   "a": 439,
+   "captured": 814,
+   "genuine": 740,
+   "periodic": 57,
+   "orbit_minima": 17,
+   "largest": 264969,
+   "ratio": 1.8542141230068336
+  },
+  {
+   "a": 441,
+   "captured": 798,
+   "genuine": 740,
+   "periodic": 8,
+   "orbit_minima": 50,
+   "largest": 159623,
+   "ratio": 1.8095238095238095
+  },
+  {
+   "a": 443,
+   "captured": 790,
+   "genuine": 741,
+   "periodic": 30,
+   "orbit_minima": 19,
+   "largest": 158997,
+   "ratio": 1.783295711060948
+  },
+  {
+   "a": 445,
+   "captured": 815,
+   "genuine": 759,
+   "periodic": 38,
+   "orbit_minima": 18,
+   "largest": 155503,
+   "ratio": 1.8314606741573034
+  },
+  {
+   "a": 447,
+   "captured": 829,
+   "genuine": 789,
+   "periodic": 15,
+   "orbit_minima": 25,
+   "largest": 169425,
+   "ratio": 1.854586129753915
+  },
+  {
+   "a": 449,
+   "captured": 816,
+   "genuine": 789,
+   "periodic": 18,
+   "orbit_minima": 9,
+   "largest": 205147,
+   "ratio": 1.8173719376391981
+  },
+  {
+   "a": 451,
+   "captured": 791,
+   "genuine": 745,
+   "periodic": 31,
+   "orbit_minima": 15,
+   "largest": 134517,
+   "ratio": 1.753880266075388
+  },
+  {
+   "a": 453,
+   "captured": 802,
+   "genuine": 749,
+   "periodic": 20,
+   "orbit_minima": 33,
+   "largest": 129771,
+   "ratio": 1.770419426048565
+  },
+  {
+   "a": 455,
+   "captured": 852,
+   "genuine": 729,
+   "periodic": 78,
+   "orbit_minima": 45,
+   "largest": 164329,
+   "ratio": 1.8725274725274725
+  },
+  {
+   "a": 457,
+   "captured": 813,
+   "genuine": 753,
+   "periodic": 38,
+   "orbit_minima": 22,
+   "largest": 218291,
+   "ratio": 1.7789934354485777
+  },
+  {
+   "a": 459,
+   "captured": 808,
+   "genuine": 692,
+   "periodic": 8,
+   "orbit_minima": 108,
+   "largest": 179305,
+   "ratio": 1.7603485838779955
+  },
+  {
+   "a": 461,
+   "captured": 822,
+   "genuine": 804,
+   "periodic": 15,
+   "orbit_minima": 3,
+   "largest": 154555,
+   "ratio": 1.7830802603036877
+  },
+  {
+   "a": 463,
+   "captured": 845,
+   "genuine": 802,
+   "periodic": 31,
+   "orbit_minima": 12,
+   "largest": 159849,
+   "ratio": 1.8250539956803455
+  },
+  {
+   "a": 465,
+   "captured": 854,
+   "genuine": 802,
+   "periodic": 20,
+   "orbit_minima": 32,
+   "largest": 156823,
+   "ratio": 1.8365591397849463
+  },
+  {
+   "a": 467,
+   "captured": 844,
+   "genuine": 789,
+   "periodic": 32,
+   "orbit_minima": 23,
+   "largest": 156389,
+   "ratio": 1.8072805139186296
+  },
+  {
+   "a": 469,
+   "captured": 858,
+   "genuine": 812,
+   "periodic": 33,
+   "orbit_minima": 13,
+   "largest": 136987,
+   "ratio": 1.8294243070362473
+  },
+  {
+   "a": 471,
+   "captured": 848,
+   "genuine": 821,
+   "periodic": 9,
+   "orbit_minima": 18,
+   "largest": 149825,
+   "ratio": 1.8004246284501062
+  },
+  {
+   "a": 473,
+   "captured": 846,
+   "genuine": 789,
+   "periodic": 54,
+   "orbit_minima": 3,
+   "largest": 160807,
+   "ratio": 1.7885835095137421
+  },
+  {
+   "a": 475,
+   "captured": 854,
+   "genuine": 779,
+   "periodic": 58,
+   "orbit_minima": 17,
+   "largest": 100709,
+   "ratio": 1.7978947368421052
+  },
+  {
+   "a": 477,
+   "captured": 849,
+   "genuine": 757,
+   "periodic": 5,
+   "orbit_minima": 87,
+   "largest": 363987,
+   "ratio": 1.779874213836478
+  },
+  {
+   "a": 479,
+   "captured": 879,
+   "genuine": 781,
+   "periodic": 83,
+   "orbit_minima": 15,
+   "largest": 162657,
+   "ratio": 1.8350730688935282
+  },
+  {
+   "a": 481,
+   "captured": 868,
+   "genuine": 749,
+   "periodic": 66,
+   "orbit_minima": 53,
+   "largest": 120079,
+   "ratio": 1.8045738045738047
+  },
+  {
+   "a": 483,
+   "captured": 873,
+   "genuine": 790,
+   "periodic": 38,
+   "orbit_minima": 45,
+   "largest": 114417,
+   "ratio": 1.8074534161490683
+  },
+  {
+   "a": 485,
+   "captured": 868,
+   "genuine": 738,
+   "periodic": 97,
+   "orbit_minima": 33,
+   "largest": 193115,
+   "ratio": 1.7896907216494846
+  },
+  {
+   "a": 487,
+   "captured": 872,
+   "genuine": 812,
+   "periodic": 39,
+   "orbit_minima": 21,
+   "largest": 188409,
+   "ratio": 1.7905544147843941
+  },
+  {
+   "a": 489,
+   "captured": 906,
+   "genuine": 860,
+   "periodic": 31,
+   "orbit_minima": 15,
+   "largest": 190355,
+   "ratio": 1.852760736196319
+  },
+  {
+   "a": 491,
+   "captured": 897,
+   "genuine": 841,
+   "periodic": 44,
+   "orbit_minima": 12,
+   "largest": 162149,
+   "ratio": 1.8268839103869654
+  },
+  {
+   "a": 493,
+   "captured": 890,
+   "genuine": 825,
+   "periodic": 56,
+   "orbit_minima": 9,
+   "largest": 165235,
+   "ratio": 1.8052738336713996
+  },
+  {
+   "a": 495,
+   "captured": 903,
+   "genuine": 763,
+   "periodic": 20,
+   "orbit_minima": 120,
+   "largest": 143601,
+   "ratio": 1.8242424242424242
+  },
+  {
+   "a": 497,
+   "captured": 913,
+   "genuine": 781,
+   "periodic": 76,
+   "orbit_minima": 56,
+   "largest": 182891,
+   "ratio": 1.8370221327967806
+  },
+  {
+   "a": 499,
+   "captured": 989,
+   "genuine": 768,
+   "periodic": 105,
+   "orbit_minima": 116,
+   "largest": 204353,
+   "ratio": 1.9819639278557115
+  },
+  {
+   "a": 501,
+   "captured": 909,
+   "genuine": 822,
+   "periodic": 22,
+   "orbit_minima": 65,
+   "largest": 217035,
+   "ratio": 1.81437125748503
+  },
+  {
+   "a": 503,
+   "captured": 937,
+   "genuine": 872,
+   "periodic": 56,
+   "orbit_minima": 9,
+   "largest": 184857,
+   "ratio": 1.8628230616302186
+  },
+  {
+   "a": 505,
+   "captured": 944,
+   "genuine": 873,
+   "periodic": 45,
+   "orbit_minima": 26,
+   "largest": 156999,
+   "ratio": 1.8693069306930694
+  },
+  {
+   "a": 507,
+   "captured": 936,
+   "genuine": 855,
+   "periodic": 27,
+   "orbit_minima": 54,
+   "largest": 175973,
+   "ratio": 1.8461538461538463
+  },
+  {
+   "a": 509,
+   "captured": 913,
+   "genuine": 862,
+   "periodic": 50,
+   "orbit_minima": 1,
+   "largest": 176643,
+   "ratio": 1.793713163064833
+  },
+  {
+   "a": 511,
+   "captured": 920,
+   "genuine": 822,
+   "periodic": 70,
+   "orbit_minima": 28,
+   "largest": 140561,
+   "ratio": 1.8003913894324852
+  },
+  {
+   "a": 513,
+   "captured": 908,
+   "genuine": 851,
+   "periodic": 4,
+   "orbit_minima": 53,
+   "largest": 131615,
+   "ratio": 1.769980506822612
+  },
+  {
+   "a": 515,
+   "captured": 955,
+   "genuine": 876,
+   "periodic": 57,
+   "orbit_minima": 22,
+   "largest": 177101,
+   "ratio": 1.854368932038835
+  },
+  {
+   "a": 517,
+   "captured": 955,
+   "genuine": 818,
+   "periodic": 75,
+   "orbit_minima": 62,
+   "largest": 218855,
+   "ratio": 1.8471953578336557
+  },
+  {
+   "a": 519,
+   "captured": 917,
+   "genuine": 881,
+   "periodic": 17,
+   "orbit_minima": 19,
+   "largest": 159197,
+   "ratio": 1.766859344894027
+  },
+  {
+   "a": 521,
+   "captured": 927,
+   "genuine": 888,
+   "periodic": 19,
+   "orbit_minima": 20,
+   "largest": 229911,
+   "ratio": 1.779270633397313
+  },
+  {
+   "a": 523,
+   "captured": 957,
+   "genuine": 905,
+   "periodic": 30,
+   "orbit_minima": 22,
+   "largest": 156457,
+   "ratio": 1.8298279158699808
+  },
+  {
+   "a": 525,
+   "captured": 971,
+   "genuine": 847,
+   "periodic": 35,
+   "orbit_minima": 89,
+   "largest": 150459,
+   "ratio": 1.8495238095238096
+  },
+  {
+   "a": 527,
+   "captured": 950,
+   "genuine": 867,
+   "periodic": 60,
+   "orbit_minima": 23,
+   "largest": 211377,
+   "ratio": 1.8026565464895636
+  },
+  {
+   "a": 529,
+   "captured": 949,
+   "genuine": 875,
+   "periodic": 36,
+   "orbit_minima": 38,
+   "largest": 154799,
+   "ratio": 1.7939508506616257
+  },
+  {
+   "a": 531,
+   "captured": 951,
+   "genuine": 823,
+   "periodic": 16,
+   "orbit_minima": 112,
+   "largest": 182957,
+   "ratio": 1.7909604519774012
+  },
+  {
+   "a": 533,
+   "captured": 989,
+   "genuine": 931,
+   "periodic": 20,
+   "orbit_minima": 38,
+   "largest": 205207,
+   "ratio": 1.8555347091932457
+  },
+  {
+   "a": 535,
+   "captured": 995,
+   "genuine": 898,
+   "periodic": 83,
+   "orbit_minima": 14,
+   "largest": 162305,
+   "ratio": 1.8598130841121496
+  },
+  {
+   "a": 537,
+   "captured": 991,
+   "genuine": 970,
+   "periodic": 14,
+   "orbit_minima": 7,
+   "largest": 195203,
+   "ratio": 1.8454376163873372
+  },
+  {
+   "a": 539,
+   "captured": 968,
+   "genuine": 927,
+   "periodic": 31,
+   "orbit_minima": 10,
+   "largest": 150629,
+   "ratio": 1.7959183673469388
+  },
+  {
+   "a": 541,
+   "captured": 991,
+   "genuine": 941,
+   "periodic": 40,
+   "orbit_minima": 10,
+   "largest": 168819,
+   "ratio": 1.8317929759704252
+  },
+  {
+   "a": 543,
+   "captured": 964,
+   "genuine": 919,
+   "periodic": 26,
+   "orbit_minima": 19,
+   "largest": 201393,
+   "ratio": 1.7753222836095763
+  },
+  {
+   "a": 545,
+   "captured": 978,
+   "genuine": 929,
+   "periodic": 30,
+   "orbit_minima": 19,
+   "largest": 210503,
+   "ratio": 1.7944954128440367
+  },
+  {
+   "a": 547,
+   "captured": 1002,
+   "genuine": 938,
+   "periodic": 48,
+   "orbit_minima": 16,
+   "largest": 207805,
+   "ratio": 1.8318098720292504
+  },
+  {
+   "a": 549,
+   "captured": 1010,
+   "genuine": 980,
+   "periodic": 6,
+   "orbit_minima": 24,
+   "largest": 193319,
+   "ratio": 1.8397085610200363
+  },
+  {
+   "a": 551,
+   "captured": 1025,
+   "genuine": 941,
+   "periodic": 47,
+   "orbit_minima": 37,
+   "largest": 212665,
+   "ratio": 1.8602540834845736
+  },
+  {
+   "a": 553,
+   "captured": 992,
+   "genuine": 917,
+   "periodic": 61,
+   "orbit_minima": 14,
+   "largest": 203135,
+   "ratio": 1.7938517179023508
+  },
+  {
+   "a": 555,
+   "captured": 1009,
+   "genuine": 941,
+   "periodic": 24,
+   "orbit_minima": 44,
+   "largest": 199149,
+   "ratio": 1.818018018018018
+  },
+  {
+   "a": 557,
+   "captured": 1009,
+   "genuine": 957,
+   "periodic": 37,
+   "orbit_minima": 15,
+   "largest": 169563,
+   "ratio": 1.8114901256732496
+  },
+  {
+   "a": 559,
+   "captured": 1032,
+   "genuine": 988,
+   "periodic": 28,
+   "orbit_minima": 16,
+   "largest": 218293,
+   "ratio": 1.8461538461538463
+  },
+  {
+   "a": 561,
+   "captured": 1018,
+   "genuine": 940,
+   "periodic": 26,
+   "orbit_minima": 52,
+   "largest": 181695,
+   "ratio": 1.8146167557932265
+  },
+  {
+   "a": 563,
+   "captured": 1039,
+   "genuine": 936,
+   "periodic": 94,
+   "orbit_minima": 9,
+   "largest": 269349,
+   "ratio": 1.8454706927175843
+  },
+  {
+   "a": 565,
+   "captured": 1024,
+   "genuine": 937,
+   "periodic": 76,
+   "orbit_minima": 11,
+   "largest": 198587,
+   "ratio": 1.8123893805309734
+  },
+  {
+   "a": 567,
+   "captured": 1004,
+   "genuine": 936,
+   "periodic": 2,
+   "orbit_minima": 66,
+   "largest": 126473,
+   "ratio": 1.7707231040564373
+  },
+  {
+   "a": 569,
+   "captured": 1060,
+   "genuine": 1028,
+   "periodic": 27,
+   "orbit_minima": 5,
+   "largest": 190743,
+   "ratio": 1.8629173989455186
+  },
+  {
+   "a": 571,
+   "captured": 1003,
+   "genuine": 949,
+   "periodic": 43,
+   "orbit_minima": 11,
+   "largest": 182585,
+   "ratio": 1.7565674255691768
+  },
+  {
+   "a": 573,
+   "captured": 1038,
+   "genuine": 965,
+   "periodic": 15,
+   "orbit_minima": 58,
+   "largest": 175747,
+   "ratio": 1.8115183246073299
+  },
+  {
+   "a": 575,
+   "captured": 1049,
+   "genuine": 959,
+   "periodic": 64,
+   "orbit_minima": 26,
+   "largest": 192769,
+   "ratio": 1.8243478260869566
+  },
+  {
+   "a": 577,
+   "captured": 1037,
+   "genuine": 962,
+   "periodic": 53,
+   "orbit_minima": 22,
+   "largest": 193831,
+   "ratio": 1.7972270363951472
+  },
+  {
+   "a": 579,
+   "captured": 1072,
+   "genuine": 999,
+   "periodic": 35,
+   "orbit_minima": 38,
+   "largest": 145805,
+   "ratio": 1.85146804835924
+  },
+  {
+   "a": 581,
+   "captured": 1031,
+   "genuine": 962,
+   "periodic": 37,
+   "orbit_minima": 32,
+   "largest": 232583,
+   "ratio": 1.774526678141136
+  },
+  {
+   "a": 583,
+   "captured": 1077,
+   "genuine": 1029,
+   "periodic": 28,
+   "orbit_minima": 20,
+   "largest": 444873,
+   "ratio": 1.8473413379073755
+  },
+  {
+   "a": 585,
+   "captured": 1128,
+   "genuine": 917,
+   "periodic": 21,
+   "orbit_minima": 190,
+   "largest": 210439,
+   "ratio": 1.9282051282051282
+  },
+  {
+   "a": 587,
+   "captured": 1062,
+   "genuine": 1018,
+   "periodic": 26,
+   "orbit_minima": 18,
+   "largest": 191349,
+   "ratio": 1.809199318568995
+  },
+  {
+   "a": 589,
+   "captured": 1092,
+   "genuine": 1016,
+   "periodic": 57,
+   "orbit_minima": 19,
+   "largest": 205087,
+   "ratio": 1.8539898132427843
+  },
+  {
+   "a": 591,
+   "captured": 1084,
+   "genuine": 1045,
+   "periodic": 32,
+   "orbit_minima": 7,
+   "largest": 268977,
+   "ratio": 1.8341793570219966
+  },
+  {
+   "a": 593,
+   "captured": 1089,
+   "genuine": 1040,
+   "periodic": 45,
+   "orbit_minima": 4,
+   "largest": 151819,
+   "ratio": 1.836424957841484
+  },
+  {
+   "a": 595,
+   "captured": 1078,
+   "genuine": 962,
+   "periodic": 89,
+   "orbit_minima": 27,
+   "largest": 212397,
+   "ratio": 1.811764705882353
+  },
+  {
+   "a": 597,
+   "captured": 1118,
+   "genuine": 1095,
+   "periodic": 10,
+   "orbit_minima": 13,
+   "largest": 351947,
+   "ratio": 1.8726968174204355
+  },
+  {
+   "a": 599,
+   "captured": 1072,
+   "genuine": 1022,
+   "periodic": 20,
+   "orbit_minima": 30,
+   "largest": 213549,
+   "ratio": 1.7896494156928213
+  },
+  {
+   "a": 601,
+   "captured": 1091,
+   "genuine": 944,
+   "periodic": 102,
+   "orbit_minima": 45,
+   "largest": 142179,
+   "ratio": 1.8153078202995008
+  },
+  {
+   "a": 603,
+   "captured": 1090,
+   "genuine": 1029,
+   "periodic": 9,
+   "orbit_minima": 52,
+   "largest": 178149,
+   "ratio": 1.8076285240464345
+  },
+  {
+   "a": 605,
+   "captured": 1115,
+   "genuine": 974,
+   "periodic": 119,
+   "orbit_minima": 22,
+   "largest": 199635,
+   "ratio": 1.8429752066115703
+  },
+  {
+   "a": 607,
+   "captured": 1091,
+   "genuine": 1049,
+   "periodic": 36,
+   "orbit_minima": 6,
+   "largest": 178113,
+   "ratio": 1.7973640856672157
+  },
+  {
+   "a": 609,
+   "captured": 1099,
+   "genuine": 1017,
+   "periodic": 28,
+   "orbit_minima": 54,
+   "largest": 198559,
+   "ratio": 1.8045977011494252
+  },
+  {
+   "a": 611,
+   "captured": 1135,
+   "genuine": 1004,
+   "periodic": 63,
+   "orbit_minima": 68,
+   "largest": 251477,
+   "ratio": 1.8576104746317512
+  },
+  {
+   "a": 613,
+   "captured": 1101,
+   "genuine": 1080,
+   "periodic": 18,
+   "orbit_minima": 3,
+   "largest": 233787,
+   "ratio": 1.796084828711256
+  },
+  {
+   "a": 615,
+   "captured": 1117,
+   "genuine": 1031,
+   "periodic": 29,
+   "orbit_minima": 57,
+   "largest": 259293,
+   "ratio": 1.816260162601626
+  },
+  {
+   "a": 617,
+   "captured": 1086,
+   "genuine": 1019,
+   "periodic": 32,
+   "orbit_minima": 35,
+   "largest": 399623,
+   "ratio": 1.760129659643436
+  },
+  {
+   "a": 619,
+   "captured": 1135,
+   "genuine": 1072,
+   "periodic": 37,
+   "orbit_minima": 26,
+   "largest": 228501,
+   "ratio": 1.8336025848142166
+  },
+  {
+   "a": 621,
+   "captured": 1166,
+   "genuine": 1036,
+   "periodic": 10,
+   "orbit_minima": 120,
+   "largest": 261667,
+   "ratio": 1.8776167471819645
+  },
+  {
+   "a": 623,
+   "captured": 1120,
+   "genuine": 1051,
+   "periodic": 41,
+   "orbit_minima": 28,
+   "largest": 165553,
+   "ratio": 1.797752808988764
+  },
+  {
+   "a": 625,
+   "captured": 1142,
+   "genuine": 1044,
+   "periodic": 58,
+   "orbit_minima": 40,
+   "largest": 245355,
+   "ratio": 1.8272
+  },
+  {
+   "a": 627,
+   "captured": 1120,
+   "genuine": 1033,
+   "periodic": 31,
+   "orbit_minima": 56,
+   "largest": 204541,
+   "ratio": 1.7862838915470494
+  },
+  {
+   "a": 629,
+   "captured": 1133,
+   "genuine": 1034,
+   "periodic": 59,
+   "orbit_minima": 40,
+   "largest": 347547,
+   "ratio": 1.8012718600953894
+  },
+  {
+   "a": 631,
+   "captured": 1147,
+   "genuine": 1112,
+   "periodic": 12,
+   "orbit_minima": 23,
+   "largest": 229641,
+   "ratio": 1.8177496038034866
+  },
+  {
+   "a": 633,
+   "captured": 1134,
+   "genuine": 1078,
+   "periodic": 18,
+   "orbit_minima": 38,
+   "largest": 213207,
+   "ratio": 1.7914691943127963
+  },
+  {
+   "a": 635,
+   "captured": 1145,
+   "genuine": 1068,
+   "periodic": 57,
+   "orbit_minima": 20,
+   "largest": 189797,
+   "ratio": 1.8031496062992125
+  },
+  {
+   "a": 637,
+   "captured": 1176,
+   "genuine": 1081,
+   "periodic": 71,
+   "orbit_minima": 24,
+   "largest": 205643,
+   "ratio": 1.8461538461538463
+  },
+  {
+   "a": 639,
+   "captured": 1252,
+   "genuine": 1047,
+   "periodic": 11,
+   "orbit_minima": 194,
+   "largest": 197849,
+   "ratio": 1.9593114241001566
+  },
+  {
+   "a": 641,
+   "captured": 1169,
+   "genuine": 1118,
+   "periodic": 48,
+   "orbit_minima": 3,
+   "largest": 202175,
+   "ratio": 1.8237129485179406
+  },
+  {
+   "a": 643,
+   "captured": 1162,
+   "genuine": 1073,
+   "periodic": 79,
+   "orbit_minima": 10,
+   "largest": 324305,
+   "ratio": 1.807153965785381
+  },
+  {
+   "a": 645,
+   "captured": 1184,
+   "genuine": 1117,
+   "periodic": 25,
+   "orbit_minima": 42,
+   "largest": 262363,
+   "ratio": 1.8356589147286821
+  },
+  {
+   "a": 647,
+   "captured": 1194,
+   "genuine": 1133,
+   "periodic": 51,
+   "orbit_minima": 10,
+   "largest": 236861,
+   "ratio": 1.8454404945904173
+  },
+  {
+   "a": 649,
+   "captured": 1182,
+   "genuine": 1057,
+   "periodic": 79,
+   "orbit_minima": 46,
+   "largest": 203463,
+   "ratio": 1.8212634822804314
+  },
+  {
+   "a": 651,
+   "captured": 1175,
+   "genuine": 1097,
+   "periodic": 34,
+   "orbit_minima": 44,
+   "largest": 197557,
+   "ratio": 1.8049155145929339
+  },
+  {
+   "a": 653,
+   "captured": 1207,
+   "genuine": 1142,
+   "periodic": 63,
+   "orbit_minima": 2,
+   "largest": 293299,
+   "ratio": 1.8483920367534457
+  },
+  {
+   "a": 655,
+   "captured": 1179,
+   "genuine": 1093,
+   "periodic": 74,
+   "orbit_minima": 12,
+   "largest": 274505,
+   "ratio": 1.8
+  },
+  {
+   "a": 657,
+   "captured": 1185,
+   "genuine": 1084,
+   "periodic": 20,
+   "orbit_minima": 81,
+   "largest": 199087,
+   "ratio": 1.8036529680365296
+  },
+  {
+   "a": 659,
+   "captured": 1194,
+   "genuine": 1141,
+   "periodic": 20,
+   "orbit_minima": 33,
+   "largest": 165613,
+   "ratio": 1.8118361153262519
+  },
+  {
+   "a": 661,
+   "captured": 1182,
+   "genuine": 1123,
+   "periodic": 45,
+   "orbit_minima": 14,
+   "largest": 276151,
+   "ratio": 1.7881996974281391
+  },
+  {
+   "a": 663,
+   "captured": 1182,
+   "genuine": 1100,
+   "periodic": 21,
+   "orbit_minima": 61,
+   "largest": 196109,
+   "ratio": 1.7828054298642535
+  },
+  {
+   "a": 665,
+   "captured": 1203,
+   "genuine": 1091,
+   "periodic": 79,
+   "orbit_minima": 33,
+   "largest": 225031,
+   "ratio": 1.8090225563909774
+  },
+  {
+   "a": 667,
+   "captured": 1213,
+   "genuine": 1105,
+   "periodic": 55,
+   "orbit_minima": 53,
+   "largest": 230233,
+   "ratio": 1.8185907046476761
+  },
+  {
+   "a": 669,
+   "captured": 1220,
+   "genuine": 1162,
+   "periodic": 21,
+   "orbit_minima": 37,
+   "largest": 247315,
+   "ratio": 1.8236173393124067
+  },
+  {
+   "a": 671,
+   "captured": 1225,
+   "genuine": 1109,
+   "periodic": 66,
+   "orbit_minima": 50,
+   "largest": 266009,
+   "ratio": 1.825633383010432
+  },
+  {
+   "a": 673,
+   "captured": 1217,
+   "genuine": 1171,
+   "periodic": 38,
+   "orbit_minima": 8,
+   "largest": 328647,
+   "ratio": 1.8083209509658247
+  },
+  {
+   "a": 675,
+   "captured": 1306,
+   "genuine": 1091,
+   "periodic": 12,
+   "orbit_minima": 203,
+   "largest": 189693,
+   "ratio": 1.9348148148148148
+  },
+  {
+   "a": 677,
+   "captured": 1224,
+   "genuine": 1178,
+   "periodic": 15,
+   "orbit_minima": 31,
+   "largest": 257131,
+   "ratio": 1.8079763663220088
+  },
+  {
+   "a": 679,
+   "captured": 1239,
+   "genuine": 1140,
+   "periodic": 69,
+   "orbit_minima": 30,
+   "largest": 270361,
+   "ratio": 1.824742268041237
+  },
+  {
+   "a": 681,
+   "captured": 1235,
+   "genuine": 1212,
+   "periodic": 17,
+   "orbit_minima": 6,
+   "largest": 261459,
+   "ratio": 1.813509544787078
+  },
+  {
+   "a": 683,
+   "captured": 1228,
+   "genuine": 1183,
+   "periodic": 32,
+   "orbit_minima": 13,
+   "largest": 217293,
+   "ratio": 1.7979502196193264
+  },
+  {
+   "a": 685,
+   "captured": 1247,
+   "genuine": 1145,
+   "periodic": 72,
+   "orbit_minima": 30,
+   "largest": 212123,
+   "ratio": 1.8204379562043795
+  },
+  {
+   "a": 687,
+   "captured": 1248,
+   "genuine": 1192,
+   "periodic": 24,
+   "orbit_minima": 32,
+   "largest": 268021,
+   "ratio": 1.8165938864628821
+  },
+  {
+   "a": 689,
+   "captured": 1233,
+   "genuine": 1143,
+   "periodic": 46,
+   "orbit_minima": 44,
+   "largest": 525759,
+   "ratio": 1.7895500725689404
+  },
+  {
+   "a": 691,
+   "captured": 1258,
+   "genuine": 1214,
+   "periodic": 31,
+   "orbit_minima": 13,
+   "largest": 306053,
+   "ratio": 1.8205499276411
+  },
+  {
+   "a": 693,
+   "captured": 1234,
+   "genuine": 1181,
+   "periodic": 15,
+   "orbit_minima": 38,
+   "largest": 275411,
+   "ratio": 1.7806637806637806
+  },
+  {
+   "a": 695,
+   "captured": 1242,
+   "genuine": 1158,
+   "periodic": 67,
+   "orbit_minima": 17,
+   "largest": 206605,
+   "ratio": 1.7870503597122303
+  },
+  {
+   "a": 697,
+   "captured": 1274,
+   "genuine": 1140,
+   "periodic": 100,
+   "orbit_minima": 34,
+   "largest": 312163,
+   "ratio": 1.8278335724533716
+  },
+  {
+   "a": 699,
+   "captured": 1274,
+   "genuine": 1073,
+   "periodic": 52,
+   "orbit_minima": 149,
+   "largest": 258649,
+   "ratio": 1.8226037195994278
+  },
+  {
+   "a": 701,
+   "captured": 1273,
+   "genuine": 1220,
+   "periodic": 22,
+   "orbit_minima": 31,
+   "largest": 217411,
+   "ratio": 1.8159771754636234
+  },
+  {
+   "a": 703,
+   "captured": 1246,
+   "genuine": 1208,
+   "periodic": 22,
+   "orbit_minima": 16,
+   "largest": 211265,
+   "ratio": 1.7724039829302987
+  },
+  {
+   "a": 705,
+   "captured": 1311,
+   "genuine": 1195,
+   "periodic": 45,
+   "orbit_minima": 71,
+   "largest": 254503,
+   "ratio": 1.8595744680851063
+  },
+  {
+   "a": 707,
+   "captured": 1300,
+   "genuine": 1232,
+   "periodic": 56,
+   "orbit_minima": 12,
+   "largest": 250813,
+   "ratio": 1.8387553041018387
+  },
+  {
+   "a": 709,
+   "captured": 1281,
+   "genuine": 1227,
+   "periodic": 32,
+   "orbit_minima": 22,
+   "largest": 203075,
+   "ratio": 1.8067700987306066
+  },
+  {
+   "a": 711,
+   "captured": 1318,
+   "genuine": 1242,
+   "periodic": 28,
+   "orbit_minima": 48,
+   "largest": 168497,
+   "ratio": 1.8537271448663855
+  },
+  {
+   "a": 713,
+   "captured": 1296,
+   "genuine": 1233,
+   "periodic": 45,
+   "orbit_minima": 18,
+   "largest": 397527,
+   "ratio": 1.817671809256662
+  },
+  {
+   "a": 715,
+   "captured": 1312,
+   "genuine": 1166,
+   "periodic": 99,
+   "orbit_minima": 47,
+   "largest": 325965,
+   "ratio": 1.834965034965035
+  },
+  {
+   "a": 717,
+   "captured": 1318,
+   "genuine": 1261,
+   "periodic": 36,
+   "orbit_minima": 21,
+   "largest": 204659,
+   "ratio": 1.8382147838214784
+  },
+  {
+   "a": 719,
+   "captured": 1314,
+   "genuine": 1213,
+   "periodic": 60,
+   "orbit_minima": 41,
+   "largest": 316617,
+   "ratio": 1.827538247566064
+  },
+  {
+   "a": 721,
+   "captured": 1291,
+   "genuine": 1192,
+   "periodic": 77,
+   "orbit_minima": 22,
+   "largest": 237103,
+   "ratio": 1.7905686546463246
+  },
+  {
+   "a": 723,
+   "captured": 1328,
+   "genuine": 1270,
+   "periodic": 28,
+   "orbit_minima": 30,
+   "largest": 298497,
+   "ratio": 1.8367911479944674
+  },
+  {
+   "a": 725,
+   "captured": 1352,
+   "genuine": 1226,
+   "periodic": 94,
+   "orbit_minima": 32,
+   "largest": 204979,
+   "ratio": 1.8648275862068966
+  },
+  {
+   "a": 727,
+   "captured": 1308,
+   "genuine": 1229,
+   "periodic": 41,
+   "orbit_minima": 38,
+   "largest": 318137,
+   "ratio": 1.7991746905089407
+  },
+  {
+   "a": 729,
+   "captured": 1380,
+   "genuine": 1199,
+   "periodic": 1,
+   "orbit_minima": 180,
+   "largest": 88935,
+   "ratio": 1.8930041152263375
+  },
+  {
+   "a": 731,
+   "captured": 1338,
+   "genuine": 1272,
+   "periodic": 40,
+   "orbit_minima": 26,
+   "largest": 280089,
+   "ratio": 1.8303693570451436
+  },
+  {
+   "a": 733,
+   "captured": 1322,
+   "genuine": 1238,
+   "periodic": 69,
+   "orbit_minima": 15,
+   "largest": 429219,
+   "ratio": 1.8035470668485676
+  },
+  {
+   "a": 735,
+   "captured": 1331,
+   "genuine": 1234,
+   "periodic": 35,
+   "orbit_minima": 62,
+   "largest": 256097,
+   "ratio": 1.8108843537414967
+  },
+  {
+   "a": 737,
+   "captured": 1307,
+   "genuine": 1230,
+   "periodic": 61,
+   "orbit_minima": 16,
+   "largest": 242171,
+   "ratio": 1.7734056987788331
+  },
+  {
+   "a": 739,
+   "captured": 1355,
+   "genuine": 1339,
+   "periodic": 16,
+   "orbit_minima": 0,
+   "largest": 322033,
+   "ratio": 1.8335588633288227
+  },
+  {
+   "a": 741,
+   "captured": 1348,
+   "genuine": 1218,
+   "periodic": 41,
+   "orbit_minima": 89,
+   "largest": 256135,
+   "ratio": 1.8191632928475034
+  },
+  {
+   "a": 743,
+   "captured": 1354,
+   "genuine": 1293,
+   "periodic": 46,
+   "orbit_minima": 15,
+   "largest": 289373,
+   "ratio": 1.8223418573351278
+  },
+  {
+   "a": 745,
+   "captured": 1346,
+   "genuine": 1208,
+   "periodic": 92,
+   "orbit_minima": 46,
+   "largest": 308851,
+   "ratio": 1.806711409395973
+  },
+  {
+   "a": 747,
+   "captured": 1338,
+   "genuine": 1229,
+   "periodic": 9,
+   "orbit_minima": 100,
+   "largest": 293557,
+   "ratio": 1.7911646586345382
+  },
+  {
+   "a": 749,
+   "captured": 1363,
+   "genuine": 1283,
+   "periodic": 66,
+   "orbit_minima": 14,
+   "largest": 240915,
+   "ratio": 1.8197596795727637
+  },
+  {
+   "a": 751,
+   "captured": 1378,
+   "genuine": 1308,
+   "periodic": 64,
+   "orbit_minima": 6,
+   "largest": 288809,
+   "ratio": 1.8348868175765647
+  },
+  {
+   "a": 753,
+   "captured": 1348,
+   "genuine": 1252,
+   "periodic": 17,
+   "orbit_minima": 79,
+   "largest": 273583,
+   "ratio": 1.7901726427622842
+  },
+  {
+   "a": 755,
+   "captured": 1359,
+   "genuine": 1252,
+   "periodic": 60,
+   "orbit_minima": 47,
+   "largest": 295789,
+   "ratio": 1.8
+  },
+  {
+   "a": 757,
+   "captured": 1347,
+   "genuine": 1285,
+   "periodic": 40,
+   "orbit_minima": 22,
+   "largest": 299219,
+   "ratio": 1.7793923381770145
+  },
+  {
+   "a": 759,
+   "captured": 1374,
+   "genuine": 1286,
+   "periodic": 49,
+   "orbit_minima": 39,
+   "largest": 348429,
+   "ratio": 1.8102766798418972
+  },
+  {
+   "a": 761,
+   "captured": 1391,
+   "genuine": 1343,
+   "periodic": 20,
+   "orbit_minima": 28,
+   "largest": 271811,
+   "ratio": 1.8278580814717478
+  },
+  {
+   "a": 763,
+   "captured": 1371,
+   "genuine": 1266,
+   "periodic": 84,
+   "orbit_minima": 21,
+   "largest": 266041,
+   "ratio": 1.796854521625164
+  },
+  {
+   "a": 765,
+   "captured": 1378,
+   "genuine": 1238,
+   "periodic": 30,
+   "orbit_minima": 110,
+   "largest": 224195,
+   "ratio": 1.8013071895424837
+  },
+  {
+   "a": 767,
+   "captured": 1419,
+   "genuine": 1305,
+   "periodic": 75,
+   "orbit_minima": 39,
+   "largest": 314789,
+   "ratio": 1.8500651890482398
+  },
+  {
+   "a": 769,
+   "captured": 1405,
+   "genuine": 1330,
+   "periodic": 49,
+   "orbit_minima": 26,
+   "largest": 337647,
+   "ratio": 1.8270481144343302
+  },
+  {
+   "a": 771,
+   "captured": 1397,
+   "genuine": 1361,
+   "periodic": 22,
+   "orbit_minima": 14,
+   "largest": 288753,
+   "ratio": 1.8119325551232166
+  },
+  {
+   "a": 773,
+   "captured": 1393,
+   "genuine": 1351,
+   "periodic": 32,
+   "orbit_minima": 10,
+   "largest": 225563,
+   "ratio": 1.8020698576972833
+  },
+  {
+   "a": 775,
+   "captured": 1415,
+   "genuine": 1355,
+   "periodic": 42,
+   "orbit_minima": 18,
+   "largest": 281257,
+   "ratio": 1.8258064516129033
+  },
+  {
+   "a": 777,
+   "captured": 1440,
+   "genuine": 1320,
+   "periodic": 38,
+   "orbit_minima": 82,
+   "largest": 271991,
+   "ratio": 1.8532818532818534
+  },
+  {
+   "a": 779,
+   "captured": 1427,
+   "genuine": 1388,
+   "periodic": 30,
+   "orbit_minima": 9,
+   "largest": 353737,
+   "ratio": 1.8318356867779204
+  },
+  {
+   "a": 781,
+   "captured": 1435,
+   "genuine": 1221,
+   "periodic": 115,
+   "orbit_minima": 99,
+   "largest": 264499,
+   "ratio": 1.8373879641485276
+  },
+  {
+   "a": 783,
+   "captured": 1508,
+   "genuine": 1343,
+   "periodic": 7,
+   "orbit_minima": 158,
+   "largest": 246097,
+   "ratio": 1.9259259259259258
+  },
+  {
+   "a": 785,
+   "captured": 1424,
+   "genuine": 1331,
+   "periodic": 60,
+   "orbit_minima": 33,
+   "largest": 308939,
+   "ratio": 1.8140127388535032
+  },
+  {
+   "a": 787,
+   "captured": 1427,
+   "genuine": 1369,
+   "periodic": 40,
+   "orbit_minima": 18,
+   "largest": 245285,
+   "ratio": 1.8132147395171538
+  },
+  {
+   "a": 789,
+   "captured": 1429,
+   "genuine": 1371,
+   "periodic": 44,
+   "orbit_minima": 14,
+   "largest": 475063,
+   "ratio": 1.8111533586818758
+  },
+  {
+   "a": 791,
+   "captured": 1446,
+   "genuine": 1373,
+   "periodic": 58,
+   "orbit_minima": 15,
+   "largest": 466497,
+   "ratio": 1.8280657395701643
+  },
+  {
+   "a": 793,
+   "captured": 1438,
+   "genuine": 1316,
+   "periodic": 63,
+   "orbit_minima": 59,
+   "largest": 324067,
+   "ratio": 1.8133669609079446
+  },
+  {
+   "a": 795,
+   "captured": 1454,
+   "genuine": 1320,
+   "periodic": 33,
+   "orbit_minima": 101,
+   "largest": 606645,
+   "ratio": 1.828930817610063
+  },
+  {
+   "a": 797,
+   "captured": 1408,
+   "genuine": 1339,
+   "periodic": 47,
+   "orbit_minima": 22,
+   "largest": 418851,
+   "ratio": 1.766624843161857
+  },
+  {
+   "a": 799,
+   "captured": 1460,
+   "genuine": 1384,
+   "periodic": 49,
+   "orbit_minima": 27,
+   "largest": 305345,
+   "ratio": 1.8272841051314144
+  },
+  {
+   "a": 801,
+   "captured": 1460,
+   "genuine": 1405,
+   "periodic": 5,
+   "orbit_minima": 50,
+   "largest": 327239,
+   "ratio": 1.822721598002497
+  },
+  {
+   "a": 803,
+   "captured": 1455,
+   "genuine": 1378,
+   "periodic": 57,
+   "orbit_minima": 20,
+   "largest": 340405,
+   "ratio": 1.8119551681195516
+  },
+  {
+   "a": 805,
+   "captured": 1469,
+   "genuine": 1342,
+   "periodic": 95,
+   "orbit_minima": 32,
+   "largest": 227307,
+   "ratio": 1.8248447204968945
+  },
+  {
+   "a": 807,
+   "captured": 1483,
+   "genuine": 1301,
+   "periodic": 42,
+   "orbit_minima": 140,
+   "largest": 413289,
+   "ratio": 1.8376703841387856
+  },
+  {
+   "a": 809,
+   "captured": 1475,
+   "genuine": 1436,
+   "periodic": 13,
+   "orbit_minima": 26,
+   "largest": 308351,
+   "ratio": 1.823238566131026
+  },
+  {
+   "a": 811,
+   "captured": 1476,
+   "genuine": 1414,
+   "periodic": 40,
+   "orbit_minima": 22,
+   "largest": 560181,
+   "ratio": 1.8199753390875462
+  },
+  {
+   "a": 813,
+   "captured": 1479,
+   "genuine": 1445,
+   "periodic": 12,
+   "orbit_minima": 22,
+   "largest": 268063,
+   "ratio": 1.8191881918819188
+  },
+  {
+   "a": 815,
+   "captured": 1496,
+   "genuine": 1384,
+   "periodic": 88,
+   "orbit_minima": 24,
+   "largest": 284945,
+   "ratio": 1.8355828220858896
+  },
+  {
+   "a": 817,
+   "captured": 1485,
+   "genuine": 1402,
+   "periodic": 55,
+   "orbit_minima": 28,
+   "largest": 280223,
+   "ratio": 1.817625458996328
+  },
+  {
+   "a": 819,
+   "captured": 1526,
+   "genuine": 1350,
+   "periodic": 27,
+   "orbit_minima": 149,
+   "largest": 339789,
+   "ratio": 1.8632478632478633
+  },
+  {
+   "a": 821,
+   "captured": 1495,
+   "genuine": 1442,
+   "periodic": 53,
+   "orbit_minima": 0,
+   "largest": 281367,
+   "ratio": 1.8209500609013398
+  },
+  {
+   "a": 823,
+   "captured": 1510,
+   "genuine": 1471,
+   "periodic": 37,
+   "orbit_minima": 2,
+   "largest": 243577,
+   "ratio": 1.8347509113001215
+  },
+  {
+   "a": 825,
+   "captured": 1532,
+   "genuine": 1430,
+   "periodic": 50,
+   "orbit_minima": 52,
+   "largest": 323143,
+   "ratio": 1.856969696969697
+  },
+  {
+   "a": 827,
+   "captured": 1509,
+   "genuine": 1402,
+   "periodic": 51,
+   "orbit_minima": 56,
+   "largest": 264125,
+   "ratio": 1.8246674727932286
+  },
+  {
+   "a": 829,
+   "captured": 1502,
+   "genuine": 1437,
+   "periodic": 55,
+   "orbit_minima": 10,
+   "largest": 279759,
+   "ratio": 1.8118214716525936
+  },
+  {
+   "a": 831,
+   "captured": 1534,
+   "genuine": 1491,
+   "periodic": 25,
+   "orbit_minima": 18,
+   "largest": 301809,
+   "ratio": 1.8459687123947053
+  },
+  {
+   "a": 833,
+   "captured": 1499,
+   "genuine": 1365,
+   "periodic": 101,
+   "orbit_minima": 33,
+   "largest": 324655,
+   "ratio": 1.7995198079231693
+  },
+  {
+   "a": 835,
+   "captured": 1547,
+   "genuine": 1395,
+   "periodic": 107,
+   "orbit_minima": 45,
+   "largest": 361725,
+   "ratio": 1.8526946107784432
+  },
+  {
+   "a": 837,
+   "captured": 1520,
+   "genuine": 1439,
+   "periodic": 5,
+   "orbit_minima": 76,
+   "largest": 271595,
+   "ratio": 1.8160095579450417
+  },
+  {
+   "a": 839,
+   "captured": 1531,
+   "genuine": 1482,
+   "periodic": 35,
+   "orbit_minima": 14,
+   "largest": 254745,
+   "ratio": 1.8247914183551848
+  },
+  {
+   "a": 841,
+   "captured": 1551,
+   "genuine": 1478,
+   "periodic": 59,
+   "orbit_minima": 14,
+   "largest": 266387,
+   "ratio": 1.8442330558858502
+  },
+  {
+   "a": 843,
+   "captured": 1518,
+   "genuine": 1433,
+   "periodic": 33,
+   "orbit_minima": 52,
+   "largest": 327885,
+   "ratio": 1.800711743772242
+  },
+  {
+   "a": 845,
+   "captured": 1534,
+   "genuine": 1456,
+   "periodic": 47,
+   "orbit_minima": 31,
+   "largest": 308291,
+   "ratio": 1.8153846153846154
+  },
+  {
+   "a": 847,
+   "captured": 1565,
+   "genuine": 1476,
+   "periodic": 81,
+   "orbit_minima": 8,
+   "largest": 393429,
+   "ratio": 1.8476977567886659
+  },
+  {
+   "a": 849,
+   "captured": 1540,
+   "genuine": 1460,
+   "periodic": 24,
+   "orbit_minima": 56,
+   "largest": 295383,
+   "ratio": 1.8138987043580683
+  },
+  {
+   "a": 851,
+   "captured": 1556,
+   "genuine": 1458,
+   "periodic": 73,
+   "orbit_minima": 25,
+   "largest": 258189,
+   "ratio": 1.828437132784959
+  },
+  {
+   "a": 853,
+   "captured": 1564,
+   "genuine": 1482,
+   "periodic": 62,
+   "orbit_minima": 20,
+   "largest": 242011,
+   "ratio": 1.8335287221570926
+  },
+  {
+   "a": 855,
+   "captured": 1562,
+   "genuine": 1439,
+   "periodic": 28,
+   "orbit_minima": 95,
+   "largest": 361417,
+   "ratio": 1.8269005847953217
+  },
+  {
+   "a": 857,
+   "captured": 1563,
+   "genuine": 1514,
+   "periodic": 39,
+   "orbit_minima": 10,
+   "largest": 374103,
+   "ratio": 1.823803967327888
+  },
+  {
+   "a": 859,
+   "captured": 1570,
+   "genuine": 1522,
+   "periodic": 21,
+   "orbit_minima": 27,
+   "largest": 348573,
+   "ratio": 1.8277066356228173
+  },
+  {
+   "a": 861,
+   "captured": 1564,
+   "genuine": 1459,
+   "periodic": 42,
+   "orbit_minima": 63,
+   "largest": 299683,
+   "ratio": 1.816492450638792
+  },
+  {
+   "a": 863,
+   "captured": 1588,
+   "genuine": 1487,
+   "periodic": 86,
+   "orbit_minima": 15,
+   "largest": 320953,
+   "ratio": 1.8400926998841252
+  },
+  {
+   "a": 865,
+   "captured": 1580,
+   "genuine": 1470,
+   "periodic": 82,
+   "orbit_minima": 28,
+   "largest": 406047,
+   "ratio": 1.8265895953757225
+  },
+  {
+   "a": 867,
+   "captured": 1547,
+   "genuine": 1496,
+   "periodic": 21,
+   "orbit_minima": 30,
+   "largest": 438357,
+   "ratio": 1.7843137254901962
+  },
+  {
+   "a": 869,
+   "captured": 1568,
+   "genuine": 1439,
+   "periodic": 118,
+   "orbit_minima": 11,
+   "largest": 436231,
+   "ratio": 1.8043728423475258
+  },
+  {
+   "a": 871,
+   "captured": 1558,
+   "genuine": 1464,
+   "periodic": 69,
+   "orbit_minima": 25,
+   "largest": 507805,
+   "ratio": 1.788748564867968
+  },
+  {
+   "a": 873,
+   "captured": 1599,
+   "genuine": 1564,
+   "periodic": 8,
+   "orbit_minima": 27,
+   "largest": 359615,
+   "ratio": 1.831615120274914
+  },
+  {
+   "a": 875,
+   "captured": 1611,
+   "genuine": 1499,
+   "periodic": 67,
+   "orbit_minima": 45,
+   "largest": 343497,
+   "ratio": 1.8411428571428572
+  },
+  {
+   "a": 877,
+   "captured": 1575,
+   "genuine": 1548,
+   "periodic": 24,
+   "orbit_minima": 3,
+   "largest": 337791,
+   "ratio": 1.7958950969213228
+  },
+  {
+   "a": 879,
+   "captured": 1568,
+   "genuine": 1542,
+   "periodic": 11,
+   "orbit_minima": 15,
+   "largest": 248497,
+   "ratio": 1.7838452787258248
+  },
+  {
+   "a": 881,
+   "captured": 1605,
+   "genuine": 1517,
+   "periodic": 84,
+   "orbit_minima": 4,
+   "largest": 332159,
+   "ratio": 1.8217934165720773
+  },
+  {
+   "a": 883,
+   "captured": 1601,
+   "genuine": 1521,
+   "periodic": 68,
+   "orbit_minima": 12,
+   "largest": 276557,
+   "ratio": 1.8131370328425822
+  },
+  {
+   "a": 885,
+   "captured": 1623,
+   "genuine": 1372,
+   "periodic": 49,
+   "orbit_minima": 202,
+   "largest": 304535,
+   "ratio": 1.8338983050847457
+  },
+  {
+   "a": 887,
+   "captured": 1615,
+   "genuine": 1523,
+   "periodic": 73,
+   "orbit_minima": 19,
+   "largest": 343949,
+   "ratio": 1.8207440811724915
+  },
+  {
+   "a": 889,
+   "captured": 1625,
+   "genuine": 1480,
+   "periodic": 87,
+   "orbit_minima": 58,
+   "largest": 379895,
+   "ratio": 1.827896512935883
+  },
+  {
+   "a": 891,
+   "captured": 1631,
+   "genuine": 1422,
+   "periodic": 6,
+   "orbit_minima": 203,
+   "largest": 240709,
+   "ratio": 1.8305274971941639
+  },
+  {
+   "a": 893,
+   "captured": 1625,
+   "genuine": 1421,
+   "periodic": 103,
+   "orbit_minima": 101,
+   "largest": 376207,
+   "ratio": 1.8197088465845466
+  },
+  {
+   "a": 895,
+   "captured": 1620,
+   "genuine": 1550,
+   "periodic": 60,
+   "orbit_minima": 10,
+   "largest": 293925,
+   "ratio": 1.8100558659217878
+  },
+  {
+   "a": 897,
+   "captured": 1677,
+   "genuine": 1534,
+   "periodic": 41,
+   "orbit_minima": 102,
+   "largest": 427183,
+   "ratio": 1.8695652173913044
+  },
+  {
+   "a": 899,
+   "captured": 1646,
+   "genuine": 1516,
+   "periodic": 108,
+   "orbit_minima": 22,
+   "largest": 346833,
+   "ratio": 1.8309232480533926
+  },
+  {
+   "a": 901,
+   "captured": 1649,
+   "genuine": 1556,
+   "periodic": 36,
+   "orbit_minima": 57,
+   "largest": 687531,
+   "ratio": 1.830188679245283
+  },
+  {
+   "a": 903,
+   "captured": 1607,
+   "genuine": 1544,
+   "periodic": 31,
+   "orbit_minima": 32,
+   "largest": 358077,
+   "ratio": 1.7796234772978958
+  },
+  {
+   "a": 905,
+   "captured": 1645,
+   "genuine": 1554,
+   "periodic": 57,
+   "orbit_minima": 34,
+   "largest": 354391,
+   "ratio": 1.8176795580110496
+  },
+  {
+   "a": 907,
+   "captured": 1654,
+   "genuine": 1591,
+   "periodic": 46,
+   "orbit_minima": 17,
+   "largest": 420589,
+   "ratio": 1.8235942668136715
+  },
+  {
+   "a": 909,
+   "captured": 1686,
+   "genuine": 1605,
+   "periodic": 20,
+   "orbit_minima": 61,
+   "largest": 419579,
+   "ratio": 1.8547854785478548
+  },
+  {
+   "a": 911,
+   "captured": 1647,
+   "genuine": 1576,
+   "periodic": 45,
+   "orbit_minima": 26,
+   "largest": 470785,
+   "ratio": 1.8079034028540066
+  },
+  {
+   "a": 913,
+   "captured": 1637,
+   "genuine": 1576,
+   "periodic": 32,
+   "orbit_minima": 29,
+   "largest": 391999,
+   "ratio": 1.7929901423877328
+  },
+  {
+   "a": 915,
+   "captured": 1659,
+   "genuine": 1588,
+   "periodic": 36,
+   "orbit_minima": 35,
+   "largest": 304513,
+   "ratio": 1.8131147540983608
+  },
+  {
+   "a": 917,
+   "captured": 1672,
+   "genuine": 1625,
+   "periodic": 34,
+   "orbit_minima": 13,
+   "largest": 384307,
+   "ratio": 1.8233369683751364
+  },
+  {
+   "a": 919,
+   "captured": 1660,
+   "genuine": 1563,
+   "periodic": 64,
+   "orbit_minima": 33,
+   "largest": 385737,
+   "ratio": 1.8063112078346029
+  },
+  {
+   "a": 921,
+   "captured": 1666,
+   "genuine": 1569,
+   "periodic": 41,
+   "orbit_minima": 56,
+   "largest": 431543,
+   "ratio": 1.8089033659066232
+  },
+  {
+   "a": 923,
+   "captured": 1701,
+   "genuine": 1567,
+   "periodic": 79,
+   "orbit_minima": 55,
+   "largest": 377925,
+   "ratio": 1.8429035752979415
+  },
+  {
+   "a": 925,
+   "captured": 1678,
+   "genuine": 1545,
+   "periodic": 85,
+   "orbit_minima": 48,
+   "largest": 331915,
+   "ratio": 1.814054054054054
+  },
+  {
+   "a": 927,
+   "captured": 1693,
+   "genuine": 1625,
+   "periodic": 17,
+   "orbit_minima": 51,
+   "largest": 304881,
+   "ratio": 1.8263214670981662
+  },
+  {
+   "a": 929,
+   "captured": 1694,
+   "genuine": 1613,
+   "periodic": 60,
+   "orbit_minima": 21,
+   "largest": 268639,
+   "ratio": 1.8234660925726587
+  },
+  {
+   "a": 931,
+   "captured": 1681,
+   "genuine": 1599,
+   "periodic": 57,
+   "orbit_minima": 25,
+   "largest": 270637,
+   "ratio": 1.8055853920515574
+  },
+  {
+   "a": 933,
+   "captured": 1707,
+   "genuine": 1652,
+   "periodic": 30,
+   "orbit_minima": 25,
+   "largest": 370443,
+   "ratio": 1.8295819935691318
+  },
+  {
+   "a": 935,
+   "captured": 1690,
+   "genuine": 1542,
+   "periodic": 108,
+   "orbit_minima": 40,
+   "largest": 302825,
+   "ratio": 1.8074866310160427
+  },
+  {
+   "a": 937,
+   "captured": 1682,
+   "genuine": 1552,
+   "periodic": 111,
+   "orbit_minima": 19,
+   "largest": 308915,
+   "ratio": 1.7950907150480255
+  },
+  {
+   "a": 939,
+   "captured": 1720,
+   "genuine": 1626,
+   "periodic": 48,
+   "orbit_minima": 46,
+   "largest": 308681,
+   "ratio": 1.8317358892438764
+  },
+  {
+   "a": 941,
+   "captured": 1696,
+   "genuine": 1657,
+   "periodic": 25,
+   "orbit_minima": 14,
+   "largest": 308147,
+   "ratio": 1.8023379383634432
+  },
+  {
+   "a": 943,
+   "captured": 1721,
+   "genuine": 1591,
+   "periodic": 101,
+   "orbit_minima": 29,
+   "largest": 266129,
+   "ratio": 1.8250265111346766
+  },
+  {
+   "a": 945,
+   "captured": 1778,
+   "genuine": 1549,
+   "periodic": 10,
+   "orbit_minima": 219,
+   "largest": 275767,
+   "ratio": 1.8814814814814815
+  },
+  {
+   "a": 947,
+   "captured": 1719,
+   "genuine": 1643,
+   "periodic": 61,
+   "orbit_minima": 15,
+   "largest": 360161,
+   "ratio": 1.8152059134107708
+  },
+  {
+   "a": 949,
+   "captured": 1729,
+   "genuine": 1633,
+   "periodic": 67,
+   "orbit_minima": 29,
+   "largest": 450923,
+   "ratio": 1.821917808219178
+  },
+  {
+   "a": 951,
+   "captured": 1695,
+   "genuine": 1635,
+   "periodic": 19,
+   "orbit_minima": 41,
+   "largest": 336889,
+   "ratio": 1.7823343848580442
+  },
+  {
+   "a": 953,
+   "captured": 1723,
+   "genuine": 1696,
+   "periodic": 24,
+   "orbit_minima": 3,
+   "largest": 371175,
+   "ratio": 1.8079748163693599
+  },
+  {
+   "a": 955,
+   "captured": 1742,
+   "genuine": 1674,
+   "periodic": 33,
+   "orbit_minima": 35,
+   "largest": 311353,
+   "ratio": 1.824083769633508
+  },
+  {
+   "a": 957,
+   "captured": 1752,
+   "genuine": 1651,
+   "periodic": 33,
+   "orbit_minima": 68,
+   "largest": 372739,
+   "ratio": 1.8307210031347962
+  },
+  {
+   "a": 959,
+   "captured": 1738,
+   "genuine": 1582,
+   "periodic": 119,
+   "orbit_minima": 37,
+   "largest": 388901,
+   "ratio": 1.8123044838373306
+  },
+  {
+   "a": 961,
+   "captured": 1758,
+   "genuine": 1679,
+   "periodic": 74,
+   "orbit_minima": 5,
+   "largest": 408367,
+   "ratio": 1.8293444328824142
+  },
+  {
+   "a": 963,
+   "captured": 1745,
+   "genuine": 1719,
+   "periodic": 19,
+   "orbit_minima": 7,
+   "largest": 422737,
+   "ratio": 1.8120456905503635
+  },
+  {
+   "a": 965,
+   "captured": 1758,
+   "genuine": 1579,
+   "periodic": 122,
+   "orbit_minima": 57,
+   "largest": 339239,
+   "ratio": 1.821761658031088
+  },
+  {
+   "a": 967,
+   "captured": 1724,
+   "genuine": 1675,
+   "periodic": 38,
+   "orbit_minima": 11,
+   "largest": 358681,
+   "ratio": 1.7828335056876938
+  },
+  {
+   "a": 969,
+   "captured": 1790,
+   "genuine": 1741,
+   "periodic": 23,
+   "orbit_minima": 26,
+   "largest": 397279,
+   "ratio": 1.847265221878225
+  },
+  {
+   "a": 971,
+   "captured": 1761,
+   "genuine": 1714,
+   "periodic": 38,
+   "orbit_minima": 9,
+   "largest": 299333,
+   "ratio": 1.8135942327497425
+  },
+  {
+   "a": 973,
+   "captured": 1776,
+   "genuine": 1651,
+   "periodic": 92,
+   "orbit_minima": 33,
+   "largest": 358755,
+   "ratio": 1.8252826310380268
+  },
+  {
+   "a": 975,
+   "captured": 1811,
+   "genuine": 1636,
+   "periodic": 37,
+   "orbit_minima": 138,
+   "largest": 380917,
+   "ratio": 1.8574358974358975
+  },
+  {
+   "a": 977,
+   "captured": 1763,
+   "genuine": 1708,
+   "periodic": 53,
+   "orbit_minima": 2,
+   "largest": 292767,
+   "ratio": 1.804503582395087
+  },
+  {
+   "a": 979,
+   "captured": 1749,
+   "genuine": 1693,
+   "periodic": 46,
+   "orbit_minima": 10,
+   "largest": 359745,
+   "ratio": 1.7865168539325842
+  },
+  {
+   "a": 981,
+   "captured": 1801,
+   "genuine": 1767,
+   "periodic": 11,
+   "orbit_minima": 23,
+   "largest": 323347,
+   "ratio": 1.835881753312946
+  },
+  {
+   "a": 983,
+   "captured": 1781,
+   "genuine": 1685,
+   "periodic": 52,
+   "orbit_minima": 44,
+   "largest": 419913,
+   "ratio": 1.8118006103763988
+  },
+  {
+   "a": 985,
+   "captured": 1794,
+   "genuine": 1665,
+   "periodic": 114,
+   "orbit_minima": 15,
+   "largest": 448295,
+   "ratio": 1.8213197969543147
+  },
+  {
+   "a": 987,
+   "captured": 1792,
+   "genuine": 1676,
+   "periodic": 46,
+   "orbit_minima": 70,
+   "largest": 342565,
+   "ratio": 1.8156028368794326
+  },
+  {
+   "a": 989,
+   "captured": 1810,
+   "genuine": 1721,
+   "periodic": 70,
+   "orbit_minima": 19,
+   "largest": 285251,
+   "ratio": 1.8301314459049545
+  },
+  {
+   "a": 991,
+   "captured": 1804,
+   "genuine": 1700,
+   "periodic": 73,
+   "orbit_minima": 31,
+   "largest": 396869,
+   "ratio": 1.8203834510595358
+  },
+  {
+   "a": 993,
+   "captured": 1816,
+   "genuine": 1757,
+   "periodic": 29,
+   "orbit_minima": 30,
+   "largest": 422299,
+   "ratio": 1.8288016112789527
+  },
+  {
+   "a": 995,
+   "captured": 1813,
+   "genuine": 1742,
+   "periodic": 57,
+   "orbit_minima": 14,
+   "largest": 372113,
+   "ratio": 1.822110552763819
+  },
+  {
+   "a": 997,
+   "captured": 1784,
+   "genuine": 1706,
+   "periodic": 62,
+   "orbit_minima": 16,
+   "largest": 422439,
+   "ratio": 1.7893681043129388
+  },
+  {
+   "a": 999,
+   "captured": 1800,
+   "genuine": 1652,
+   "periodic": 4,
+   "orbit_minima": 144,
+   "largest": 304585,
+   "ratio": 1.8018018018018018
+  },
+  {
+   "a": 1001,
+   "captured": 1832,
+   "genuine": 1683,
+   "periodic": 95,
+   "orbit_minima": 54,
+   "largest": 456351,
+   "ratio": 1.8301698301698301
+  },
+  {
+   "a": 1003,
+   "captured": 1824,
+   "genuine": 1709,
+   "periodic": 65,
+   "orbit_minima": 50,
+   "largest": 398221,
+   "ratio": 1.818544366899302
+  },
+  {
+   "a": 1005,
+   "captured": 1850,
+   "genuine": 1740,
+   "periodic": 45,
+   "orbit_minima": 65,
+   "largest": 371807,
+   "ratio": 1.8407960199004976
+  },
+  {
+   "a": 1007,
+   "captured": 1827,
+   "genuine": 1707,
+   "periodic": 94,
+   "orbit_minima": 26,
+   "largest": 768417,
+   "ratio": 1.8142999006951341
+  },
+  {
+   "a": 1009,
+   "captured": 1847,
+   "genuine": 1794,
+   "periodic": 53,
+   "orbit_minima": 0,
+   "largest": 450543,
+   "ratio": 1.8305252725470764
+  },
+  {
+   "a": 1011,
+   "captured": 1835,
+   "genuine": 1740,
+   "periodic": 38,
+   "orbit_minima": 57,
+   "largest": 440525,
+   "ratio": 1.815034619188922
+  },
+  {
+   "a": 1013,
+   "captured": 1851,
+   "genuine": 1757,
+   "periodic": 74,
+   "orbit_minima": 20,
+   "largest": 391019,
+   "ratio": 1.8272458045409674
+  },
+  {
+   "a": 1015,
+   "captured": 1839,
+   "genuine": 1661,
+   "periodic": 134,
+   "orbit_minima": 44,
+   "largest": 299417,
+   "ratio": 1.811822660098522
+  },
+  {
+   "a": 1017,
+   "captured": 1837,
+   "genuine": 1822,
+   "periodic": 8,
+   "orbit_minima": 7,
+   "largest": 392487,
+   "ratio": 1.806293018682399
+  },
+  {
+   "a": 1019,
+   "captured": 1840,
+   "genuine": 1802,
+   "periodic": 34,
+   "orbit_minima": 4,
+   "largest": 449337,
+   "ratio": 1.8056918547595682
+  },
+  {
+   "a": 1021,
+   "captured": 1876,
+   "genuine": 1786,
+   "periodic": 52,
+   "orbit_minima": 38,
+   "largest": 561611,
+   "ratio": 1.8374142997061704
+  },
+  {
+   "a": 1023,
+   "captured": 1864,
+   "genuine": 1760,
+   "periodic": 24,
+   "orbit_minima": 80,
+   "largest": 421585,
+   "ratio": 1.8220918866080156
+  },
+  {
+   "a": 1025,
+   "captured": 1828,
+   "genuine": 1730,
+   "periodic": 72,
+   "orbit_minima": 26,
+   "largest": 432155,
+   "ratio": 1.7834146341463415
+  },
+  {
+   "a": 1027,
+   "captured": 1879,
+   "genuine": 1721,
+   "periodic": 112,
+   "orbit_minima": 46,
+   "largest": 448621,
+   "ratio": 1.8296007789678677
+  },
+  {
+   "a": 1029,
+   "captured": 1848,
+   "genuine": 1767,
+   "periodic": 26,
+   "orbit_minima": 55,
+   "largest": 532011,
+   "ratio": 1.7959183673469388
+  },
+  {
+   "a": 1031,
+   "captured": 1858,
+   "genuine": 1765,
+   "periodic": 71,
+   "orbit_minima": 22,
+   "largest": 333449,
+   "ratio": 1.8021338506304558
+  },
+  {
+   "a": 1033,
+   "captured": 1847,
+   "genuine": 1732,
+   "periodic": 93,
+   "orbit_minima": 22,
+   "largest": 378079,
+   "ratio": 1.7879961277831558
+  },
+  {
+   "a": 1035,
+   "captured": 1939,
+   "genuine": 1776,
+   "periodic": 28,
+   "orbit_minima": 135,
+   "largest": 319341,
+   "ratio": 1.8734299516908213
+  },
+  {
+   "a": 1037,
+   "captured": 1862,
+   "genuine": 1802,
+   "periodic": 50,
+   "orbit_minima": 10,
+   "largest": 375419,
+   "ratio": 1.7955641272902603
+  },
+  {
+   "a": 1039,
+   "captured": 1927,
+   "genuine": 1879,
+   "periodic": 31,
+   "orbit_minima": 17,
+   "largest": 417745,
+   "ratio": 1.8546679499518768
+  },
+  {
+   "a": 1041,
+   "captured": 1899,
+   "genuine": 1849,
+   "periodic": 40,
+   "orbit_minima": 10,
+   "largest": 371415,
+   "ratio": 1.824207492795389
+  },
+  {
+   "a": 1043,
+   "captured": 1890,
+   "genuine": 1821,
+   "periodic": 51,
+   "orbit_minima": 18,
+   "largest": 454269,
+   "ratio": 1.8120805369127517
+  },
+  {
+   "a": 1045,
+   "captured": 1902,
+   "genuine": 1685,
+   "periodic": 162,
+   "orbit_minima": 55,
+   "largest": 333011,
+   "ratio": 1.8200956937799042
+  },
+  {
+   "a": 1047,
+   "captured": 1873,
+   "genuine": 1797,
+   "periodic": 40,
+   "orbit_minima": 36,
+   "largest": 474881,
+   "ratio": 1.7889207258834765
+  },
+  {
+   "a": 1049,
+   "captured": 1890,
+   "genuine": 1841,
+   "periodic": 18,
+   "orbit_minima": 31,
+   "largest": 448151,
+   "ratio": 1.801715919923737
+  },
+  {
+   "a": 1051,
+   "captured": 1884,
+   "genuine": 1824,
+   "periodic": 53,
+   "orbit_minima": 7,
+   "largest": 420445,
+   "ratio": 1.7925784966698382
+  },
+  {
+   "a": 1053,
+   "captured": 2071,
+   "genuine": 1476,
+   "periodic": 10,
+   "orbit_minima": 585,
+   "largest": 376291,
+   "ratio": 1.9667616334283
+  },
+  {
+   "a": 1055,
+   "captured": 1936,
+   "genuine": 1827,
+   "periodic": 62,
+   "orbit_minima": 47,
+   "largest": 355345,
+   "ratio": 1.8350710900473934
+  },
+  {
+   "a": 1057,
+   "captured": 1924,
+   "genuine": 1806,
+   "periodic": 70,
+   "orbit_minima": 48,
+   "largest": 431071,
+   "ratio": 1.8202459791863765
+  },
+  {
+   "a": 1059,
+   "captured": 1904,
+   "genuine": 1794,
+   "periodic": 41,
+   "orbit_minima": 69,
+   "largest": 342493,
+   "ratio": 1.797922568460812
+  },
+  {
+   "a": 1061,
+   "captured": 1918,
+   "genuine": 1887,
+   "periodic": 21,
+   "orbit_minima": 10,
+   "largest": 451399,
+   "ratio": 1.8077285579641846
+  },
+  {
+   "a": 1063,
+   "captured": 1919,
+   "genuine": 1856,
+   "periodic": 58,
+   "orbit_minima": 5,
+   "largest": 396861,
+   "ratio": 1.8052681091251175
+  },
+  {
+   "a": 1065,
+   "captured": 2092,
+   "genuine": 1800,
+   "periodic": 50,
+   "orbit_minima": 242,
+   "largest": 390551,
+   "ratio": 1.964319248826291
+  },
+  {
+   "a": 1067,
+   "captured": 1976,
+   "genuine": 1879,
+   "periodic": 80,
+   "orbit_minima": 17,
+   "largest": 605257,
+   "ratio": 1.8519212746016869
+  },
+  {
+   "a": 1069,
+   "captured": 1934,
+   "genuine": 1853,
+   "periodic": 60,
+   "orbit_minima": 21,
+   "largest": 375327,
+   "ratio": 1.8091674462114125
+  },
+  {
+   "a": 1071,
+   "captured": 1933,
+   "genuine": 1785,
+   "periodic": 36,
+   "orbit_minima": 112,
+   "largest": 421121,
+   "ratio": 1.8048552754435108
+  },
+  {
+   "a": 1073,
+   "captured": 1951,
+   "genuine": 1893,
+   "periodic": 42,
+   "orbit_minima": 16,
+   "largest": 400023,
+   "ratio": 1.8182665424044735
+  },
+  {
+   "a": 1075,
+   "captured": 1948,
+   "genuine": 1815,
+   "periodic": 91,
+   "orbit_minima": 42,
+   "largest": 442721,
+   "ratio": 1.812093023255814
+  },
+  {
+   "a": 1077,
+   "captured": 1982,
+   "genuine": 1837,
+   "periodic": 42,
+   "orbit_minima": 103,
+   "largest": 333035,
+   "ratio": 1.840297121634169
+  },
+  {
+   "a": 1079,
+   "captured": 1967,
+   "genuine": 1746,
+   "periodic": 162,
+   "orbit_minima": 59,
+   "largest": 351265,
+   "ratio": 1.8229842446709916
+  },
+  {
+   "a": 1081,
+   "captured": 1977,
+   "genuine": 1821,
+   "periodic": 98,
+   "orbit_minima": 58,
+   "largest": 417895,
+   "ratio": 1.8288621646623497
+  },
+  {
+   "a": 1083,
+   "captured": 1969,
+   "genuine": 1856,
+   "periodic": 54,
+   "orbit_minima": 59,
+   "largest": 592829,
+   "ratio": 1.8180978762696214
+  },
+  {
+   "a": 1085,
+   "captured": 1965,
+   "genuine": 1790,
+   "periodic": 127,
+   "orbit_minima": 48,
+   "largest": 410863,
+   "ratio": 1.8110599078341014
+  },
+  {
+   "a": 1087,
+   "captured": 1983,
+   "genuine": 1893,
+   "periodic": 84,
+   "orbit_minima": 6,
+   "largest": 387353,
+   "ratio": 1.8242870285188593
+  },
+  {
+   "a": 1089,
+   "captured": 1983,
+   "genuine": 1872,
+   "periodic": 37,
+   "orbit_minima": 74,
+   "largest": 423391,
+   "ratio": 1.8209366391184574
+  },
+  {
+   "a": 1091,
+   "captured": 1984,
+   "genuine": 1912,
+   "periodic": 67,
+   "orbit_minima": 5,
+   "largest": 361549,
+   "ratio": 1.8185151237396884
+  },
+  {
+   "a": 1093,
+   "captured": 2011,
+   "genuine": 1894,
+   "periodic": 94,
+   "orbit_minima": 23,
+   "largest": 367931,
+   "ratio": 1.8398902104300092
+  },
+  {
+   "a": 1095,
+   "captured": 2001,
+   "genuine": 1875,
+   "periodic": 48,
+   "orbit_minima": 78,
+   "largest": 360113,
+   "ratio": 1.8273972602739725
+  },
+  {
+   "a": 1097,
+   "captured": 1985,
+   "genuine": 1855,
+   "periodic": 93,
+   "orbit_minima": 37,
+   "largest": 396247,
+   "ratio": 1.8094804010938925
+  },
+  {
+   "a": 1099,
+   "captured": 2015,
+   "genuine": 1946,
+   "periodic": 46,
+   "orbit_minima": 23,
+   "largest": 472757,
+   "ratio": 1.8334849863512284
+  },
+  {
+   "a": 1101,
+   "captured": 1999,
+   "genuine": 1957,
+   "periodic": 32,
+   "orbit_minima": 10,
+   "largest": 453603,
+   "ratio": 1.815622161671208
+  },
+  {
+   "a": 1103,
+   "captured": 2011,
+   "genuine": 1916,
+   "periodic": 67,
+   "orbit_minima": 28,
+   "largest": 463477,
+   "ratio": 1.8232094288304623
+  },
+  {
+   "a": 1105,
+   "captured": 2030,
+   "genuine": 1829,
+   "periodic": 151,
+   "orbit_minima": 50,
+   "largest": 393111,
+   "ratio": 1.83710407239819
+  },
+  {
+   "a": 1107,
+   "captured": 1982,
+   "genuine": 1956,
+   "periodic": 6,
+   "orbit_minima": 20,
+   "largest": 386565,
+   "ratio": 1.7904245709123758
+  },
+  {
+   "a": 1109,
+   "captured": 2012,
+   "genuine": 1976,
+   "periodic": 26,
+   "orbit_minima": 10,
+   "largest": 412107,
+   "ratio": 1.8142470694319206
+  },
+  {
+   "a": 1111,
+   "captured": 1999,
+   "genuine": 1934,
+   "periodic": 42,
+   "orbit_minima": 23,
+   "largest": 374093,
+   "ratio": 1.7992799279927993
+  },
+  {
+   "a": 1113,
+   "captured": 2000,
+   "genuine": 1887,
+   "periodic": 51,
+   "orbit_minima": 62,
+   "largest": 849303,
+   "ratio": 1.7969451931716083
+  },
+  {
+   "a": 1115,
+   "captured": 2018,
+   "genuine": 1917,
+   "periodic": 68,
+   "orbit_minima": 33,
+   "largest": 405173,
+   "ratio": 1.8098654708520179
+  },
+  {
+   "a": 1117,
+   "captured": 1990,
+   "genuine": 1913,
+   "periodic": 69,
+   "orbit_minima": 8,
+   "largest": 406995,
+   "ratio": 1.7815577439570278
+  },
+  {
+   "a": 1119,
+   "captured": 2085,
+   "genuine": 2015,
+   "periodic": 40,
+   "orbit_minima": 30,
+   "largest": 465841,
+   "ratio": 1.8632707774798927
+  },
+  {
+   "a": 1121,
+   "captured": 2029,
+   "genuine": 1957,
+   "periodic": 52,
+   "orbit_minima": 20,
+   "largest": 418143,
+   "ratio": 1.8099910793933986
+  },
+  {
+   "a": 1123,
+   "captured": 2013,
+   "genuine": 1865,
+   "periodic": 122,
+   "orbit_minima": 26,
+   "largest": 378477,
+   "ratio": 1.792520035618878
+  },
+  {
+   "a": 1125,
+   "captured": 2112,
+   "genuine": 1838,
+   "periodic": 27,
+   "orbit_minima": 247,
+   "largest": 467707,
+   "ratio": 1.8773333333333333
+  },
+  {
+   "a": 1127,
+   "captured": 2019,
+   "genuine": 1892,
+   "periodic": 91,
+   "orbit_minima": 36,
+   "largest": 348317,
+   "ratio": 1.7914818101153505
+  },
+  {
+   "a": 1129,
+   "captured": 2028,
+   "genuine": 1906,
+   "periodic": 114,
+   "orbit_minima": 8,
+   "largest": 472135,
+   "ratio": 1.796279893711249
+  },
+  {
+   "a": 1131,
+   "captured": 2051,
+   "genuine": 1908,
+   "periodic": 53,
+   "orbit_minima": 90,
+   "largest": 457801,
+   "ratio": 1.8134394341290894
+  },
+  {
+   "a": 1133,
+   "captured": 2042,
+   "genuine": 1945,
+   "periodic": 69,
+   "orbit_minima": 28,
+   "largest": 394675,
+   "ratio": 1.8022947925860546
+  },
+  {
+   "a": 1135,
+   "captured": 2072,
+   "genuine": 1964,
+   "periodic": 96,
+   "orbit_minima": 12,
+   "largest": 435765,
+   "ratio": 1.8255506607929515
+  },
+  {
+   "a": 1137,
+   "captured": 2080,
+   "genuine": 2016,
+   "periodic": 20,
+   "orbit_minima": 44,
+   "largest": 420983,
+   "ratio": 1.8293755496921724
+  },
+  {
+   "a": 1139,
+   "captured": 2095,
+   "genuine": 2021,
+   "periodic": 37,
+   "orbit_minima": 37,
+   "largest": 461089,
+   "ratio": 1.839332748024583
+  },
+  {
+   "a": 1141,
+   "captured": 2062,
+   "genuine": 1931,
+   "periodic": 99,
+   "orbit_minima": 32,
+   "largest": 398923,
+   "ratio": 1.8071866783523225
+  },
+  {
+   "a": 1143,
+   "captured": 2039,
+   "genuine": 1954,
+   "periodic": 15,
+   "orbit_minima": 70,
+   "largest": 440993,
+   "ratio": 1.783902012248469
+  },
+  {
+   "a": 1145,
+   "captured": 2060,
+   "genuine": 1944,
+   "periodic": 102,
+   "orbit_minima": 14,
+   "largest": 407747,
+   "ratio": 1.7991266375545851
+  },
+  {
+   "a": 1147,
+   "captured": 2076,
+   "genuine": 1986,
+   "periodic": 58,
+   "orbit_minima": 32,
+   "largest": 407165,
+   "ratio": 1.8099389712292937
+  },
+  {
+   "a": 1149,
+   "captured": 2063,
+   "genuine": 1989,
+   "periodic": 27,
+   "orbit_minima": 47,
+   "largest": 409675,
+   "ratio": 1.795474325500435
+  },
+  {
+   "a": 1151,
+   "captured": 2053,
+   "genuine": 1948,
+   "periodic": 73,
+   "orbit_minima": 32,
+   "largest": 424033,
+   "ratio": 1.7836663770634231
+  },
+  {
+   "a": 1153,
+   "captured": 2092,
+   "genuine": 1965,
+   "periodic": 107,
+   "orbit_minima": 20,
+   "largest": 439295,
+   "ratio": 1.8143972246313964
+  },
+  {
+   "a": 1155,
+   "captured": 2101,
+   "genuine": 1952,
+   "periodic": 59,
+   "orbit_minima": 90,
+   "largest": 776913,
+   "ratio": 1.819047619047619
+  },
+  {
+   "a": 1157,
+   "captured": 2100,
+   "genuine": 1974,
+   "periodic": 81,
+   "orbit_minima": 45,
+   "largest": 458723,
+   "ratio": 1.815038893690579
+  },
+  {
+   "a": 1159,
+   "captured": 2127,
+   "genuine": 2061,
+   "periodic": 51,
+   "orbit_minima": 15,
+   "largest": 413689,
+   "ratio": 1.8352027610008628
+  },
+  {
+   "a": 1161,
+   "captured": 2107,
+   "genuine": 2082,
+   "periodic": 4,
+   "orbit_minima": 21,
+   "largest": 430439,
+   "ratio": 1.8148148148148149
+  },
+  {
+   "a": 1163,
+   "captured": 2107,
+   "genuine": 1988,
+   "periodic": 113,
+   "orbit_minima": 6,
+   "largest": 584077,
+   "ratio": 1.8116938950988821
+  },
+  {
+   "a": 1165,
+   "captured": 2135,
+   "genuine": 1961,
+   "periodic": 105,
+   "orbit_minima": 69,
+   "largest": 364339,
+   "ratio": 1.832618025751073
+  },
+  {
+   "a": 1167,
+   "captured": 2117,
+   "genuine": 2030,
+   "periodic": 41,
+   "orbit_minima": 46,
+   "largest": 476309,
+   "ratio": 1.8140531276778062
+  },
+  {
+   "a": 1169,
+   "captured": 2114,
+   "genuine": 1997,
+   "periodic": 84,
+   "orbit_minima": 33,
+   "largest": 506415,
+   "ratio": 1.8083832335329342
+  },
+  {
+   "a": 1171,
+   "captured": 2130,
+   "genuine": 2050,
+   "periodic": 60,
+   "orbit_minima": 20,
+   "largest": 336421,
+   "ratio": 1.8189581554227157
+  },
+  {
+   "a": 1173,
+   "captured": 2167,
+   "genuine": 2050,
+   "periodic": 49,
+   "orbit_minima": 68,
+   "largest": 575159,
+   "ratio": 1.8473998294970162
+  },
+  {
+   "a": 1175,
+   "captured": 2134,
+   "genuine": 2005,
+   "periodic": 78,
+   "orbit_minima": 51,
+   "largest": 423137,
+   "ratio": 1.8161702127659574
+  },
+  {
+   "a": 1177,
+   "captured": 2136,
+   "genuine": 2001,
+   "periodic": 114,
+   "orbit_minima": 21,
+   "largest": 471767,
+   "ratio": 1.814783347493628
+  },
+  {
+   "a": 1179,
+   "captured": 2109,
+   "genuine": 2024,
+   "periodic": 24,
+   "orbit_minima": 61,
+   "largest": 494109,
+   "ratio": 1.7888040712468194
+  },
+  {
+   "a": 1181,
+   "captured": 2119,
+   "genuine": 2026,
+   "periodic": 91,
+   "orbit_minima": 2,
+   "largest": 476563,
+   "ratio": 1.7942421676545302
+  },
+  {
+   "a": 1183,
+   "captured": 2162,
+   "genuine": 2073,
+   "periodic": 66,
+   "orbit_minima": 23,
+   "largest": 486513,
+   "ratio": 1.827557058326289
+  },
+  {
+   "a": 1185,
+   "captured": 2162,
+   "genuine": 2013,
+   "periodic": 64,
+   "orbit_minima": 85,
+   "largest": 550343,
+   "ratio": 1.8244725738396625
+  },
+  {
+   "a": 1187,
+   "captured": 2158,
+   "genuine": 2096,
+   "periodic": 39,
+   "orbit_minima": 23,
+   "largest": 320149,
+   "ratio": 1.818028643639427
+  },
+  {
+   "a": 1189,
+   "captured": 2142,
+   "genuine": 2041,
+   "periodic": 82,
+   "orbit_minima": 19,
+   "largest": 418587,
+   "ratio": 1.8015138772077377
+  },
+  {
+   "a": 1191,
+   "captured": 2178,
+   "genuine": 2145,
+   "periodic": 27,
+   "orbit_minima": 6,
+   "largest": 504145,
+   "ratio": 1.8287153652392947
+  },
+  {
+   "a": 1193,
+   "captured": 2142,
+   "genuine": 2089,
+   "periodic": 51,
+   "orbit_minima": 2,
+   "largest": 460287,
+   "ratio": 1.7954735959765298
+  },
+  {
+   "a": 1195,
+   "captured": 2175,
+   "genuine": 2034,
+   "periodic": 104,
+   "orbit_minima": 37,
+   "largest": 578509,
+   "ratio": 1.8200836820083681
+  },
+  {
+   "a": 1197,
+   "captured": 2153,
+   "genuine": 2059,
+   "periodic": 20,
+   "orbit_minima": 74,
+   "largest": 458323,
+   "ratio": 1.7986633249791144
+  },
+  {
+   "a": 1199,
+   "captured": 2155,
+   "genuine": 2039,
+   "periodic": 94,
+   "orbit_minima": 22,
+   "largest": 554537,
+   "ratio": 1.7973311092577147
+  },
+  {
+   "a": 1201,
+   "captured": 2160,
+   "genuine": 1897,
+   "periodic": 158,
+   "orbit_minima": 105,
+   "largest": 467991,
+   "ratio": 1.7985012489592007
+  },
+  {
+   "a": 1203,
+   "captured": 2190,
+   "genuine": 2136,
+   "periodic": 46,
+   "orbit_minima": 8,
+   "largest": 339365,
+   "ratio": 1.8204488778054864
+  },
+  {
+   "a": 1205,
+   "captured": 2167,
+   "genuine": 2043,
+   "periodic": 89,
+   "orbit_minima": 35,
+   "largest": 544979,
+   "ratio": 1.7983402489626557
+  },
+  {
+   "a": 1207,
+   "captured": 2178,
+   "genuine": 1997,
+   "periodic": 119,
+   "orbit_minima": 62,
+   "largest": 366729,
+   "ratio": 1.8044739022369511
+  },
+  {
+   "a": 1209,
+   "captured": 2199,
+   "genuine": 2102,
+   "periodic": 39,
+   "orbit_minima": 58,
+   "largest": 418671,
+   "ratio": 1.8188585607940446
+  },
+  {
+   "a": 1211,
+   "captured": 2221,
+   "genuine": 2163,
+   "periodic": 37,
+   "orbit_minima": 21,
+   "largest": 497173,
+   "ratio": 1.8340214698596202
+  },
+  {
+   "a": 1213,
+   "captured": 2158,
+   "genuine": 2115,
+   "periodic": 36,
+   "orbit_minima": 7,
+   "largest": 447043,
+   "ratio": 1.7790601813685079
+  },
+  {
+   "a": 1215,
+   "captured": 2509,
+   "genuine": 1664,
+   "periodic": 6,
+   "orbit_minima": 839,
+   "largest": 268609,
+   "ratio": 2.0650205761316873
+  },
+  {
+   "a": 1217,
+   "captured": 2197,
+   "genuine": 2137,
+   "periodic": 36,
+   "orbit_minima": 24,
+   "largest": 382815,
+   "ratio": 1.8052588331963846
+  },
+  {
+   "a": 1219,
+   "captured": 2212,
+   "genuine": 2087,
+   "periodic": 92,
+   "orbit_minima": 33,
+   "largest": 930189,
+   "ratio": 1.8146021328958162
+  },
+  {
+   "a": 1221,
+   "captured": 2190,
+   "genuine": 2065,
+   "periodic": 56,
+   "orbit_minima": 69,
+   "largest": 460123,
+   "ratio": 1.7936117936117937
+  },
+  {
+   "a": 1223,
+   "captured": 2249,
+   "genuine": 2128,
+   "periodic": 77,
+   "orbit_minima": 44,
+   "largest": 398333,
+   "ratio": 1.83892068683565
+  },
+  {
+   "a": 1225,
+   "captured": 2231,
+   "genuine": 2052,
+   "periodic": 133,
+   "orbit_minima": 46,
+   "largest": 546951,
+   "ratio": 1.8212244897959184
+  },
+  {
+   "a": 1227,
+   "captured": 2219,
+   "genuine": 2155,
+   "periodic": 31,
+   "orbit_minima": 33,
+   "largest": 405509,
+   "ratio": 1.8084759576202118
+  },
+  {
+   "a": 1229,
+   "captured": 2220,
+   "genuine": 2173,
+   "periodic": 27,
+   "orbit_minima": 20,
+   "largest": 537027,
+   "ratio": 1.806346623270952
+  },
+  {
+   "a": 1231,
+   "captured": 2266,
+   "genuine": 2141,
+   "periodic": 120,
+   "orbit_minima": 5,
+   "largest": 454389,
+   "ratio": 1.8407798537774167
+  },
+  {
+   "a": 1233,
+   "captured": 2227,
+   "genuine": 2038,
+   "periodic": 23,
+   "orbit_minima": 166,
+   "largest": 423407,
+   "ratio": 1.8061638280616383
+  },
+  {
+   "a": 1235,
+   "captured": 2222,
+   "genuine": 1966,
+   "periodic": 165,
+   "orbit_minima": 91,
+   "largest": 357377,
+   "ratio": 1.7991902834008098
+  },
+  {
+   "a": 1237,
+   "captured": 2226,
+   "genuine": 2157,
+   "periodic": 41,
+   "orbit_minima": 28,
+   "largest": 575507,
+   "ratio": 1.7995149555375909
+  },
+  {
+   "a": 1239,
+   "captured": 2213,
+   "genuine": 2107,
+   "periodic": 40,
+   "orbit_minima": 66,
+   "largest": 438121,
+   "ratio": 1.7861178369652946
+  },
+  {
+   "a": 1241,
+   "captured": 2255,
+   "genuine": 2070,
+   "periodic": 153,
+   "orbit_minima": 32,
+   "largest": 505511,
+   "ratio": 1.8170829975825946
+  },
+  {
+   "a": 1243,
+   "captured": 2277,
+   "genuine": 2243,
+   "periodic": 24,
+   "orbit_minima": 10,
+   "largest": 447589,
+   "ratio": 1.831858407079646
+  },
+  {
+   "a": 1245,
+   "captured": 2252,
+   "genuine": 2126,
+   "periodic": 46,
+   "orbit_minima": 80,
+   "largest": 708419,
+   "ratio": 1.8088353413654619
+  },
+  {
+   "a": 1247,
+   "captured": 2276,
+   "genuine": 2152,
+   "periodic": 96,
+   "orbit_minima": 28,
+   "largest": 464513,
+   "ratio": 1.8251804330392942
+  },
+  {
+   "a": 1249,
+   "captured": 2256,
+   "genuine": 2211,
+   "periodic": 40,
+   "orbit_minima": 5,
+   "largest": 544059,
+   "ratio": 1.8062449959967974
+  },
+  {
+   "a": 1251,
+   "captured": 2306,
+   "genuine": 2237,
+   "periodic": 28,
+   "orbit_minima": 41,
+   "largest": 466797,
+   "ratio": 1.8433253397282174
+  },
+  {
+   "a": 1253,
+   "captured": 2253,
+   "genuine": 2167,
+   "periodic": 77,
+   "orbit_minima": 9,
+   "largest": 413659,
+   "ratio": 1.7980845969672785
+  },
+  {
+   "a": 1255,
+   "captured": 2278,
+   "genuine": 2188,
+   "periodic": 54,
+   "orbit_minima": 36,
+   "largest": 499229,
+   "ratio": 1.8151394422310756
+  },
+  {
+   "a": 1257,
+   "captured": 2279,
+   "genuine": 2198,
+   "periodic": 38,
+   "orbit_minima": 43,
+   "largest": 388151,
+   "ratio": 1.813046937151949
+  },
+  {
+   "a": 1259,
+   "captured": 2282,
+   "genuine": 2167,
+   "periodic": 83,
+   "orbit_minima": 32,
+   "largest": 577973,
+   "ratio": 1.812549642573471
+  },
+  {
+   "a": 1261,
+   "captured": 2277,
+   "genuine": 2047,
+   "periodic": 171,
+   "orbit_minima": 59,
+   "largest": 502099,
+   "ratio": 1.8057097541633624
+  },
+  {
+   "a": 1263,
+   "captured": 2298,
+   "genuine": 2216,
+   "periodic": 33,
+   "orbit_minima": 49,
+   "largest": 481961,
+   "ratio": 1.819477434679335
+  },
+  {
+   "a": 1265,
+   "captured": 2311,
+   "genuine": 2069,
+   "periodic": 190,
+   "orbit_minima": 52,
+   "largest": 581247,
+   "ratio": 1.8268774703557311
+  },
+  {
+   "a": 1267,
+   "captured": 2318,
+   "genuine": 2126,
+   "periodic": 141,
+   "orbit_minima": 51,
+   "largest": 1049821,
+   "ratio": 1.829518547750592
+  },
+  {
+   "a": 1269,
+   "captured": 2338,
+   "genuine": 2069,
+   "periodic": 20,
+   "orbit_minima": 249,
+   "largest": 381939,
+   "ratio": 1.8423955870764381
+  },
+  {
+   "a": 1271,
+   "captured": 2339,
+   "genuine": 2220,
+   "periodic": 82,
+   "orbit_minima": 37,
+   "largest": 711609,
+   "ratio": 1.8402832415420929
+  },
+  {
+   "a": 1273,
+   "captured": 2288,
+   "genuine": 2187,
+   "periodic": 75,
+   "orbit_minima": 26,
+   "largest": 541111,
+   "ratio": 1.7973291437549097
+  },
+  {
+   "a": 1275,
+   "captured": 2335,
+   "genuine": 2173,
+   "periodic": 66,
+   "orbit_minima": 96,
+   "largest": 487493,
+   "ratio": 1.8313725490196078
+  },
+  {
+   "a": 1277,
+   "captured": 2316,
+   "genuine": 2236,
+   "periodic": 60,
+   "orbit_minima": 20,
+   "largest": 461003,
+   "ratio": 1.8136256851996868
+  },
+  {
+   "a": 1279,
+   "captured": 2337,
+   "genuine": 2249,
+   "periodic": 84,
+   "orbit_minima": 4,
+   "largest": 540837,
+   "ratio": 1.8272087568412823
+  },
+  {
+   "a": 1281,
+   "captured": 2339,
+   "genuine": 2234,
+   "periodic": 38,
+   "orbit_minima": 67,
+   "largest": 445435,
+   "ratio": 1.8259172521467604
+  },
+  {
+   "a": 1283,
+   "captured": 2307,
+   "genuine": 2201,
+   "periodic": 62,
+   "orbit_minima": 44,
+   "largest": 496913,
+   "ratio": 1.7981293842556507
+  },
+  {
+   "a": 1285,
+   "captured": 2336,
+   "genuine": 2272,
+   "periodic": 57,
+   "orbit_minima": 7,
+   "largest": 481255,
+   "ratio": 1.8178988326848249
+  },
+  {
+   "a": 1287,
+   "captured": 2337,
+   "genuine": 2129,
+   "periodic": 43,
+   "orbit_minima": 165,
+   "largest": 685393,
+   "ratio": 1.8158508158508158
+  },
+  {
+   "a": 1289,
+   "captured": 2309,
+   "genuine": 2274,
+   "periodic": 30,
+   "orbit_minima": 5,
+   "largest": 541095,
+   "ratio": 1.791311093871218
+  },
+  {
+   "a": 1291,
+   "captured": 2369,
+   "genuine": 2291,
+   "periodic": 64,
+   "orbit_minima": 14,
+   "largest": 611333,
+   "ratio": 1.8350116189000774
+  },
+  {
+   "a": 1293,
+   "captured": 2337,
+   "genuine": 2125,
+   "periodic": 90,
+   "orbit_minima": 122,
+   "largest": 521631,
+   "ratio": 1.8074245939675173
+  },
+  {
+   "a": 1295,
+   "captured": 2404,
+   "genuine": 2180,
+   "periodic": 146,
+   "orbit_minima": 78,
+   "largest": 511169,
+   "ratio": 1.8563706563706563
+  },
+  {
+   "a": 1297,
+   "captured": 2355,
+   "genuine": 2251,
+   "periodic": 95,
+   "orbit_minima": 9,
+   "largest": 558091,
+   "ratio": 1.8157286044718581
+  },
+  {
+   "a": 1299,
+   "captured": 2387,
+   "genuine": 2250,
+   "periodic": 81,
+   "orbit_minima": 56,
+   "largest": 522173,
+   "ratio": 1.8375673595073134
+  },
+  {
+   "a": 1301,
+   "captured": 2373,
+   "genuine": 2317,
+   "periodic": 49,
+   "orbit_minima": 7,
+   "largest": 459699,
+   "ratio": 1.8239815526518064
+  },
+  {
+   "a": 1303,
+   "captured": 2353,
+   "genuine": 2263,
+   "periodic": 47,
+   "orbit_minima": 43,
+   "largest": 520601,
+   "ratio": 1.8058326937835765
+  },
+  {
+   "a": 1305,
+   "captured": 2407,
+   "genuine": 2192,
+   "periodic": 27,
+   "orbit_minima": 188,
+   "largest": 407183,
+   "ratio": 1.8444444444444446
+  },
+  {
+   "a": 1307,
+   "captured": 2372,
+   "genuine": 2233,
+   "periodic": 139,
+   "orbit_minima": 0,
+   "largest": 415557,
+   "ratio": 1.8148431522570774
+  },
+  {
+   "a": 1309,
+   "captured": 2321,
+   "genuine": 2132,
+   "periodic": 144,
+   "orbit_minima": 45,
+   "largest": 427435,
+   "ratio": 1.773109243697479
+  },
+  {
+   "a": 1311,
+   "captured": 2346,
+   "genuine": 2261,
+   "periodic": 50,
+   "orbit_minima": 35,
+   "largest": 469105,
+   "ratio": 1.7894736842105263
+  },
+  {
+   "a": 1313,
+   "captured": 2370,
+   "genuine": 2286,
+   "periodic": 50,
+   "orbit_minima": 34,
+   "largest": 532751,
+   "ratio": 1.805026656511805
+  },
+  {
+   "a": 1315,
+   "captured": 2366,
+   "genuine": 2250,
+   "periodic": 76,
+   "orbit_minima": 40,
+   "largest": 503829,
+   "ratio": 1.7992395437262358
+  },
+  {
+   "a": 1317,
+   "captured": 2410,
+   "genuine": 2296,
+   "periodic": 57,
+   "orbit_minima": 57,
+   "largest": 794907,
+   "ratio": 1.829916476841306
+  },
+  {
+   "a": 1319,
+   "captured": 2390,
+   "genuine": 2068,
+   "periodic": 151,
+   "orbit_minima": 171,
+   "largest": 380185,
+   "ratio": 1.8119787717968159
+  },
+  {
+   "a": 1321,
+   "captured": 2396,
+   "genuine": 2315,
+   "periodic": 76,
+   "orbit_minima": 5,
+   "largest": 496727,
+   "ratio": 1.813777441332324
+  },
+  {
+   "a": 1323,
+   "captured": 2366,
+   "genuine": 2211,
+   "periodic": 8,
+   "orbit_minima": 147,
+   "largest": 478869,
+   "ratio": 1.7883597883597884
+  },
+  {
+   "a": 1325,
+   "captured": 2424,
+   "genuine": 2232,
+   "periodic": 97,
+   "orbit_minima": 95,
+   "largest": 1011075,
+   "ratio": 1.829433962264151
+  },
+  {
+   "a": 1327,
+   "captured": 2375,
+   "genuine": 2218,
+   "periodic": 85,
+   "orbit_minima": 72,
+   "largest": 537249,
+   "ratio": 1.7897513187641296
+  },
+  {
+   "a": 1329,
+   "captured": 2379,
+   "genuine": 2286,
+   "periodic": 30,
+   "orbit_minima": 63,
+   "largest": 511159,
+   "ratio": 1.7900677200902935
+  },
+  {
+   "a": 1331,
+   "captured": 2417,
+   "genuine": 2333,
+   "periodic": 72,
+   "orbit_minima": 12,
+   "largest": 547141,
+   "ratio": 1.8159278737791134
+  },
+  {
+   "a": 1333,
+   "captured": 2421,
+   "genuine": 2264,
+   "periodic": 108,
+   "orbit_minima": 49,
+   "largest": 345339,
+   "ratio": 1.8162040510127533
+  },
+  {
+   "a": 1335,
+   "captured": 2414,
+   "genuine": 2313,
+   "periodic": 38,
+   "orbit_minima": 63,
+   "largest": 600809,
+   "ratio": 1.8082397003745319
+  },
+  {
+   "a": 1337,
+   "captured": 2443,
+   "genuine": 2335,
+   "periodic": 65,
+   "orbit_minima": 43,
+   "largest": 455223,
+   "ratio": 1.8272251308900525
+  },
+  {
+   "a": 1339,
+   "captured": 2461,
+   "genuine": 2331,
+   "periodic": 71,
+   "orbit_minima": 59,
+   "largest": 414901,
+   "ratio": 1.8379387602688573
+  },
+  {
+   "a": 1341,
+   "captured": 2430,
+   "genuine": 2337,
+   "periodic": 15,
+   "orbit_minima": 78,
+   "largest": 508275,
+   "ratio": 1.8120805369127517
+  },
+  {
+   "a": 1343,
+   "captured": 2441,
+   "genuine": 2329,
+   "periodic": 95,
+   "orbit_minima": 17,
+   "largest": 1017489,
+   "ratio": 1.817572598659717
+  },
+  {
+   "a": 1345,
+   "captured": 2427,
+   "genuine": 2171,
+   "periodic": 122,
+   "orbit_minima": 134,
+   "largest": 688815,
+   "ratio": 1.804460966542751
+  },
+  {
+   "a": 1347,
+   "captured": 2453,
+   "genuine": 2414,
+   "periodic": 18,
+   "orbit_minima": 21,
+   "largest": 615441,
+   "ratio": 1.8210838901262063
+  },
+  {
+   "a": 1349,
+   "captured": 2475,
+   "genuine": 2293,
+   "periodic": 140,
+   "orbit_minima": 42,
+   "largest": 579755,
+   "ratio": 1.8346923647146034
+  },
+  {
+   "a": 1351,
+   "captured": 2454,
+   "genuine": 2288,
+   "periodic": 114,
+   "orbit_minima": 52,
+   "largest": 514685,
+   "ratio": 1.8164322723908217
+  },
+  {
+   "a": 1353,
+   "captured": 2427,
+   "genuine": 2347,
+   "periodic": 31,
+   "orbit_minima": 49,
+   "largest": 454963,
+   "ratio": 1.793791574279379
+  },
+  {
+   "a": 1355,
+   "captured": 2459,
+   "genuine": 2312,
+   "periodic": 90,
+   "orbit_minima": 57,
+   "largest": 529829,
+   "ratio": 1.814760147601476
+  },
+  {
+   "a": 1357,
+   "captured": 2487,
+   "genuine": 2304,
+   "periodic": 147,
+   "orbit_minima": 36,
+   "largest": 456059,
+   "ratio": 1.8327192336035372
+  },
+  {
+   "a": 1359,
+   "captured": 2442,
+   "genuine": 2333,
+   "periodic": 20,
+   "orbit_minima": 89,
+   "largest": 647881,
+   "ratio": 1.7969094922737308
+  },
+  {
+   "a": 1361,
+   "captured": 2440,
+   "genuine": 2361,
+   "periodic": 53,
+   "orbit_minima": 26,
+   "largest": 469515,
+   "ratio": 1.792799412196914
+  },
+  {
+   "a": 1363,
+   "captured": 2473,
+   "genuine": 2323,
+   "periodic": 105,
+   "orbit_minima": 45,
+   "largest": 377217,
+   "ratio": 1.8143800440205429
+  },
+  {
+   "a": 1365,
+   "captured": 2540,
+   "genuine": 2325,
+   "periodic": 78,
+   "orbit_minima": 137,
+   "largest": 566315,
+   "ratio": 1.8608058608058609
+  },
+  {
+   "a": 1367,
+   "captured": 2444,
+   "genuine": 2364,
+   "periodic": 61,
+   "orbit_minima": 19,
+   "largest": 549897,
+   "ratio": 1.7878566203365034
+  },
+  {
+   "a": 1369,
+   "captured": 2491,
+   "genuine": 2445,
+   "periodic": 32,
+   "orbit_minima": 14,
+   "largest": 548087,
+   "ratio": 1.8195763330898467
+  },
+  {
+   "a": 1371,
+   "captured": 2462,
+   "genuine": 2353,
+   "periodic": 38,
+   "orbit_minima": 71,
+   "largest": 654873,
+   "ratio": 1.7957695113056162
+  },
+  {
+   "a": 1373,
+   "captured": 2505,
+   "genuine": 2437,
+   "periodic": 35,
+   "orbit_minima": 33,
+   "largest": 542227,
+   "ratio": 1.8244719592134013
+  },
+  {
+   "a": 1375,
+   "captured": 2516,
+   "genuine": 2359,
+   "periodic": 99,
+   "orbit_minima": 58,
+   "largest": 539781,
+   "ratio": 1.8298181818181818
+  },
+  {
+   "a": 1377,
+   "captured": 2437,
+   "genuine": 2151,
+   "periodic": 8,
+   "orbit_minima": 278,
+   "largest": 537915,
+   "ratio": 1.7697893972403775
+  },
+  {
+   "a": 1379,
+   "captured": 2519,
+   "genuine": 2423,
+   "periodic": 85,
+   "orbit_minima": 11,
+   "largest": 627613,
+   "ratio": 1.826686004350979
+  },
+  {
+   "a": 1381,
+   "captured": 2478,
+   "genuine": 2413,
+   "periodic": 56,
+   "orbit_minima": 9,
+   "largest": 592423,
+   "ratio": 1.7943519188993482
+  },
+  {
+   "a": 1383,
+   "captured": 2472,
+   "genuine": 2446,
+   "periodic": 15,
+   "orbit_minima": 11,
+   "largest": 473597,
+   "ratio": 1.7874186550976139
+  },
+  {
+   "a": 1385,
+   "captured": 2510,
+   "genuine": 2388,
+   "periodic": 94,
+   "orbit_minima": 28,
+   "largest": 602951,
+   "ratio": 1.812274368231047
+  },
+  {
+   "a": 1387,
+   "captured": 2503,
+   "genuine": 2398,
+   "periodic": 77,
+   "orbit_minima": 28,
+   "largest": 557957,
+   "ratio": 1.8046142754145638
+  },
+  {
+   "a": 1389,
+   "captured": 2505,
+   "genuine": 2434,
+   "periodic": 31,
+   "orbit_minima": 40,
+   "largest": 547775,
+   "ratio": 1.8034557235421167
+  },
+  {
+   "a": 1391,
+   "captured": 2504,
+   "genuine": 2370,
+   "periodic": 100,
+   "orbit_minima": 34,
+   "largest": 578593,
+   "ratio": 1.8001437814521926
+  },
+  {
+   "a": 1393,
+   "captured": 2538,
+   "genuine": 2418,
+   "periodic": 85,
+   "orbit_minima": 35,
+   "largest": 704959,
+   "ratio": 1.8219669777458722
+  },
+  {
+   "a": 1395,
+   "captured": 2516,
+   "genuine": 2415,
+   "periodic": 20,
+   "orbit_minima": 81,
+   "largest": 573509,
+   "ratio": 1.803584229390681
+  },
+  {
+   "a": 1397,
+   "captured": 2528,
+   "genuine": 2411,
+   "periodic": 82,
+   "orbit_minima": 35,
+   "largest": 489387,
+   "ratio": 1.8095919828203293
+  },
+  {
+   "a": 1399,
+   "captured": 2544,
+   "genuine": 2353,
+   "periodic": 124,
+   "orbit_minima": 67,
+   "largest": 631625,
+   "ratio": 1.8184417441029306
+  },
+  {
+   "a": 1401,
+   "captured": 2549,
+   "genuine": 2460,
+   "periodic": 32,
+   "orbit_minima": 57,
+   "largest": 490711,
+   "ratio": 1.8194147037830122
+  }
+ ]
+}

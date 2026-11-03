@@ -43,6 +43,7 @@ Findings from notebook investigations:
 - **First Convergent Eliminated**: No 13-step cycle exists. All 91 parity words checked; none have 13 | C. Gap=13 ruled out.
 - **Divisibility Obstruction Conjecture**: For gap g = 2^E - 3^S > 1, g never divides 2^E * C. Would prove no non-trivial cycles.
 - **Pinball / Stopping Vectors (SCRUM-30)**: stopping_vector(n) = (n, *stopping_orbit(n)); each subgroup of Set_k is a lattice line in Z^(k+1) with integer direction. Integer-only decision model in `collatz/pinball/` returns exact Fraction probabilities. Collatz routing matches the Bayes posterior on Collatz questions but loses to fixed-depth bit reading on other data. Vault: `research/investigate-pinball-analogy/`.
+- **Information-Theoretic Schwarzschild Radius (SCRUM-65)**: r_s(M) = theta M bits of address, with weak-field limit 2GM/c^2; c = log2 d is an exact causal cone, g = 0.2075 bits/step is the drift, theta = 1 for 3x+1. A parity word has horizon F(w) = C/(d^k - Q) with the exact factor 1 - F/n, and bits destroyed sit in its denominator. Captured integers of 3x+a grow as 1.8137 a. Code in `collatz/schwarzschild/`, vault `research/information-schwarzschild-radius/`.
 
 ## Research Plans
 - [[path-to-proof]] — structured roadmap toward proving the Collatz conjecture

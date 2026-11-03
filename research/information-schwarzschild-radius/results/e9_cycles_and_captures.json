@@ -1,0 +1,848 @@
+[
+ {
+  "map": "3x+1",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 2,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.4150374992788439
+   }
+  ],
+  "captured": [
+   1
+  ],
+  "captured_count": 1,
+  "captured_not_periodic": []
+ },
+ {
+  "map": "3x-1",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 1,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": false,
+    "beta": -0.5849625007211561
+   },
+   {
+    "min": 5,
+    "length": 3,
+    "horizon": "5",
+    "on_horizon": true,
+    "contracting": false,
+    "beta": -0.16992500144231215
+   },
+   {
+    "min": 17,
+    "length": 11,
+    "horizon": "17",
+    "on_horizon": true,
+    "contracting": false,
+    "beta": -0.09473750504809253
+   }
+  ],
+  "captured": [],
+  "captured_count": 0,
+  "captured_not_periodic": []
+ },
+ {
+  "map": "3x+5",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 3,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 1.415037499278844
+   },
+   {
+    "min": 5,
+    "length": 2,
+    "horizon": "5",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.4150374992788439
+   },
+   {
+    "min": 19,
+    "length": 5,
+    "horizon": "19",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.24511249783653177
+   },
+   {
+    "min": 23,
+    "length": 5,
+    "horizon": "23",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.24511249783653177
+   },
+   {
+    "min": 187,
+    "length": 27,
+    "horizon": "187",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.05563748774034494
+   },
+   {
+    "min": 347,
+    "length": 27,
+    "horizon": "347",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.05563748774034494
+   }
+  ],
+  "captured": [
+   1,
+   3,
+   5,
+   7,
+   11,
+   19,
+   23,
+   71,
+   99,
+   103,
+   123,
+   171,
+   187,
+   259,
+   347
+  ],
+  "captured_count": 15,
+  "captured_not_periodic": [
+   3,
+   7,
+   11,
+   71,
+   99,
+   103,
+   123,
+   171,
+   259
+  ]
+ },
+ {
+  "map": "3x-5",
+  "cycles": [
+   {
+    "min": -4,
+    "length": 3,
+    "horizon": "-4",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 1.415037499278844
+   },
+   {
+    "min": 5,
+    "length": 1,
+    "horizon": "5",
+    "on_horizon": true,
+    "contracting": false,
+    "beta": -0.5849625007211561
+   },
+   {
+    "min": 25,
+    "length": 3,
+    "horizon": "25",
+    "on_horizon": true,
+    "contracting": false,
+    "beta": -0.16992500144231215
+   },
+   {
+    "min": 85,
+    "length": 11,
+    "horizon": "85",
+    "on_horizon": true,
+    "contracting": false,
+    "beta": -0.09473750504809253
+   }
+  ],
+  "captured": [],
+  "captured_count": 0,
+  "captured_not_periodic": []
+ },
+ {
+  "map": "3x+7",
+  "cycles": [
+   {
+    "min": 5,
+    "length": 4,
+    "horizon": "5",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.8300749985576878
+   },
+   {
+    "min": 7,
+    "length": 2,
+    "horizon": "7",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.4150374992788439
+   }
+  ],
+  "captured": [
+   1,
+   3,
+   5,
+   7,
+   9,
+   13,
+   17,
+   41,
+   57,
+   93,
+   113
+  ],
+  "captured_count": 11,
+  "captured_not_periodic": [
+   1,
+   3,
+   9,
+   13,
+   17,
+   41,
+   57,
+   93,
+   113
+  ]
+ },
+ {
+  "map": "3x-7",
+  "cycles": [
+   {
+    "min": -20,
+    "length": 4,
+    "horizon": "-20",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.8300749985576878
+   },
+   {
+    "min": 7,
+    "length": 1,
+    "horizon": "7",
+    "on_horizon": true,
+    "contracting": false,
+    "beta": -0.5849625007211561
+   },
+   {
+    "min": 35,
+    "length": 3,
+    "horizon": "35",
+    "on_horizon": true,
+    "contracting": false,
+    "beta": -0.16992500144231215
+   },
+   {
+    "min": 119,
+    "length": 11,
+    "horizon": "119",
+    "on_horizon": true,
+    "contracting": false,
+    "beta": -0.09473750504809253
+   }
+  ],
+  "captured": [],
+  "captured_count": 0,
+  "captured_not_periodic": []
+ },
+ {
+  "map": "3x+11",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 6,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 2.830074998557688
+   },
+   {
+    "min": 11,
+    "length": 2,
+    "horizon": "11",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.4150374992788439
+   },
+   {
+    "min": 13,
+    "length": 14,
+    "horizon": "13",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 1.3202999942307514
+   }
+  ],
+  "captured": [
+   1,
+   3,
+   5,
+   7,
+   9,
+   11,
+   13,
+   21,
+   25,
+   29,
+   73,
+   101,
+   105,
+   109,
+   133,
+   141,
+   173,
+   201,
+   309,
+   453
+  ],
+  "captured_count": 20,
+  "captured_not_periodic": [
+   3,
+   5,
+   9,
+   21,
+   73,
+   101,
+   105,
+   109,
+   133,
+   141,
+   173,
+   201,
+   309,
+   453
+  ]
+ },
+ {
+  "map": "3x+13",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 4,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 2.415037499278844
+   },
+   {
+    "min": 13,
+    "length": 2,
+    "horizon": "13",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.4150374992788439
+   },
+   {
+    "min": 131,
+    "length": 24,
+    "horizon": "131",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.2255624891826571
+   },
+   {
+    "min": 211,
+    "length": 8,
+    "horizon": "211",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.07518749639421873
+   },
+   {
+    "min": 227,
+    "length": 8,
+    "horizon": "227",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.07518749639421873
+   },
+   {
+    "min": 251,
+    "length": 8,
+    "horizon": "251",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.07518749639421873
+   },
+   {
+    "min": 259,
+    "length": 8,
+    "horizon": "259",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.07518749639421873
+   },
+   {
+    "min": 283,
+    "length": 8,
+    "horizon": "283",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.07518749639421873
+   },
+   {
+    "min": 287,
+    "length": 8,
+    "horizon": "287",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.07518749639421873
+   },
+   {
+    "min": 319,
+    "length": 8,
+    "horizon": "319",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.07518749639421873
+   }
+  ],
+  "captured": [
+   1,
+   3,
+   5,
+   7,
+   9,
+   11,
+   13,
+   15,
+   19,
+   27,
+   31,
+   35,
+   43,
+   47,
+   51,
+   59,
+   63,
+   83,
+   95,
+   99,
+   115,
+   123,
+   131,
+   147,
+   155,
+   159,
+   163,
+   187,
+   191,
+   211,
+   223,
+   227,
+   251,
+   259,
+   283,
+   287,
+   319
+  ],
+  "captured_count": 37,
+  "captured_not_periodic": [
+   3,
+   5,
+   7,
+   9,
+   11,
+   15,
+   19,
+   27,
+   31,
+   35,
+   43,
+   47,
+   51,
+   59,
+   63,
+   83,
+   95,
+   99,
+   115,
+   123,
+   147,
+   155,
+   159,
+   163,
+   187,
+   191,
+   223
+  ]
+ },
+ {
+  "map": "5x+1",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 5,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.35614381022527564
+   },
+   {
+    "min": 13,
+    "length": 7,
+    "horizon": "13",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.03421571533791301
+   },
+   {
+    "min": 17,
+    "length": 7,
+    "horizon": "17",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.03421571533791301
+   }
+  ],
+  "captured": [
+   1,
+   5,
+   13,
+   17
+  ],
+  "captured_count": 4,
+  "captured_not_periodic": [
+   5
+  ]
+ },
+ {
+  "map": "5x-1",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 2,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": false,
+    "beta": -0.3219280948873622
+   }
+  ],
+  "captured": [],
+  "captured_count": 0,
+  "captured_not_periodic": []
+ },
+ {
+  "map": "7x+1",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 3,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.19264507794239583
+   }
+  ],
+  "captured": [
+   1
+  ],
+  "captured_count": 1,
+  "captured_not_periodic": []
+ },
+ {
+  "map": "(1,4,4)/3",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 3,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.7548875021634682
+   },
+   {
+    "min": 7,
+    "length": 9,
+    "horizon": "7",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.2646625064904047
+   }
+  ],
+  "captured": [
+   1,
+   5,
+   7
+  ],
+  "captured_count": 3,
+  "captured_not_periodic": [
+   5
+  ]
+ },
+ {
+  "map": "(1,1,7)/3",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 1,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 1.584962500721156
+   },
+   {
+    "min": 2,
+    "length": 4,
+    "horizon": "2",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.725140158769416
+   }
+  ],
+  "captured": [
+   1,
+   2
+  ],
+  "captured_count": 2,
+  "captured_not_periodic": []
+ },
+ {
+  "map": "(1,3,5,7)/4",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 1,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.4150374992788439
+   },
+   {
+    "min": 2,
+    "length": 4,
+    "horizon": "2",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.548788888167671
+   },
+   {
+    "min": 10,
+    "length": 2,
+    "horizon": "10",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.0931094043914813
+   },
+   {
+    "min": 19,
+    "length": 4,
+    "horizon": "19",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.06336206099742903
+   },
+   {
+    "min": 55,
+    "length": 3,
+    "horizon": "55",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.02272007650008323
+   }
+  ],
+  "captured": [
+   1,
+   2,
+   7,
+   10,
+   14,
+   18,
+   19,
+   23,
+   31,
+   46,
+   55
+  ],
+  "captured_count": 11,
+  "captured_not_periodic": [
+   7,
+   14,
+   18,
+   23,
+   31,
+   46
+  ]
+ },
+ {
+  "map": "(1,5,5,5)/4",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 4,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 1.034215715337913
+   },
+   {
+    "min": 23,
+    "length": 14,
+    "horizon": "23",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.13686286135165204
+   }
+  ],
+  "captured": [
+   1,
+   11,
+   14,
+   18,
+   23
+  ],
+  "captured_count": 5,
+  "captured_not_periodic": [
+   11,
+   14,
+   18
+  ]
+ },
+ {
+  "map": "(1,6,6,6,6)/5",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 5,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 1.2697904715521862
+   }
+  ],
+  "captured": [
+   1
+  ],
+  "captured_count": 1,
+  "captured_not_periodic": []
+ },
+ {
+  "map": "(1,2,4)/3",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 1,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.5849625007211561
+   },
+   {
+    "min": 5,
+    "length": 2,
+    "horizon": "5",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.16992500144231215
+   }
+  ],
+  "captured": [
+   1,
+   5
+  ],
+  "captured_count": 2,
+  "captured_not_periodic": []
+ },
+ {
+  "map": "(1,2,5)/3",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 1,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.5849625007211561
+   },
+   {
+    "min": 8,
+    "length": 3,
+    "horizon": "8",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.11103131238874386
+   }
+  ],
+  "captured": [
+   1,
+   8
+  ],
+  "captured_count": 2,
+  "captured_not_periodic": []
+ },
+ {
+  "map": "(1,4,4,6,6)/5",
+  "cycles": [
+   {
+    "min": 1,
+    "length": 1,
+    "horizon": "1",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.3219280948873622
+   },
+   {
+    "min": 2,
+    "length": 1,
+    "horizon": "2",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.3219280948873622
+   },
+   {
+    "min": 9,
+    "length": 2,
+    "horizon": "9",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.05889368905356829
+   },
+   {
+    "min": 13,
+    "length": 2,
+    "horizon": "13",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.05889368905356829
+   },
+   {
+    "min": 14,
+    "length": 2,
+    "horizon": "14",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.05889368905356829
+   },
+   {
+    "min": 18,
+    "length": 2,
+    "horizon": "18",
+    "on_horizon": true,
+    "contracting": true,
+    "beta": 0.05889368905356829
+   }
+  ],
+  "captured": [
+   1,
+   2,
+   9,
+   13,
+   14,
+   18
+  ],
+  "captured_count": 6,
+  "captured_not_periodic": []
+ }
+]

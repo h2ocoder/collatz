@@ -71,3 +71,4 @@ The observed average (~$1.4B$) is far below the worst case (~$B^2/c$), confirmin
 - [[Affine Orbit Structure]] — the affine formula underlying bit destruction
 - [[Logarithmic Escape Theorem]] — bounds consecutive slow drops
 - [[Odd Stopping Time Spectrum]] — $k = \lceil s \log_2 6 \rceil$, the formula behind $\beta(s)$
+- `research/information-schwarzschild-radius/Word Horizons.md` — $\beta$ as the denominator of a word's horizon, $F = \zeta / (2^\beta - 1)$

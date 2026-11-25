@@ -152,25 +152,36 @@ def test_no_arms_on_the_grid_beat_the_closed_form():
                 assert nf.tripod_bound(w, arms) <= best
 
 
-@pytest.mark.parametrize("w", WEIGHTS)
-def test_brute_force_supremum_matches_the_closed_form(w):
+@pytest.mark.parametrize("w", WEIGHTS + NEAR_BOUNDARY)
+def test_search_supremum_matches_the_closed_form(w):
     value, arms = nf.tripod_sup_numeric(w)
     assert value == pytest.approx(float(nf.rectangular_exponent(*w)), abs=1e-9)
     assert min(arms) >= 0 and sum(arms) == pytest.approx(1.0)
 
 
 @pytest.mark.parametrize("w", NEAR_BOUNDARY)
-def test_brute_force_resolves_the_regime_boundary(w):
+def test_search_resolves_the_regime_boundary(w):
     """The search must find the interior optimum, not stop at the flat value x + y."""
     closed = nf.rectangular_exponent(*w)
     flat = max(nf.pair_sums(w))
     assert closed > flat
     value, arms = nf.tripod_sup_numeric(w)
     assert abs(value - float(closed)) < float(closed - flat) / 100
-    assert min(arms) > 0
+    exact = nf.optimal_arms(w)
+    for found, wanted in zip(arms, exact):
+        assert found == pytest.approx(float(wanted / sum(exact)), abs=1e-4)
+    assert min(arms) > float(min(exact) / sum(exact)) / 2
 
 
-def test_brute_force_matches_the_closed_form_on_a_grid_of_weights():
+def test_tripod_functions_reject_negative_weights():
+    for call in (nf.pair_sums, nf.optimal_arms, nf.tripod_sup_numeric):
+        with pytest.raises(ValueError):
+            call((1, Fr(-1, 2), Fr(-1, 2)))
+    with pytest.raises(ValueError):
+        nf.tripod_bound((1, -1, 1), (1, 1, 1))
+
+
+def test_search_matches_the_closed_form_on_a_grid_of_weights():
     for w in itertools.product(HALVES, repeat=3):
         value, _ = nf.tripod_sup_numeric(w)
         assert value == pytest.approx(float(nf.rectangular_exponent(*w)), abs=1e-9)
@@ -346,8 +357,11 @@ def test_look_elsewhere_terminates_on_an_interval_containing_zero():
     assert Fr(0) not in slopes and Fr(1, 2) in slopes
 
 
-def test_simple_rationals_takes_exact_endpoints():
-    assert Fr(3, 10) in nf.simple_rationals(Fr(1, 10), Fr(3, 10), 10)
+def test_simple_rationals_needs_exact_endpoints():
+    assert nf.simple_rationals("1/10", "3/10", 10) == [Fr(1, 10), Fr(1, 9), Fr(1, 8), Fr(1, 7), Fr(1, 6),
+                                                         Fr(1, 5), Fr(2, 9), Fr(1, 4), Fr(2, 7), Fr(3, 10)]
+    with pytest.raises(TypeError):
+        nf.simple_rationals(0.1, 0.3, 10)
 
 
 # ---- reports ----

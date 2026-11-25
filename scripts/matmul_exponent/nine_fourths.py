@@ -48,8 +48,14 @@ def tripod_rate(arms):
 
 
 def pair_sums(weights):
-    """(x, y, z) -> (x + y, y + z, z + x): the log-sizes of the matrices at A, B, C."""
+    """(x, y, z) -> (x + y, y + z, z + x): the log-sizes of the matrices at A, B, C.
+
+    The tripod functions take non-negative weights; only the two closed forms
+    clamp negatives, as the Lean statement does.
+    """
     x, y, z = (Fr(v) for v in weights)
+    if min(x, y, z) < 0:
+        raise ValueError("non-negative weights expected")
     return (x + y, y + z, z + x)
 
 
@@ -110,10 +116,10 @@ def optimal_arms(weights):
     with the largest pair sum (the flat case).
     """
     x, y, z = (Fr(v) for v in weights)
+    sums = pair_sums(weights)
     if in_triangle_regime(x, y, z):
         e2 = x * y + y * z + z * x
         return (1 / (e2 - 2 * x * y), 1 / (e2 - 2 * y * z), 1 / (e2 - 2 * z * x))
-    sums = pair_sums(weights)
     top = sums.index(max(sums))
     return tuple(Fr(1) if i == top else Fr(0) for i in range(3))
 
@@ -150,11 +156,12 @@ def _ternary_max(f, lo, hi, iters):
 
 
 def tripod_sup_numeric(weights, iters=60):
-    """Brute-force maximum of tripod_bound over the simplex a_A + a_B + a_C = 1 (numeric).
+    """Maximum of tripod_bound over the simplex a_A + a_B + a_C = 1, by search (numeric).
 
-    Independent of the closed form. The ratio is quasi-concave on the simplex
-    (the price is linear and D_* is convex), so a nested ternary search finds
-    the global maximum: outer over a_A, inner over a_B. Returns (value, arms).
+    Independent of the closed form, but not assumption-free: for non-negative
+    weights the ratio is quasi-concave on the simplex (the price is linear and
+    D_* is convex), and that is what lets a nested ternary search find the
+    global maximum: outer over a_A, inner over a_B. Returns (value, arms).
     """
     sums = tuple(float(w) for w in pair_sums(weights))
 
@@ -312,7 +319,12 @@ def is_shortcut_slope(f):
 
 
 def simple_rationals(lo, hi, max_den):
-    """All rationals in [lo, hi] whose denominator in lowest terms is at most max_den."""
+    """All rationals in [lo, hi] whose denominator in lowest terms is at most max_den.
+
+    The endpoints must be exact (int, Fraction or a string such as "3/10"), not floats.
+    """
+    if isinstance(lo, float) or isinstance(hi, float):
+        raise TypeError("exact endpoints expected: int, Fraction or str")
     lo, hi = Fr(lo), Fr(hi)
     out = set()
     for q in range(1, max_den + 1):
@@ -353,7 +365,7 @@ def report_provenance():
     print(f"sqrt(lam) = 3 sqrt(lam - 2) at lam = 9/4: defect {sqrt_equation_defect(unit, Fr(9, 4)):.1e}")
     print()
     print("== Rectangular formats (x, y, z): Lean closed form vs the tripod ==")
-    print("weights        Lean form   symmetric   at optimal arms   brute force   optimal arms")
+    print("weights        Lean form   symmetric   at optimal arms   by search     optimal arms")
     rows = [
         (1, 1, 1), (1, 1, Fr(3, 4)), (1, 1, Fr(2, 3)), (1, 1, Fr(1, 2)), (1, 1, Fr(1, 4)),
         (2, 1, 1), (3, 2, 2), (5, 4, 3), (3, 1, 1), (2, 2, 1), (1, 1, 0),

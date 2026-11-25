@@ -7,7 +7,7 @@ the ratio 2 sum a / D_* is at most 2 / (1 - 1/9) = 9/4
 sqrt(lam) = 3 sqrt(lam - 2) at lam = 9/4: defect 0.0e+00
 
 == Rectangular formats (x, y, z): Lean closed form vs the tripod ==
-weights        Lean form   symmetric   at optimal arms   brute force   optimal arms
+weights        Lean form   symmetric   at optimal arms   by search     optimal arms
 1, 1, 1        9/4         9/4         9/4               2.250000000   (1/3, 1/3, 1/3)
 1, 1, 3/4      25/12       25/12       25/12             2.083333333   (1/2, 1/4, 1/4)
 1, 1, 2/3      49/24       49/24       49/24             2.041666667   (3/5, 1/5, 1/5)

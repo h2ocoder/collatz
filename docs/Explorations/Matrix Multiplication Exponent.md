@@ -110,10 +110,10 @@ sup over arms of (Σ wᵢaᵢ) / D\*(a) = the closed form.
 
 *Proof.* Fix λ ≥ max w. The inequality Σ wᵢaᵢ ≤ λ·D\*(a) for all arms is the same as λ / (Σ 1/aᵢ) ≤ Σ (λ − wᵢ)aᵢ. By Cauchy–Schwarz, (Σ dᵢaᵢ)(Σ 1/aᵢ) ≥ (Σ √dᵢ)², with equality when aᵢ is proportional to 1/√dᵢ. So the inequality holds for all arms exactly when √λ ≤ Σ √(λ − wᵢ). The difference of the two sides increases with λ, so the supremum is the least λ ≥ max w that satisfies it. At λ = (xy + yz + zx)²/(4xyz) one has λ − (x + y) = (xz + yz − xy)²/(4xyz), and likewise for the other two, so the three square roots sum to √λ whenever all three numerators are non-negative. Otherwise λ = max w already satisfies the inequality. ∎
 
-The script checks this three ways (`provenance.log`):
+The tests check this four ways (`tests/test_matmul_exponent.py`; `provenance.log` shows thirteen sample rows):
 - at the optimal arms the ratio equals the closed form exactly, for all 18³ positive triples of the grid;
 - no arms on a grid beat it, for sixteen weight triples;
-- an independent brute-force search agrees to 10⁻⁹ on those triples and on a 6³ grid of weights. It is a nested ternary search, which finds the global maximum because the ratio is quasi-concave (the price is linear and D\* is convex);
+- a numerical search that does not use the closed form agrees to 10⁻⁹ on those triples and on a 6³ grid of weights. It is a nested ternary search, and it relies on one fact: for non-negative weights the ratio is quasi-concave (the price is linear and D\* is convex), so a local maximum is the global one;
 - the same search resolves five triples just inside the regime boundary, where the closed form exceeds x + y by between 4·10⁻⁴ and 2·10⁻¹⁰.
 
 **What this does and does not show.**
@@ -148,7 +148,7 @@ Let T be the shortcut map: odd n goes to (3n + 1)/2 and even n goes to n/2. Two 
 - 9/4 is the slope of two consecutive odd steps. In the repo's terms it is the slope 3^s/2^(k−s) of [[Affine Orbit Structure]] with s = 2 odd steps among k = 4 steps of the unshortened map. `collatz.core` confirms (9n + 5)/4 for every n ≡ 3 mod 4 below 20000.
 - The slopes 1/4, 3/4, 9/4 have densities 1/4, 1/2, 1/4. Their arithmetic mean is 1 and their geometric mean is 3/4.
 
-Every number 3^s/2^k with k ≥ s is the slope of some branch of T: s odd steps among k, since each odd step of T carries one halving. So finding 9/4 = 3²/2² among the slopes is not a coincidence that needs explaining. It is the scaffold of [[The +1 Perturbation]]: the multiplicative part that is fully understood.
+Counted in steps of T, the slopes are the numbers 3^s/2^j with j ≥ s: s odd steps among j steps of T, since each odd step of T carries one halving. Every such number is the slope of some branch. So finding 9/4 = 3²/2² among them is not a coincidence that needs explaining. It is the scaffold of [[The +1 Perturbation]]: the multiplicative part that is fully understood.
 
 ### 3.2 Exponent against multiplier [checked]
 
@@ -181,9 +181,9 @@ On the matrix side there is nothing to vary in step with a. The exponent does no
 
 There are seven rationals in [2, 3] with denominator at most 4: 2, 9/4, 7/3, 5/2, 8/3, 11/4, 3.
 - Four of them are ratios of numbers of the form 2^i·3^j: 2, 9/4, 8/3, 3.
-- One is a slope of T: 9/4. (3 is a power of 3 over a power of 2, but a slope of T needs a halving for every tripling.)
+- One is a slope of T: 9/4. The count is for T. In the unshortened map 3 is also a slope, of a single odd step, which T always follows with a halving.
 
-So a simple answer to this problem had a better than even chance of being built from 2s and 3s. Landing exactly on a slope of T is rarer, one in seven at this size. One-in-seven is weak evidence on its own, and §2.4 removes it: the answer is built from 2s and 3s because a bilinear map has three matrices and its indices come in pairs.
+So a simple answer to this problem had a better than even chance of being built from 2s and 3s. Landing exactly on a slope of T is rarer, one in seven at this size (two in seven if the unshortened map is counted). One-in-seven is weak evidence on its own, and §2.4 removes it: the answer is built from 2s and 3s because a bilinear map has three matrices and its indices come in pairs.
 
 ### 3.6 Multiplication and division in the paper [paper, LB]
 
@@ -214,7 +214,7 @@ All **[analogy]**, with the reason each is not a link.
 - **Polynomial multiplication.** [UB] gets 9/4 from the tensor of polynomial multiplication. Multiplying an integer by 3 is multiplying its binary polynomial by 1 + x and then carrying. Polynomial multiplication has no carries, and the carries are where Collatz is hard.
 - **3² − 2³ = 1.** In 2 ÷ (1 − 1/3²) the denominator is a power of 2 only because 3² − 1 = 2³. The same identity is why 3x − 1 has the cycle through 5 and 7: two odd steps and three halvings give (9n − 5)/8 = n, and the denominator 9 − 8 is 1 [checked: the cycle 5, 7, 10 of the shortcut map]. One elementary identity appears in two places.
 - **The three slopes.** {ω − 2, ω/3, ω} = {1/4, 3/4, 9/4}, the three two-step slopes of §3.1 [checked]. This is one coincidence, not three: once ω = 9/4, the other two follow by arithmetic. On the matrix side ω − 2 is the excess over the size of the output and ω/3 is the wire length 3/4 at an extremal price.
-- **Tuning.** 9/4 is two stacked fifths, 9/8 is the Pythagorean whole tone, and 8/3 is an octave plus a fourth, so 9/4 = 2 × 9/8 reads as an octave times a tone. Every Collatz slope 3^s/2^k is a Pythagorean interval; that is the reframe in [[Collatz Embeddings]]. What ties Collatz to tuning is the continued fraction of log₂ 3 ([[Dropping Zeta Spectrum]]), and the paper never touches log₂ 3.
+- **Tuning.** 9/4 is two stacked fifths, 9/8 is the Pythagorean whole tone, and 8/3 is an octave plus a fourth, so 9/4 = 2 × 9/8 reads as an octave times a tone. Every Collatz slope is a power of 3 over a power of 2, which is a Pythagorean interval; that is the reframe in [[Collatz Embeddings]]. What ties Collatz to tuning is the continued fraction of log₂ 3 ([[Dropping Zeta Spectrum]]), and the paper never touches log₂ 3.
 
 ## 6. What would count as a relation
 

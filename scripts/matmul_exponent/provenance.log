@@ -19,12 +19,14 @@ weights        Lean form   symmetric   at optimal arms   brute force   optimal a
 3, 1, 1        49/12       49/12       49/12             4.083333333   (5/11, 1/11, 5/11)
 2, 2, 1        4           4           4                 4.000000000   (1, 0, 0)
 1, 1, 0        2           2           2                 2.000000000   (1, 0, 0)
+5, 4, 9/4      25921/2880  25921/2880  25921/2880        9.000347222   (6319/6479, 71/6479, 89/6479)
+1, 1, 51/100   10201/5100  10201/5100  10201/5100        2.000196078   (25/26, 1/52, 1/52)
 
 family (1, 1, z):  exponent = (z + 1/2)^2 / z for z >= 1/2, and 2 below
-  z = 1/2  Lean 2       (z + 1/2)^2 / z = 2       paper's lower bound 3(2 + z)/4 = 15/8
-  z = 2/3  Lean 49/24   (z + 1/2)^2 / z = 49/24   paper's lower bound 3(2 + z)/4 = 2
-  z = 3/4  Lean 25/12   (z + 1/2)^2 / z = 25/12   paper's lower bound 3(2 + z)/4 = 33/16
-  z = 1    Lean 9/4     (z + 1/2)^2 / z = 9/4     paper's lower bound 3(2 + z)/4 = 9/4
+  z = 1/2  Lean 2       (z + 1/2)^2 / z = 2       paper's lower bound max(2, 3(2 + z)/4) = 2
+  z = 2/3  Lean 49/24   (z + 1/2)^2 / z = 49/24   paper's lower bound max(2, 3(2 + z)/4) = 2
+  z = 3/4  Lean 25/12   (z + 1/2)^2 / z = 25/12   paper's lower bound max(2, 3(2 + z)/4) = 33/16
+  z = 1    Lean 9/4     (z + 1/2)^2 / z = 9/4     paper's lower bound max(2, 3(2 + z)/4) = 9/4
 
 == B. Upper bound: the diagonal growth lemma ==
 a      H_a (float)    H_a^3 >= a   D_a >= a^(4/3)

@@ -26,6 +26,6 @@ type check: 9/4 is an exponent there, a multiplier here
   1.584963  log2(3), bits per tripling
   2.584963  log2(6), stopping-time spectrum k = ceil(s log2 6)
   0.207519  1 - log2(3)/2, drift in bits per shortcut step
-  0.949956  H(log3 2), dimension of the never-dropping set
+  0.949956  H(log3 2), growth exponent of the cycle-word count
   1.169925  log2(9/4), bits gained by two odd shortcut steps
   2.250000  omega

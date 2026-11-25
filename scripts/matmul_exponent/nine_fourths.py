@@ -78,6 +78,12 @@ def rectangular_exponent(a, b, c):
     return x + y + max((x + y) * z - x * y, Fr(0)) ** 2 / (4 * x * y * z)
 
 
+def paper_rectangular_lower_bound(x, y, z):
+    """[LB] Cor. "rectangular", as an exponent: max of the pair sums and (3/4)(x + y + z)."""
+    x, y, z = (Fr(v) for v in (x, y, z))
+    return max(max(pair_sums((x, y, z))), Fr(3, 4) * (x + y + z))
+
+
 def in_triangle_regime(x, y, z):
     """True when the correction term is positive: 1/z < 1/x + 1/y for the smallest weight z."""
     x, y, z = sorted((Fr(v) for v in (x, y, z)), reverse=True)
@@ -88,8 +94,9 @@ def rectangular_exponent_symmetric(x, y, z):
     """The same value written symmetrically (this repo's algebra, checked in the tests):
 
     (xy + yz + zx)^2 / (4 xyz) in the triangle regime, the largest pair sum otherwise.
+    Negative weights are clamped to zero, as in the Lean statement.
     """
-    x, y, z = sorted((Fr(v) for v in (x, y, z)), reverse=True)
+    x, y, z = sorted((max(Fr(v), Fr(0)) for v in (x, y, z)), reverse=True)
     if not in_triangle_regime(x, y, z):
         return x + y
     return (x * y + y * z + z * x) ** 2 / (4 * x * y * z)
@@ -129,34 +136,36 @@ def _bound_float(sums, arms):
     return (sums[0] * arms[0] + sums[1] * arms[1] + sums[2] * arms[2]) / rate
 
 
-def tripod_sup_numeric(weights, steps=60, tol=1e-12):
+def _ternary_max(f, lo, hi, iters):
+    """Maximise a quasi-concave f on [lo, hi] by ternary search (numeric). Returns (value, x)."""
+    for _ in range(iters):
+        m1 = lo + (hi - lo) / 3
+        m2 = hi - (hi - lo) / 3
+        if f(m1)[0] < f(m2)[0]:
+            lo = m1
+        else:
+            hi = m2
+    x = (lo + hi) / 2
+    return f(x)[0], x
+
+
+def tripod_sup_numeric(weights, iters=60):
     """Brute-force maximum of tripod_bound over the simplex a_A + a_B + a_C = 1 (numeric).
 
-    A grid search followed by a shrinking pattern search; independent of the
-    closed form. Returns (value, arms).
+    Independent of the closed form. The ratio is quasi-concave on the simplex
+    (the price is linear and D_* is convex), so a nested ternary search finds
+    the global maximum: outer over a_A, inner over a_B. Returns (value, arms).
     """
     sums = tuple(float(w) for w in pair_sums(weights))
-    best, arg = -1.0, None
-    for i in range(steps + 1):
-        for j in range(steps + 1 - i):
-            arms = (i / steps, j / steps, (steps - i - j) / steps)
-            value = _bound_float(sums, arms)
-            if value > best:
-                best, arg = value, arms
-    h = 1.0 / steps
-    while h > tol:
-        improved = False
-        for di, dj in ((h, 0), (-h, 0), (0, h), (0, -h), (h, -h), (-h, h)):
-            a0, a1 = arg[0] + di, arg[1] + dj
-            arms = (a0, a1, 1.0 - a0 - a1)
-            if min(arms) < 0.0:
-                continue
-            value = _bound_float(sums, arms)
-            if value > best:
-                best, arg, improved = value, arms, True
-        if not improved:
-            h /= 2
-    return best, arg
+
+    def inner(a0):
+        def f(a1):
+            return (_bound_float(sums, (a0, a1, max(1.0 - a0 - a1, 0.0))), a1)
+        return _ternary_max(f, 0.0, 1.0 - a0, iters)
+
+    value, a0 = _ternary_max(inner, 0.0, 1.0, iters)
+    a1 = inner(a0)[1]
+    return value, (a0, a1, max(1.0 - a0 - a1, 0.0))
 
 
 # --------------------------------------------------------------------------
@@ -257,13 +266,13 @@ def cycles(a=3, c=1, limit=1000, max_steps=10000):
 
 
 def collatz_exponents():
-    """The exponents (logarithms, entropies) that the repo's Collatz work actually uses."""
+    """The exponents (logarithms, entropies) that the repo's Collatz work actually uses (numeric)."""
     p = math.log(2) / math.log(3)
     return {
         "log2(3), bits per tripling": math.log2(3),
         "log2(6), stopping-time spectrum k = ceil(s log2 6)": math.log2(6),
         "1 - log2(3)/2, drift in bits per shortcut step": 1 - math.log2(3) / 2,
-        "H(log3 2), dimension of the never-dropping set": -p * math.log2(p) - (1 - p) * math.log2(1 - p),
+        "H(log3 2), growth exponent of the cycle-word count": -p * math.log2(p) - (1 - p) * math.log2(1 - p),
         "log2(9/4), bits gained by two odd shortcut steps": math.log2(9 / 4),
     }
 
@@ -283,14 +292,28 @@ def is_3_smooth(n):
     return n == 1
 
 
-def is_power_of(n, base):
+def exponent_of(n, base):
+    """e with n == base**e, or None when n is not a power of base (n >= 1, base >= 2)."""
+    if n < 1 or base < 2:
+        return None
+    e = 0
     while n % base == 0:
         n //= base
-    return n == 1
+        e += 1
+    return e if n == 1 else None
+
+
+def is_shortcut_slope(f):
+    """True when f = 3^s / 2^k with k >= s >= 0: the slope of a branch of the shortcut map
+    with s odd steps among k (every odd step carries one halving)."""
+    f = Fr(f)
+    s, k = exponent_of(f.numerator, 3), exponent_of(f.denominator, 2)
+    return s is not None and k is not None and k >= s
 
 
 def simple_rationals(lo, hi, max_den):
     """All rationals in [lo, hi] whose denominator in lowest terms is at most max_den."""
+    lo, hi = Fr(lo), Fr(hi)
     out = set()
     for q in range(1, max_den + 1):
         for p in range(math.ceil(lo * q), math.floor(hi * q) + 1):
@@ -299,15 +322,15 @@ def simple_rationals(lo, hi, max_den):
 
 
 def look_elsewhere(max_den, lo=2, hi=3):
-    """(all, three_smooth, pure) simple rationals in [lo, hi].
+    """(all, three_smooth, slopes) simple rationals in [lo, hi].
 
     three_smooth: numerator and denominator are both 2^i 3^j.
-    pure: a power of 3 over a power of 2, the form of a Collatz slope.
+    slopes: slopes of the shortcut map, see is_shortcut_slope.
     """
     everything = simple_rationals(lo, hi, max_den)
     smooth = [f for f in everything if is_3_smooth(f.numerator) and is_3_smooth(f.denominator)]
-    pure = [f for f in everything if is_power_of(f.numerator, 3) and is_power_of(f.denominator, 2)]
-    return everything, smooth, pure
+    slopes = [f for f in everything if is_shortcut_slope(f)]
+    return everything, smooth, slopes
 
 
 # --------------------------------------------------------------------------
@@ -334,6 +357,7 @@ def report_provenance():
     rows = [
         (1, 1, 1), (1, 1, Fr(3, 4)), (1, 1, Fr(2, 3)), (1, 1, Fr(1, 2)), (1, 1, Fr(1, 4)),
         (2, 1, 1), (3, 2, 2), (5, 4, 3), (3, 1, 1), (2, 2, 1), (1, 1, 0),
+        (5, 4, Fr(9, 4)), (1, 1, Fr(51, 100)),
     ]
     for w in rows:
         lean = rectangular_exponent(*w)
@@ -350,7 +374,7 @@ def report_provenance():
     for z in (Fr(1, 2), Fr(2, 3), Fr(3, 4), Fr(1)):
         print(f"  z = {_fmt(z):<4} Lean {_fmt(rectangular_exponent(1, 1, z)):<7} "
               f"(z + 1/2)^2 / z = {_fmt((z + Fr(1, 2)) ** 2 / z):<7} "
-              f"paper's lower bound 3(2 + z)/4 = {_fmt(3 * (2 + z) / 4)}")
+              f"paper's lower bound max(2, 3(2 + z)/4) = {_fmt(paper_rectangular_lower_bound(1, 1, z))}")
     print()
     print("== B. Upper bound: the diagonal growth lemma ==")
     print("a      H_a (float)    H_a^3 >= a   D_a >= a^(4/3)")
@@ -405,15 +429,15 @@ def report_collatz():
 
 def report_null():
     print("== D. Look-elsewhere: simple rationals in [2, 3] ==")
-    print("max denominator   all   3-smooth   3^i/2^j   3-smooth share")
+    print("max denominator   all   3-smooth   slopes of T   3-smooth share")
     for q in (4, 6, 8, 12, 16, 32):
-        everything, smooth, pure = look_elsewhere(q)
-        print(f"{q:<17} {len(everything):<5} {len(smooth):<10} {len(pure):<9} "
+        everything, smooth, slopes = look_elsewhere(q)
+        print(f"{q:<17} {len(everything):<5} {len(smooth):<10} {len(slopes):<13} "
               f"{len(smooth) / len(everything):.3f}")
-    everything, smooth, pure = look_elsewhere(4)
+    everything, smooth, slopes = look_elsewhere(4)
     print(f"denominator <= 4: {[_fmt(f) for f in everything]}")
     print(f"  3-smooth:       {[_fmt(f) for f in smooth]}")
-    print(f"  3^i/2^j:        {[_fmt(f) for f in pure]}")
+    print(f"  slopes of T:    {[_fmt(f) for f in slopes]}   (3^s/2^k with k >= s)")
 
 
 REPORTS = {"provenance": report_provenance, "collatz": report_collatz, "null": report_null}

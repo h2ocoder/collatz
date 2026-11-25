@@ -18,7 +18,11 @@ GRID = [Fr(p, q) for q in (1, 2, 3, 4) for p in range(0, 3 * q + 1)]
 POSITIVE = sorted({v for v in GRID if v > 0})
 WEIGHTS = [(1, 1, 1), (1, 1, Fr(3, 4)), (1, 1, Fr(2, 3)), (1, 1, Fr(1, 2)), (1, 1, Fr(1, 4)),
            (2, 1, 1), (3, 2, 2), (5, 4, 3), (3, 1, 1), (2, 2, 1), (Fr(1, 3), 2, Fr(5, 2))]
+# Just inside the triangle regime: the closed form beats the flat value x + y by 4e-4 down to 2e-10.
+NEAR_BOUNDARY = [(5, 4, Fr(9, 4)), (10, 1, Fr(23, 25)), (3, 2, Fr(121, 100)),
+                 (1, 1, Fr(501, 1000)), (1, 1, Fr(50001, 100000))]
 ARM_GRID = [Fr(p, 12) for p in range(0, 13)]
+HALVES = [Fr(p, 2) for p in range(1, 7)]
 
 
 # ---- A. the tripod ([LB]) ----
@@ -58,8 +62,11 @@ def test_square_bound_is_at_most_nine_fourths_with_equality_only_at_equal_arms()
 
 
 def test_nine_fourths_is_two_over_one_minus_one_ninth():
-    assert Fr(2) / (1 - Fr(1, 9)) == Fr(9, 4)
-    assert abs(nf.sqrt_equation_defect((1, 1, 1), Fr(9, 4))) < 1e-12
+    for arm in POSITIVE:
+        equal = (arm, arm, arm)
+        assert nf.tripod_rate(equal) == (1 - Fr(1, 9)) * sum(equal)
+        assert nf.tripod_bound((1, 1, 1), equal) == Fr(2) / (1 - Fr(1, 9))
+    assert abs(nf.sqrt_equation_defect((1, 1, 1), nf.rectangular_exponent(1, 1, 1))) < 1e-12
 
 
 # ---- the rectangular closed form ([Lean]) ----
@@ -85,6 +92,13 @@ def test_lean_form_is_symmetric_in_its_arguments():
 def test_lean_form_clamps_negative_weights_and_is_flat_on_coordinate_planes():
     assert nf.rectangular_exponent(2, 3, 0) == 5
     assert nf.rectangular_exponent(2, 3, -1) == 5
+    assert nf.rectangular_exponent(2, -1, -1) == 2
+
+
+def test_symmetric_form_clamps_negative_weights_like_the_lean_form():
+    signed = [Fr(p, 2) for p in range(-4, 7)]
+    for w in itertools.product(signed, repeat=3):
+        assert nf.rectangular_exponent_symmetric(*w) == nf.rectangular_exponent(*w)
 
 
 def test_one_one_z_family_is_a_square_over_z():
@@ -107,11 +121,15 @@ def test_closed_form_dominates_the_bounds_stated_in_the_paper():
         assert value >= max(nf.pair_sums((x, y, z)))
         assert value >= Fr(3, 4) * (x + y + z)
         assert (value == Fr(3, 4) * (x + y + z)) == (x == y == z)
+        assert value >= nf.paper_rectangular_lower_bound(x, y, z)
 
 
-def test_paper_bound_gives_alpha_at_most_two_thirds():
-    assert Fr(3, 4) * (2 + Fr(2, 3)) == 2
-    assert Fr(3, 4) * (2 + Fr(2, 3) + Fr(1, 100)) > 2
+def test_paper_bound_gives_alpha_at_most_two_thirds_and_closed_form_one_half():
+    zs = [Fr(p, 120) for p in range(1, 121)]
+    paper_twos = [z for z in zs if nf.paper_rectangular_lower_bound(1, 1, z) == 2]
+    closed_twos = [z for z in zs if nf.rectangular_exponent(1, 1, z) == 2]
+    assert max(paper_twos) == Fr(2, 3)
+    assert max(closed_twos) == Fr(1, 2)
 
 
 # ---- closed form == tripod bound ----
@@ -127,7 +145,7 @@ def test_optimal_arms_are_equal_for_the_square():
 
 
 def test_no_arms_on_the_grid_beat_the_closed_form():
-    for w in WEIGHTS:
+    for w in WEIGHTS + NEAR_BOUNDARY:
         best = nf.rectangular_exponent(*w)
         for arms in itertools.product(ARM_GRID, repeat=3):
             if sum(arms) > 0:
@@ -137,12 +155,29 @@ def test_no_arms_on_the_grid_beat_the_closed_form():
 @pytest.mark.parametrize("w", WEIGHTS)
 def test_brute_force_supremum_matches_the_closed_form(w):
     value, arms = nf.tripod_sup_numeric(w)
-    assert value == pytest.approx(float(nf.rectangular_exponent(*w)), abs=1e-8)
+    assert value == pytest.approx(float(nf.rectangular_exponent(*w)), abs=1e-9)
     assert min(arms) >= 0 and sum(arms) == pytest.approx(1.0)
 
 
+@pytest.mark.parametrize("w", NEAR_BOUNDARY)
+def test_brute_force_resolves_the_regime_boundary(w):
+    """The search must find the interior optimum, not stop at the flat value x + y."""
+    closed = nf.rectangular_exponent(*w)
+    flat = max(nf.pair_sums(w))
+    assert closed > flat
+    value, arms = nf.tripod_sup_numeric(w)
+    assert abs(value - float(closed)) < float(closed - flat) / 100
+    assert min(arms) > 0
+
+
+def test_brute_force_matches_the_closed_form_on_a_grid_of_weights():
+    for w in itertools.product(HALVES, repeat=3):
+        value, _ = nf.tripod_sup_numeric(w)
+        assert value == pytest.approx(float(nf.rectangular_exponent(*w)), abs=1e-9)
+
+
 def test_closed_form_is_the_least_feasible_point_of_the_square_root_equation():
-    for w in WEIGHTS:
+    for w in WEIGHTS + NEAR_BOUNDARY:
         lam = nf.rectangular_exponent(*w)
         top = max(nf.pair_sums(w))
         assert lam >= top
@@ -150,7 +185,7 @@ def test_closed_form_is_the_least_feasible_point_of_the_square_root_equation():
         if nf.in_triangle_regime(*w):
             assert lam > top
             assert abs(defect) < 1e-9
-            assert nf.sqrt_equation_defect(w, lam - Fr(1, 1000)) < 0
+            assert nf.sqrt_equation_defect(w, (lam + top) / 2) < 0
         else:
             assert lam == top
             assert defect >= -1e-12
@@ -226,7 +261,10 @@ def test_slopes_and_densities_and_their_means():
     slopes = nf.two_step_slopes()
     assert slopes == {Fr(1, 4): Fr(1, 4), Fr(3, 4): Fr(1, 2), Fr(9, 4): Fr(1, 4)}
     assert sum(s * w for s, w in slopes.items()) == 1
-    assert Fr(1, 4) * Fr(3, 4) ** 2 * Fr(9, 4) == Fr(3, 4) ** 4
+    fourth_power_of_geometric_mean = Fr(1)
+    for slope, density in slopes.items():
+        fourth_power_of_geometric_mean *= slope ** int(4 * density)
+    assert fourth_power_of_geometric_mean == Fr(3, 4) ** 4
 
 
 def test_the_three_slopes_are_omega_minus_two_omega_over_three_and_omega():
@@ -267,16 +305,49 @@ def test_three_smooth():
     assert not nf.is_3_smooth(0)
 
 
+def test_exponent_of_terminates_on_zero_and_rejects_bad_bases():
+    assert nf.exponent_of(0, 3) is None
+    assert nf.exponent_of(8, 1) is None
+    assert nf.exponent_of(1, 2) == 0
+    assert nf.exponent_of(81, 3) == 4
+    assert nf.exponent_of(12, 2) is None
+
+
+def test_shortcut_slopes_need_a_halving_for_every_tripling():
+    assert nf.is_shortcut_slope(Fr(9, 4))
+    assert nf.is_shortcut_slope(Fr(3, 2))
+    assert nf.is_shortcut_slope(Fr(1, 4))
+    assert not nf.is_shortcut_slope(3)
+    assert not nf.is_shortcut_slope(Fr(9, 2))
+    assert not nf.is_shortcut_slope(Fr(5, 4))
+    assert not nf.is_shortcut_slope(0)
+
+
+def test_every_two_step_slope_is_a_shortcut_slope():
+    assert all(nf.is_shortcut_slope(s) for s in nf.two_step_slopes())
+
+
 def test_simple_rationals_with_denominator_at_most_four():
-    everything, smooth, pure = nf.look_elsewhere(4)
+    everything, smooth, slopes = nf.look_elsewhere(4)
     assert everything == [Fr(2), Fr(9, 4), Fr(7, 3), Fr(5, 2), Fr(8, 3), Fr(11, 4), Fr(3)]
     assert smooth == [Fr(2), Fr(9, 4), Fr(8, 3), Fr(3)]
-    assert pure == [Fr(9, 4), Fr(3)]
+    assert slopes == [Fr(9, 4)]
 
 
 def test_look_elsewhere_counts():
     assert [(len(a), len(s), len(p)) for a, s, p in map(nf.look_elsewhere, (6, 8, 16, 32))] == [
-        (13, 4, 2), (23, 4, 2), (81, 4, 2), (325, 6, 3)]
+        (13, 4, 1), (23, 4, 1), (81, 4, 1), (325, 6, 2)]
+    assert nf.look_elsewhere(32)[2] == [Fr(9, 4), Fr(81, 32)]
+
+
+def test_look_elsewhere_terminates_on_an_interval_containing_zero():
+    everything, _, slopes = nf.look_elsewhere(4, lo=0, hi=3)
+    assert Fr(0) in everything
+    assert Fr(0) not in slopes and Fr(1, 2) in slopes
+
+
+def test_simple_rationals_takes_exact_endpoints():
+    assert Fr(3, 10) in nf.simple_rationals(Fr(1, 10), Fr(3, 10), 10)
 
 
 # ---- reports ----

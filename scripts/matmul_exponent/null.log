@@ -1,0 +1,11 @@
+== D. Look-elsewhere: simple rationals in [2, 3] ==
+max denominator   all   3-smooth   3^i/2^j   3-smooth share
+4                 7     4          2         0.571
+6                 13    4          2         0.308
+8                 23    4          2         0.174
+12                47    4          2         0.085
+16                81    4          2         0.049
+32                325   6          3         0.018
+denominator <= 4: ['2', '9/4', '7/3', '5/2', '8/3', '11/4', '3']
+  3-smooth:       ['2', '9/4', '8/3', '3']
+  3^i/2^j:        ['9/4', '3']
